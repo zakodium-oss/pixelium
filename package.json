@@ -1,0 +1,19 @@
+{
+  "name": "pixelium",
+  "version": "0.0.0",
+  "description": "React component to display and process raster image.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zakodium-oss/pixelium.git"
+  },
+  "author": "Xavier Stouder <xavier@stouder.io> (https://stouder.io)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zakodium-oss/pixelium/issues"
+  },
+  "homepage": "https://github.com/zakodium-oss/pixelium#readme"
+}
