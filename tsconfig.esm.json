@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "src/index.tsx",
+    "vite.config.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "lib",
+    "noEmit": false,
+    "declaration": true
+  }
+}

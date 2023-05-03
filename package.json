@@ -2,7 +2,9 @@
   "name": "pixelium",
   "version": "0.0.0",
   "description": "React component to display and process raster image.",
-  "main": "index.js",
+  "main": "lib-cjs/components/Pixelium.js",
+  "module": "lib/components/Pixelium.js",
+  "types": "lib/components/Pixelium.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/zakodium-oss/pixelium/issues"
   },
-  "homepage": "https://github.com/zakodium-oss/pixelium#readme"
+  "homepage": "https://github.com/zakodium-oss/pixelium#readme",
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
 }
