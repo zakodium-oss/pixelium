@@ -2,3 +2,5 @@
 node_modules
 lib
 lib-cjs
+.eslintcache
+build

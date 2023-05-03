@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "exclude": [
-    "src/index.tsx",
+    "src/main.tsx",
     "vite.config.ts"
   ],
   "compilerOptions": {

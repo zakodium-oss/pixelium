@@ -6,7 +6,15 @@
   "module": "lib/components/Pixelium.js",
   "types": "lib/components/Pixelium.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build --outDir build",
+    "eslint": "eslint . --cache",
+    "eslint:fix": "npm run eslint -- --fix",
+    "prettier": "prettier --check src",
+    "prettier-write": "prettier --write src",
+    "check-types": "tsc --project tsconfig.esm.json",
+    "compile": "tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
+    "clean-lib": "rimraf lib lib-cjs"
   },
   "repository": {
     "type": "git",
@@ -18,7 +26,24 @@
     "url": "https://github.com/zakodium-oss/pixelium/issues"
   },
   "homepage": "https://github.com/zakodium-oss/pixelium#readme",
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
   "devDependencies": {
-    "typescript": "^5.0.4"
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "@vitejs/plugin-react-swc": "^3.0.0",
+    "eslint": "^8.38.0",
+    "eslint-config-zakodium": "^7.2.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.3.4",
+    "prettier": "^2.8.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2"
   }
 }
