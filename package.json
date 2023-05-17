@@ -47,6 +47,9 @@
     "typescript": "^5.0.2",
     "vite": "^4.3.2"
   },
+  "dependencies": {
+    "immer": "^10.0.2"
+  },
   "volta": {
     "node": "18.16.0",
     "npm": "9.6.6"
