@@ -1,11 +1,20 @@
-import { memo, useMemo, useReducer } from 'react';
+import { memo, useEffect, useMemo, useReducer } from 'react';
 
-import { dataReducer, initialDataState } from '../state/data/DataReducer';
+import {
+  dataReducer,
+  DataState,
+  initialDataState,
+} from '../state/data/DataReducer';
 import {
   initialPreferencesState,
   preferencesReducer,
+  PreferencesState,
 } from '../state/preferences/PreferencesReducer';
-import { initialViewState, viewReducer } from '../state/view/ViewReducer';
+import {
+  initialViewState,
+  viewReducer,
+  ViewState,
+} from '../state/view/ViewReducer';
 
 import Counter from './Counter';
 import { DataProvider } from './context/DataContext';
@@ -13,7 +22,14 @@ import { DispatchProvider } from './context/DispatchContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
 
-function Pixelium() {
+interface PixeliumProps {
+  data: DataState;
+  preferences: PreferencesState;
+  view: ViewState;
+}
+
+function Pixelium({ data, preferences, view }: PixeliumProps) {
+  // Populate contexts
   const [dataState, dispatchData] = useReducer(dataReducer, initialDataState);
   const [preferencesState, dispatchPreferences] = useReducer(
     preferencesReducer,
