@@ -5,7 +5,12 @@ import {
   FaRegWindowMaximize,
   FaWrench,
 } from 'react-icons/all';
-import { Header, RootLayout, Toolbar } from 'react-science/ui';
+import {
+  DropZoneContainer,
+  Header,
+  RootLayout,
+  Toolbar,
+} from 'react-science/ui';
 import { useFullscreen, useToggle } from 'react-use';
 
 import {
@@ -99,6 +104,9 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                     )}
                   </Toolbar>
                 </Header>
+                <DropZoneContainer emptyText="Drag and drop here either an image or a Pixelium file.">
+                  <h1>H</h1>
+                </DropZoneContainer>
               </div>
             </DispatchProvider>
           </ViewProvider>
