@@ -1,6 +1,10 @@
 import { css } from '@emotion/react';
 import { memo, useMemo, useReducer, useRef } from 'react';
-import { FaRegWindowMaximize, FaWrench } from 'react-icons/all';
+import {
+  FaQuestionCircle,
+  FaRegWindowMaximize,
+  FaWrench,
+} from 'react-icons/all';
 import { Header, RootLayout, Toolbar } from 'react-science/ui';
 import { useFullscreen, useToggle } from 'react-use';
 
@@ -76,6 +80,14 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                     <span>Pixelium</span>
                   </Toolbar>
                   <Toolbar orientation="horizontal">
+                    <Toolbar.Item
+                      title="User manual"
+                      onClick={() =>
+                        window.open('https://zakodium.com', '_blank')
+                      }
+                    >
+                      <FaQuestionCircle />
+                    </Toolbar.Item>
                     <Toolbar.Item title="Settings">
                       <FaWrench />
                     </Toolbar.Item>
