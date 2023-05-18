@@ -1,8 +1,9 @@
 import { createRoot } from 'react-dom/client';
 
-import Pixelium from './components/Pixelium';
+import MainView from './demo/views/MainView';
 
 import 'modern-normalize/modern-normalize.css';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 
 const rootElement = document.querySelector('#root');
 if (!rootElement) {
@@ -10,4 +11,10 @@ if (!rootElement) {
 }
 
 const root = createRoot(rootElement);
-root.render(<Pixelium />);
+root.render(
+  <HashRouter>
+    <Routes>
+      <Route path="*" element={<MainView />} />
+    </Routes>
+  </HashRouter>,
+);

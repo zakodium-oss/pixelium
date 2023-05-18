@@ -45,6 +45,8 @@ const pixeliumContainerStyle = css`
   width: 100%;
   height: 100%;
   background-color: white;
+  display: flex;
+  flex-direction: column;
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -104,9 +106,11 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                     )}
                   </Toolbar>
                 </Header>
-                <DropZoneContainer emptyText="Drag and drop here either an image or a Pixelium file.">
-                  <h1>H</h1>
-                </DropZoneContainer>
+                <div style={{ flex: '1' }}>
+                  <DropZoneContainer emptyText="Drag and drop here either an image or a Pixelium file.">
+                    <span>Hello</span>
+                  </DropZoneContainer>
+                </div>
               </div>
             </DispatchProvider>
           </ViewProvider>
