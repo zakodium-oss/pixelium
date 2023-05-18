@@ -2,6 +2,8 @@ import { createRoot } from 'react-dom/client';
 
 import Pixelium from './components/Pixelium';
 
+import 'modern-normalize/modern-normalize.css';
+
 const rootElement = document.querySelector('#root');
 if (!rootElement) {
   throw new Error('#root element not found');
