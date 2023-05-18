@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { SvgLogoZakodium } from 'cheminfo-font';
-import { RiPixelfedFill } from 'react-icons/all';
 import { Modal, Toolbar, useOnOff } from 'react-science/ui';
 
 const modalStyle = css`
