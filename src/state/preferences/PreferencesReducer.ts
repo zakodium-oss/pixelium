@@ -1,16 +1,26 @@
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
 
-export interface PreferencesState {
-  // TODO define data
-}
+import * as Type from './PreferenceActionTypes';
+import * as InitActions from './actions/InitActions';
+import type { InitializePreferenceAction } from './actions/InitActions';
+
+export interface PreferencesState {}
 
 export const initialPreferencesState: PreferencesState = {};
 
-function innerPreferencesReducer(draft: Draft<PreferencesState>, action) {
+type PreferencesActions = InitializePreferenceAction;
+
+function innerPreferencesReducer(
+  draft: Draft<PreferencesState>,
+  action: PreferencesActions,
+) {
   switch (action.type) {
+    case Type.INITIALIZE_PREFERENCES:
+      return InitActions.initializePreferences(draft, action);
     default:
-      throw new Error(`Unhandled action type: ${action.type}`);
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      throw new Error(`Type ${action.type} is not handled.`);
   }
 }
 

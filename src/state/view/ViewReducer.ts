@@ -7,7 +7,9 @@ export interface ViewState {
 
 export const initialViewState: ViewState = {};
 
-function innerViewReducer(draft: Draft<ViewState>, action) {
+type ViewActions = any;
+
+function innerViewReducer(draft: Draft<ViewState>, action: ViewActions) {
   switch (action.type) {
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

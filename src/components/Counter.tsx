@@ -1,17 +1,16 @@
 import { useCallback } from 'react';
 
 import useData from '../hooks/useData';
-import { INCREMENT } from '../state/data/actions/Types';
+import useDataDispatch from '../hooks/useDataDispatch';
+import { INCREMENT } from '../state/data/DataActionTypes';
 
 export default function Counter() {
-  const {
-    data: { counter },
-    dispatch,
-  } = useData();
+  const { counter } = useData();
+  const dataDispatch = useDataDispatch();
 
   const increment = useCallback(() => {
-    dispatch({ type: INCREMENT });
-  }, [dispatch]);
+    dataDispatch({ type: INCREMENT });
+  }, [dataDispatch]);
 
   return (
     <div>
