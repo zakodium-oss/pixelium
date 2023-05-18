@@ -28,6 +28,7 @@ import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
+import AboutModal from './modal/AboutModal';
 
 interface PixeliumProps {
   data?: DataState;
@@ -77,7 +78,7 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
               <div css={pixeliumContainerStyle} ref={rootRef}>
                 <Header>
                   <Toolbar orientation="horizontal">
-                    <span>Pixelium</span>
+                    <AboutModal />
                   </Toolbar>
                   <Toolbar orientation="horizontal">
                     <Toolbar.Item
