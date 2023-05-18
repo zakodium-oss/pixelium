@@ -2,7 +2,8 @@ import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
 
 import * as Type from './DataActionTypes';
-import { IncrementAction } from './actions/IncrementActions';
+import * as IncrementActions from './actions/IncrementActions';
+import type { IncrementAction } from './actions/IncrementActions';
 
 export interface DataState {
   counter: number;
