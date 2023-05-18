@@ -13,5 +13,5 @@ export function initializePreferences(
   action: InitializePreferenceAction,
 ) {
   // eslint-disable-next-line no-useless-return
-  if (!action.payload || !action.payload.preferences) return;
+  if (!action.payload?.preferences) return;
 }

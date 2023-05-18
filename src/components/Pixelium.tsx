@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
-import { memo, useEffect, useMemo, useReducer, useRef } from 'react';
-import { FaRegWindowMaximize, FaWrench, MdSettings } from 'react-icons/all';
-import { DropZone, Header, RootLayout, Toolbar } from 'react-science/ui';
+import { memo, useMemo, useReducer, useRef } from 'react';
+import { FaRegWindowMaximize, FaWrench } from 'react-icons/all';
+import { Header, RootLayout, Toolbar } from 'react-science/ui';
 import { useFullscreen, useToggle } from 'react-use';
 
 import {
@@ -37,6 +37,7 @@ const pixeliumContainerStyle = css`
   background-color: white;
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function Pixelium({ data, preferences, view }: PixeliumProps) {
   // Refs
   const rootRef = useRef<HTMLDivElement>(null);
