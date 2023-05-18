@@ -1,9 +1,7 @@
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
 
-export interface ViewState {
-  // TODO define data
-}
+export interface ViewState {}
 
 export const initialViewState: ViewState = {};
 

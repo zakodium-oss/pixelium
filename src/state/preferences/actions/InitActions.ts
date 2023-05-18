@@ -12,6 +12,6 @@ export function initializePreferences(
   draft: Draft<PreferencesState>,
   action: InitializePreferenceAction,
 ) {
+  // eslint-disable-next-line no-useless-return
   if (!action.payload || !action.payload.preferences) return;
-  // TODO depend on the available preferences
 }
