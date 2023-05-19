@@ -1,17 +1,6 @@
 import { css } from '@emotion/react';
 import { memo, useMemo, useReducer, useRef } from 'react';
-import {
-  FaQuestionCircle,
-  FaRegWindowMaximize,
-  FaWrench,
-} from 'react-icons/all';
-import {
-  DropZoneContainer,
-  Header,
-  RootLayout,
-  Toolbar,
-} from 'react-science/ui';
-import { useFullscreen, useToggle } from 'react-use';
+import { DropZoneContainer, RootLayout } from 'react-science/ui';
 
 import {
   dataReducer,
@@ -31,9 +20,10 @@ import {
 
 import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
+import { GlobalProvider } from './context/GlobalContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
-import AboutModal from './modal/AboutModal';
+import Header from './header/Header';
 
 interface PixeliumProps {
   data?: DataState;
@@ -70,52 +60,26 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
     };
   }, [dispatchData, dispatchPreferences, dispatchView]);
 
-  const [show, toggle] = useToggle(false);
-
-  const isFullScreen = useFullscreen(rootRef, show, {
-    onClose: () => toggle(false),
-  });
-
   return (
     <RootLayout>
-      <DataProvider value={dataState}>
-        <PreferencesProvider value={preferencesState}>
-          <ViewProvider value={viewState}>
-            <DispatchProvider value={dispatchers}>
-              <div css={pixeliumContainerStyle} ref={rootRef}>
-                <Header>
-                  <Toolbar orientation="horizontal">
-                    <AboutModal />
-                  </Toolbar>
-                  <Toolbar orientation="horizontal">
-                    <Toolbar.Item
-                      title="User manual"
-                      onClick={() =>
-                        window.open('https://zakodium.com', '_blank')
-                      }
-                    >
-                      <FaQuestionCircle />
-                    </Toolbar.Item>
-                    <Toolbar.Item title="Settings">
-                      <FaWrench />
-                    </Toolbar.Item>
-                    {!isFullScreen && (
-                      <Toolbar.Item title="Full Screen" onClick={toggle}>
-                        <FaRegWindowMaximize />
-                      </Toolbar.Item>
-                    )}
-                  </Toolbar>
-                </Header>
-                <div style={{ flex: '1' }}>
-                  <DropZoneContainer emptyText="Drag and drop here either an image or a Pixelium file.">
-                    <span>Hello</span>
-                  </DropZoneContainer>
+      <GlobalProvider value={{ rootRef }}>
+        <DataProvider value={dataState}>
+          <PreferencesProvider value={preferencesState}>
+            <ViewProvider value={viewState}>
+              <DispatchProvider value={dispatchers}>
+                <div css={pixeliumContainerStyle} ref={rootRef}>
+                  <Header />
+                  <div style={{ flex: '1' }}>
+                    <DropZoneContainer emptyText="Drag and drop here either an image or a Pixelium file.">
+                      <span>Hello</span>
+                    </DropZoneContainer>
+                  </div>
                 </div>
-              </div>
-            </DispatchProvider>
-          </ViewProvider>
-        </PreferencesProvider>
-      </DataProvider>
+              </DispatchProvider>
+            </ViewProvider>
+          </PreferencesProvider>
+        </DataProvider>
+      </GlobalProvider>
     </RootLayout>
   );
 }
