@@ -1,6 +1,11 @@
 import { css } from '@emotion/react';
 import { memo, useMemo, useReducer, useRef } from 'react';
-import { DropZoneContainer, RootLayout, Toolbar } from 'react-science/ui';
+import {
+  DropZoneContainer,
+  RootLayout,
+  SplitPane,
+  Toolbar,
+} from 'react-science/ui';
 
 import {
   dataReducer,
@@ -78,9 +83,12 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                   >
                     <Toolbar orientation={'vertical'} />
                     <div style={{ flex: '1' }}>
-                      <DropZoneContainer emptyText="Drag and drop here either an image or a Pixelium file.">
-                        {null}
-                      </DropZoneContainer>
+                      <SplitPane direction="horizontal" size="80%">
+                        <DropZoneContainer emptyText="Drag and drop here either an image or a Pixelium file.">
+                          {null}
+                        </DropZoneContainer>
+                        <div>Hello, world</div>
+                      </SplitPane>
                     </div>
                   </div>
                 </div>
