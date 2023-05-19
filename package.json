@@ -11,11 +11,12 @@
     "eslint": "eslint . --cache",
     "eslint:fix": "npm run eslint -- --fix",
     "prettier": "prettier --check src",
-    "prettier-write": "prettier --write src",
+    "prettier:write": "prettier --write src",
     "check-types": "tsc --project tsconfig.esm.json",
     "compile": "tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
     "clean-lib": "rimraf lib lib-cjs",
-    "test": "npm run eslint && npm run prettier && npm run check-types"
+    "test": "npm run eslint && npm run prettier && npm run check-types",
+    "deploy": "npm run build && gh-pages -d build -- -u \"Github Actions <support+actions@github.com>\""
   },
   "repository": {
     "type": "git",
