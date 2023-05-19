@@ -16,7 +16,7 @@
     "compile": "tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
     "clean-lib": "rimraf lib lib-cjs",
     "test": "npm run eslint && npm run prettier && npm run check-types",
-    "deploy": "npm run build && gh-pages -d build -- -u \"Github Actions <support+actions@github.com>\""
+    "deploy": "npm run build && gh-pages -d build"
   },
   "repository": {
     "type": "git",
