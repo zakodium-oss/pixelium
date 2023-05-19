@@ -1,4 +1,4 @@
-name: Code quality
+name: Deploy Pixelium demo
 
 on:
   push:
