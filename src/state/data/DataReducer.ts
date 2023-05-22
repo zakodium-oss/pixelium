@@ -30,8 +30,7 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
     case Type.LOAD_DROP:
       return LoadActions.loadDrop(draft, action.payload);
     default:
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      throw new Error(`Unhandled action: ${action}`);
+      throw new Error('Unknown action type in data reducer.');
   }
 }
 

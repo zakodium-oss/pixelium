@@ -13,14 +13,14 @@ export const initialViewState: ViewState = {
   currentTab: undefined,
 };
 
-type ViewActions = OpenTabAction;
+type ViewActions = OpenTabAction | any;
 
 function innerViewReducer(draft: Draft<ViewState>, action: ViewActions) {
   switch (action.type) {
     case Type.OPEN_TAB:
       return TabActions.openTab(draft, action.payload);
     default:
-      throw new Error(`Unhandled action type: ${action.type}`);
+      throw new Error('Unknown action type in view reducer.');
   }
 }
 

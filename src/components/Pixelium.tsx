@@ -1,14 +1,7 @@
 import { css } from '@emotion/react';
-import { memo, useCallback, useMemo, useReducer, useRef } from 'react';
-import {
-  DropZoneContainer,
-  RootLayout,
-  SplitPane,
-  Toolbar,
-} from 'react-science/ui';
+import { memo, useMemo, useReducer, useRef } from 'react';
+import { RootLayout, SplitPane, Toolbar } from 'react-science/ui';
 
-import useDataDispatch from '../hooks/useDataDispatch';
-import { SET_LOADING } from '../state/data/DataActionTypes';
 import {
   dataReducer,
   DataState,
@@ -31,7 +24,6 @@ import { DispatchProvider } from './context/DispatchContext';
 import { GlobalProvider } from './context/GlobalContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
-import DropZone from './dropzone/DropZone';
 import Header from './header/Header';
 
 interface PixeliumProps {
