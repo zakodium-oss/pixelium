@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useMemo } from 'react';
 import { Tabs } from 'react-science/ui';
 
 import useData from '../hooks/useData';
@@ -29,6 +29,12 @@ function CenterPanel() {
     },
     [viewDispatch],
   );
+
+  useEffect(() => {
+    if (!currentTab && tabsItems.length > 0) {
+      openTab(tabsItems[0].id);
+    }
+  }, [openTab, currentTab, tabsItems]);
 
   return (
     <DropZone>
