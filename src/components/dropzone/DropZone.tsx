@@ -8,7 +8,7 @@ import { LOAD_DROP, SET_LOADING } from '../../state/data/DataActionTypes';
 import { ImageWithMetadata } from '../../state/data/DataReducer';
 
 interface DropZoneProps {
-  children: JSX.Element;
+  children: JSX.Element | null;
 }
 
 function DropZone({ children }: DropZoneProps) {

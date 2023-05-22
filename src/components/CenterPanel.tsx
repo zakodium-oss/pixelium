@@ -32,12 +32,14 @@ function CenterPanel() {
 
   return (
     <DropZone>
-      <Tabs
-        orientation="horizontal"
-        items={tabsItems}
-        opened={currentTab}
-        onClick={openTab}
-      />
+      {tabsItems.length > 0 ? (
+        <Tabs
+          orientation="horizontal"
+          items={tabsItems}
+          opened={currentTab}
+          onClick={openTab}
+        />
+      ) : null}
     </DropZone>
   );
 }
