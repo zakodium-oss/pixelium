@@ -1,27 +1,37 @@
+import { Image } from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
 
 import * as Type from './DataActionTypes';
-import * as IncrementActions from './actions/IncrementActions';
-import type { IncrementAction } from './actions/IncrementActions';
+import * as LoadActions from './actions/LoadActions';
+import type { SetLoadingAction, LoadDropAction } from './actions/LoadActions';
+
+export interface ImageWithMetadata {
+  image: Image;
+  metadata: { name: string; relativePath: string };
+}
 
 export interface DataState {
-  counter: number;
+  isLoading?: boolean;
+  files: { [identifier: string]: ImageWithMetadata };
 }
 
 export const initialDataState: DataState = {
-  counter: 0,
+  isLoading: false,
+  files: {},
 };
 
-type DataActions = IncrementAction;
+type DataActions = SetLoadingAction | LoadDropAction;
 
 function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
   switch (action.type) {
-    case Type.INCREMENT:
-      return IncrementActions.increment(draft);
+    case Type.SET_LOADING:
+      return LoadActions.setLoading(draft, action.payload);
+    case Type.LOAD_DROP:
+      return LoadActions.loadDrop(draft, action.payload);
     default:
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      throw new Error(`Unhandled action type: ${action.type}`);
+      throw new Error(`Unhandled action: ${action}`);
   }
 }
 

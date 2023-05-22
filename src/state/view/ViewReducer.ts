@@ -1,14 +1,24 @@
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
 
-export interface ViewState {}
+import * as Type from './ViewActionTypes';
+import * as TabActions from './actions/TabActions';
+import { OpenTabAction } from './actions/TabActions';
 
-export const initialViewState: ViewState = {};
+export interface ViewState {
+  currentTab?: string;
+}
 
-type ViewActions = any;
+export const initialViewState: ViewState = {
+  currentTab: undefined,
+};
+
+type ViewActions = OpenTabAction;
 
 function innerViewReducer(draft: Draft<ViewState>, action: ViewActions) {
   switch (action.type) {
+    case Type.OPEN_TAB:
+      return TabActions.openTab(draft, action.payload);
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

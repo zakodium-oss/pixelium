@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { memo, useMemo, useReducer, useRef } from 'react';
+import { memo, useCallback, useMemo, useReducer, useRef } from 'react';
 import {
   DropZoneContainer,
   RootLayout,
@@ -7,6 +7,8 @@ import {
   Toolbar,
 } from 'react-science/ui';
 
+import useDataDispatch from '../hooks/useDataDispatch';
+import { SET_LOADING } from '../state/data/DataActionTypes';
 import {
   dataReducer,
   DataState,
@@ -23,11 +25,13 @@ import {
   ViewState,
 } from '../state/view/ViewReducer';
 
+import CenterPanel from './CenterPanel';
 import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
 import { GlobalProvider } from './context/GlobalContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
+import DropZone from './dropzone/DropZone';
 import Header from './header/Header';
 
 interface PixeliumProps {
@@ -82,14 +86,10 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                     }}
                   >
                     <Toolbar orientation={'vertical'} />
-                    <div style={{ flex: '1' }}>
-                      <SplitPane direction="horizontal" size="80%">
-                        <DropZoneContainer emptyText="Drag and drop here either an image or a Pixelium file.">
-                          {null}
-                        </DropZoneContainer>
-                        <div>Hello, world</div>
-                      </SplitPane>
-                    </div>
+                    <SplitPane direction="horizontal" size="80%">
+                      <CenterPanel />
+                      <div>Hello, world</div>
+                    </SplitPane>
                   </div>
                 </div>
               </DispatchProvider>

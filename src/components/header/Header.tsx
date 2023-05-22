@@ -1,12 +1,13 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import {
   FaQuestionCircle,
   FaRegWindowMaximize,
   FaWrench,
 } from 'react-icons/all';
-import { Header as InnerHeader, Toolbar } from 'react-science/ui';
+import { Header as InnerHeader, Tabs, Toolbar } from 'react-science/ui';
 import { useFullscreen, useToggle } from 'react-use';
 
+import useData from '../../hooks/useData';
 import useGlobal from '../../hooks/useGlobal';
 import AboutModal from '../modal/AboutModal';
 
@@ -23,6 +24,7 @@ function PixeliumHeader() {
       <Toolbar orientation="horizontal">
         <AboutModal />
       </Toolbar>
+
       <Toolbar orientation="horizontal">
         <Toolbar.Item
           title="User manual"
