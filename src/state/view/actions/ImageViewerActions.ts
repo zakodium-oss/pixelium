@@ -3,14 +3,22 @@ import { Draft } from 'immer';
 import { ViewActionType } from '../ViewActionTypes';
 import { ViewState } from '../ViewReducer';
 
-export type SetPanAction = ViewActionType<
-  'SET_PAN',
-  { identifier: string; x: number; y: number }
+interface PanZoomData {
+  scale: number;
+  translation: { x: number; y: number };
+}
+
+export type SetPanZoomAction = ViewActionType<
+  'SET_PAN_ZOOM',
+  {
+    identifier: string;
+    panZoom: PanZoomData;
+  }
 >;
 
-export function setPan(
+export function setPanZoom(
   draft: Draft<ViewState>,
-  { identifier, x, y }: { identifier: string; x: number; y: number },
+  { identifier, panZoom }: { identifier: string; panZoom: PanZoomData },
 ) {
-  draft.imageViewerProps.set(identifier, { pan: { x, y } });
+  draft.imageViewerProps.set(identifier, panZoom);
 }

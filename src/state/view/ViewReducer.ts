@@ -2,14 +2,17 @@ import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
 
 import * as Type from './ViewActionTypes';
-import { SetPanAction } from './actions/ImageViewerActions';
+import { SetPanZoomAction } from './actions/ImageViewerActions';
 import * as ImageViewerActions from './actions/ImageViewerActions';
 import * as TabActions from './actions/TabActions';
 import { OpenTabAction } from './actions/TabActions';
 
 export interface ViewState {
   currentTab?: string;
-  imageViewerProps: Map<string, { pan: { x: number; y: number } }>;
+  imageViewerProps: Map<
+    string,
+    { translation: { x: number; y: number }; scale: number }
+  >;
 }
 
 export const initialViewState: ViewState = {
@@ -17,14 +20,14 @@ export const initialViewState: ViewState = {
   imageViewerProps: new Map(),
 };
 
-type ViewActions = OpenTabAction | SetPanAction;
+type ViewActions = OpenTabAction | SetPanZoomAction;
 
 function innerViewReducer(draft: Draft<ViewState>, action: ViewActions) {
   switch (action.type) {
     case Type.OPEN_TAB:
       return TabActions.openTab(draft, action.payload);
-    case Type.SET_PAN:
-      return ImageViewerActions.setPan(draft, action.payload);
+    case Type.SET_PAN_ZOOM:
+      return ImageViewerActions.setPanZoom(draft, action.payload);
     default:
       throw new Error('Unknown action type in view reducer.');
   }

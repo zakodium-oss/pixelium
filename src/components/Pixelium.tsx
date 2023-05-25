@@ -75,6 +75,7 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                       display: 'flex',
                       flexDirection: 'row',
                       height: '100%',
+                      overflow: 'hidden',
                     }}
                   >
                     <Toolbar orientation={'vertical'} />
