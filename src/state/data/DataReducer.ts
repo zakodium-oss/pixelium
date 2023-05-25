@@ -13,12 +13,12 @@ export interface ImageWithMetadata {
 
 export interface DataState {
   isLoading?: boolean;
-  files: Map<string, ImageWithMetadata>;
+  files: { [identifier: string]: ImageWithMetadata };
 }
 
 export const initialDataState: DataState = {
   isLoading: false,
-  files: new Map(),
+  files: {},
 };
 
 type DataActions = SetLoadingAction | LoadDropAction;

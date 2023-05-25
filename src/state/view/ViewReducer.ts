@@ -9,15 +9,20 @@ import { OpenTabAction } from './actions/TabActions';
 
 export interface ViewState {
   currentTab?: string;
-  imageViewerProps: Map<
-    string,
-    { translation: { x: number; y: number }; scale: number }
-  >;
+  imageViewerProps: {
+    [identifier: string]: {
+      translation: {
+        x: number;
+        y: number;
+      };
+      scale: number;
+    };
+  };
 }
 
 export const initialViewState: ViewState = {
   currentTab: undefined,
-  imageViewerProps: new Map(),
+  imageViewerProps: {},
 };
 
 type ViewActions = OpenTabAction | SetPanZoomAction;

@@ -13,9 +13,9 @@ function CenterPanel() {
 
   const tabsItems = useMemo(
     () =>
-      Array.from(files).map(([identifier, file]) => ({
+      Object.keys(files).map((identifier) => ({
         id: identifier,
-        title: file.metadata.name,
+        title: files[identifier].metadata.name,
         content: <ImageViewer identifier={identifier} />,
       })),
     [files],

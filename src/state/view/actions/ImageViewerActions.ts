@@ -20,5 +20,5 @@ export function setPanZoom(
   draft: Draft<ViewState>,
   { identifier, panZoom }: { identifier: string; panZoom: PanZoomData },
 ) {
-  draft.imageViewerProps.set(identifier, panZoom);
+  draft.imageViewerProps[identifier] = panZoom;
 }

@@ -1,4 +1,3 @@
-import { enableMapSet } from 'immer';
 import { createRoot } from 'react-dom/client';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 
@@ -10,8 +9,6 @@ const rootElement = document.querySelector('#root');
 if (!rootElement) {
   throw new Error('#root element not found');
 }
-
-enableMapSet();
 
 const root = createRoot(rootElement);
 root.render(

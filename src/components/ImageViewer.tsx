@@ -20,9 +20,10 @@ function ImageViewer({ identifier }: ImageViewerProps) {
 
   const panZoom = useMemo(
     () =>
-      view.imageViewerProps.has(identifier)
-        ? view.imageViewerProps.get(identifier)
-        : { translation: { x: 0, y: 0 }, scale: 1 },
+      view.imageViewerProps[identifier] || {
+        translation: { x: 0, y: 0 },
+        scale: 1,
+      },
     [identifier, view.imageViewerProps],
   );
 
@@ -34,7 +35,7 @@ function ImageViewer({ identifier }: ImageViewerProps) {
   );
 
   const image = useMemo(
-    () => data.files.get(identifier)?.image,
+    () => data.files[identifier]?.image,
     [data.files, identifier],
   );
 

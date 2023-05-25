@@ -16,6 +16,6 @@ export function loadDrop(
   payload: ImageWithMetadata[],
 ) {
   for (const file of payload) {
-    draft.files.set(uuid(), file);
+    draft.files[uuid()] = file;
   }
 }
