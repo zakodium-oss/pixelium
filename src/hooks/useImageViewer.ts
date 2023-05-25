@@ -14,7 +14,7 @@ export default function useImageViewer(identifier: string) {
   const data = useData();
 
   const image = useMemo(
-    () => data.files[identifier].image,
+    () => data.files.get(identifier)?.image,
     [data.files, identifier],
   );
 
