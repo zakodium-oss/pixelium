@@ -6,6 +6,7 @@ import useView from '../hooks/useView';
 import useViewDispatch from '../hooks/useViewDispatch';
 
 import DropZone from './dropzone/DropZone';
+import ImageViewer from './image-viewer/ImageViewer';
 
 function CenterPanel() {
   const { files } = useData();
@@ -15,7 +16,7 @@ function CenterPanel() {
       Object.keys(files).map((identifier) => ({
         id: identifier,
         title: files[identifier].metadata.name,
-        content: files[identifier].metadata.name,
+        content: <ImageViewer identifier={identifier} />,
       })),
     [files],
   );
