@@ -24,7 +24,7 @@ import { DispatchProvider } from './context/DispatchContext';
 import { GlobalProvider } from './context/GlobalContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
-import Header from './header/Header';
+import Header from './Header';
 
 interface PixeliumProps {
   data?: DataState;

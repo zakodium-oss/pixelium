@@ -3,9 +3,9 @@ import { decode } from 'image-js';
 import { memo, useCallback } from 'react';
 import { DropZoneContainer } from 'react-science/ui';
 
-import useDataDispatch from '../../hooks/useDataDispatch';
-import { LOAD_DROP, SET_LOADING } from '../../state/data/DataActionTypes';
-import { ImageWithMetadata } from '../../state/data/DataReducer';
+import useDataDispatch from '../hooks/useDataDispatch';
+import { LOAD_DROP, SET_LOADING } from '../state/data/DataActionTypes';
+import { ImageWithMetadata } from '../state/data/DataReducer';
 
 interface DropZoneProps {
   children: JSX.Element | null;

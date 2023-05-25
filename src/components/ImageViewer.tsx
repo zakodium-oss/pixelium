@@ -2,10 +2,10 @@ import { writeCanvas } from 'image-js';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { MapInteractionCSS } from 'react-map-interaction';
 
-import useData from '../../hooks/useData';
-import useView from '../../hooks/useView';
-import useViewDispatch from '../../hooks/useViewDispatch';
-import { SET_PAN_ZOOM } from '../../state/view/ViewActionTypes';
+import useData from '../hooks/useData';
+import useView from '../hooks/useView';
+import useViewDispatch from '../hooks/useViewDispatch';
+import { SET_PAN_ZOOM } from '../state/view/ViewActionTypes';
 
 interface ImageViewerProps {
   identifier: string;

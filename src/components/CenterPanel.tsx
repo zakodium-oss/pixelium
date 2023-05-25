@@ -5,8 +5,8 @@ import useData from '../hooks/useData';
 import useView from '../hooks/useView';
 import useViewDispatch from '../hooks/useViewDispatch';
 
-import DropZone from './dropzone/DropZone';
-import ImageViewer from './image-viewer/ImageViewer';
+import DropZone from './DropZone';
+import ImageViewer from './ImageViewer';
 
 function CenterPanel() {
   const { files } = useData();
