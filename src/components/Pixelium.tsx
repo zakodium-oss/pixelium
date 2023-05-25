@@ -19,12 +19,13 @@ import {
 } from '../state/view/ViewReducer';
 
 import CenterPanel from './CenterPanel';
+import Header from './Header';
 import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
 import { GlobalProvider } from './context/GlobalContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
-import Header from './Header';
+import ImportTool from './tools/ImportTool';
 
 interface PixeliumProps {
   data?: DataState;
@@ -78,7 +79,9 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                       overflow: 'hidden',
                     }}
                   >
-                    <Toolbar orientation={'vertical'} />
+                    <Toolbar orientation={'vertical'}>
+                      <ImportTool />
+                    </Toolbar>
                     <SplitPane direction="horizontal" size="80%">
                       <CenterPanel />
                       <div>Hello, world</div>

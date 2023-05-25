@@ -1,11 +1,11 @@
 import React, { memo, useCallback, useEffect, useMemo } from 'react';
-import { Tabs } from 'react-science/ui';
+import { DropZoneContainer, Tabs } from 'react-science/ui';
 
 import useData from '../hooks/useData';
+import useFileLoader from '../hooks/useFileLoader';
 import useView from '../hooks/useView';
 import useViewDispatch from '../hooks/useViewDispatch';
 
-import DropZone from './DropZone';
 import ImageViewer from './ImageViewer';
 
 function CenterPanel() {
@@ -37,8 +37,13 @@ function CenterPanel() {
     }
   }, [openTab, currentTab, tabsItems]);
 
+  const handleOnDrop = useFileLoader();
+
   return (
-    <DropZone>
+    <DropZoneContainer
+      emptyText="Drag and drop here either an image or a Pixelium file."
+      onDrop={handleOnDrop}
+    >
       {tabsItems.length > 0 ? (
         <Tabs
           orientation="horizontal"
@@ -47,7 +52,7 @@ function CenterPanel() {
           onClick={openTab}
         />
       ) : null}
-    </DropZone>
+    </DropZoneContainer>
   );
 }
 

@@ -8,6 +8,7 @@ import { Header as InnerHeader, Toolbar } from 'react-science/ui';
 import { useFullscreen, useToggle } from 'react-use';
 
 import useGlobal from '../hooks/useGlobal';
+
 import AboutModal from './modal/AboutModal';
 
 function PixeliumHeader() {

@@ -1,17 +1,13 @@
 import { fileCollectionFromFiles } from 'filelist-utils';
 import { decode } from 'image-js';
-import { memo, useCallback } from 'react';
-import { DropZoneContainer } from 'react-science/ui';
+import { useCallback } from 'react';
 
-import useDataDispatch from '../hooks/useDataDispatch';
 import { LOAD_DROP, SET_LOADING } from '../state/data/DataActionTypes';
 import { ImageWithMetadata } from '../state/data/DataReducer';
 
-interface DropZoneProps {
-  children: JSX.Element | null;
-}
+import useDataDispatch from './useDataDispatch';
 
-function DropZone({ children }: DropZoneProps) {
+export default function useFileLoader() {
   const dataDispatch = useDataDispatch();
 
   const loadFiles = useCallback(
@@ -37,7 +33,7 @@ function DropZone({ children }: DropZoneProps) {
     [dataDispatch],
   );
 
-  const handleOnDrop = useCallback(
+  const handleFileLoad = useCallback(
     (acceptedFiles) => {
       dataDispatch({ type: SET_LOADING, payload: true });
       loadFiles(acceptedFiles).finally(() =>
@@ -47,14 +43,5 @@ function DropZone({ children }: DropZoneProps) {
     [dataDispatch, loadFiles],
   );
 
-  return (
-    <DropZoneContainer
-      emptyText="Drag and drop here either an image or a Pixelium file."
-      onDrop={handleOnDrop}
-    >
-      {children}
-    </DropZoneContainer>
-  );
+  return handleFileLoad;
 }
-
-export default memo(DropZone);
