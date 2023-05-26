@@ -20,6 +20,7 @@ import {
 
 import CenterPanel from './CenterPanel';
 import Header from './Header';
+import Sidebar from './Sidebar';
 import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
 import { GlobalProvider } from './context/GlobalContext';
@@ -84,7 +85,7 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                     </Toolbar>
                     <SplitPane direction="horizontal" size="80%">
                       <CenterPanel />
-                      <div>Hello, world</div>
+                      <Sidebar />
                     </SplitPane>
                   </div>
                 </div>
