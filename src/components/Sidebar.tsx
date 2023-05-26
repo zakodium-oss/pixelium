@@ -20,9 +20,9 @@ function Sidebar() {
         key: 'Image size',
         render: (
           <ValueRenderers.Text
-            value={`${currentImage.width} x ${currentImage.height} (${
+            value={`${currentImage.width.toLocaleString()} x ${currentImage.height.toLocaleString()} (${(
               currentImage.width * currentImage.height
-            } pixels)`}
+            ).toLocaleString()} pixels)`}
           />
         ),
       },
@@ -37,6 +37,10 @@ function Sidebar() {
       {
         key: 'Components',
         render: <ValueRenderers.Number value={currentImage.components} />,
+      },
+      {
+        key: 'Color model',
+        render: <ValueRenderers.Text value={currentImage.colorModel} />,
       },
     ];
   }, [currentImage]);
