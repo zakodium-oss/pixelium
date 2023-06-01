@@ -45,19 +45,18 @@ function Sidebar() {
     ];
   }, [currentImage]);
 
+  if (currentImage === null) return null;
   return (
     <Accordion>
       <Accordion.Item title="General informations">
-        {currentImage === null ? null : (
-          <Table>
-            {generalInformations.map(({ key, render }) => (
-              <Table.Row key={key}>
-                <ValueRenderers.Text value={key} />
-                {render}
-              </Table.Row>
-            ))}
-          </Table>
-        )}
+        <Table>
+          {generalInformations.map(({ key, render }) => (
+            <Table.Row key={key}>
+              <ValueRenderers.Text value={key} />
+              {render}
+            </Table.Row>
+          ))}
+        </Table>
       </Accordion.Item>
     </Accordion>
   );

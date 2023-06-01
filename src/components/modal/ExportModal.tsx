@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { SvgLogoZakodium } from 'cheminfo-font';
 import { memo } from 'react';
+import { FaFileExport } from 'react-icons/all';
 import { Modal, Toolbar, useOnOff } from 'react-science/ui';
 
 const modalStyle = css`
@@ -17,22 +17,22 @@ const modalStyle = css`
   }
 `;
 
-function AboutModal() {
+function ExportModal() {
   const [isOpenDialog, openDialog, closeDialog] = useOnOff(false);
 
   return (
     <>
       <Toolbar.Item
-        title="About Pixelium"
+        title="Export"
         titleOrientation="horizontal"
         onClick={openDialog}
       >
-        <SvgLogoZakodium />
+        <FaFileExport />
       </Toolbar.Item>
       <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
         <div css={modalStyle}>
           <Modal.Header>
-            <div className="header">About Pixelium</div>
+            <div className="header">Export</div>
           </Modal.Header>
           <div className="container">Nothing to see here at this time.</div>
         </div>
@@ -41,4 +41,4 @@ function AboutModal() {
   );
 }
 
-export default memo(AboutModal);
+export default memo(ExportModal);

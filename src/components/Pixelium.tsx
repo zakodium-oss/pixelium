@@ -26,6 +26,7 @@ import { DispatchProvider } from './context/DispatchContext';
 import { GlobalProvider } from './context/GlobalContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
+import ExportTool from './tools/ExportTool';
 import ImportTool from './tools/ImportTool';
 
 interface PixeliumProps {
@@ -82,6 +83,7 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                   >
                     <Toolbar orientation={'vertical'}>
                       <ImportTool />
+                      <ExportTool />
                     </Toolbar>
                     <SplitPane direction="horizontal" size="80%">
                       <CenterPanel />
