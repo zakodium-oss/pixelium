@@ -63,7 +63,7 @@
     "modern-normalize": "^2.0.0",
     "react-icons": "^4.8.0",
     "react-map-interaction": "^2.1.0",
-    "react-science": "^0.22.1",
+    "react-science": "^0.22.2",
     "react-use": "^17.4.0"
   },
   "volta": {
