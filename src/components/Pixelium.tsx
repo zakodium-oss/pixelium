@@ -24,6 +24,7 @@ import Sidebar from './Sidebar';
 import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
 import { GlobalProvider } from './context/GlobalContext';
+import { LogProvider } from './context/LogContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
 import ExportTool from './tools/ExportTool';
@@ -67,34 +68,36 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
   return (
     <RootLayout>
       <GlobalProvider value={{ rootRef }}>
-        <DataProvider value={dataState}>
-          <PreferencesProvider value={preferencesState}>
-            <ViewProvider value={viewState}>
-              <DispatchProvider value={dispatchers}>
-                <div css={pixeliumContainerStyle} ref={rootRef}>
-                  <Header />
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      height: '100%',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <Toolbar orientation={'vertical'}>
-                      <ImportTool />
-                      <ExportTool />
-                    </Toolbar>
-                    <SplitPane direction="horizontal" size="80%">
-                      <CenterPanel />
-                      <Sidebar />
-                    </SplitPane>
+        <LogProvider>
+          <DataProvider value={dataState}>
+            <PreferencesProvider value={preferencesState}>
+              <ViewProvider value={viewState}>
+                <DispatchProvider value={dispatchers}>
+                  <div css={pixeliumContainerStyle} ref={rootRef}>
+                    <Header />
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        height: '100%',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <Toolbar orientation={'vertical'}>
+                        <ImportTool />
+                        <ExportTool />
+                      </Toolbar>
+                      <SplitPane direction="horizontal" size="80%">
+                        <CenterPanel />
+                        <Sidebar />
+                      </SplitPane>
+                    </div>
                   </div>
-                </div>
-              </DispatchProvider>
-            </ViewProvider>
-          </PreferencesProvider>
-        </DataProvider>
+                </DispatchProvider>
+              </ViewProvider>
+            </PreferencesProvider>
+          </DataProvider>
+        </LogProvider>
       </GlobalProvider>
     </RootLayout>
   );
