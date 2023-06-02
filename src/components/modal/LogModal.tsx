@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
-import { CSSProperties, memo, useCallback, useMemo } from 'react';
-import { FaBug } from 'react-icons/all';
+import { CSSProperties, memo, useMemo } from 'react';
+import { FaBug, FaTrash } from 'react-icons/all';
 import {
+  Button,
   Modal,
   Table,
   Toolbar,
@@ -31,6 +32,15 @@ const modalStyle = css`
   table {
     width: 100%;
   }
+
+  .no-log {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25rem;
+  }
 `;
 
 const tableHeaderStyle: CSSProperties = {
@@ -54,13 +64,7 @@ const logsDataFormat = new Intl.DateTimeFormat('default', {
 
 function LogModal() {
   const [isOpenDialog, openDialog, closeDialog] = useOnOff(false);
-
-  const { logger, logs } = useLog();
-
-  const onClick = useCallback(() => {
-    logger.warn('test');
-  }, [logger]);
-
+  const { logs, clear } = useLog();
   const reversedLogs = useMemo(() => logs.slice().reverse(), [logs]);
 
   return (
@@ -78,52 +82,65 @@ function LogModal() {
             <div className="header">Log history</div>
           </Modal.Header>
           <Modal.Body>
-            <div className="table-container">
-              <Table>
-                <Table.Header>
-                  <ValueRenderers.Header style={tableHeaderStyle} value="#" />
-                  <ValueRenderers.Header
-                    style={tableHeaderStyle}
-                    value="Time"
-                  />
-                  <ValueRenderers.Header
-                    style={tableHeaderStyle}
-                    value="Label"
-                  />
-                  <ValueRenderers.Header
-                    style={tableHeaderStyle}
-                    value="Message"
-                  />
-                </Table.Header>
-                {reversedLogs.map((log) => {
-                  const cellStyle: CSSProperties = {
-                    backgroundColor: logLevelColorMap[log.levelLabel],
-                  };
-                  return (
-                    <Table.Row key={log.id}>
-                      <ValueRenderers.Number style={cellStyle} value={log.id} />
-                      <ValueRenderers.Text
-                        style={cellStyle}
-                        value={logsDataFormat.format(log.time)}
-                      />
-                      <ValueRenderers.Text
-                        style={cellStyle}
-                        value={log.levelLabel}
-                      />
-                      <ValueRenderers.Text
-                        style={cellStyle}
-                        value={log.message}
-                      />
-                    </Table.Row>
-                  );
-                })}
-              </Table>
-            </div>
+            {logs.length > 0 ? (
+              <div className="table-container">
+                <Table>
+                  <Table.Header>
+                    <ValueRenderers.Header style={tableHeaderStyle} value="#" />
+                    <ValueRenderers.Header
+                      style={tableHeaderStyle}
+                      value="Time"
+                    />
+                    <ValueRenderers.Header
+                      style={tableHeaderStyle}
+                      value="Label"
+                    />
+                    <ValueRenderers.Header
+                      style={tableHeaderStyle}
+                      value="Message"
+                    />
+                  </Table.Header>
+                  {reversedLogs.map((log) => {
+                    const cellStyle: CSSProperties = {
+                      backgroundColor: logLevelColorMap[log.levelLabel],
+                    };
+                    return (
+                      <Table.Row key={log.id}>
+                        <ValueRenderers.Number
+                          style={cellStyle}
+                          value={log.id}
+                        />
+                        <ValueRenderers.Text
+                          style={cellStyle}
+                          value={logsDataFormat.format(log.time)}
+                        />
+                        <ValueRenderers.Text
+                          style={cellStyle}
+                          value={log.levelLabel}
+                        />
+                        <ValueRenderers.Text
+                          style={cellStyle}
+                          value={log.message}
+                        />
+                      </Table.Row>
+                    );
+                  })}
+                </Table>
+              </div>
+            ) : (
+              <div className="no-log">Nothing to see for now.</div>
+            )}
           </Modal.Body>
           <Modal.Footer>
-            <button type="button" onClick={onClick}>
-              Add log
-            </button>
+            <Button
+              backgroundColor={{ basic: '#c81e1e', hover: '#971d1f' }}
+              onClick={clear}
+            >
+              <span style={{ display: 'flex', alignItems: 'center' }}>
+                <FaTrash />
+                <span style={{ marginLeft: '8px' }}>Clear logs</span>
+              </span>
+            </Button>
           </Modal.Footer>
         </div>
       </Modal>

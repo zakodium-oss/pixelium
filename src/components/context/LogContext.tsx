@@ -1,9 +1,17 @@
 import { FifoLogger, LogEntry } from 'fifo-logger';
-import { createContext, ReactNode, useMemo, useRef, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 export interface LogState {
   logger: FifoLogger;
   logs: LogEntry[];
+  clear: () => void;
 }
 
 export const LogContext = createContext<LogState | null>(null);
@@ -21,12 +29,19 @@ export function LogProvider({ children }: LogProviderProps) {
       },
     }),
   );
-  const log = useMemo(
+
+  const clear = useCallback(() => {
+    loggerRef.current.clear();
+    setLogs([]);
+  }, [setLogs]);
+
+  const log: LogState = useMemo(
     () => ({
       logger: loggerRef.current,
       logs,
+      clear,
     }),
-    [logs],
+    [clear, logs],
   );
 
   return <LogContext.Provider value={log}>{children}</LogContext.Provider>;
