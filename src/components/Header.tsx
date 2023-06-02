@@ -10,6 +10,7 @@ import { useFullscreen, useToggle } from 'react-use';
 import useGlobal from '../hooks/useGlobal';
 
 import AboutModal from './modal/AboutModal';
+import LogModal from './modal/LogModal';
 
 function PixeliumHeader() {
   const { rootRef } = useGlobal();
@@ -32,6 +33,7 @@ function PixeliumHeader() {
         >
           <FaQuestionCircle />
         </Toolbar.Item>
+        <LogModal />
         <Toolbar.Item title="Settings">
           <FaWrench />
         </Toolbar.Item>
