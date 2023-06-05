@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { CSSProperties, memo, useMemo } from 'react';
+import { CSSProperties, memo, useCallback, useMemo } from 'react';
 import { FaBug, FaTrash } from 'react-icons/all';
 import {
   Button,
@@ -47,34 +47,64 @@ const tableHeaderStyle: CSSProperties = {
   textAlign: 'left',
 };
 
-const logLevelColorMap = {
-  trace: '#ffffff',
-  debug: '#ffffff',
-  info: '#ffffff',
-  warn: '#fffbe6',
-  error: '#ffe6e6',
-  fatal: '#ffe6e6',
-};
-
 const logsDataFormat = new Intl.DateTimeFormat('default', {
   hour: 'numeric',
   minute: 'numeric',
   second: 'numeric',
 });
 
+function getNotificationColor(level: number) {
+  if (level > 40) {
+    return '#ff0000';
+  } else if (level === 40) {
+    return '#ffc409';
+  }
+  return '#2dd36f';
+}
+
+function getRowColor(level: number) {
+  if (level > 40) {
+    return 'pink';
+  } else if (level === 40) {
+    return 'lightyellow';
+  }
+  return 'lightgreen';
+}
+
 function LogModal() {
   const [isOpenDialog, openDialog, closeDialog] = useOnOff(false);
-  const { logs, clear } = useLog();
+  const { logs, clear, unreadLevel, unreadCount, markAsRead } = useLog();
   const reversedLogs = useMemo(() => logs.slice().reverse(), [logs]);
+
+  const handleDialogOpen = useCallback(() => {
+    openDialog();
+    markAsRead();
+  }, [markAsRead, openDialog]);
 
   return (
     <>
       <Toolbar.Item
         title="Logs"
         titleOrientation="vertical"
-        onClick={openDialog}
+        onClick={handleDialogOpen}
       >
         <FaBug />
+        {unreadCount > 0 && (
+          <span
+            style={{
+              position: 'absolute',
+              top: '0.5em',
+              left: '0.5em',
+              backgroundColor: getNotificationColor(unreadLevel),
+              borderRadius: '50%',
+              minWidth: '14px',
+              fontSize: '0.75em',
+              color: 'white',
+            }}
+          >
+            {unreadCount}
+          </span>
+        )}
       </Toolbar.Item>
       <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
         <div css={modalStyle}>
@@ -102,7 +132,7 @@ function LogModal() {
                   </Table.Header>
                   {reversedLogs.map((log) => {
                     const cellStyle: CSSProperties = {
-                      backgroundColor: logLevelColorMap[log.levelLabel],
+                      backgroundColor: getRowColor(log.level),
                     };
                     return (
                       <Table.Row key={log.id}>
