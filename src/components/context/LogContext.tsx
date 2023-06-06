@@ -46,7 +46,8 @@ export function LogProvider({ children }: LogProviderProps) {
   }, [logs, setLastLogId]);
 
   const unreadCount = useMemo(() => {
-    return logs.length - lastReadLogId;
+    if (logs.length <= 0) return 0;
+    return logs[logs.length - 1].id - lastReadLogId;
   }, [lastReadLogId, logs]);
 
   const unreadLevel = useMemo(() => {
