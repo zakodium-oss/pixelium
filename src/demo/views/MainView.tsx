@@ -8,6 +8,7 @@ const wrapperStyle = css`
   display: flex;
   height: 100vh;
   flex-direction: row;
+  overflow: hidden;
 `;
 
 function MainView() {

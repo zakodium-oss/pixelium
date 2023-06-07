@@ -40,19 +40,21 @@ function CenterPanel() {
   const handleOnDrop = useFileLoader();
 
   return (
-    <DropZoneContainer
-      emptyText="Drag and drop here either an image or a Pixelium file."
-      onDrop={handleOnDrop}
-    >
-      {tabsItems.length > 0 ? (
-        <Tabs
-          orientation="horizontal"
-          items={tabsItems}
-          opened={currentTab}
-          onClick={openTab}
-        />
-      ) : null}
-    </DropZoneContainer>
+    <div style={{ width: '100%', overflowX: 'auto' }}>
+      <DropZoneContainer
+        emptyText="Drag and drop here either an image or a Pixelium file."
+        onDrop={handleOnDrop}
+      >
+        {tabsItems.length > 0 ? (
+          <Tabs
+            orientation="horizontal"
+            items={tabsItems}
+            opened={currentTab}
+            onClick={openTab}
+          />
+        ) : null}
+      </DropZoneContainer>
+    </div>
   );
 }
 
