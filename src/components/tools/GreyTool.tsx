@@ -6,16 +6,20 @@ import ExploreGreyModal from '../modal/ExploreGreyModal';
 
 export function GreyTool() {
   const [isOpenDialog, openDialog, closeDialog] = useOnOff(false);
-  const view = useView();
+  const { currentTab } = useView();
 
-  if (view.currentTab === undefined) return null;
+  if (currentTab === undefined) return null;
 
   return (
     <>
       <Toolbar.Item title="Grey filters" onClick={openDialog}>
         <FaFilter />
       </Toolbar.Item>
-      <ExploreGreyModal isOpenDialog={isOpenDialog} closeDialog={closeDialog} />
+      <ExploreGreyModal
+        isOpenDialog={isOpenDialog}
+        closeDialog={closeDialog}
+        previewImageIdentifier={currentTab}
+      />
     </>
   );
 }

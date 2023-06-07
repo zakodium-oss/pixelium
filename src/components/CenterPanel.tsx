@@ -16,7 +16,12 @@ function CenterPanel() {
       Object.keys(files).map((identifier) => ({
         id: identifier,
         title: files[identifier].metadata.name,
-        content: <ImageViewer identifier={identifier} />,
+        content: (
+          <ImageViewer
+            identifier={identifier}
+            image={files[identifier].image}
+          />
+        ),
       })),
     [files],
   );

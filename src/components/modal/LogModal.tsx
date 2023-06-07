@@ -12,16 +12,14 @@ import {
 
 import useLog from '../../hooks/useLog';
 
+import StyledModalBody from './utils/StyledModalBody';
+import StyledModalHeader from './utils/StyledModalHeader';
+
 const modalStyle = css`
   display: flex;
   flex-direction: column;
   width: 50vw;
   height: 50vh;
-  padding: 0.5em;
-
-  .header {
-    font-size: 1.25rem;
-  }
 
   .table-container {
     width: 100%;
@@ -108,58 +106,64 @@ function LogModal() {
       </Toolbar.Item>
       <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
         <div css={modalStyle}>
-          <Modal.Header>
-            <div className="header">Log history</div>
-          </Modal.Header>
+          <StyledModalHeader>
+            <Modal.Header>Log history</Modal.Header>
+          </StyledModalHeader>
+
           <Modal.Body>
-            {logs.length > 0 ? (
-              <div className="table-container">
-                <Table>
-                  <Table.Header>
-                    <ValueRenderers.Header style={tableHeaderStyle} value="#" />
-                    <ValueRenderers.Header
-                      style={tableHeaderStyle}
-                      value="Time"
-                    />
-                    <ValueRenderers.Header
-                      style={tableHeaderStyle}
-                      value="Label"
-                    />
-                    <ValueRenderers.Header
-                      style={tableHeaderStyle}
-                      value="Message"
-                    />
-                  </Table.Header>
-                  {reversedLogs.map((log) => {
-                    const cellStyle: CSSProperties = {
-                      backgroundColor: getRowColor(log.level),
-                    };
-                    return (
-                      <Table.Row key={log.id}>
-                        <ValueRenderers.Number
-                          style={cellStyle}
-                          value={log.id}
-                        />
-                        <ValueRenderers.Text
-                          style={cellStyle}
-                          value={logsDataFormat.format(log.time)}
-                        />
-                        <ValueRenderers.Text
-                          style={cellStyle}
-                          value={log.levelLabel}
-                        />
-                        <ValueRenderers.Text
-                          style={cellStyle}
-                          value={log.message}
-                        />
-                      </Table.Row>
-                    );
-                  })}
-                </Table>
-              </div>
-            ) : (
-              <div className="no-log">Nothing to see for now.</div>
-            )}
+            <StyledModalBody>
+              {logs.length > 0 ? (
+                <div className="table-container">
+                  <Table>
+                    <Table.Header>
+                      <ValueRenderers.Header
+                        style={tableHeaderStyle}
+                        value="#"
+                      />
+                      <ValueRenderers.Header
+                        style={tableHeaderStyle}
+                        value="Time"
+                      />
+                      <ValueRenderers.Header
+                        style={tableHeaderStyle}
+                        value="Label"
+                      />
+                      <ValueRenderers.Header
+                        style={tableHeaderStyle}
+                        value="Message"
+                      />
+                    </Table.Header>
+                    {reversedLogs.map((log) => {
+                      const cellStyle: CSSProperties = {
+                        backgroundColor: getRowColor(log.level),
+                      };
+                      return (
+                        <Table.Row key={log.id}>
+                          <ValueRenderers.Number
+                            style={cellStyle}
+                            value={log.id}
+                          />
+                          <ValueRenderers.Text
+                            style={cellStyle}
+                            value={logsDataFormat.format(log.time)}
+                          />
+                          <ValueRenderers.Text
+                            style={cellStyle}
+                            value={log.levelLabel}
+                          />
+                          <ValueRenderers.Text
+                            style={cellStyle}
+                            value={log.message}
+                          />
+                        </Table.Row>
+                      );
+                    })}
+                  </Table>
+                </div>
+              ) : (
+                <div className="no-log">Nothing to see for now.</div>
+              )}
+            </StyledModalBody>
           </Modal.Body>
           <Modal.Footer>
             <Button

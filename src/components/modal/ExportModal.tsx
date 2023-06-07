@@ -3,6 +3,9 @@ import { memo } from 'react';
 import { FaFileExport } from 'react-icons/all';
 import { Modal, Toolbar, useOnOff } from 'react-science/ui';
 
+import StyledModalBody from './utils/StyledModalBody';
+import StyledModalHeader from './utils/StyledModalHeader';
+
 const modalStyle = css`
   display: flex;
   flex-direction: column;
@@ -31,10 +34,14 @@ function ExportModal() {
       </Toolbar.Item>
       <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
         <div css={modalStyle}>
-          <Modal.Header>
-            <div className="header">Export</div>
-          </Modal.Header>
-          <div className="container">Nothing to see here at this time.</div>
+          <StyledModalHeader>
+            <Modal.Header>
+              <div className="header">Export</div>
+            </Modal.Header>
+          </StyledModalHeader>
+          <StyledModalBody>
+            <Modal.Body>Nothing to see here at this time.</Modal.Body>
+          </StyledModalBody>
         </div>
       </Modal>
     </>

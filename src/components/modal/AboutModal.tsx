@@ -3,14 +3,13 @@ import { SvgLogoZakodium } from 'cheminfo-font';
 import { memo } from 'react';
 import { Modal, Toolbar, useOnOff } from 'react-science/ui';
 
+import StyledModalBody from './utils/StyledModalBody';
+import StyledModalHeader from './utils/StyledModalHeader';
+
 const modalStyle = css`
   display: flex;
   flex-direction: column;
   width: 500px;
-
-  .header {
-    font-size: 1.25rem;
-  }
 
   .container {
     padding: 20px;
@@ -31,10 +30,12 @@ function AboutModal() {
       </Toolbar.Item>
       <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
         <div css={modalStyle}>
-          <Modal.Header>
-            <div className="header">About Pixelium</div>
-          </Modal.Header>
-          <div className="container">Nothing to see here at this time.</div>
+          <StyledModalHeader>
+            <Modal.Header>About Pixelium</Modal.Header>
+          </StyledModalHeader>
+          <StyledModalBody>
+            <Modal.Body>Nothing to see here at this time.</Modal.Body>
+          </StyledModalBody>
         </div>
       </Modal>
     </>

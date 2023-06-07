@@ -1,20 +1,19 @@
-import { writeCanvas } from 'image-js';
+import { Image, writeCanvas } from 'image-js';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { MapInteractionCSS } from 'react-map-interaction';
 
-import useData from '../hooks/useData';
 import useView from '../hooks/useView';
 import useViewDispatch from '../hooks/useViewDispatch';
 import { SET_PAN_ZOOM } from '../state/view/ViewActionTypes';
 
 interface ImageViewerProps {
   identifier: string;
+  image: Image;
 }
 
-function ImageViewer({ identifier }: ImageViewerProps) {
+function ImageViewer({ identifier, image }: ImageViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const data = useData();
   const view = useView();
   const viewDispatch = useViewDispatch();
 
@@ -29,14 +28,12 @@ function ImageViewer({ identifier }: ImageViewerProps) {
 
   const setPanZoom = useCallback(
     (panZoom) => {
-      viewDispatch({ type: SET_PAN_ZOOM, payload: { identifier, panZoom } });
+      viewDispatch({
+        type: SET_PAN_ZOOM,
+        payload: { identifier, panZoom },
+      });
     },
     [identifier, viewDispatch],
-  );
-
-  const image = useMemo(
-    () => data.files[identifier]?.image,
-    [data.files, identifier],
   );
 
   useEffect(() => {
