@@ -1,8 +1,17 @@
+import styled from '@emotion/styled';
 import { memo, useMemo } from 'react';
 import { ValueRenderers, Accordion, Table } from 'react-science/ui';
 
 import useData from '../hooks/useData';
+import useImageInformations from '../hooks/useImageInformations';
+import useImageMetadata from '../hooks/useImageMetadata';
 import useView from '../hooks/useView';
+
+const MissingMetadata = styled.div`
+  margin-top: 8px;
+  font-size: 1.5em;
+  text-align: center;
+`;
 
 function Sidebar() {
   const data = useData();
@@ -13,37 +22,8 @@ function Sidebar() {
     return data.files[view.currentTab].image;
   }, [data.files, view.currentTab]);
 
-  const generalInformations = useMemo(() => {
-    if (currentImage === null) return [];
-    return [
-      {
-        key: 'Image size',
-        render: (
-          <ValueRenderers.Text
-            value={`${currentImage.width.toLocaleString()} x ${currentImage.height.toLocaleString()} (${(
-              currentImage.width * currentImage.height
-            ).toLocaleString()} pixels)`}
-          />
-        ),
-      },
-      {
-        key: 'Bit depth',
-        render: <ValueRenderers.Number value={currentImage.bitDepth} />,
-      },
-      {
-        key: 'Channels',
-        render: <ValueRenderers.Number value={currentImage.channels} />,
-      },
-      {
-        key: 'Components',
-        render: <ValueRenderers.Number value={currentImage.components} />,
-      },
-      {
-        key: 'Color model',
-        render: <ValueRenderers.Text value={currentImage.colorModel} />,
-      },
-    ];
-  }, [currentImage]);
+  const generalInformations = useImageInformations(currentImage);
+  const metadatas = useImageMetadata(currentImage);
 
   if (currentImage === null) return null;
   return (
@@ -58,6 +38,20 @@ function Sidebar() {
               </Table.Row>
             ))}
           </Table>
+        </Accordion.Item>
+        <Accordion.Item title="Metadatas">
+          {metadatas.length === 0 ? (
+            <MissingMetadata>No metadatas found</MissingMetadata>
+          ) : (
+            <Table>
+              {metadatas.map(({ key, render }) => (
+                <Table.Row key={key}>
+                  <ValueRenderers.Text value={key} />
+                  {render}
+                </Table.Row>
+              ))}
+            </Table>
+          )}
         </Accordion.Item>
       </Accordion>
     </div>
