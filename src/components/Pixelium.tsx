@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { memo, useMemo, useReducer, useRef } from 'react';
+import { KbsProvider } from 'react-kbs';
 import { RootLayout, SplitPane, Toolbar } from 'react-science/ui';
 
 import {
@@ -69,37 +70,39 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
   return (
     <RootLayout>
       <GlobalProvider value={{ rootRef }}>
-        <LogProvider>
-          <DataProvider value={dataState}>
-            <PreferencesProvider value={preferencesState}>
-              <ViewProvider value={viewState}>
-                <DispatchProvider value={dispatchers}>
-                  <div css={pixeliumContainerStyle} ref={rootRef}>
-                    <Header />
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        height: '100%',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <Toolbar orientation={'vertical'}>
-                        <ImportTool />
-                        <ExportTool />
-                        <GreyTool />
-                      </Toolbar>
-                      <SplitPane direction="horizontal" size="80%">
-                        <CenterPanel />
-                        <Sidebar />
-                      </SplitPane>
+        <KbsProvider>
+          <LogProvider>
+            <DataProvider value={dataState}>
+              <PreferencesProvider value={preferencesState}>
+                <ViewProvider value={viewState}>
+                  <DispatchProvider value={dispatchers}>
+                    <div css={pixeliumContainerStyle} ref={rootRef}>
+                      <Header />
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          height: '100%',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <Toolbar orientation={'vertical'}>
+                          <ImportTool />
+                          <ExportTool />
+                          <GreyTool />
+                        </Toolbar>
+                        <SplitPane direction="horizontal" size="80%">
+                          <CenterPanel />
+                          <Sidebar />
+                        </SplitPane>
+                      </div>
                     </div>
-                  </div>
-                </DispatchProvider>
-              </ViewProvider>
-            </PreferencesProvider>
-          </DataProvider>
-        </LogProvider>
+                  </DispatchProvider>
+                </ViewProvider>
+              </PreferencesProvider>
+            </DataProvider>
+          </LogProvider>
+        </KbsProvider>
       </GlobalProvider>
     </RootLayout>
   );

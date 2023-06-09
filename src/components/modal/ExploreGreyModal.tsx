@@ -1,10 +1,11 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { GreyAlgorithm } from 'image-js';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { Modal } from 'react-science/ui';
 
 import useData from '../../hooks/useData';
+import FastSelector from '../FastSelector';
 import ImageViewer from '../ImageViewer';
 
 import StyledModalBody from './utils/StyledModalBody';
@@ -36,21 +37,21 @@ function ExploreGreyModal({
 }: ExportGreyModalProps) {
   const data = useData();
 
-  const currentAlgorithm = useMemo(() => {
-    return GreyAlgorithm.AVERAGE;
-  }, []);
-
   const image = useMemo(
     () => data.files[previewImageIdentifier]?.image,
     [data.files, previewImageIdentifier],
   );
 
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState<
+    GreyAlgorithm | undefined
+  >();
+
   const greyImage = useMemo(
     () =>
       image.grey({
-        algorithm: currentAlgorithm,
+        algorithm: selectedAlgorithm,
       }),
-    [currentAlgorithm, image],
+    [selectedAlgorithm, image],
   );
 
   return (
@@ -64,8 +65,12 @@ function ExploreGreyModal({
             <ImageViewerContainer>
               <ImageViewer identifier="__grey_filter_preview" image={image} />
             </ImageViewerContainer>
-            <div style={{ width: '20%' }}>
-              <p>Selector here</p>
+            <div style={{ width: '20%', paddingInline: '20px' }}>
+              <FastSelector
+                options={Object.values(GreyAlgorithm)}
+                selected={selectedAlgorithm}
+                setSelected={setSelectedAlgorithm}
+              />
             </div>
             <ImageViewerContainer>
               <ImageViewer
