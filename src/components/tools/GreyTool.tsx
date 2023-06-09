@@ -3,6 +3,7 @@ import { Toolbar, useOnOff } from 'react-science/ui';
 
 import useData from '../../hooks/useData';
 import useView from '../../hooks/useView';
+import isColor from '../../utils/isColor';
 import ExploreGreyModal from '../modal/ExploreGreyModal';
 
 export function GreyTool() {
@@ -11,7 +12,7 @@ export function GreyTool() {
   const { files } = useData();
 
   if (currentTab === undefined) return null;
-  if (!files[currentTab].image.colorModel.includes('RGB')) return null;
+  if (!isColor(files[currentTab].image)) return null;
 
   return (
     <>
