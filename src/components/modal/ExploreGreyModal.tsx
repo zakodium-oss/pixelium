@@ -2,9 +2,10 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { GreyAlgorithm } from 'image-js';
 import { memo, useMemo, useState } from 'react';
-import { Modal } from 'react-science/ui';
+import { Button, Modal } from 'react-science/ui';
 
 import useData from '../../hooks/useData';
+import { buttons } from '../../utils/colors';
 import FastSelector from '../FastSelector';
 import ImageViewer from '../ImageViewer';
 
@@ -28,6 +29,12 @@ const ImageViewerContainer = styled.div`
   width: 40%;
   border: 1px solid #9e9e9e;
   border-radius: 4px;
+`;
+
+const FooterStyled = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
 function ExploreGreyModal({
@@ -80,7 +87,11 @@ function ExploreGreyModal({
             </ImageViewerContainer>
           </StyledModalBody>
         </Modal.Body>
-        <Modal.Footer>I am the footer</Modal.Footer>
+        <Modal.Footer>
+          <FooterStyled>
+            <Button backgroundColor={buttons.info}>Add filter</Button>
+          </FooterStyled>
+        </Modal.Footer>
       </div>
     </Modal>
   );

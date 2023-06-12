@@ -7,6 +7,8 @@ import useImageInformations from '../hooks/useImageInformations';
 import useImageMetadata from '../hooks/useImageMetadata';
 import useView from '../hooks/useView';
 
+import Histograms from './histogram/Histograms';
+
 const MissingMetadata = styled.div`
   margin-top: 8px;
   font-size: 1.5em;
@@ -52,6 +54,9 @@ function Sidebar() {
               ))}
             </Table>
           )}
+        </Accordion.Item>
+        <Accordion.Item title="Histograms">
+          <Histograms image={currentImage} />
         </Accordion.Item>
       </Accordion>
     </div>

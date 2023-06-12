@@ -11,6 +11,7 @@ import {
 } from 'react-science/ui';
 
 import useLog from '../../hooks/useLog';
+import { buttons } from '../../utils/colors';
 
 import StyledModalBody from './utils/StyledModalBody';
 import StyledModalHeader from './utils/StyledModalHeader';
@@ -166,10 +167,7 @@ function LogModal() {
             </StyledModalBody>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              backgroundColor={{ basic: '#c81e1e', hover: '#971d1f' }}
-              onClick={clear}
-            >
+            <Button backgroundColor={buttons.danger} onClick={clear}>
               <span style={{ display: 'flex', alignItems: 'center' }}>
                 <FaTrash />
                 <span style={{ marginLeft: '8px' }}>Clear logs</span>
