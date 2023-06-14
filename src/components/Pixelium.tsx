@@ -91,7 +91,11 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                           <ExportTool />
                           <GreyTool />
                         </Toolbar>
-                        <SplitPane direction="horizontal" size="80%">
+                        <SplitPane
+                          direction="horizontal"
+                          size="20%"
+                          controlledSide="end"
+                        >
                           <CenterPanel />
                           <Sidebar />
                         </SplitPane>
