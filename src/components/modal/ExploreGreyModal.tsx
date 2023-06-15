@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { GreyAlgorithm } from 'image-js';
-import { memo, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { Button, Modal } from 'react-science/ui';
 
 import useData from '../../hooks/useData';
+import useDataDispatch from '../../hooks/useDataDispatch';
+import { ADD_GREY_FILTER } from '../../state/data/DataActionTypes';
 import { buttons } from '../../utils/colors';
 import FastSelector from '../FastSelector';
 import ImageViewer from '../ImageViewer';
@@ -45,13 +47,13 @@ function ExploreGreyModal({
   const data = useData();
 
   const image = useMemo(
-    () => data.files[previewImageIdentifier]?.image,
-    [data.files, previewImageIdentifier],
+    () => data.images[previewImageIdentifier]?.image,
+    [data.images, previewImageIdentifier],
   );
 
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<
     GreyAlgorithm | undefined
-  >();
+  >(GreyAlgorithm.LUMA_709);
 
   const greyImage = useMemo(
     () =>
@@ -60,6 +62,21 @@ function ExploreGreyModal({
       }),
     [selectedAlgorithm, image],
   );
+
+  const dataDispatch = useDataDispatch();
+
+  const addGreyFilter = useCallback(() => {
+    dataDispatch({
+      type: ADD_GREY_FILTER,
+      payload: {
+        identifier: previewImageIdentifier,
+        options: {
+          algorithm: selectedAlgorithm,
+        },
+      },
+    });
+    closeDialog();
+  }, [closeDialog, dataDispatch, previewImageIdentifier, selectedAlgorithm]);
 
   return (
     <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
@@ -89,7 +106,9 @@ function ExploreGreyModal({
         </Modal.Body>
         <Modal.Footer>
           <FooterStyled>
-            <Button backgroundColor={buttons.info}>Add filter</Button>
+            <Button backgroundColor={buttons.info} onClick={addGreyFilter}>
+              Add filter
+            </Button>
           </FooterStyled>
         </Modal.Footer>
       </div>

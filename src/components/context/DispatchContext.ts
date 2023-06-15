@@ -1,9 +1,13 @@
 import { createContext, Dispatch } from 'react';
 
+import { DataActions } from '../../state/data/DataReducer';
+import { PreferencesActions } from '../../state/preferences/PreferencesReducer';
+import { ViewActions } from '../../state/view/ViewReducer';
+
 interface DispatchState {
-  data: Dispatch<any>;
-  preferences: Dispatch<any>;
-  view: Dispatch<any>;
+  data: Dispatch<DataActions>;
+  preferences: Dispatch<PreferencesActions>;
+  view: Dispatch<ViewActions>;
 }
 export const DispatchContext = createContext<DispatchState>({
   data: () => {

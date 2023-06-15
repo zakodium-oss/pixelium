@@ -3,7 +3,7 @@ import { decode } from 'image-js';
 import { useCallback } from 'react';
 
 import { LOAD_DROP, SET_LOADING } from '../state/data/DataActionTypes';
-import { ImageWithMetadata } from '../state/data/DataReducer';
+import { DataFile } from '../state/data/DataReducer';
 
 import useDataDispatch from './useDataDispatch';
 import useLog from './useLog';
@@ -21,7 +21,7 @@ export default function useFileLoader() {
           logger.error('Error loading files');
           return [] as FileCollectionItem[];
         });
-      const imagesWithMetadata: ImageWithMetadata[] = [];
+      const imagesWithMetadata: DataFile[] = [];
 
       // for each image, decode it
       for (const file of fileCollection) {
@@ -34,6 +34,7 @@ export default function useFileLoader() {
           imagesWithMetadata.push({
             image,
             metadata,
+            pipeline: [],
           });
         } catch {
           logger.error(`Error decoding file ${file.name}`);

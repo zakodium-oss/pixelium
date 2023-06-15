@@ -2,13 +2,14 @@ import { Image, writeCanvas } from 'image-js';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { MapInteractionCSS } from 'react-map-interaction';
 
+import useData from '../hooks/useData';
 import useView from '../hooks/useView';
 import useViewDispatch from '../hooks/useViewDispatch';
 import { SET_PAN_ZOOM } from '../state/view/ViewActionTypes';
 
 interface ImageViewerProps {
   identifier: string;
-  image: Image;
+  image?: Image;
 }
 
 function ImageViewer({ identifier, image }: ImageViewerProps) {
@@ -16,6 +17,13 @@ function ImageViewer({ identifier, image }: ImageViewerProps) {
 
   const view = useView();
   const viewDispatch = useViewDispatch();
+
+  const { images } = useData();
+
+  const originalImage = useMemo(
+    () => (image === undefined ? images[identifier].image : image),
+    [images, identifier, image],
+  );
 
   const panZoom = useMemo(
     () =>
@@ -37,9 +45,9 @@ function ImageViewer({ identifier, image }: ImageViewerProps) {
   );
 
   useEffect(() => {
-    if (image === undefined || canvasRef.current === null) return;
-    writeCanvas(image, canvasRef.current);
-  }, [image]);
+    if (originalImage === undefined || canvasRef.current === null) return;
+    writeCanvas(originalImage, canvasRef.current);
+  }, [originalImage]);
 
   return (
     <MapInteractionCSS value={panZoom} onChange={setPanZoom}>

@@ -6,6 +6,7 @@ import Sidebar from '../Sidebar';
 
 const wrapperStyle = css`
   display: flex;
+  max-width: 100vw;
   height: 100vh;
   flex-direction: row;
   overflow: hidden;
@@ -15,7 +16,14 @@ function MainView() {
   return (
     <div css={wrapperStyle}>
       <Sidebar />
-      <div style={{ padding: '20px', backgroundColor: 'lightgray', flex: '1' }}>
+      <div
+        style={{
+          padding: '20px',
+          backgroundColor: 'lightgray',
+          flex: '1',
+          minWidth: '0',
+        }}
+      >
         <Pixelium />
       </div>
     </div>

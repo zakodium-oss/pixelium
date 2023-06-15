@@ -9,21 +9,21 @@ import useViewDispatch from '../hooks/useViewDispatch';
 import ImageViewer from './ImageViewer';
 
 function CenterPanel() {
-  const { files } = useData();
+  const { images } = useData();
 
   const tabsItems = useMemo(
     () =>
-      Object.keys(files).map((identifier) => ({
+      Object.keys(images).map((identifier) => ({
         id: identifier,
-        title: files[identifier].metadata.name,
+        title: images[identifier].metadata.name,
         content: (
           <ImageViewer
             identifier={identifier}
-            image={files[identifier].image}
+            image={images[identifier].image}
           />
         ),
       })),
-    [files],
+    [images],
   );
 
   const { currentTab } = useView();
@@ -45,7 +45,7 @@ function CenterPanel() {
   const handleOnDrop = useFileLoader();
 
   return (
-    <div style={{ width: '100%', overflowX: 'auto' }}>
+    <div style={{ width: '100%', overflowX: 'auto', minWidth: 0 }}>
       <DropZoneContainer
         emptyText="Drag and drop here either an image or a Pixelium file."
         onDrop={handleOnDrop}

@@ -9,10 +9,13 @@ import ExploreGreyModal from '../modal/ExploreGreyModal';
 export function GreyTool() {
   const [isOpenDialog, openDialog, closeDialog] = useOnOff(false);
   const { currentTab } = useView();
-  const { files } = useData();
+  const { images } = useData();
+
+  const image = currentTab ? images[currentTab].image : undefined;
 
   if (currentTab === undefined) return null;
-  if (!isColor(files[currentTab].image)) return null;
+  if (image === undefined) return null;
+  if (!isColor(image)) return null;
 
   return (
     <>

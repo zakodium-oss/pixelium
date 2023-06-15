@@ -8,6 +8,7 @@ import useImageMetadata from '../hooks/useImageMetadata';
 import useView from '../hooks/useView';
 
 import Histograms from './histogram/Histograms';
+import PipelineTable from './pipeline/PipelineTable';
 
 const MissingMetadata = styled.div`
   margin-top: 8px;
@@ -17,19 +18,20 @@ const MissingMetadata = styled.div`
 
 function Sidebar() {
   const data = useData();
-  const view = useView();
+  const { currentTab } = useView();
 
   const currentImage = useMemo(() => {
-    if (view.currentTab === undefined) return null;
-    return data.files[view.currentTab].image;
-  }, [data.files, view.currentTab]);
+    if (currentTab === undefined) return null;
+    return data.images[currentTab].image;
+  }, [data.images, currentTab]);
 
   const generalInformations = useImageInformations(currentImage);
   const metadatas = useImageMetadata(currentImage);
 
   if (currentImage === null) return null;
+  if (currentTab === undefined) return null;
   return (
-    <div style={{ width: '100%', minWidth: '300px' }}>
+    <div style={{ width: '100%', minWidth: 300 }}>
       <Accordion>
         <Accordion.Item title="General informations">
           <Table>
@@ -57,6 +59,9 @@ function Sidebar() {
         </Accordion.Item>
         <Accordion.Item title="Histograms">
           <Histograms image={currentImage} />
+        </Accordion.Item>
+        <Accordion.Item title="Pipeline">
+          <PipelineTable identifier={currentTab} />
         </Accordion.Item>
       </Accordion>
     </div>

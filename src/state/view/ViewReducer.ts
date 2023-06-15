@@ -25,7 +25,7 @@ export const initialViewState: ViewState = {
   imageViewerProps: {},
 };
 
-type ViewActions = OpenTabAction | SetPanZoomAction;
+export type ViewActions = OpenTabAction | SetPanZoomAction;
 
 function innerViewReducer(draft: Draft<ViewState>, action: ViewActions) {
   switch (action.type) {

@@ -9,7 +9,7 @@ export interface PreferencesState {}
 
 export const initialPreferencesState: PreferencesState = {};
 
-type PreferencesActions = InitializePreferenceAction;
+export type PreferencesActions = InitializePreferenceAction;
 
 function innerPreferencesReducer(
   draft: Draft<PreferencesState>,
