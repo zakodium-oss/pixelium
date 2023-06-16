@@ -21,7 +21,7 @@ export default function useFileLoader() {
           logger.error('Error loading files');
           return [] as FileCollectionItem[];
         });
-      const imagesWithMetadata: DataFile[] = [];
+      const dataFiles: DataFile[] = [];
 
       // for each image, decode it
       for (const file of fileCollection) {
@@ -31,7 +31,7 @@ export default function useFileLoader() {
             name: file.name,
             relativePath: file.relativePath,
           };
-          imagesWithMetadata.push({
+          dataFiles.push({
             image,
             metadata,
             pipeline: [],
@@ -40,8 +40,8 @@ export default function useFileLoader() {
           logger.error(`Error decoding file ${file.name}`);
         }
       }
-      dataDispatch({ type: LOAD_DROP, payload: imagesWithMetadata });
-      return imagesWithMetadata.length;
+      dataDispatch({ type: LOAD_DROP, payload: dataFiles });
+      return dataFiles.length;
     },
     [dataDispatch, logger],
   );

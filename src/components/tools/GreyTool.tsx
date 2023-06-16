@@ -1,21 +1,20 @@
 import { FaFilter } from 'react-icons/all';
 import { Toolbar, useOnOff } from 'react-science/ui';
 
-import useData from '../../hooks/useData';
-import useView from '../../hooks/useView';
+import useCurrentTab from '../../hooks/useCurrentTab';
+import useImage from '../../hooks/useImage';
 import isColor from '../../utils/isColor';
 import ExploreGreyModal from '../modal/ExploreGreyModal';
 
 export function GreyTool() {
   const [isOpenDialog, openDialog, closeDialog] = useOnOff(false);
-  const { currentTab } = useView();
-  const { images } = useData();
+  const currentTab = useCurrentTab();
 
-  const image = currentTab ? images[currentTab].image : undefined;
+  const { pipelined } = useImage(currentTab || '');
 
   if (currentTab === undefined) return null;
-  if (image === undefined) return null;
-  if (!isColor(image)) return null;
+  if (pipelined === undefined) return null;
+  if (!isColor(pipelined)) return null;
 
   return (
     <>

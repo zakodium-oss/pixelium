@@ -13,22 +13,24 @@ import {
   RemovePipelineOperationAction,
 } from './actions/PipelineActions';
 
+interface PipelineOperation<T extends string, O> {
+  type: T;
+  options: O;
+  order: number;
+  isActive: boolean;
+  result?: Image;
+  identifier: string;
+}
+
+export type PipelineOperations =
+  | PipelineOperation<'GREY_FILTER', GreyOptions>
+  | PipelineOperation<'MASK', MaskOptions>;
+
 export interface DataFile {
   image: Image;
   pipeline: PipelineOperations[];
   metadata: { name: string; relativePath: string };
 }
-
-interface PipelineOperation<T extends string, O> {
-  type: T;
-  options: O;
-  order: number;
-  identifier: string;
-}
-
-type PipelineOperations =
-  | PipelineOperation<'GREY_FILTER', GreyOptions>
-  | PipelineOperation<'MASK', MaskOptions>;
 
 export interface DataState {
   isLoading?: boolean;
@@ -57,11 +59,11 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
     case Type.ADD_GREY_FILTER:
       return PipelineActions.addGreyFilter(draft, action.payload);
     case Type.REMOVE_PIPELINE_OPERATION:
-      return PipelineActions.removePipelineOperation(draft, action.payload);
+      return PipelineActions.removeOperation(draft, action.payload);
     case Type.MOVE_PIPELINE_OPERATION_UP:
-      return PipelineActions.movePipelineOperationUp(draft, action.payload);
+      return PipelineActions.moveOperationUp(draft, action.payload);
     case Type.MOVE_PIPELINE_OPERATION_DOWN:
-      return PipelineActions.movePipelineOperationDown(draft, action.payload);
+      return PipelineActions.moveOperationDown(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }

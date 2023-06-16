@@ -9,15 +9,16 @@ import { OpenTabAction } from './actions/TabActions';
 
 export interface ViewState {
   currentTab?: string;
-  imageViewerProps: {
-    [identifier: string]: {
+  imageViewerProps: Record<
+    string,
+    {
       translation: {
         x: number;
         y: number;
       };
       scale: number;
-    };
-  };
+    }
+  >;
 }
 
 export const initialViewState: ViewState = {

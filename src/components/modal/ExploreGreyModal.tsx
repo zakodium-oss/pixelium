@@ -4,8 +4,8 @@ import { GreyAlgorithm } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Button, Modal } from 'react-science/ui';
 
-import useData from '../../hooks/useData';
 import useDataDispatch from '../../hooks/useDataDispatch';
+import useImage from '../../hooks/useImage';
 import { ADD_GREY_FILTER } from '../../state/data/DataActionTypes';
 import { buttons } from '../../utils/colors';
 import FastSelector from '../FastSelector';
@@ -44,12 +44,7 @@ function ExploreGreyModal({
   closeDialog,
   previewImageIdentifier,
 }: ExportGreyModalProps) {
-  const data = useData();
-
-  const image = useMemo(
-    () => data.images[previewImageIdentifier]?.image,
-    [data.images, previewImageIdentifier],
-  );
+  const { original } = useImage(previewImageIdentifier);
 
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<
     GreyAlgorithm | undefined
@@ -57,10 +52,10 @@ function ExploreGreyModal({
 
   const greyImage = useMemo(
     () =>
-      image.grey({
+      original.grey({
         algorithm: selectedAlgorithm,
       }),
-    [selectedAlgorithm, image],
+    [selectedAlgorithm, original],
   );
 
   const dataDispatch = useDataDispatch();
@@ -87,7 +82,10 @@ function ExploreGreyModal({
         <Modal.Body>
           <StyledModalBody>
             <ImageViewerContainer>
-              <ImageViewer identifier="__grey_filter_preview" image={image} />
+              <ImageViewer
+                identifier="__grey_filter_preview"
+                image={original}
+              />
             </ImageViewerContainer>
             <div style={{ width: '20%', paddingInline: '20px' }}>
               <FastSelector

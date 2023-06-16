@@ -1,9 +1,9 @@
 import React, { memo, useCallback, useEffect, useMemo } from 'react';
 import { DropZoneContainer, Tabs } from 'react-science/ui';
 
+import useCurrentTab from '../hooks/useCurrentTab';
 import useData from '../hooks/useData';
 import useFileLoader from '../hooks/useFileLoader';
-import useView from '../hooks/useView';
 import useViewDispatch from '../hooks/useViewDispatch';
 
 import ImageViewer from './ImageViewer';
@@ -16,17 +16,12 @@ function CenterPanel() {
       Object.keys(images).map((identifier) => ({
         id: identifier,
         title: images[identifier].metadata.name,
-        content: (
-          <ImageViewer
-            identifier={identifier}
-            image={images[identifier].image}
-          />
-        ),
+        content: <ImageViewer identifier={identifier} />,
       })),
     [images],
   );
 
-  const { currentTab } = useView();
+  const currentTab = useCurrentTab();
   const viewDispatch = useViewDispatch();
 
   const openTab = useCallback(

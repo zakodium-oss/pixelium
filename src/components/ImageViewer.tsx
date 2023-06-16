@@ -2,7 +2,7 @@ import { Image, writeCanvas } from 'image-js';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { MapInteractionCSS } from 'react-map-interaction';
 
-import useData from '../hooks/useData';
+import useImage from '../hooks/useImage';
 import useView from '../hooks/useView';
 import useViewDispatch from '../hooks/useViewDispatch';
 import { SET_PAN_ZOOM } from '../state/view/ViewActionTypes';
@@ -10,20 +10,25 @@ import { SET_PAN_ZOOM } from '../state/view/ViewActionTypes';
 interface ImageViewerProps {
   identifier: string;
   image?: Image;
+  showOriginal?: boolean;
 }
 
-function ImageViewer({ identifier, image }: ImageViewerProps) {
+function ImageViewer({
+  identifier,
+  showOriginal = false,
+  image,
+}: ImageViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const view = useView();
   const viewDispatch = useViewDispatch();
 
-  const { images } = useData();
+  const { original, pipelined } = useImage(identifier);
 
-  const originalImage = useMemo(
-    () => (image === undefined ? images[identifier].image : image),
-    [images, identifier, image],
-  );
+  const imageToShow = useMemo(() => {
+    if (image !== undefined) return image;
+    return showOriginal ? original : pipelined;
+  }, [image, original, pipelined, showOriginal]);
 
   const panZoom = useMemo(
     () =>
@@ -45,9 +50,9 @@ function ImageViewer({ identifier, image }: ImageViewerProps) {
   );
 
   useEffect(() => {
-    if (originalImage === undefined || canvasRef.current === null) return;
-    writeCanvas(originalImage, canvasRef.current);
-  }, [originalImage]);
+    if (canvasRef.current === null) return;
+    writeCanvas(imageToShow, canvasRef.current);
+  }, [imageToShow]);
 
   return (
     <MapInteractionCSS value={panZoom} onChange={setPanZoom}>
