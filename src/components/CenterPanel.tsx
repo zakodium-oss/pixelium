@@ -40,7 +40,7 @@ function CenterPanel() {
   const handleOnDrop = useFileLoader();
 
   return (
-    <div style={{ width: '100%', overflowX: 'auto', minWidth: 0 }}>
+    <div style={{ width: '100%' }}>
       <DropZoneContainer
         emptyText="Drag and drop here either an image or a Pixelium file."
         onDrop={handleOnDrop}
