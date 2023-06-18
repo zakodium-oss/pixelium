@@ -15,6 +15,7 @@ const HistogramsContainer = styled.div`
   height: 100%;
   padding: 8px 0;
 `;
+
 function Histograms({ image }: HistogramsProps) {
   return (
     <HistogramsContainer>

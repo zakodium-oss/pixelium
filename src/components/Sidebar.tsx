@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { ValueRenderers, Accordion, Table } from 'react-science/ui';
 
 import useCurrentTab from '../hooks/useCurrentTab';
-import useData from '../hooks/useData';
+import useImage from '../hooks/useImage';
 import useImageInformations from '../hooks/useImageInformations';
 import useImageMetadata from '../hooks/useImageMetadata';
 
@@ -17,18 +17,13 @@ const MissingMetadata = styled.div`
 `;
 
 function Sidebar() {
-  const data = useData();
   const currentTab = useCurrentTab();
 
-  const currentImage = useMemo(() => {
-    if (currentTab === undefined) return null;
-    return data.images[currentTab].image;
-  }, [data.images, currentTab]);
+  const { pipelined: currentImage } = useImage(currentTab);
 
   const generalInformations = useImageInformations(currentImage);
   const metadatas = useImageMetadata(currentImage);
 
-  if (currentImage === null) return null;
   if (currentTab === undefined) return null;
   return (
     <div style={{ width: '100%', minWidth: 300 }}>
