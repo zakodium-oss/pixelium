@@ -39,6 +39,17 @@ const FooterStyled = styled.div`
   align-items: center;
 `;
 
+const AlgorithmError = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  color: red;
+  font-size: 1.25rem;
+  font-weight: bold;
+`;
+
 function ExploreGreyModal({
   isOpenDialog,
   closeDialog,
@@ -50,13 +61,17 @@ function ExploreGreyModal({
     ThresholdAlgorithm.HUANG,
   );
 
-  const maskImage = useMemo(
-    () =>
-      pipelined instanceof Mask
-        ? pipelined
-        : pipelined.threshold({ algorithm }),
-    [pipelined, algorithm],
-  );
+  const maskImage = useMemo(() => {
+    if (pipelined instanceof Mask) {
+      return pipelined;
+    }
+
+    try {
+      return pipelined.threshold({ algorithm });
+    } catch {
+      return null;
+    }
+  }, [pipelined, algorithm]);
 
   const dataDispatch = useDataDispatch();
 
@@ -92,10 +107,14 @@ function ExploreGreyModal({
               />
             </div>
             <ImageViewerContainer>
-              <ImageViewer
-                identifier="__grey_filter_preview"
-                image={maskImage}
-              />
+              {maskImage === null ? (
+                <AlgorithmError>Error running algorithm</AlgorithmError>
+              ) : (
+                <ImageViewer
+                  identifier="__grey_filter_preview"
+                  image={maskImage}
+                />
+              )}
             </ImageViewerContainer>
           </StyledModalBody>
         </Modal.Body>
