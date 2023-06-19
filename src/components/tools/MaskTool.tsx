@@ -1,13 +1,13 @@
 import { memo } from 'react';
-import { FaFilter } from 'react-icons/fa';
+import { FaMask } from 'react-icons/fa';
 import { Toolbar, useOnOff } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
-import isColor from '../../utils/isColor';
-import ExploreGreyModal from '../modal/ExploreGreyModal';
+import isGrey from '../../utils/isGrey';
+import ExploreMaskModal from '../modal/ExploreMaskModal';
 
-function GreyTool() {
+function MaskTool() {
   const [isOpenDialog, openDialog, closeDialog] = useOnOff(false);
   const currentTab = useCurrentTab();
 
@@ -15,14 +15,14 @@ function GreyTool() {
 
   if (currentTab === undefined) return null;
   if (pipelined === undefined) return null;
-  if (!isColor(pipelined)) return null;
+  if (!isGrey(pipelined)) return null;
 
   return (
     <>
-      <Toolbar.Item title="Grey filters" onClick={openDialog}>
-        <FaFilter />
+      <Toolbar.Item title="Mask" onClick={openDialog}>
+        <FaMask />
       </Toolbar.Item>
-      <ExploreGreyModal
+      <ExploreMaskModal
         isOpenDialog={isOpenDialog}
         closeDialog={closeDialog}
         previewImageIdentifier={currentTab}
@@ -31,4 +31,4 @@ function GreyTool() {
   );
 }
 
-export default memo(GreyTool);
+export default memo(MaskTool);

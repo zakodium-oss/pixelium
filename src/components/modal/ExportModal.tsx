@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { memo } from 'react';
-import { FaFileExport } from 'react-icons/all';
+import { FaFileExport } from 'react-icons/fa';
 import { Modal, Toolbar, useOnOff } from 'react-science/ui';
 
 import StyledModalBody from './utils/StyledModalBody';

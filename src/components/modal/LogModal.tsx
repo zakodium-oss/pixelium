@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { CSSProperties, memo, useCallback, useMemo } from 'react';
-import { FaBug, FaTrash } from 'react-icons/all';
+import { FaBug, FaTrash } from 'react-icons/fa';
 import {
   Button,
   Modal,

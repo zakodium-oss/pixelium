@@ -18,7 +18,7 @@ function getComponent(value: unknown) {
 }
 
 function getDisplayKey(key: string) {
-  return key.replace(/(?<capitals>[A-Z])/g, ' $<capitals>').trim();
+  return key.replaceAll(/(?<capitals>[A-Z])/g, ' $<capitals>').trim();
 }
 
 export default function useImageMetadata(image: Image | null) {

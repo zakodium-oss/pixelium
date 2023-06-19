@@ -50,6 +50,7 @@ export default function FastSelector<T extends string>({
   selected,
   setSelected,
 }: FastSelectorProps<T>) {
+  // eslint-disable-next-line unicorn/no-array-reduce
   const refs: { [key: string]: RefObject<HTMLLIElement> } = options.reduce(
     (acc, value) => {
       acc[value as string] = createRef();
@@ -84,7 +85,8 @@ export default function FastSelector<T extends string>({
       shortcut: 'ArrowDown',
       handler: () => {
         if (selected === undefined) {
-          return select(options[options.length - 1]);
+          const last = options.at(-1) || options[0];
+          return select(last);
         }
 
         const index = options.indexOf(selected);

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import { memo } from 'react';
+import { Image, ImageColorModel } from 'image-js';
+import { memo, useMemo } from 'react';
 import { ValueRenderers, Accordion, Table } from 'react-science/ui';
 
 import useCurrentTab from '../hooks/useCurrentTab';
@@ -19,10 +20,18 @@ const MissingMetadata = styled.div`
 function Sidebar() {
   const currentTab = useCurrentTab();
 
-  const { pipelined: currentImage } = useImage(currentTab);
+  const { original, pipelined } = useImage(currentTab);
 
-  const generalInformations = useImageInformations(currentImage);
-  const metadatas = useImageMetadata(currentImage);
+  const generalInformations = useImageInformations(original);
+  const metadatas = useImageMetadata(original);
+
+  const pipelinedAsImage = useMemo(
+    () =>
+      pipelined instanceof Image
+        ? pipelined
+        : pipelined.convertColor(ImageColorModel.GREY),
+    [pipelined],
+  );
 
   if (currentTab === undefined) return null;
   return (
@@ -53,7 +62,7 @@ function Sidebar() {
           )}
         </Accordion.Item>
         <Accordion.Item title="Histograms">
-          <Histograms image={currentImage} />
+          <Histograms image={pipelinedAsImage} />
         </Accordion.Item>
         <Accordion.Item title="Pipeline">
           <PipelineTable identifier={currentTab} />

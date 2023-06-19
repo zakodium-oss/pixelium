@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef } from 'react';
-import { FaFileImport } from 'react-icons/all';
+import { FaFileImport } from 'react-icons/fa';
 import { Toolbar } from 'react-science/ui';
 
 import useFileLoader from '../../hooks/useFileLoader';

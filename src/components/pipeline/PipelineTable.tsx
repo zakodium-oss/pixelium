@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { memo, useCallback } from 'react';
-import { FaArrowDown, FaArrowUp, FaTrash } from 'react-icons/all';
+import { FaArrowDown, FaArrowUp, FaTrash } from 'react-icons/fa';
 import { Button, Table, ValueRenderers } from 'react-science/ui';
 
 import useData from '../../hooks/useData';
@@ -108,22 +108,20 @@ function PipelineTable({ identifier }: PipelineTableProps) {
           <ValueRenderers.Object value={operation.options} />
           <ValueRenderers.Component>
             <ActionsContainer>
-              {canMoveUp(operation.identifier) && (
-                <Button
-                  onClick={() => handleMoveUp(operation.identifier)}
-                  backgroundColor={buttons.info}
-                >
-                  <FaArrowUp />
-                </Button>
-              )}
-              {canMoveDown(operation.identifier) && (
-                <Button
-                  onClick={() => handleMoveDown(operation.identifier)}
-                  backgroundColor={buttons.info}
-                >
-                  <FaArrowDown />
-                </Button>
-              )}
+              <Button
+                onClick={() => handleMoveUp(operation.identifier)}
+                backgroundColor={buttons.info}
+                disabled={!canMoveUp(operation.identifier)}
+              >
+                <FaArrowUp />
+              </Button>
+              <Button
+                onClick={() => handleMoveDown(operation.identifier)}
+                backgroundColor={buttons.info}
+                disabled={!canMoveDown(operation.identifier)}
+              >
+                <FaArrowDown />
+              </Button>
               <Button
                 onClick={() => handleDelete(operation.identifier)}
                 backgroundColor={buttons.danger}

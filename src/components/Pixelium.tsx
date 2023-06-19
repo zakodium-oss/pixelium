@@ -29,8 +29,9 @@ import { LogProvider } from './context/LogContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
 import ExportTool from './tools/ExportTool';
-import { GreyTool } from './tools/GreyTool';
+import GreyTool from './tools/GreyTool';
 import ImportTool from './tools/ImportTool';
+import MaskTool from './tools/MaskTool';
 
 interface PixeliumProps {
   data?: DataState;
@@ -90,6 +91,7 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                           <ImportTool />
                           <ExportTool />
                           <GreyTool />
+                          <MaskTool />
                         </Toolbar>
                         <SplitPane
                           direction="horizontal"

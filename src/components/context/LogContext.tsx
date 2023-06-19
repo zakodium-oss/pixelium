@@ -41,19 +41,22 @@ export function LogProvider({ children }: LogProviderProps) {
   const [lastReadLogId, setLastLogId] = useState(0);
   const markAsRead = useCallback(() => {
     if (logs.length <= 0) return;
-    const id = logs[logs.length - 1].id;
+    const id = logs.at(-1)?.id || 0;
     setLastLogId(id);
   }, [logs, setLastLogId]);
 
   const unreadCount = useMemo(() => {
     if (logs.length <= 0) return 0;
-    return logs[logs.length - 1].id - lastReadLogId;
+    return (logs.at(-1)?.id || 0) - lastReadLogId;
   }, [lastReadLogId, logs]);
 
   const unreadLevel = useMemo(() => {
-    return logs
-      .filter((log) => log.id > lastReadLogId)
-      .reduce((acc, log) => (log.level > acc ? log.level : acc), -1);
+    return (
+      logs
+        .filter((log) => log.id > lastReadLogId)
+        // eslint-disable-next-line unicorn/no-array-reduce
+        .reduce((acc, log) => (log.level > acc ? log.level : acc), -1)
+    );
   }, [lastReadLogId, logs]);
 
   const log: LogState = useMemo(

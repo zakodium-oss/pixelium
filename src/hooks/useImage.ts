@@ -2,7 +2,12 @@ import { EMPTY_IMAGE } from '../utils/defaults';
 
 import useData from './useData';
 
-const DEFAULT = { original: EMPTY_IMAGE, pipelined: EMPTY_IMAGE };
+const DEFAULT = {
+  original: EMPTY_IMAGE,
+  pipelined: EMPTY_IMAGE,
+  pipelinedAsImage: EMPTY_IMAGE,
+  pipelinedAsMask: null,
+};
 
 export default function useImage(identifier?: string) {
   const { images } = useData();
@@ -11,11 +16,13 @@ export default function useImage(identifier?: string) {
   const dataFile = images[identifier];
   if (!dataFile) return DEFAULT;
 
+  const pipelined =
+    dataFile.pipeline.findLast(
+      (operation) => operation.isActive && operation.result !== undefined,
+    )?.result || dataFile.image;
+
   return {
     original: dataFile.image,
-    pipelined:
-      dataFile.pipeline.findLast(
-        (operation) => operation.isActive && operation.result !== undefined,
-      )?.result || dataFile.image,
+    pipelined,
   };
 }

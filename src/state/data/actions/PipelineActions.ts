@@ -1,5 +1,6 @@
 import { v4 as uuid } from '@lukeed/uuid';
 import { GreyOptions, Image } from 'image-js';
+import { ThresholdOptionsAlgorithm } from 'image-js/src/operations/threshold';
 import { Draft } from 'immer';
 
 import { DataActionType } from '../DataActionTypes';
@@ -8,6 +9,11 @@ import { DataState, PipelineOperations } from '../DataReducer';
 export type PipelineAddGreyFilterAction = DataActionType<
   'ADD_GREY_FILTER',
   { identifier: string; options: GreyOptions }
+>;
+
+export type PipelineAddMaskAction = DataActionType<
+  'ADD_MASK',
+  { identifier: string; options: ThresholdOptionsAlgorithm }
 >;
 
 export type RemovePipelineOperationAction = DataActionType<
@@ -34,6 +40,7 @@ export function addGreyFilter(
 
   const { pipeline, image } = dataFile;
 
+  // eslint-disable-next-line unicorn/no-array-reduce
   const biggestOrder = pipeline.reduce(
     (acc, operation) => Math.max(acc, operation.order),
     0,
@@ -41,6 +48,34 @@ export function addGreyFilter(
   pipeline.push({
     identifier: uuid(),
     type: 'GREY_FILTER',
+    order: biggestOrder + 1,
+    isActive: true,
+    options,
+  });
+
+  runPipeline(pipeline, image);
+}
+
+export function addMask(
+  draft: Draft<DataState>,
+  {
+    identifier,
+    options,
+  }: { identifier: string; options: ThresholdOptionsAlgorithm },
+) {
+  const dataFile = draft.images[identifier];
+  if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
+
+  const { pipeline, image } = dataFile;
+
+  // eslint-disable-next-line unicorn/no-array-reduce
+  const biggestOrder = pipeline.reduce(
+    (acc, operation) => Math.max(acc, operation.order),
+    0,
+  );
+  pipeline.push({
+    identifier: uuid(),
+    type: 'MASK',
     order: biggestOrder + 1,
     isActive: true,
     options,
@@ -119,21 +154,27 @@ function runPipeline(
   pipeline: Draft<PipelineOperations>[],
   baseImage: Draft<Image>,
 ) {
-  let previous = baseImage;
-  for (const operation of pipeline) {
+  for (const [index, operation] of pipeline.entries()) {
     if (!operation.isActive) {
       continue;
     }
 
-    switch (operation.type) {
-      case 'GREY_FILTER':
-        operation.result = previous.grey({
+    const applyOn = index === 0 ? baseImage : pipeline[index - 1].result;
+
+    if (operation.type === 'GREY_FILTER') {
+      if (applyOn instanceof Image) {
+        operation.result = applyOn.grey({
           algorithm: operation.options.algorithm,
         });
-        previous = operation.result;
-        break;
-      default:
-        throw new Error(`Unknown operation type ${operation.type}`);
+      }
+    } else if (operation.type === 'MASK') {
+      if (applyOn instanceof Image) {
+        operation.result = applyOn.threshold({
+          algorithm: operation.options.algorithm,
+        });
+      }
+    } else {
+      throw new Error('Unknown operation type');
     }
   }
 }

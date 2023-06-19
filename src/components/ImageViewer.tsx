@@ -1,4 +1,4 @@
-import { Image, writeCanvas } from 'image-js';
+import { Image, Mask, writeCanvas } from 'image-js';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { MapInteractionCSS } from 'react-map-interaction';
 
@@ -9,7 +9,7 @@ import { SET_PAN_ZOOM } from '../state/view/ViewActionTypes';
 
 interface ImageViewerProps {
   identifier: string;
-  image?: Image;
+  image?: Image | Mask;
   showOriginal?: boolean;
 }
 

@@ -3,7 +3,7 @@ import {
   FaQuestionCircle,
   FaRegWindowMaximize,
   FaWrench,
-} from 'react-icons/all';
+} from 'react-icons/fa';
 import { Header as InnerHeader, Toolbar } from 'react-science/ui';
 import { useFullscreen, useToggle } from 'react-use';
 

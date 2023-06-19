@@ -1,8 +1,8 @@
 root: true
 extends:
-  - zakodium/ts
-  - zakodium/react
-  - zakodium/unicorn
+  - cheminfo-react/base
+  - cheminfo-typescript/base
+  - cheminfo-typescript/unicorn
 rules:
   'import/default': off
   'import/no-unresolved': off
@@ -13,10 +13,19 @@ rules:
   '@typescript-eslint/no-misused-promises': off
   '@typescript-eslint/restrict-plus-operands': off
   'react/no-unstable-nested-components': off
+  no-restricted-imports:
+    - error
+    - name: lodash
+      message: "Use a deep import instead, like for example 'lodash/get'"
+    - name: '@simbathesailor/use-what-changed'
+      message: 'Remove use-what-changed before committing the code'
+    - name: openchemlib
+      message: "Use 'openchemlib/full'"
+    - name: react-ocl
+      message: "Use 'react-ocl/full"
   react/no-unknown-property:
     - error
     - ignore:
         - 'css'
-  unicorn/no-array-reduce: off
 parserOptions:
   sourceType: module

@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "exclude": [
+    "src/demo",
     "src/main.tsx",
     "vite.config.ts"
   ],
