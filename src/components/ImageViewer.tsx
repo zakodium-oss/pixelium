@@ -55,11 +55,16 @@ function ImageViewer({
   }, [imageToShow]);
 
   return (
-    <MapInteractionCSS value={panZoom} onChange={setPanZoom}>
+    <MapInteractionCSS value={panZoom} onChange={setPanZoom} maxScale={20}>
       <div style={{ position: 'relative' }}>
         <canvas
           ref={canvasRef}
-          style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+          style={{
+            maxWidth: '100%',
+            maxHeight: '100%',
+            objectFit: 'contain',
+            imageRendering: 'pixelated',
+          }}
         />
       </div>
     </MapInteractionCSS>
