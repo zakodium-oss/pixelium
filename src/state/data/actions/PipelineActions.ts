@@ -1,6 +1,5 @@
 import { v4 as uuid } from '@lukeed/uuid';
-import { GreyOptions, Image } from 'image-js';
-import { ThresholdOptionsAlgorithm } from 'image-js/src/operations/threshold';
+import { GreyOptions, Image, ThresholdOptionsAlgorithm } from 'image-js';
 import { Draft } from 'immer';
 
 import { DataActionType } from '../DataActionTypes';

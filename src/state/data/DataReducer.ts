@@ -1,5 +1,4 @@
-import { Image, GreyOptions, Mask } from 'image-js';
-import { ThresholdOptionsAlgorithm } from 'image-js/src/operations/threshold';
+import { Image, GreyOptions, Mask, ThresholdOptionsAlgorithm } from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
 
