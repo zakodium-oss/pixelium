@@ -30,14 +30,9 @@ export type RemovePipelineOperationAction = DataActionType<
   { identifier: string; opIdentifier: string }
 >;
 
-export type MovePipelineOperationUpAction = DataActionType<
-  'MOVE_PIPELINE_OPERATION_UP',
-  { identifier: string; opIdentifier: string }
->;
-
-export type MovePipelineOperationDownAction = DataActionType<
-  'MOVE_PIPELINE_OPERATION_DOWN',
-  { identifier: string; opIdentifier: string }
+export type TogglePipelineOperationAction = DataActionType<
+  'TOGGLE_PIPELINE_OPERATION',
+  { identifier: string; opIdentifier: string; checked: boolean }
 >;
 
 export function addGreyFilter(
@@ -49,15 +44,9 @@ export function addGreyFilter(
 
   const { pipeline, image } = dataFile;
 
-  // eslint-disable-next-line unicorn/no-array-reduce
-  const biggestOrder = pipeline.reduce(
-    (acc, operation) => Math.max(acc, operation.order),
-    0,
-  );
   pipeline.push({
     identifier: uuid(),
     type: 'GREY_FILTER',
-    order: biggestOrder + 1,
     isActive: true,
     options,
   });
@@ -74,15 +63,9 @@ export function addBlur(
 
   const { pipeline, image } = dataFile;
 
-  // eslint-disable-next-line unicorn/no-array-reduce
-  const biggestOrder = pipeline.reduce(
-    (acc, operation) => Math.max(acc, operation.order),
-    0,
-  );
   pipeline.push({
     identifier: uuid(),
     type: 'BLUR',
-    order: biggestOrder + 1,
     isActive: true,
     options,
   });
@@ -102,15 +85,9 @@ export function addMask(
 
   const { pipeline, image } = dataFile;
 
-  // eslint-disable-next-line unicorn/no-array-reduce
-  const biggestOrder = pipeline.reduce(
-    (acc, operation) => Math.max(acc, operation.order),
-    0,
-  );
   pipeline.push({
     identifier: uuid(),
     type: 'MASK',
-    order: biggestOrder + 1,
     isActive: true,
     options,
   });
@@ -139,51 +116,30 @@ export function removeOperation(
   runPipeline(pipeline, image);
 }
 
-export function moveOperationUp(
+export function toggleOperation(
   draft: Draft<DataState>,
-  { identifier, opIdentifier }: { identifier: string; opIdentifier: string },
+  {
+    identifier,
+    opIdentifier,
+    checked,
+  }: { identifier: string; opIdentifier: string; checked: boolean },
 ) {
-  moveOperation(draft, identifier, opIdentifier, 'UP');
-}
-
-export function moveOperationDown(
-  draft: Draft<DataState>,
-  { identifier, opIdentifier }: { identifier: string; opIdentifier: string },
-) {
-  moveOperation(draft, identifier, opIdentifier, 'DOWN');
-}
-
-export function moveOperation(
-  draft: Draft<DataState>,
-  identifier: string,
-  opIdentifier: string,
-  direction: 'UP' | 'DOWN',
-) {
-  const factor = direction === 'UP' ? -1 : 1;
-
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
-  const { pipeline } = dataFile;
 
-  const operationIndex = pipeline.findIndex(
+  const { pipeline, image } = dataFile;
+
+  const selectedIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
   );
-  if (operationIndex === -1) {
-    throw new Error(`Operation ${opIdentifier} not found`);
+
+  for (const [index, operation] of pipeline.entries()) {
+    operation.isActive = checked
+      ? index <= selectedIndex
+      : index < selectedIndex;
   }
 
-  const upperOperationIndex = pipeline.findIndex(
-    (maybeUpperOperation) =>
-      maybeUpperOperation.order === pipeline[operationIndex].order + factor,
-  );
-  if (upperOperationIndex === -1) {
-    throw new Error(`Operation ${opIdentifier} has no upper operation`);
-  }
-
-  pipeline[operationIndex].order += factor;
-  pipeline[upperOperationIndex].order -= factor;
-
-  pipeline.sort((a, b) => a.order - b.order);
+  runPipeline(pipeline, image);
 }
 
 function runPipeline(
@@ -192,7 +148,7 @@ function runPipeline(
 ) {
   for (const [index, operation] of pipeline.entries()) {
     if (!operation.isActive) {
-      continue;
+      break;
     }
 
     const applyOn = index === 0 ? baseImage : pipeline[index - 1].result;

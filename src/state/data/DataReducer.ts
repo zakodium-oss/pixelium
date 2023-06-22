@@ -13,12 +13,11 @@ import * as LoadActions from './actions/LoadActions';
 import type { SetLoadingAction, LoadDropAction } from './actions/LoadActions';
 import * as PipelineActions from './actions/PipelineActions';
 import {
-  MovePipelineOperationUpAction,
-  MovePipelineOperationDownAction,
   PipelineAddGreyFilterAction,
   RemovePipelineOperationAction,
   PipelineAddMaskAction,
   PipelineAddBlurAction,
+  TogglePipelineOperationAction,
 } from './actions/PipelineActions';
 
 interface PipelineOperation<
@@ -28,7 +27,6 @@ interface PipelineOperation<
 > {
   type: T;
   options: O;
-  order: number;
   isActive: boolean;
   result?: R;
   identifier: string;
@@ -62,8 +60,7 @@ export type DataActions =
   | PipelineAddBlurAction
   | PipelineAddMaskAction
   | RemovePipelineOperationAction
-  | MovePipelineOperationUpAction
-  | MovePipelineOperationDownAction;
+  | TogglePipelineOperationAction;
 
 function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
   switch (action.type) {
@@ -79,10 +76,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.addMask(draft, action.payload);
     case Type.REMOVE_PIPELINE_OPERATION:
       return PipelineActions.removeOperation(draft, action.payload);
-    case Type.MOVE_PIPELINE_OPERATION_UP:
-      return PipelineActions.moveOperationUp(draft, action.payload);
-    case Type.MOVE_PIPELINE_OPERATION_DOWN:
-      return PipelineActions.moveOperationDown(draft, action.payload);
+    case Type.TOGGLE_PIPELINE_OPERATION:
+      return PipelineActions.toggleOperation(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }
