@@ -4,6 +4,7 @@ import {
   Mask,
   ThresholdOptionsAlgorithm,
   BlurOptions,
+  GaussianBlurXYOptions,
 } from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
@@ -18,6 +19,7 @@ import {
   PipelineAddMaskAction,
   PipelineAddBlurAction,
   TogglePipelineOperationAction,
+  PipelineAddGaussianBlurAction,
 } from './actions/PipelineActions';
 
 interface PipelineOperation<
@@ -35,6 +37,7 @@ interface PipelineOperation<
 export type PipelineOperations =
   | PipelineOperation<'GREY_FILTER', GreyOptions, Image>
   | PipelineOperation<'BLUR', BlurOptions, Image>
+  | PipelineOperation<'GAUSSIAN_BLUR', GaussianBlurXYOptions, Image>
   | PipelineOperation<'MASK', ThresholdOptionsAlgorithm, Mask>;
 
 export interface DataFile {
@@ -58,6 +61,7 @@ export type DataActions =
   | LoadDropAction
   | PipelineAddGreyFilterAction
   | PipelineAddBlurAction
+  | PipelineAddGaussianBlurAction
   | PipelineAddMaskAction
   | RemovePipelineOperationAction
   | TogglePipelineOperationAction;
@@ -72,6 +76,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.addGreyFilter(draft, action.payload);
     case Type.ADD_BLUR:
       return PipelineActions.addBlur(draft, action.payload);
+    case Type.ADD_GAUSSIAN_BLUR:
+      return PipelineActions.addGaussianBlur(draft, action.payload);
     case Type.ADD_MASK:
       return PipelineActions.addMask(draft, action.payload);
     case Type.REMOVE_PIPELINE_OPERATION:

@@ -1,6 +1,7 @@
 import { v4 as uuid } from '@lukeed/uuid';
 import {
   BlurOptions,
+  GaussianBlurXYOptions,
   GreyOptions,
   Image,
   ThresholdOptionsAlgorithm,
@@ -18,6 +19,11 @@ export type PipelineAddGreyFilterAction = DataActionType<
 export type PipelineAddBlurAction = DataActionType<
   'ADD_BLUR',
   { identifier: string; options: BlurOptions }
+>;
+
+export type PipelineAddGaussianBlurAction = DataActionType<
+  'ADD_GAUSSIAN_BLUR',
+  { identifier: string; options: GaussianBlurXYOptions }
 >;
 
 export type PipelineAddMaskAction = DataActionType<
@@ -66,6 +72,28 @@ export function addBlur(
   pipeline.push({
     identifier: uuid(),
     type: 'BLUR',
+    isActive: true,
+    options,
+  });
+
+  runPipeline(pipeline, image);
+}
+
+export function addGaussianBlur(
+  draft: Draft<DataState>,
+  {
+    identifier,
+    options,
+  }: { identifier: string; options: GaussianBlurXYOptions },
+) {
+  const dataFile = draft.images[identifier];
+  if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
+
+  const { pipeline, image } = dataFile;
+
+  pipeline.push({
+    identifier: uuid(),
+    type: 'GAUSSIAN_BLUR',
     isActive: true,
     options,
   });
@@ -172,6 +200,15 @@ function runPipeline(
       if (applyOn instanceof Image) {
         operation.result = applyOn.threshold({
           algorithm: operation.options.algorithm,
+        });
+      }
+    } else if (operation.type === 'GAUSSIAN_BLUR') {
+      if (applyOn instanceof Image) {
+        operation.result = applyOn.gaussianBlur({
+          sigmaX: operation.options.sigmaX,
+          sigmaY: operation.options.sigmaY,
+          sizeX: operation.options.sizeX,
+          sizeY: operation.options.sizeY,
         });
       }
     } else {

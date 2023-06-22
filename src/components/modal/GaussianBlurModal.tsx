@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { BlurOptions, BorderType, Image } from 'image-js';
+import { GaussianBlurXYOptions, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Button, Field, Input, Modal, Select } from 'react-science/ui';
+import { Button, Field, Input, Modal } from 'react-science/ui';
 
 import useDataDispatch from '../../hooks/useDataDispatch';
 import useImage from '../../hooks/useImage';
-import { ADD_BLUR } from '../../state/data/DataActionTypes';
+import { ADD_GAUSSIAN_BLUR } from '../../state/data/DataActionTypes';
 import { buttons } from '../../utils/colors';
 import ImageViewer from '../ImageViewer';
 
@@ -21,7 +21,7 @@ const modalStyle = css`
   height: 75vh;
 `;
 
-interface BlurModalProps {
+interface GaussianBlurModalProps {
   isOpenDialog: boolean;
   closeDialog: () => void;
   previewImageIdentifier: string;
@@ -43,56 +43,50 @@ function BlurModal({
   isOpenDialog,
   closeDialog,
   previewImageIdentifier,
-}: BlurModalProps) {
+}: GaussianBlurModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
-  const [blurOptions, setBlurOptions] = useState<BlurOptions>({
-    width: 1,
-    height: 1,
-    borderType: BorderType.REFLECT_101,
-    borderValue: undefined,
-  });
+  const [gaussianBlurOptions, setGaussianBlurOptions] =
+    useState<GaussianBlurXYOptions>({
+      sigmaX: 1,
+      sigmaY: 1,
+      sizeX: 1,
+      sizeY: 1,
+    });
 
   const blurredImage = useMemo(() => {
-    if (blurOptions.width % 2 !== 1 || blurOptions.height % 2 !== 1) {
+    if (
+      (gaussianBlurOptions.sizeX || 1) % 2 !== 1 ||
+      (gaussianBlurOptions.sizeY || 1) % 2 !== 1
+    ) {
       return pipelined;
     }
 
     if (pipelined instanceof Image) {
-      return pipelined.blur(blurOptions);
+      return pipelined.gaussianBlur(gaussianBlurOptions);
     }
 
     return pipelined;
-  }, [blurOptions, pipelined]);
+  }, [gaussianBlurOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();
 
-  const addBlurFilter = useCallback(() => {
+  const addGaussianBlurFilter = useCallback(() => {
     dataDispatch({
-      type: ADD_BLUR,
+      type: ADD_GAUSSIAN_BLUR,
       payload: {
         identifier: previewImageIdentifier,
-        options: blurOptions,
+        options: gaussianBlurOptions,
       },
     });
     closeDialog();
-  }, [blurOptions, closeDialog, dataDispatch, previewImageIdentifier]);
-
-  const borderTypeOptions = useMemo(
-    () => [
-      Object.keys(BorderType).map((borderType) => ({
-        label: BorderType[borderType],
-        value: BorderType[borderType],
-      })),
-    ],
-    [],
-  );
+  }, [gaussianBlurOptions, closeDialog, dataDispatch, previewImageIdentifier]);
 
   return (
     <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
       <div css={modalStyle}>
         <StyledModalHeader>
-          <Modal.Header>Blur image</Modal.Header>
+          <Modal.Header>Gaussian blur image</Modal.Header>
         </StyledModalHeader>
         <Modal.Body>
           <StyledModalBody>
@@ -108,65 +102,62 @@ function BlurModal({
                 paddingInline: '20px',
               }}
             >
-              <Field name="kernelWidth" label="Kernel width">
+              <Field name="sigmaX" label="Sigma X">
                 <Input
                   type="number"
-                  name="kernelWidth"
-                  step={2}
-                  min={1}
-                  value={blurOptions.width}
+                  name="sigmaX"
+                  value={gaussianBlurOptions.sigmaX}
                   onChange={(e) => {
-                    setBlurOptions({
-                      ...blurOptions,
-                      width: Number(e.target.value),
+                    setGaussianBlurOptions({
+                      ...gaussianBlurOptions,
+                      sigmaX: Number(e.target.value),
                     });
                   }}
                 />
               </Field>
-              <Field name="kernelHeight" label="Kenel height">
+              <Field name="sigmaY" label="Sigma Y">
                 <Input
                   type="number"
-                  name="kernelHeight"
-                  step={2}
-                  min={1}
-                  value={blurOptions.height}
+                  name="sigmaY"
+                  value={gaussianBlurOptions.sigmaY}
                   onChange={(e) => {
-                    setBlurOptions({
-                      ...blurOptions,
-                      height: Number(e.target.value),
+                    setGaussianBlurOptions({
+                      ...gaussianBlurOptions,
+                      sigmaY: Number(e.target.value),
                     });
                   }}
                 />
               </Field>
-
-              <Field name="borderType" label="Border type">
-                <Select
-                  value={blurOptions.borderType}
-                  options={borderTypeOptions}
-                  onSelect={(value) => {
-                    setBlurOptions({
-                      ...blurOptions,
-                      borderType: value as BorderType,
+              <Field name="sizeX" label="Size X">
+                <Input
+                  type="number"
+                  name="sizeX"
+                  min={1}
+                  step={2}
+                  value={gaussianBlurOptions.sizeX}
+                  onChange={(e) => {
+                    setGaussianBlurOptions({
+                      ...gaussianBlurOptions,
+                      sizeX: Number(e.target.value),
                     });
                   }}
                 />
               </Field>
-
-              {blurOptions.borderType === BorderType.CONSTANT && (
-                <Field name="borderValue" label="Border value">
-                  <Input
-                    type="number"
-                    name="borderValue"
-                    value={blurOptions.borderValue}
-                    onChange={(e) => {
-                      setBlurOptions({
-                        ...blurOptions,
-                        borderValue: Number(e.target.value),
-                      });
-                    }}
-                  />
-                </Field>
-              )}
+              <Field name="sizeY" label="Size Y">
+                <Input
+                  type="number"
+                  name="sizeY"
+                  min={1}
+                  step={2}
+                  value={gaussianBlurOptions.sizeY}
+                  onChange={(e) => {
+                    setGaussianBlurOptions({
+                      ...gaussianBlurOptions,
+                      sizeY: Number(e.target.value),
+                    });
+                  }}
+                />
+              </Field>
             </div>
             <ImageViewerContainer>
               <ImageViewer
@@ -178,7 +169,10 @@ function BlurModal({
         </Modal.Body>
         <Modal.Footer>
           <FooterStyled>
-            <Button backgroundColor={buttons.info} onClick={addBlurFilter}>
+            <Button
+              backgroundColor={buttons.info}
+              onClick={() => addGaussianBlurFilter()}
+            >
               Add filter
             </Button>
           </FooterStyled>

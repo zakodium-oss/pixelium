@@ -14,10 +14,17 @@ import isBinary from '../../utils/isBinary';
 import isColor from '../../utils/isColor';
 import BlurModal from '../modal/BlurModal';
 import ExploreGreyModal from '../modal/ExploreGreyModal';
+import GaussianBlurModal from '../modal/GaussianBlurModal';
 
 function FilterTool() {
   const [isGreyDialogOpen, openGreyDialog, closeGreyDialog] = useOnOff(false);
   const [isBlurDialogOpen, openBlurDialog, closeBlurDialog] = useOnOff(false);
+  const [
+    isGaussianBlurDialogOpen,
+    openGaussianBlurDialog,
+    closeGaussianBlurDialog,
+  ] = useOnOff(false);
+
   const currentTab = useCurrentTab();
 
   const { pipelined } = useImage(currentTab || '');
@@ -36,6 +43,12 @@ function FilterTool() {
         type: 'option',
         disabled: isBinary(pipelined),
       },
+      {
+        label: 'Gaussian blur',
+        data: 'gaussian-blur',
+        type: 'option',
+        disabled: isBinary(pipelined),
+      },
     ],
     [pipelined],
   );
@@ -48,8 +61,11 @@ function FilterTool() {
       if (selected.data === 'blur') {
         openBlurDialog();
       }
+      if (selected.data === 'gaussian-blur') {
+        openGaussianBlurDialog();
+      }
     },
-    [openBlurDialog, openGreyDialog],
+    [openBlurDialog, openGaussianBlurDialog, openGreyDialog],
   );
 
   if (currentTab === undefined) return null;
@@ -77,6 +93,13 @@ function FilterTool() {
         <BlurModal
           isOpenDialog={isBlurDialogOpen}
           closeDialog={closeBlurDialog}
+          previewImageIdentifier={currentTab}
+        />
+      )}
+      {isGaussianBlurDialogOpen && (
+        <GaussianBlurModal
+          isOpenDialog={isGaussianBlurDialogOpen}
+          closeDialog={closeGaussianBlurDialog}
           previewImageIdentifier={currentTab}
         />
       )}
