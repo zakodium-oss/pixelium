@@ -29,7 +29,7 @@ import { LogProvider } from './context/LogContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
 import ExportTool from './tools/ExportTool';
-import GreyTool from './tools/GreyTool';
+import GreyTool from './tools/FilterTool';
 import ImportTool from './tools/ImportTool';
 import MaskTool from './tools/MaskTool';
 

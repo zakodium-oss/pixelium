@@ -1,4 +1,10 @@
-import { Image, GreyOptions, Mask, ThresholdOptionsAlgorithm } from 'image-js';
+import {
+  Image,
+  GreyOptions,
+  Mask,
+  ThresholdOptionsAlgorithm,
+  BlurOptions,
+} from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
 
@@ -12,6 +18,7 @@ import {
   PipelineAddGreyFilterAction,
   RemovePipelineOperationAction,
   PipelineAddMaskAction,
+  PipelineAddBlurAction,
 } from './actions/PipelineActions';
 
 interface PipelineOperation<
@@ -29,6 +36,7 @@ interface PipelineOperation<
 
 export type PipelineOperations =
   | PipelineOperation<'GREY_FILTER', GreyOptions, Image>
+  | PipelineOperation<'BLUR', BlurOptions, Image>
   | PipelineOperation<'MASK', ThresholdOptionsAlgorithm, Mask>;
 
 export interface DataFile {
@@ -51,6 +59,7 @@ export type DataActions =
   | SetLoadingAction
   | LoadDropAction
   | PipelineAddGreyFilterAction
+  | PipelineAddBlurAction
   | PipelineAddMaskAction
   | RemovePipelineOperationAction
   | MovePipelineOperationUpAction
@@ -64,6 +73,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return LoadActions.loadDrop(draft, action.payload);
     case Type.ADD_GREY_FILTER:
       return PipelineActions.addGreyFilter(draft, action.payload);
+    case Type.ADD_BLUR:
+      return PipelineActions.addBlur(draft, action.payload);
     case Type.ADD_MASK:
       return PipelineActions.addMask(draft, action.payload);
     case Type.REMOVE_PIPELINE_OPERATION:

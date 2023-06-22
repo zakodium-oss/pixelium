@@ -1,5 +1,10 @@
 import { v4 as uuid } from '@lukeed/uuid';
-import { GreyOptions, Image, ThresholdOptionsAlgorithm } from 'image-js';
+import {
+  BlurOptions,
+  GreyOptions,
+  Image,
+  ThresholdOptionsAlgorithm,
+} from 'image-js';
 import { Draft } from 'immer';
 
 import { DataActionType } from '../DataActionTypes';
@@ -8,6 +13,11 @@ import { DataState, PipelineOperations } from '../DataReducer';
 export type PipelineAddGreyFilterAction = DataActionType<
   'ADD_GREY_FILTER',
   { identifier: string; options: GreyOptions }
+>;
+
+export type PipelineAddBlurAction = DataActionType<
+  'ADD_BLUR',
+  { identifier: string; options: BlurOptions }
 >;
 
 export type PipelineAddMaskAction = DataActionType<
@@ -55,6 +65,31 @@ export function addGreyFilter(
   runPipeline(pipeline, image);
 }
 
+export function addBlur(
+  draft: Draft<DataState>,
+  { identifier, options }: { identifier: string; options: BlurOptions },
+) {
+  const dataFile = draft.images[identifier];
+  if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
+
+  const { pipeline, image } = dataFile;
+
+  // eslint-disable-next-line unicorn/no-array-reduce
+  const biggestOrder = pipeline.reduce(
+    (acc, operation) => Math.max(acc, operation.order),
+    0,
+  );
+  pipeline.push({
+    identifier: uuid(),
+    type: 'BLUR',
+    order: biggestOrder + 1,
+    isActive: true,
+    options,
+  });
+
+  runPipeline(pipeline, image);
+}
+
 export function addMask(
   draft: Draft<DataState>,
   {
@@ -90,7 +125,7 @@ export function removeOperation(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline } = dataFile;
+  const { pipeline, image } = dataFile;
 
   const indexToRemove = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -100,6 +135,8 @@ export function removeOperation(
   }
 
   pipeline.splice(indexToRemove, 1);
+
+  runPipeline(pipeline, image);
 }
 
 export function moveOperationUp(
@@ -164,6 +201,15 @@ function runPipeline(
       if (applyOn instanceof Image) {
         operation.result = applyOn.grey({
           algorithm: operation.options.algorithm,
+        });
+      }
+    } else if (operation.type === 'BLUR') {
+      if (applyOn instanceof Image) {
+        operation.result = applyOn.blur({
+          width: operation.options.width,
+          height: operation.options.height,
+          borderType: operation.options.borderType,
+          borderValue: operation.options.borderValue,
         });
       }
     } else if (operation.type === 'MASK') {
