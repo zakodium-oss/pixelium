@@ -14,6 +14,7 @@ import isBinary from '../../utils/isBinary';
 import isColor from '../../utils/isColor';
 import BlurModal from '../modal/BlurModal';
 import ExploreGreyModal from '../modal/ExploreGreyModal';
+import FlipModal from '../modal/FlipModal';
 import GaussianBlurModal from '../modal/GaussianBlurModal';
 import InvertModal from '../modal/InvertModal';
 
@@ -27,6 +28,7 @@ function FilterTool() {
   ] = useOnOff(false);
   const [isInvertDialogOpen, openInvertDialog, closeInvertDialog] =
     useOnOff(false);
+  const [isFlipDialogOpen, openFlipDialog, closeFlipDialog] = useOnOff(false);
 
   const currentTab = useCurrentTab();
 
@@ -57,6 +59,12 @@ function FilterTool() {
         data: 'invert',
         type: 'option',
       },
+      {
+        label: 'Flip',
+        data: 'flip',
+        type: 'option',
+        disabled: isBinary(pipelined),
+      },
     ],
     [pipelined],
   );
@@ -75,8 +83,17 @@ function FilterTool() {
       if (selected.data === 'invert') {
         openInvertDialog();
       }
+      if (selected.data === 'flip') {
+        openFlipDialog();
+      }
     },
-    [openBlurDialog, openGaussianBlurDialog, openGreyDialog, openInvertDialog],
+    [
+      openBlurDialog,
+      openFlipDialog,
+      openGaussianBlurDialog,
+      openGreyDialog,
+      openInvertDialog,
+    ],
   );
 
   if (currentTab === undefined) return null;
@@ -118,6 +135,13 @@ function FilterTool() {
         <InvertModal
           isOpenDialog={isInvertDialogOpen}
           closeDialog={closeInvertDialog}
+          previewImageIdentifier={currentTab}
+        />
+      )}
+      {isFlipDialogOpen && (
+        <FlipModal
+          isOpenDialog={isFlipDialogOpen}
+          closeDialog={closeFlipDialog}
           previewImageIdentifier={currentTab}
         />
       )}

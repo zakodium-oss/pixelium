@@ -1,6 +1,7 @@
 import { v4 as uuid } from '@lukeed/uuid';
 import {
   BlurOptions,
+  FlipOptions,
   GaussianBlurXYOptions,
   GreyOptions,
   Image,
@@ -29,6 +30,11 @@ export type PipelineAddGaussianBlurAction = DataActionType<
 export type PipelineAddInvertAction = DataActionType<
   'ADD_INVERT',
   { identifier: string }
+>;
+
+export type PipelineAddFlipAction = DataActionType<
+  'ADD_FLIP',
+  { identifier: string; options: FlipOptions }
 >;
 
 export type PipelineAddMaskAction = DataActionType<
@@ -119,6 +125,25 @@ export function addInvert(
     identifier: uuid(),
     type: 'INVERT',
     isActive: true,
+  });
+
+  runPipeline(pipeline, image);
+}
+
+export function addFlip(
+  draft: Draft<DataState>,
+  { identifier, options }: { identifier: string; options: FlipOptions },
+) {
+  const dataFile = draft.images[identifier];
+  if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
+
+  const { pipeline, image } = dataFile;
+
+  pipeline.push({
+    identifier: uuid(),
+    type: 'FLIP',
+    isActive: true,
+    options,
   });
 
   runPipeline(pipeline, image);
@@ -237,6 +262,12 @@ function runPipeline(
       }
     } else if (operation.type === 'INVERT') {
       operation.result = applyOn.invert();
+    } else if (operation.type === 'FLIP') {
+      if (applyOn instanceof Image) {
+        operation.result = applyOn.flip({
+          axis: operation.options.axis,
+        });
+      }
     } else {
       throw new Error('Unknown operation type');
     }
