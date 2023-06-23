@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { GreyAlgorithm } from 'image-js';
+import { GreyAlgorithm, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Button, Modal } from 'react-science/ui';
 
@@ -44,7 +44,7 @@ function ExploreGreyModal({
   closeDialog,
   previewImageIdentifier,
 }: ExportGreyModalProps) {
-  const { original } = useImage(previewImageIdentifier);
+  const { pipelined } = useImage(previewImageIdentifier);
 
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<
     GreyAlgorithm | undefined
@@ -52,10 +52,12 @@ function ExploreGreyModal({
 
   const greyImage = useMemo(
     () =>
-      original.grey({
-        algorithm: selectedAlgorithm,
-      }),
-    [selectedAlgorithm, original],
+      pipelined instanceof Image
+        ? pipelined.grey({
+            algorithm: selectedAlgorithm,
+          })
+        : pipelined,
+    [selectedAlgorithm, pipelined],
   );
 
   const dataDispatch = useDataDispatch();
@@ -84,7 +86,7 @@ function ExploreGreyModal({
             <ImageViewerContainer>
               <ImageViewer
                 identifier="__grey_filter_preview"
-                image={original}
+                image={pipelined}
               />
             </ImageViewerContainer>
             <div style={{ width: '20%', paddingInline: '20px' }}>
