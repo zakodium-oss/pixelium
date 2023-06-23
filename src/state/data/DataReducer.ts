@@ -20,13 +20,10 @@ import {
   PipelineAddBlurAction,
   TogglePipelineOperationAction,
   PipelineAddGaussianBlurAction,
+  PipelineAddInvertAction,
 } from './actions/PipelineActions';
 
-interface PipelineOperation<
-  T extends string,
-  O,
-  R extends T extends 'MASK' ? Mask : Image,
-> {
+interface InnerPipelineOperation<T extends string, R, O = undefined> {
   type: T;
   options: O;
   isActive: boolean;
@@ -34,11 +31,16 @@ interface PipelineOperation<
   identifier: string;
 }
 
+type PipelineOperation<T extends string, R, O> = O extends undefined
+  ? Omit<InnerPipelineOperation<T, R>, 'options'>
+  : InnerPipelineOperation<T, R, O>;
+
 export type PipelineOperations =
-  | PipelineOperation<'GREY_FILTER', GreyOptions, Image>
-  | PipelineOperation<'BLUR', BlurOptions, Image>
-  | PipelineOperation<'GAUSSIAN_BLUR', GaussianBlurXYOptions, Image>
-  | PipelineOperation<'MASK', ThresholdOptionsAlgorithm, Mask>;
+  | PipelineOperation<'GREY_FILTER', Image, GreyOptions>
+  | PipelineOperation<'BLUR', Image, BlurOptions>
+  | PipelineOperation<'GAUSSIAN_BLUR', Image, GaussianBlurXYOptions>
+  | PipelineOperation<'INVERT', Image | Mask, undefined>
+  | PipelineOperation<'MASK', Mask, ThresholdOptionsAlgorithm>;
 
 export interface DataFile {
   image: Image;
@@ -62,6 +64,7 @@ export type DataActions =
   | PipelineAddGreyFilterAction
   | PipelineAddBlurAction
   | PipelineAddGaussianBlurAction
+  | PipelineAddInvertAction
   | PipelineAddMaskAction
   | RemovePipelineOperationAction
   | TogglePipelineOperationAction;
@@ -78,6 +81,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.addBlur(draft, action.payload);
     case Type.ADD_GAUSSIAN_BLUR:
       return PipelineActions.addGaussianBlur(draft, action.payload);
+    case Type.ADD_INVERT:
+      return PipelineActions.addInvert(draft, action.payload);
     case Type.ADD_MASK:
       return PipelineActions.addMask(draft, action.payload);
     case Type.REMOVE_PIPELINE_OPERATION:

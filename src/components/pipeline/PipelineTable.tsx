@@ -74,7 +74,11 @@ function PipelineTable({ identifier }: PipelineTableProps) {
             value={operation.type}
             style={{ cursor: 'pointer' }}
           />
-          <ValueRenderers.Object value={operation.options} />
+          {'options' in operation ? (
+            <ValueRenderers.Object value={operation.options} />
+          ) : (
+            <ValueRenderers.Text value="N/A" />
+          )}
           <ValueRenderers.Component>
             <Checkbox
               checked={operation.isActive}

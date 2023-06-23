@@ -26,6 +26,11 @@ export type PipelineAddGaussianBlurAction = DataActionType<
   { identifier: string; options: GaussianBlurXYOptions }
 >;
 
+export type PipelineAddInvertAction = DataActionType<
+  'ADD_INVERT',
+  { identifier: string }
+>;
+
 export type PipelineAddMaskAction = DataActionType<
   'ADD_MASK',
   { identifier: string; options: ThresholdOptionsAlgorithm }
@@ -96,6 +101,24 @@ export function addGaussianBlur(
     type: 'GAUSSIAN_BLUR',
     isActive: true,
     options,
+  });
+
+  runPipeline(pipeline, image);
+}
+
+export function addInvert(
+  draft: Draft<DataState>,
+  { identifier }: { identifier: string },
+) {
+  const dataFile = draft.images[identifier];
+  if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
+
+  const { pipeline, image } = dataFile;
+
+  pipeline.push({
+    identifier: uuid(),
+    type: 'INVERT',
+    isActive: true,
   });
 
   runPipeline(pipeline, image);
@@ -180,6 +203,7 @@ function runPipeline(
     }
 
     const applyOn = index === 0 ? baseImage : pipeline[index - 1].result;
+    if (applyOn === undefined) break;
 
     if (operation.type === 'GREY_FILTER') {
       if (applyOn instanceof Image) {
@@ -211,6 +235,8 @@ function runPipeline(
           sizeY: operation.options.sizeY,
         });
       }
+    } else if (operation.type === 'INVERT') {
+      operation.result = applyOn.invert();
     } else {
       throw new Error('Unknown operation type');
     }
