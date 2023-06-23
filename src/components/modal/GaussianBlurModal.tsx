@@ -39,6 +39,8 @@ const FooterStyled = styled.div`
   align-items: center;
 `;
 
+const viewIdentifier = '__gaussian_blur_preview';
+
 function BlurModal({
   isOpenDialog,
   closeDialog,
@@ -91,10 +93,7 @@ function BlurModal({
         <Modal.Body>
           <StyledModalBody>
             <ImageViewerContainer>
-              <ImageViewer
-                identifier="__grey_filter_preview"
-                image={pipelined}
-              />
+              <ImageViewer identifier={viewIdentifier} image={pipelined} />
             </ImageViewerContainer>
             <div
               style={{
@@ -160,10 +159,7 @@ function BlurModal({
               </Field>
             </div>
             <ImageViewerContainer>
-              <ImageViewer
-                identifier="__grey_filter_preview"
-                image={blurredImage}
-              />
+              <ImageViewer identifier={viewIdentifier} image={blurredImage} />
             </ImageViewerContainer>
           </StyledModalBody>
         </Modal.Body>

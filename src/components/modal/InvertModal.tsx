@@ -38,6 +38,8 @@ const FooterStyled = styled.div`
   align-items: center;
 `;
 
+const viewIdentifier = '__invert_preview';
+
 function InvertModal({
   isOpenDialog,
   closeDialog,
@@ -63,15 +65,12 @@ function InvertModal({
     <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
       <div css={modalStyle}>
         <StyledModalHeader>
-          <Modal.Header>Blur image</Modal.Header>
+          <Modal.Header>Invert image</Modal.Header>
         </StyledModalHeader>
         <Modal.Body>
           <StyledModalBody>
             <ImageViewerContainer>
-              <ImageViewer
-                identifier="__invert_filter_preview"
-                image={pipelined}
-              />
+              <ImageViewer identifier={viewIdentifier} image={pipelined} />
             </ImageViewerContainer>
             <div
               style={{
@@ -80,10 +79,7 @@ function InvertModal({
               }}
             />
             <ImageViewerContainer>
-              <ImageViewer
-                identifier="__invert_filter_preview"
-                image={invertedImage}
-              />
+              <ImageViewer identifier={viewIdentifier} image={invertedImage} />
             </ImageViewerContainer>
           </StyledModalBody>
         </Modal.Body>

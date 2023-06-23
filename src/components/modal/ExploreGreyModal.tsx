@@ -39,6 +39,8 @@ const FooterStyled = styled.div`
   align-items: center;
 `;
 
+const viewIdentifier = '__grey_filter_preview';
+
 function ExploreGreyModal({
   isOpenDialog,
   closeDialog,
@@ -84,10 +86,7 @@ function ExploreGreyModal({
         <Modal.Body>
           <StyledModalBody>
             <ImageViewerContainer>
-              <ImageViewer
-                identifier="__grey_filter_preview"
-                image={pipelined}
-              />
+              <ImageViewer identifier={viewIdentifier} image={pipelined} />
             </ImageViewerContainer>
             <div style={{ width: '20%', paddingInline: '20px' }}>
               <FastSelector
@@ -97,10 +96,7 @@ function ExploreGreyModal({
               />
             </div>
             <ImageViewerContainer>
-              <ImageViewer
-                identifier="__grey_filter_preview"
-                image={greyImage}
-              />
+              <ImageViewer identifier={viewIdentifier} image={greyImage} />
             </ImageViewerContainer>
           </StyledModalBody>
         </Modal.Body>

@@ -50,6 +50,8 @@ const AlgorithmError = styled.div`
   font-weight: bold;
 `;
 
+const viewIdentifier = '__mask_preview';
+
 function ExploreGreyModal({
   isOpenDialog,
   closeDialog,
@@ -92,12 +94,12 @@ function ExploreGreyModal({
     <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
       <div css={modalStyle}>
         <StyledModalHeader>
-          <Modal.Header>Explore grey filters</Modal.Header>
+          <Modal.Header>Explore masks</Modal.Header>
         </StyledModalHeader>
         <Modal.Body>
           <StyledModalBody>
             <ImageViewerContainer>
-              <ImageViewer identifier="__mask_preview" image={pipelined} />
+              <ImageViewer identifier={viewIdentifier} image={pipelined} />
             </ImageViewerContainer>
             <div style={{ width: '20%', paddingInline: '20px' }}>
               <FastSelector
@@ -110,10 +112,7 @@ function ExploreGreyModal({
               {maskImage === null ? (
                 <AlgorithmError>Error running algorithm</AlgorithmError>
               ) : (
-                <ImageViewer
-                  identifier="__grey_filter_preview"
-                  image={maskImage}
-                />
+                <ImageViewer identifier={viewIdentifier} image={maskImage} />
               )}
             </ImageViewerContainer>
           </StyledModalBody>
