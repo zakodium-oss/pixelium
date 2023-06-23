@@ -12,11 +12,11 @@ import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
 import isBinary from '../../utils/isBinary';
 import isColor from '../../utils/isColor';
-import BlurModal from '../modal/BlurModal';
-import ExploreGreyModal from '../modal/ExploreGreyModal';
-import FlipModal from '../modal/FlipModal';
-import GaussianBlurModal from '../modal/GaussianBlurModal';
-import InvertModal from '../modal/InvertModal';
+import BlurModal from '../modal/filters/BlurModal';
+import ExploreGreyModal from '../modal/filters/ExploreGreyModal';
+import FlipModal from '../modal/filters/FlipModal';
+import GaussianBlurModal from '../modal/filters/GaussianBlurModal';
+import InvertModal from '../modal/filters/InvertModal';
 
 function FilterTool() {
   const [isGreyDialogOpen, openGreyDialog, closeGreyDialog] = useOnOff(false);

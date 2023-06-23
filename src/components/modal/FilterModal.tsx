@@ -1,11 +1,10 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { memo, useCallback, useMemo } from 'react';
+import { Image, Mask } from 'image-js';
+import { memo, ReactNode } from 'react';
 import { Button, Modal } from 'react-science/ui';
 
-import useDataDispatch from '../../hooks/useDataDispatch';
 import useImage from '../../hooks/useImage';
-import { ADD_INVERT } from '../../state/data/DataActionTypes';
 import { buttons } from '../../utils/colors';
 import ImageViewer from '../ImageViewer';
 
@@ -20,14 +19,20 @@ const modalStyle = css`
   height: 75vh;
 `;
 
-interface InvertModalProps {
+interface FilterModalProps {
   isOpenDialog: boolean;
   closeDialog: () => void;
   previewImageIdentifier: string;
+  children?: ReactNode;
+  title: string;
+  viewIdentifier: string;
+  apply: () => void;
+  previewed: Image | Mask;
 }
 
 const ImageViewerContainer = styled.div`
   width: 40%;
+  flex-grow: 3;
   border: 1px solid #9e9e9e;
   border-radius: 4px;
 `;
@@ -38,34 +43,23 @@ const FooterStyled = styled.div`
   align-items: center;
 `;
 
-const viewIdentifier = '__invert_preview';
-
-function InvertModal({
+function FilterModal({
   isOpenDialog,
   closeDialog,
   previewImageIdentifier,
-}: InvertModalProps) {
+  children = null,
+  title,
+  viewIdentifier,
+  apply,
+  previewed,
+}: FilterModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
-
-  const invertedImage = useMemo(() => pipelined.invert(), [pipelined]);
-
-  const dataDispatch = useDataDispatch();
-
-  const addInvertFilter = useCallback(() => {
-    dataDispatch({
-      type: ADD_INVERT,
-      payload: {
-        identifier: previewImageIdentifier,
-      },
-    });
-    closeDialog();
-  }, [closeDialog, dataDispatch, previewImageIdentifier]);
 
   return (
     <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
       <div css={modalStyle}>
         <StyledModalHeader>
-          <Modal.Header>Invert image</Modal.Header>
+          <Modal.Header>{title}</Modal.Header>
         </StyledModalHeader>
         <Modal.Body>
           <StyledModalBody>
@@ -74,18 +68,20 @@ function InvertModal({
             </ImageViewerContainer>
             <div
               style={{
-                width: '25%',
+                flexGrow: 1,
                 paddingInline: '20px',
               }}
-            />
+            >
+              {children}
+            </div>
             <ImageViewerContainer>
-              <ImageViewer identifier={viewIdentifier} image={invertedImage} />
+              <ImageViewer identifier={viewIdentifier} image={previewed} />
             </ImageViewerContainer>
           </StyledModalBody>
         </Modal.Body>
         <Modal.Footer>
           <FooterStyled>
-            <Button backgroundColor={buttons.info} onClick={addInvertFilter}>
+            <Button backgroundColor={buttons.info} onClick={apply}>
               Add filter
             </Button>
           </FooterStyled>
@@ -95,4 +91,4 @@ function InvertModal({
   );
 }
 
-export default memo(InvertModal);
+export default memo(FilterModal);
