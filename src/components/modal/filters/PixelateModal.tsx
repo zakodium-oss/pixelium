@@ -16,7 +16,7 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
   const dataDispatch = useDataDispatch();
-  const [isOpen, , close] = useModal('pixelate');
+  const { isOpen, close } = useModal('pixelate');
 
   const [options, setOptions] = useState<PixelateOptions>({
     cellSize: 2,

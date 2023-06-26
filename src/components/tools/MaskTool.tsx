@@ -9,7 +9,7 @@ import isGrey from '../../utils/isGrey';
 import ExploreMaskModal from '../modal/ExploreMaskModal';
 
 function MaskTool() {
-  const [, , open] = useModal('mask');
+  const { open } = useModal('mask');
   const currentTab = useCurrentTab();
 
   const { pipelined } = useImage(currentTab || '');

@@ -26,7 +26,7 @@ function LevelModal({ previewImageIdentifier }: LevelModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
   const dataDispatch = useDataDispatch();
-  const [isOpen, , close] = useModal('level');
+  const { isOpen, close } = useModal('level');
 
   const [options, setOptions] = useState<LocalLevelOptions>({
     channels: new Array(pipelined.components).fill(0).map((_, i) => i),

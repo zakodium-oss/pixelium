@@ -30,7 +30,7 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
   );
 
   const dataDispatch = useDataDispatch();
-  const [isOpen, , close] = useModal('grey');
+  const { isOpen, close } = useModal('grey');
 
   const addGreyFilter = useCallback(() => {
     dataDispatch({

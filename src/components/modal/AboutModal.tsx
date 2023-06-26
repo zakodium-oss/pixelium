@@ -19,7 +19,7 @@ const modalStyle = css`
 `;
 
 function AboutModal() {
-  const [isOpen, open, close] = useModal('about');
+  const { isOpen, open, close } = useModal('about');
 
   return (
     <>

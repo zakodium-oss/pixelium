@@ -16,7 +16,7 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
   const dataDispatch = useDataDispatch();
-  const [isOpen, , close] = useModal('flip');
+  const { isOpen, close } = useModal('flip');
 
   const [options, setOptions] = useState<FlipOptions>({
     axis: 'horizontal',

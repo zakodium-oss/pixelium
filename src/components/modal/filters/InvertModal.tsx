@@ -16,7 +16,7 @@ function InvertModal({ previewImageIdentifier }: InvertModalProps) {
   const invertedImage = useMemo(() => pipelined.invert(), [pipelined]);
 
   const dataDispatch = useDataDispatch();
-  const [isOpen, , close] = useModal('invert');
+  const { isOpen, close } = useModal('invert');
 
   const addInvertFilter = useCallback(() => {
     dataDispatch({

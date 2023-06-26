@@ -71,7 +71,7 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
   }, [pipelined, algorithm]);
 
   const dataDispatch = useDataDispatch();
-  const [isOpen, , close] = useModal('mask');
+  const { isOpen, close } = useModal('mask');
 
   const addMask = useCallback(() => {
     dataDispatch({

@@ -71,7 +71,7 @@ function getRowColor(level: number) {
 }
 
 function LogModal() {
-  const [isOpen, open, close] = useModal('log');
+  const { isOpen, open, close } = useModal('log');
   const { logs, clear, unreadLevel, unreadCount, markAsRead } = useLog();
   const reversedLogs = useMemo(() => logs.slice().reverse(), [logs]);
 

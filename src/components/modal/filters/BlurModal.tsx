@@ -35,7 +35,7 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
   }, [blurOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();
-  const [isOpen, , close] = useModal('blur');
+  const { isOpen, close } = useModal('blur');
 
   const addBlurFilter = useCallback(() => {
     dataDispatch({

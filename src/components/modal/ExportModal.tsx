@@ -23,7 +23,7 @@ const modalStyle = css`
 `;
 
 function ExportModal() {
-  const [isOpen, open, close] = useModal('export');
+  const { isOpen, open, close } = useModal('export');
 
   return (
     <>

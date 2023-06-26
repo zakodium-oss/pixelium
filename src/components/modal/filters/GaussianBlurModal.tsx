@@ -39,7 +39,7 @@ function BlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
   }, [gaussianBlurOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();
-  const [isOpen, , close] = useModal('gaussianBlur');
+  const { isOpen, close } = useModal('gaussianBlur');
 
   const addGaussianBlurFilter = useCallback(() => {
     dataDispatch({

@@ -5,9 +5,7 @@ import { ModalName } from '../state/view/ViewReducer';
 import useView from './useView';
 import useViewDispatch from './useViewDispatch';
 
-export default function useModal(
-  identifier: ModalName,
-): [boolean, () => void, () => void] {
+export default function useModal(identifier: ModalName) {
   const view = useView();
   const viewDispatch = useViewDispatch();
 
@@ -24,5 +22,5 @@ export default function useModal(
     [viewDispatch, identifier],
   );
 
-  return [isOpen, open, close];
+  return { isOpen, open, close };
 }
