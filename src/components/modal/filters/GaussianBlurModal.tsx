@@ -74,7 +74,7 @@ function BlurModal({
           onChange={(e) => {
             setGaussianBlurOptions({
               ...gaussianBlurOptions,
-              sigmaX: Number(e.target.value),
+              sigmaX: e.target.valueAsNumber,
             });
           }}
         />
@@ -87,7 +87,7 @@ function BlurModal({
           onChange={(e) => {
             setGaussianBlurOptions({
               ...gaussianBlurOptions,
-              sigmaY: Number(e.target.value),
+              sigmaY: e.target.valueAsNumber,
             });
           }}
         />
@@ -102,7 +102,7 @@ function BlurModal({
           onChange={(e) => {
             setGaussianBlurOptions({
               ...gaussianBlurOptions,
-              sizeX: Number(e.target.value),
+              sizeX: e.target.valueAsNumber,
             });
           }}
         />
@@ -117,7 +117,7 @@ function BlurModal({
           onChange={(e) => {
             setGaussianBlurOptions({
               ...gaussianBlurOptions,
-              sizeY: Number(e.target.value),
+              sizeY: e.target.valueAsNumber,
             });
           }}
         />

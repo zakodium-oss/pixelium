@@ -6,6 +6,7 @@ import {
   BlurOptions,
   GaussianBlurXYOptions,
   FlipOptions,
+  LevelOptions,
 } from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
@@ -23,6 +24,7 @@ import {
   PipelineAddGaussianBlurAction,
   PipelineAddInvertAction,
   PipelineAddFlipAction,
+  PipelineAddLevelAction,
 } from './actions/PipelineActions';
 
 interface InnerPipelineOperation<T extends string, R, O = undefined> {
@@ -43,6 +45,7 @@ export type PipelineOperations =
   | PipelineOperation<'GAUSSIAN_BLUR', Image, GaussianBlurXYOptions>
   | PipelineOperation<'INVERT', Image | Mask, undefined>
   | PipelineOperation<'FLIP', Image, FlipOptions>
+  | PipelineOperation<'LEVEL', Image, LevelOptions>
   | PipelineOperation<'MASK', Mask, ThresholdOptionsAlgorithm>;
 
 export interface DataFile {
@@ -69,6 +72,7 @@ export type DataActions =
   | PipelineAddGaussianBlurAction
   | PipelineAddInvertAction
   | PipelineAddFlipAction
+  | PipelineAddLevelAction
   | PipelineAddMaskAction
   | RemovePipelineOperationAction
   | TogglePipelineOperationAction;
@@ -91,6 +95,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.addMask(draft, action.payload);
     case Type.ADD_FLIP:
       return PipelineActions.addFlip(draft, action.payload);
+    case Type.ADD_LEVEL:
+      return PipelineActions.addLevel(draft, action.payload);
     case Type.REMOVE_PIPELINE_OPERATION:
       return PipelineActions.removeOperation(draft, action.payload);
     case Type.TOGGLE_PIPELINE_OPERATION:

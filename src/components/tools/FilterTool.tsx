@@ -17,6 +17,7 @@ import ExploreGreyModal from '../modal/filters/ExploreGreyModal';
 import FlipModal from '../modal/filters/FlipModal';
 import GaussianBlurModal from '../modal/filters/GaussianBlurModal';
 import InvertModal from '../modal/filters/InvertModal';
+import LevelModal from '../modal/filters/LevelModal';
 
 function FilterTool() {
   const [isGreyDialogOpen, openGreyDialog, closeGreyDialog] = useOnOff(false);
@@ -29,6 +30,8 @@ function FilterTool() {
   const [isInvertDialogOpen, openInvertDialog, closeInvertDialog] =
     useOnOff(false);
   const [isFlipDialogOpen, openFlipDialog, closeFlipDialog] = useOnOff(false);
+  const [isLevelDialogOpen, openLevelDialog, closeLevelDialog] =
+    useOnOff(false);
 
   const currentTab = useCurrentTab();
 
@@ -65,6 +68,11 @@ function FilterTool() {
         type: 'option',
         disabled: isBinary(pipelined),
       },
+      {
+        label: 'Level',
+        data: 'level',
+        type: 'option',
+      },
     ],
     [pipelined],
   );
@@ -86,6 +94,9 @@ function FilterTool() {
       if (selected.data === 'flip') {
         openFlipDialog();
       }
+      if (selected.data === 'level') {
+        openLevelDialog();
+      }
     },
     [
       openBlurDialog,
@@ -93,6 +104,7 @@ function FilterTool() {
       openGaussianBlurDialog,
       openGreyDialog,
       openInvertDialog,
+      openLevelDialog,
     ],
   );
 
@@ -142,6 +154,13 @@ function FilterTool() {
         <FlipModal
           isOpenDialog={isFlipDialogOpen}
           closeDialog={closeFlipDialog}
+          previewImageIdentifier={currentTab}
+        />
+      )}
+      {isLevelDialogOpen && (
+        <LevelModal
+          isOpenDialog={isLevelDialogOpen}
+          closeDialog={closeLevelDialog}
           previewImageIdentifier={currentTab}
         />
       )}

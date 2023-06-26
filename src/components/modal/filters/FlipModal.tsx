@@ -1,8 +1,6 @@
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
 import { FlipOptions, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Button, Field, Modal, Select } from 'react-science/ui';
+import { Field, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
 import useImage from '../../../hooks/useImage';

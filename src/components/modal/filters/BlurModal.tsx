@@ -82,7 +82,7 @@ function BlurModal({
           onChange={(e) => {
             setBlurOptions({
               ...blurOptions,
-              width: Number(e.target.value),
+              width: e.target.valueAsNumber,
             });
           }}
         />
@@ -97,7 +97,7 @@ function BlurModal({
           onChange={(e) => {
             setBlurOptions({
               ...blurOptions,
-              height: Number(e.target.value),
+              height: e.target.valueAsNumber,
             });
           }}
         />
@@ -125,7 +125,7 @@ function BlurModal({
             onChange={(e) => {
               setBlurOptions({
                 ...blurOptions,
-                borderValue: Number(e.target.value),
+                borderValue: e.target.valueAsNumber,
               });
             }}
           />

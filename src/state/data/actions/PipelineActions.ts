@@ -5,6 +5,7 @@ import {
   GaussianBlurXYOptions,
   GreyOptions,
   Image,
+  LevelOptions,
   ThresholdOptionsAlgorithm,
 } from 'image-js';
 import { Draft } from 'immer';
@@ -35,6 +36,11 @@ export type PipelineAddInvertAction = DataActionType<
 export type PipelineAddFlipAction = DataActionType<
   'ADD_FLIP',
   { identifier: string; options: FlipOptions }
+>;
+
+export type PipelineAddLevelAction = DataActionType<
+  'ADD_LEVEL',
+  { identifier: string; options: LevelOptions }
 >;
 
 export type PipelineAddMaskAction = DataActionType<
@@ -149,6 +155,25 @@ export function addFlip(
   runPipeline(pipeline, image);
 }
 
+export function addLevel(
+  draft: Draft<DataState>,
+  { identifier, options }: { identifier: string; options: LevelOptions },
+) {
+  const dataFile = draft.images[identifier];
+  if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
+
+  const { pipeline, image } = dataFile;
+
+  pipeline.push({
+    identifier: uuid(),
+    type: 'LEVEL',
+    isActive: true,
+    options,
+  });
+
+  runPipeline(pipeline, image);
+}
+
 export function addMask(
   draft: Draft<DataState>,
   {
@@ -230,46 +255,72 @@ function runPipeline(
     const applyOn = index === 0 ? baseImage : pipeline[index - 1].result;
     if (applyOn === undefined) break;
 
-    if (operation.type === 'GREY_FILTER') {
-      if (applyOn instanceof Image) {
-        operation.result = applyOn.grey({
-          algorithm: operation.options.algorithm,
-        });
+    switch (operation.type) {
+      case 'GREY_FILTER': {
+        if (applyOn instanceof Image) {
+          operation.result = applyOn.grey({
+            algorithm: operation.options.algorithm,
+          });
+        }
+        break;
       }
-    } else if (operation.type === 'BLUR') {
-      if (applyOn instanceof Image) {
-        operation.result = applyOn.blur({
-          width: operation.options.width,
-          height: operation.options.height,
-          borderType: operation.options.borderType,
-          borderValue: operation.options.borderValue,
-        });
+      case 'BLUR': {
+        if (applyOn instanceof Image) {
+          operation.result = applyOn.blur({
+            width: operation.options.width,
+            height: operation.options.height,
+            borderType: operation.options.borderType,
+            borderValue: operation.options.borderValue,
+          });
+        }
+        break;
       }
-    } else if (operation.type === 'MASK') {
-      if (applyOn instanceof Image) {
-        operation.result = applyOn.threshold({
-          algorithm: operation.options.algorithm,
-        });
+      case 'MASK': {
+        if (applyOn instanceof Image) {
+          operation.result = applyOn.threshold({
+            algorithm: operation.options.algorithm,
+          });
+        }
+        break;
       }
-    } else if (operation.type === 'GAUSSIAN_BLUR') {
-      if (applyOn instanceof Image) {
-        operation.result = applyOn.gaussianBlur({
-          sigmaX: operation.options.sigmaX,
-          sigmaY: operation.options.sigmaY,
-          sizeX: operation.options.sizeX,
-          sizeY: operation.options.sizeY,
-        });
+      case 'GAUSSIAN_BLUR': {
+        if (applyOn instanceof Image) {
+          operation.result = applyOn.gaussianBlur({
+            sigmaX: operation.options.sigmaX,
+            sigmaY: operation.options.sigmaY,
+            sizeX: operation.options.sizeX,
+            sizeY: operation.options.sizeY,
+          });
+        }
+        break;
       }
-    } else if (operation.type === 'INVERT') {
-      operation.result = applyOn.invert();
-    } else if (operation.type === 'FLIP') {
-      if (applyOn instanceof Image) {
-        operation.result = applyOn.flip({
-          axis: operation.options.axis,
-        });
+      case 'INVERT': {
+        operation.result = applyOn.invert();
+        break;
       }
-    } else {
-      throw new Error('Unknown operation type');
+      case 'FLIP': {
+        if (applyOn instanceof Image) {
+          operation.result = applyOn.flip({
+            axis: operation.options.axis,
+          });
+        }
+        break;
+      }
+      case 'LEVEL': {
+        if (applyOn instanceof Image) {
+          operation.result = applyOn.level({
+            channels: operation.options.channels,
+            inputMin: operation.options.inputMin,
+            inputMax: operation.options.inputMax,
+            outputMin: operation.options.outputMin,
+            outputMax: operation.options.outputMax,
+            gamma: operation.options.gamma,
+          });
+        }
+        break;
+      }
+      default:
+        throw new Error(`Unknown operation`);
     }
   }
 }
