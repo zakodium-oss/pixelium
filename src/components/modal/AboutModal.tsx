@@ -1,7 +1,9 @@
 import { css } from '@emotion/react';
 import { SvgLogoZakodium } from 'cheminfo-font';
 import { memo } from 'react';
-import { Modal, Toolbar, useOnOff } from 'react-science/ui';
+import { Modal, Toolbar } from 'react-science/ui';
+
+import useModal from '../../hooks/useModal';
 
 import StyledModalBody from './utils/StyledModalBody';
 import StyledModalHeader from './utils/StyledModalHeader';
@@ -17,18 +19,18 @@ const modalStyle = css`
 `;
 
 function AboutModal() {
-  const [isOpenDialog, openDialog, closeDialog] = useOnOff(false);
+  const [isOpen, open, close] = useModal('about');
 
   return (
     <>
       <Toolbar.Item
         title="About Pixelium"
         titleOrientation="horizontal"
-        onClick={openDialog}
+        onClick={open}
       >
         <SvgLogoZakodium />
       </Toolbar.Item>
-      <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
+      <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
         <div css={modalStyle}>
           <StyledModalHeader>
             <Modal.Header>About Pixelium</Modal.Header>

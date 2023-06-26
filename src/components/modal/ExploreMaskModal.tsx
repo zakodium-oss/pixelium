@@ -6,6 +6,7 @@ import { Button, Modal } from 'react-science/ui';
 
 import useDataDispatch from '../../hooks/useDataDispatch';
 import useImage from '../../hooks/useImage';
+import useModal from '../../hooks/useModal';
 import { ADD_MASK } from '../../state/data/DataActionTypes';
 import { buttons } from '../../utils/colors';
 import FastSelector from '../FastSelector';
@@ -22,8 +23,6 @@ const modalStyle = css`
 `;
 
 interface ExportGreyModalProps {
-  isOpenDialog: boolean;
-  closeDialog: () => void;
   previewImageIdentifier: string;
 }
 
@@ -52,11 +51,7 @@ const AlgorithmError = styled.div`
 
 const viewIdentifier = '__mask_preview';
 
-function ExploreGreyModal({
-  isOpenDialog,
-  closeDialog,
-  previewImageIdentifier,
-}: ExportGreyModalProps) {
+function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
   const [algorithm, setAlgorithm] = useState<ThresholdAlgorithm | undefined>(
@@ -76,6 +71,7 @@ function ExploreGreyModal({
   }, [pipelined, algorithm]);
 
   const dataDispatch = useDataDispatch();
+  const [isOpen, , close] = useModal('mask');
 
   const addMask = useCallback(() => {
     dataDispatch({
@@ -87,11 +83,11 @@ function ExploreGreyModal({
         },
       },
     });
-    closeDialog();
-  }, [closeDialog, dataDispatch, previewImageIdentifier, algorithm]);
+    close();
+  }, [close, dataDispatch, previewImageIdentifier, algorithm]);
 
   return (
-    <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
+    <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
       <div css={modalStyle}>
         <StyledModalHeader>
           <Modal.Header>Explore masks</Modal.Header>

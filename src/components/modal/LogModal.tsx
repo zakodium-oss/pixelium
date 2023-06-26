@@ -6,11 +6,11 @@ import {
   Modal,
   Table,
   Toolbar,
-  useOnOff,
   ValueRenderers,
 } from 'react-science/ui';
 
 import useLog from '../../hooks/useLog';
+import useModal from '../../hooks/useModal';
 import { buttons } from '../../utils/colors';
 
 import StyledModalBody from './utils/StyledModalBody';
@@ -71,14 +71,14 @@ function getRowColor(level: number) {
 }
 
 function LogModal() {
-  const [isOpenDialog, openDialog, closeDialog] = useOnOff(false);
+  const [isOpen, open, close] = useModal('log');
   const { logs, clear, unreadLevel, unreadCount, markAsRead } = useLog();
   const reversedLogs = useMemo(() => logs.slice().reverse(), [logs]);
 
   const handleDialogOpen = useCallback(() => {
-    openDialog();
+    open();
     markAsRead();
-  }, [markAsRead, openDialog]);
+  }, [markAsRead, open]);
 
   return (
     <>
@@ -105,7 +105,7 @@ function LogModal() {
           </span>
         )}
       </Toolbar.Item>
-      <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
+      <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
         <div css={modalStyle}>
           <StyledModalHeader>
             <Modal.Header>Log history</Modal.Header>

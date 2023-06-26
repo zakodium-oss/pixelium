@@ -18,7 +18,9 @@ export type ModalName =
   | 'level'
   | 'pixelate'
   | 'mask'
-  | 'log';
+  | 'log'
+  | 'about'
+  | 'export';
 
 export interface ViewState {
   currentTab?: string;
@@ -48,6 +50,8 @@ export const initialViewState: ViewState = {
     pixelate: false,
     mask: false,
     log: false,
+    about: false,
+    export: false,
   },
 };
 

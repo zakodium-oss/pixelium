@@ -1,14 +1,15 @@
 import { memo } from 'react';
 import { FaMask } from 'react-icons/fa';
-import { Toolbar, useOnOff } from 'react-science/ui';
+import { Toolbar } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
+import useModal from '../../hooks/useModal';
 import isGrey from '../../utils/isGrey';
 import ExploreMaskModal from '../modal/ExploreMaskModal';
 
 function MaskTool() {
-  const [isOpenDialog, openDialog, closeDialog] = useOnOff(false);
+  const [, , open] = useModal('mask');
   const currentTab = useCurrentTab();
 
   const { pipelined } = useImage(currentTab || '');
@@ -19,14 +20,10 @@ function MaskTool() {
 
   return (
     <>
-      <Toolbar.Item title="Mask" onClick={openDialog}>
+      <Toolbar.Item title="Mask" onClick={open}>
         <FaMask />
       </Toolbar.Item>
-      <ExploreMaskModal
-        isOpenDialog={isOpenDialog}
-        closeDialog={closeDialog}
-        previewImageIdentifier={currentTab}
-      />
+      <ExploreMaskModal previewImageIdentifier={currentTab} />
     </>
   );
 }

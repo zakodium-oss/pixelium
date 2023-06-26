@@ -1,7 +1,9 @@
 import { css } from '@emotion/react';
 import { memo } from 'react';
 import { FaFileExport } from 'react-icons/fa';
-import { Modal, Toolbar, useOnOff } from 'react-science/ui';
+import { Modal, Toolbar } from 'react-science/ui';
+
+import useModal from '../../hooks/useModal';
 
 import StyledModalBody from './utils/StyledModalBody';
 import StyledModalHeader from './utils/StyledModalHeader';
@@ -21,18 +23,14 @@ const modalStyle = css`
 `;
 
 function ExportModal() {
-  const [isOpenDialog, openDialog, closeDialog] = useOnOff(false);
+  const [isOpen, open, close] = useModal('export');
 
   return (
     <>
-      <Toolbar.Item
-        title="Export"
-        titleOrientation="horizontal"
-        onClick={openDialog}
-      >
+      <Toolbar.Item title="Export" titleOrientation="horizontal" onClick={open}>
         <FaFileExport />
       </Toolbar.Item>
-      <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
+      <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
         <div css={modalStyle}>
           <StyledModalHeader>
             <Modal.Header>
