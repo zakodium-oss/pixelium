@@ -4,23 +4,19 @@ import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
 import useImage from '../../../hooks/useImage';
+import useModal from '../../../hooks/useModal';
 import { ADD_PIXELATE } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface PixelateModalProps {
-  isOpenDialog: boolean;
-  closeDialog: () => void;
   previewImageIdentifier: string;
 }
 
-function PixelateModal({
-  isOpenDialog,
-  closeDialog,
-  previewImageIdentifier,
-}: PixelateModalProps) {
+function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
   const dataDispatch = useDataDispatch();
+  const [isOpen, , close] = useModal('pixelate');
 
   const [options, setOptions] = useState<PixelateOptions>({
     cellSize: 2,
@@ -51,14 +47,14 @@ function PixelateModal({
         options,
       },
     });
-    closeDialog();
-  }, [closeDialog, dataDispatch, options, previewImageIdentifier]);
+    close();
+  }, [close, dataDispatch, options, previewImageIdentifier]);
 
   return (
     <FilterModal
       previewImageIdentifier={previewImageIdentifier}
-      closeDialog={closeDialog}
-      isOpenDialog={isOpenDialog}
+      closeDialog={close}
+      isOpenDialog={isOpen}
       title="Pixelate image"
       viewIdentifier="__pixelate_preview"
       apply={addPixelateFilter}

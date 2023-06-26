@@ -4,23 +4,19 @@ import { Field, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
 import useImage from '../../../hooks/useImage';
+import useModal from '../../../hooks/useModal';
 import { ADD_FLIP } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface FlipModalProps {
-  isOpenDialog: boolean;
-  closeDialog: () => void;
   previewImageIdentifier: string;
 }
 
-function FlipModal({
-  isOpenDialog,
-  closeDialog,
-  previewImageIdentifier,
-}: FlipModalProps) {
+function FlipModal({ previewImageIdentifier }: FlipModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
   const dataDispatch = useDataDispatch();
+  const [isOpen, , close] = useModal('flip');
 
   const [options, setOptions] = useState<FlipOptions>({
     axis: 'horizontal',
@@ -49,14 +45,14 @@ function FlipModal({
         options,
       },
     });
-    closeDialog();
-  }, [closeDialog, dataDispatch, options, previewImageIdentifier]);
+    close();
+  }, [close, dataDispatch, options, previewImageIdentifier]);
 
   return (
     <FilterModal
       previewImageIdentifier={previewImageIdentifier}
-      closeDialog={closeDialog}
-      isOpenDialog={isOpenDialog}
+      closeDialog={close}
+      isOpenDialog={isOpen}
       title="Flip image"
       viewIdentifier="__flip_preview"
       apply={addFlipFilter}

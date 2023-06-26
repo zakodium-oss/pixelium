@@ -3,21 +3,16 @@ import { memo, useCallback, useMemo, useState } from 'react';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
 import useImage from '../../../hooks/useImage';
+import useModal from '../../../hooks/useModal';
 import { ADD_GREY_FILTER } from '../../../state/data/DataActionTypes';
 import FastSelector from '../../FastSelector';
 import FilterModal from '../FilterModal';
 
 interface ExportGreyModalProps {
-  isOpenDialog: boolean;
-  closeDialog: () => void;
   previewImageIdentifier: string;
 }
 
-function ExploreGreyModal({
-  isOpenDialog,
-  closeDialog,
-  previewImageIdentifier,
-}: ExportGreyModalProps) {
+function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<
@@ -35,6 +30,7 @@ function ExploreGreyModal({
   );
 
   const dataDispatch = useDataDispatch();
+  const [isOpen, , close] = useModal('grey');
 
   const addGreyFilter = useCallback(() => {
     dataDispatch({
@@ -46,14 +42,14 @@ function ExploreGreyModal({
         },
       },
     });
-    closeDialog();
-  }, [closeDialog, dataDispatch, previewImageIdentifier, selectedAlgorithm]);
+    close();
+  }, [close, dataDispatch, previewImageIdentifier, selectedAlgorithm]);
 
   return (
     <FilterModal
       previewImageIdentifier={previewImageIdentifier}
-      closeDialog={closeDialog}
-      isOpenDialog={isOpenDialog}
+      closeDialog={close}
+      isOpenDialog={isOpen}
       title="Explore grey filters"
       viewIdentifier="__grey_filter_preview"
       apply={addGreyFilter}

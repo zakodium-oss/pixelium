@@ -4,20 +4,15 @@ import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
 import useImage from '../../../hooks/useImage';
+import useModal from '../../../hooks/useModal';
 import { ADD_BLUR } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface BlurModalProps {
-  isOpenDialog: boolean;
-  closeDialog: () => void;
   previewImageIdentifier: string;
 }
 
-function BlurModal({
-  isOpenDialog,
-  closeDialog,
-  previewImageIdentifier,
-}: BlurModalProps) {
+function BlurModal({ previewImageIdentifier }: BlurModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
   const [blurOptions, setBlurOptions] = useState<BlurOptions>({
@@ -40,6 +35,7 @@ function BlurModal({
   }, [blurOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();
+  const [isOpen, , close] = useModal('blur');
 
   const addBlurFilter = useCallback(() => {
     dataDispatch({
@@ -49,8 +45,8 @@ function BlurModal({
         options: blurOptions,
       },
     });
-    closeDialog();
-  }, [blurOptions, closeDialog, dataDispatch, previewImageIdentifier]);
+    close();
+  }, [blurOptions, close, dataDispatch, previewImageIdentifier]);
 
   const borderTypeOptions = useMemo(
     () => [
@@ -65,8 +61,8 @@ function BlurModal({
   return (
     <FilterModal
       previewImageIdentifier={previewImageIdentifier}
-      closeDialog={closeDialog}
-      isOpenDialog={isOpenDialog}
+      closeDialog={close}
+      isOpenDialog={isOpen}
       title="Blur image"
       viewIdentifier="__blur_preview"
       apply={addBlurFilter}

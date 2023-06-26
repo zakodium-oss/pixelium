@@ -5,11 +5,12 @@ import {
   MenuOption,
   MenuOptions,
   Toolbar,
-  useOnOff,
 } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
+import useView from '../../hooks/useView';
+import useViewDispatch from '../../hooks/useViewDispatch';
 import isBinary from '../../utils/isBinary';
 import isColor from '../../utils/isColor';
 import BlurModal from '../modal/filters/BlurModal';
@@ -21,20 +22,8 @@ import LevelModal from '../modal/filters/LevelModal';
 import PixelateModal from '../modal/filters/PixelateModal';
 
 function FilterTool() {
-  const [isGreyDialogOpen, openGreyDialog, closeGreyDialog] = useOnOff(false);
-  const [isBlurDialogOpen, openBlurDialog, closeBlurDialog] = useOnOff(false);
-  const [
-    isGaussianBlurDialogOpen,
-    openGaussianBlurDialog,
-    closeGaussianBlurDialog,
-  ] = useOnOff(false);
-  const [isInvertDialogOpen, openInvertDialog, closeInvertDialog] =
-    useOnOff(false);
-  const [isFlipDialogOpen, openFlipDialog, closeFlipDialog] = useOnOff(false);
-  const [isLevelDialogOpen, openLevelDialog, closeLevelDialog] =
-    useOnOff(false);
-  const [isPixelateDialogOpen, openPixelateDialog, closePixelateDialog] =
-    useOnOff(false);
+  const view = useView();
+  const viewDispatch = useViewDispatch();
 
   const currentTab = useCurrentTab();
 
@@ -56,7 +45,7 @@ function FilterTool() {
       },
       {
         label: 'Gaussian blur',
-        data: 'gaussian-blur',
+        data: 'gaussianBlur',
         type: 'option',
         disabled: isBinary(pipelined),
       },
@@ -89,37 +78,13 @@ function FilterTool() {
 
   const selectOption = useCallback(
     (selected: MenuOption<string>) => {
-      if (selected.data === 'grey') {
-        openGreyDialog();
-      }
-      if (selected.data === 'blur') {
-        openBlurDialog();
-      }
-      if (selected.data === 'gaussian-blur') {
-        openGaussianBlurDialog();
-      }
-      if (selected.data === 'invert') {
-        openInvertDialog();
-      }
-      if (selected.data === 'flip') {
-        openFlipDialog();
-      }
-      if (selected.data === 'level') {
-        openLevelDialog();
-      }
-      if (selected.data === 'pixelate') {
-        openPixelateDialog();
-      }
+      if (selected.data === undefined) return;
+      viewDispatch({
+        type: 'OPEN_MODAL',
+        payload: selected.data,
+      });
     },
-    [
-      openBlurDialog,
-      openFlipDialog,
-      openGaussianBlurDialog,
-      openGreyDialog,
-      openInvertDialog,
-      openLevelDialog,
-      openPixelateDialog,
-    ],
+    [viewDispatch],
   );
 
   if (currentTab === undefined) return null;
@@ -136,54 +101,20 @@ function FilterTool() {
           <FaFilter />
         </Toolbar.Item>
       </DropdownMenu>
-      {isGreyDialogOpen && (
-        <ExploreGreyModal
-          isOpenDialog={isGreyDialogOpen}
-          closeDialog={closeGreyDialog}
-          previewImageIdentifier={currentTab}
-        />
+      {view.modals.grey && (
+        <ExploreGreyModal previewImageIdentifier={currentTab} />
       )}
-      {isBlurDialogOpen && (
-        <BlurModal
-          isOpenDialog={isBlurDialogOpen}
-          closeDialog={closeBlurDialog}
-          previewImageIdentifier={currentTab}
-        />
+      {view.modals.blur && <BlurModal previewImageIdentifier={currentTab} />}
+      {view.modals.gaussianBlur && (
+        <GaussianBlurModal previewImageIdentifier={currentTab} />
       )}
-      {isGaussianBlurDialogOpen && (
-        <GaussianBlurModal
-          isOpenDialog={isGaussianBlurDialogOpen}
-          closeDialog={closeGaussianBlurDialog}
-          previewImageIdentifier={currentTab}
-        />
+      {view.modals.invert && (
+        <InvertModal previewImageIdentifier={currentTab} />
       )}
-      {isInvertDialogOpen && (
-        <InvertModal
-          isOpenDialog={isInvertDialogOpen}
-          closeDialog={closeInvertDialog}
-          previewImageIdentifier={currentTab}
-        />
-      )}
-      {isFlipDialogOpen && (
-        <FlipModal
-          isOpenDialog={isFlipDialogOpen}
-          closeDialog={closeFlipDialog}
-          previewImageIdentifier={currentTab}
-        />
-      )}
-      {isLevelDialogOpen && (
-        <LevelModal
-          isOpenDialog={isLevelDialogOpen}
-          closeDialog={closeLevelDialog}
-          previewImageIdentifier={currentTab}
-        />
-      )}
-      {isPixelateDialogOpen && (
-        <PixelateModal
-          isOpenDialog={isPixelateDialogOpen}
-          closeDialog={closePixelateDialog}
-          previewImageIdentifier={currentTab}
-        />
+      {view.modals.flip && <FlipModal previewImageIdentifier={currentTab} />}
+      {view.modals.level && <LevelModal previewImageIdentifier={currentTab} />}
+      {view.modals.pixelate && (
+        <PixelateModal previewImageIdentifier={currentTab} />
       )}
     </>
   );

@@ -5,12 +5,11 @@ import { Checkbox, Field, Input } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
 import useImage from '../../../hooks/useImage';
+import useModal from '../../../hooks/useModal';
 import { ADD_LEVEL } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface LevelModalProps {
-  isOpenDialog: boolean;
-  closeDialog: () => void;
   previewImageIdentifier: string;
 }
 
@@ -23,14 +22,11 @@ interface LocalLevelOptions {
   gamma: number;
 }
 
-function LevelModal({
-  isOpenDialog,
-  closeDialog,
-  previewImageIdentifier,
-}: LevelModalProps) {
+function LevelModal({ previewImageIdentifier }: LevelModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
   const dataDispatch = useDataDispatch();
+  const [isOpen, , close] = useModal('level');
 
   const [options, setOptions] = useState<LocalLevelOptions>({
     channels: new Array(pipelined.components).fill(0).map((_, i) => i),
@@ -54,14 +50,14 @@ function LevelModal({
         options,
       },
     });
-    closeDialog();
-  }, [closeDialog, dataDispatch, options, previewImageIdentifier]);
+    close();
+  }, [close, dataDispatch, options, previewImageIdentifier]);
 
   return (
     <FilterModal
       previewImageIdentifier={previewImageIdentifier}
-      closeDialog={closeDialog}
-      isOpenDialog={isOpenDialog}
+      closeDialog={close}
+      isOpenDialog={isOpen}
       title="Level image"
       viewIdentifier="__level_preview"
       apply={addLevelFilter}

@@ -4,20 +4,15 @@ import { Field, Input } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
 import useImage from '../../../hooks/useImage';
+import useModal from '../../../hooks/useModal';
 import { ADD_GAUSSIAN_BLUR } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface GaussianBlurModalProps {
-  isOpenDialog: boolean;
-  closeDialog: () => void;
   previewImageIdentifier: string;
 }
 
-function BlurModal({
-  isOpenDialog,
-  closeDialog,
-  previewImageIdentifier,
-}: GaussianBlurModalProps) {
+function BlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
   const [gaussianBlurOptions, setGaussianBlurOptions] =
@@ -44,6 +39,7 @@ function BlurModal({
   }, [gaussianBlurOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();
+  const [isOpen, , close] = useModal('gaussianBlur');
 
   const addGaussianBlurFilter = useCallback(() => {
     dataDispatch({
@@ -53,14 +49,14 @@ function BlurModal({
         options: gaussianBlurOptions,
       },
     });
-    closeDialog();
-  }, [gaussianBlurOptions, closeDialog, dataDispatch, previewImageIdentifier]);
+    close();
+  }, [gaussianBlurOptions, close, dataDispatch, previewImageIdentifier]);
 
   return (
     <FilterModal
       previewImageIdentifier={previewImageIdentifier}
-      closeDialog={closeDialog}
-      isOpenDialog={isOpenDialog}
+      closeDialog={close}
+      isOpenDialog={isOpen}
       title="Gaussian blur image"
       viewIdentifier="__gaussian_blur_preview"
       apply={addGaussianBlurFilter}
