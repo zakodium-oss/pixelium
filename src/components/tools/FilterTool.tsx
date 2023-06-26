@@ -19,6 +19,7 @@ import FlipModal from '../modal/filters/FlipModal';
 import GaussianBlurModal from '../modal/filters/GaussianBlurModal';
 import InvertModal from '../modal/filters/InvertModal';
 import LevelModal from '../modal/filters/LevelModal';
+import MedianFilterModal from '../modal/filters/MedianFilterModal';
 import PixelateModal from '../modal/filters/PixelateModal';
 
 function FilterTool() {
@@ -72,6 +73,12 @@ function FilterTool() {
         type: 'option',
         disabled: isBinary(pipelined),
       },
+      {
+        label: 'Median filter',
+        data: 'median',
+        type: 'option',
+        disabled: isBinary(pipelined),
+      },
     ],
     [pipelined],
   );
@@ -115,6 +122,9 @@ function FilterTool() {
       {view.modals.level && <LevelModal previewImageIdentifier={currentTab} />}
       {view.modals.pixelate && (
         <PixelateModal previewImageIdentifier={currentTab} />
+      )}
+      {view.modals.median && (
+        <MedianFilterModal previewImageIdentifier={currentTab} />
       )}
     </>
   );

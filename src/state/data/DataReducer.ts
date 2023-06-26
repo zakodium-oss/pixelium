@@ -8,6 +8,7 @@ import {
   FlipOptions,
   LevelOptions,
   PixelateOptions,
+  MedianFilterOptions,
 } from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
@@ -27,6 +28,7 @@ import {
   PipelineAddFlipAction,
   PipelineAddLevelAction,
   PipelineAddPixelateAction,
+  PipelineAddMedianFilterAction,
 } from './actions/PipelineActions';
 
 interface InnerPipelineOperation<T extends string, R, O = undefined> {
@@ -49,6 +51,7 @@ export type PipelineOperations =
   | PipelineOperation<'FLIP', Image, FlipOptions>
   | PipelineOperation<'LEVEL', Image, LevelOptions>
   | PipelineOperation<'PIXELATE', Image, PixelateOptions>
+  | PipelineOperation<'MEDIAN_FILTER', Image, MedianFilterOptions>
   | PipelineOperation<'MASK', Mask, ThresholdOptionsAlgorithm>;
 
 export interface DataFile {
@@ -77,6 +80,7 @@ export type DataActions =
   | PipelineAddFlipAction
   | PipelineAddLevelAction
   | PipelineAddPixelateAction
+  | PipelineAddMedianFilterAction
   | PipelineAddMaskAction
   | RemovePipelineOperationAction
   | TogglePipelineOperationAction;
@@ -99,10 +103,12 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.addMask(draft, action.payload);
     case Type.ADD_FLIP:
       return PipelineActions.addFlip(draft, action.payload);
-    case Type.ADD_PIXELATE:
-      return PipelineActions.addPixelate(draft, action.payload);
     case Type.ADD_LEVEL:
       return PipelineActions.addLevel(draft, action.payload);
+    case Type.ADD_PIXELATE:
+      return PipelineActions.addPixelate(draft, action.payload);
+    case Type.ADD_MEDIAN_FILTER:
+      return PipelineActions.addMedianFilter(draft, action.payload);
     case Type.REMOVE_PIPELINE_OPERATION:
       return PipelineActions.removeOperation(draft, action.payload);
     case Type.TOGGLE_PIPELINE_OPERATION:

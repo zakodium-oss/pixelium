@@ -6,6 +6,7 @@ import {
   GreyOptions,
   Image,
   LevelOptions,
+  MedianFilterOptions,
   PixelateOptions,
   ThresholdOptionsAlgorithm,
 } from 'image-js';
@@ -47,6 +48,11 @@ export type PipelineAddLevelAction = DataActionType<
 export type PipelineAddPixelateAction = DataActionType<
   'ADD_PIXELATE',
   { identifier: string; options: PixelateOptions }
+>;
+
+export type PipelineAddMedianFilterAction = DataActionType<
+  'ADD_MEDIAN_FILTER',
+  { identifier: string; options: MedianFilterOptions }
 >;
 
 export type PipelineAddMaskAction = DataActionType<
@@ -161,6 +167,25 @@ export function addFlip(
   runPipeline(pipeline, image);
 }
 
+export function addLevel(
+  draft: Draft<DataState>,
+  { identifier, options }: { identifier: string; options: LevelOptions },
+) {
+  const dataFile = draft.images[identifier];
+  if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
+
+  const { pipeline, image } = dataFile;
+
+  pipeline.push({
+    identifier: uuid(),
+    type: 'LEVEL',
+    isActive: true,
+    options,
+  });
+
+  runPipeline(pipeline, image);
+}
+
 export function addPixelate(
   draft: Draft<DataState>,
   { identifier, options }: { identifier: string; options: PixelateOptions },
@@ -180,9 +205,9 @@ export function addPixelate(
   runPipeline(pipeline, image);
 }
 
-export function addLevel(
+export function addMedianFilter(
   draft: Draft<DataState>,
-  { identifier, options }: { identifier: string; options: LevelOptions },
+  { identifier, options }: { identifier: string; options: MedianFilterOptions },
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -191,7 +216,7 @@ export function addLevel(
 
   pipeline.push({
     identifier: uuid(),
-    type: 'LEVEL',
+    type: 'MEDIAN_FILTER',
     isActive: true,
     options,
   });
@@ -349,6 +374,16 @@ function runPipeline(
           operation.result = applyOn.pixelate({
             cellSize: operation.options.cellSize,
             algorithm: operation.options.algorithm,
+          });
+        }
+        break;
+      }
+      case 'MEDIAN_FILTER': {
+        if (applyOn instanceof Image) {
+          operation.result = applyOn.medianFilter({
+            cellSize: operation.options.cellSize,
+            borderType: operation.options.borderType,
+            borderValue: operation.options.borderValue,
           });
         }
         break;

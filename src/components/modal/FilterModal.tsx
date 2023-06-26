@@ -27,7 +27,7 @@ interface FilterModalProps {
   title: string;
   viewIdentifier: string;
   apply: () => void;
-  previewed: Image | Mask;
+  previewed: Image | Mask | null;
 }
 
 const ImageViewerContainer = styled.div`
@@ -41,6 +41,17 @@ const FooterStyled = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+`;
+
+const AlgorithmError = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  color: red;
+  font-size: 1.25rem;
+  font-weight: bold;
 `;
 
 function FilterModal({
@@ -75,7 +86,11 @@ function FilterModal({
               {children}
             </div>
             <ImageViewerContainer>
-              <ImageViewer identifier={viewIdentifier} image={previewed} />
+              {previewed === null ? (
+                <AlgorithmError>Error running algorithm</AlgorithmError>
+              ) : (
+                <ImageViewer identifier={viewIdentifier} image={previewed} />
+              )}
             </ImageViewerContainer>
           </StyledModalBody>
         </Modal.Body>

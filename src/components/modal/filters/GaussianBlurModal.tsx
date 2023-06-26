@@ -24,18 +24,15 @@ function BlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
     });
 
   const blurredImage = useMemo(() => {
-    if (
-      (gaussianBlurOptions.sizeX || 1) % 2 !== 1 ||
-      (gaussianBlurOptions.sizeY || 1) % 2 !== 1
-    ) {
-      return pipelined;
-    }
-
     if (pipelined instanceof Image) {
-      return pipelined.gaussianBlur(gaussianBlurOptions);
+      try {
+        return pipelined.gaussianBlur(gaussianBlurOptions);
+      } catch {
+        return null;
+      }
     }
 
-    return pipelined;
+    return null;
   }, [gaussianBlurOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();

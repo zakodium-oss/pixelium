@@ -20,7 +20,8 @@ export type ModalName =
   | 'mask'
   | 'log'
   | 'about'
-  | 'export';
+  | 'export'
+  | 'median';
 
 export interface ViewState {
   currentTab?: string;
@@ -52,6 +53,7 @@ export const initialViewState: ViewState = {
     log: false,
     about: false,
     export: false,
+    median: false,
   },
 };
 

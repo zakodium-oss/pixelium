@@ -23,15 +23,15 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
   });
 
   const blurredImage = useMemo(() => {
-    if (blurOptions.width % 2 !== 1 || blurOptions.height % 2 !== 1) {
-      return pipelined;
-    }
-
     if (pipelined instanceof Image) {
-      return pipelined.blur(blurOptions);
+      try {
+        return pipelined.blur(blurOptions);
+      } catch {
+        return null;
+      }
     }
 
-    return pipelined;
+    return null;
   }, [blurOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();

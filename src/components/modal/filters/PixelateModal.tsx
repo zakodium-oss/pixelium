@@ -33,11 +33,17 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
     [],
   );
 
-  const pixelatedImage = useMemo(
-    () =>
-      pipelined instanceof Image ? pipelined.pixelate(options) : pipelined,
-    [options, pipelined],
-  );
+  const pixelatedImage = useMemo(() => {
+    if (pipelined instanceof Image) {
+      try {
+        return pipelined.pixelate(options);
+      } catch {
+        return null;
+      }
+    }
+
+    return null;
+  }, [options, pipelined]);
 
   const addPixelateFilter = useCallback(() => {
     dataDispatch({
