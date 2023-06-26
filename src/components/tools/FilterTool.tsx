@@ -18,6 +18,7 @@ import FlipModal from '../modal/filters/FlipModal';
 import GaussianBlurModal from '../modal/filters/GaussianBlurModal';
 import InvertModal from '../modal/filters/InvertModal';
 import LevelModal from '../modal/filters/LevelModal';
+import PixelateModal from '../modal/filters/PixelateModal';
 
 function FilterTool() {
   const [isGreyDialogOpen, openGreyDialog, closeGreyDialog] = useOnOff(false);
@@ -31,6 +32,8 @@ function FilterTool() {
     useOnOff(false);
   const [isFlipDialogOpen, openFlipDialog, closeFlipDialog] = useOnOff(false);
   const [isLevelDialogOpen, openLevelDialog, closeLevelDialog] =
+    useOnOff(false);
+  const [isPixelateDialogOpen, openPixelateDialog, closePixelateDialog] =
     useOnOff(false);
 
   const currentTab = useCurrentTab();
@@ -72,6 +75,13 @@ function FilterTool() {
         label: 'Level',
         data: 'level',
         type: 'option',
+        disabled: isBinary(pipelined),
+      },
+      {
+        label: 'Pixelate',
+        data: 'pixelate',
+        type: 'option',
+        disabled: isBinary(pipelined),
       },
     ],
     [pipelined],
@@ -97,6 +107,9 @@ function FilterTool() {
       if (selected.data === 'level') {
         openLevelDialog();
       }
+      if (selected.data === 'pixelate') {
+        openPixelateDialog();
+      }
     },
     [
       openBlurDialog,
@@ -105,6 +118,7 @@ function FilterTool() {
       openGreyDialog,
       openInvertDialog,
       openLevelDialog,
+      openPixelateDialog,
     ],
   );
 
@@ -161,6 +175,13 @@ function FilterTool() {
         <LevelModal
           isOpenDialog={isLevelDialogOpen}
           closeDialog={closeLevelDialog}
+          previewImageIdentifier={currentTab}
+        />
+      )}
+      {isPixelateDialogOpen && (
+        <PixelateModal
+          isOpenDialog={isPixelateDialogOpen}
+          closeDialog={closePixelateDialog}
           previewImageIdentifier={currentTab}
         />
       )}

@@ -7,6 +7,7 @@ import {
   GaussianBlurXYOptions,
   FlipOptions,
   LevelOptions,
+  PixelateOptions,
 } from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
@@ -25,6 +26,7 @@ import {
   PipelineAddInvertAction,
   PipelineAddFlipAction,
   PipelineAddLevelAction,
+  PipelineAddPixelateAction,
 } from './actions/PipelineActions';
 
 interface InnerPipelineOperation<T extends string, R, O = undefined> {
@@ -46,6 +48,7 @@ export type PipelineOperations =
   | PipelineOperation<'INVERT', Image | Mask, undefined>
   | PipelineOperation<'FLIP', Image, FlipOptions>
   | PipelineOperation<'LEVEL', Image, LevelOptions>
+  | PipelineOperation<'PIXELATE', Image, PixelateOptions>
   | PipelineOperation<'MASK', Mask, ThresholdOptionsAlgorithm>;
 
 export interface DataFile {
@@ -73,6 +76,7 @@ export type DataActions =
   | PipelineAddInvertAction
   | PipelineAddFlipAction
   | PipelineAddLevelAction
+  | PipelineAddPixelateAction
   | PipelineAddMaskAction
   | RemovePipelineOperationAction
   | TogglePipelineOperationAction;
@@ -95,6 +99,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.addMask(draft, action.payload);
     case Type.ADD_FLIP:
       return PipelineActions.addFlip(draft, action.payload);
+    case Type.ADD_PIXELATE:
+      return PipelineActions.addPixelate(draft, action.payload);
     case Type.ADD_LEVEL:
       return PipelineActions.addLevel(draft, action.payload);
     case Type.REMOVE_PIPELINE_OPERATION:

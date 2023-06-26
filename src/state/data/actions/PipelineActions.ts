@@ -6,6 +6,7 @@ import {
   GreyOptions,
   Image,
   LevelOptions,
+  PixelateOptions,
   ThresholdOptionsAlgorithm,
 } from 'image-js';
 import { Draft } from 'immer';
@@ -41,6 +42,11 @@ export type PipelineAddFlipAction = DataActionType<
 export type PipelineAddLevelAction = DataActionType<
   'ADD_LEVEL',
   { identifier: string; options: LevelOptions }
+>;
+
+export type PipelineAddPixelateAction = DataActionType<
+  'ADD_PIXELATE',
+  { identifier: string; options: PixelateOptions }
 >;
 
 export type PipelineAddMaskAction = DataActionType<
@@ -148,6 +154,25 @@ export function addFlip(
   pipeline.push({
     identifier: uuid(),
     type: 'FLIP',
+    isActive: true,
+    options,
+  });
+
+  runPipeline(pipeline, image);
+}
+
+export function addPixelate(
+  draft: Draft<DataState>,
+  { identifier, options }: { identifier: string; options: PixelateOptions },
+) {
+  const dataFile = draft.images[identifier];
+  if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
+
+  const { pipeline, image } = dataFile;
+
+  pipeline.push({
+    identifier: uuid(),
+    type: 'PIXELATE',
     isActive: true,
     options,
   });
@@ -315,6 +340,15 @@ function runPipeline(
             outputMin: operation.options.outputMin,
             outputMax: operation.options.outputMax,
             gamma: operation.options.gamma,
+          });
+        }
+        break;
+      }
+      case 'PIXELATE': {
+        if (applyOn instanceof Image) {
+          operation.result = applyOn.pixelate({
+            cellSize: operation.options.cellSize,
+            algorithm: operation.options.algorithm,
           });
         }
         break;
