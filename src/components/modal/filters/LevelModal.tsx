@@ -28,7 +28,7 @@ function LevelModal({ previewImageIdentifier }: LevelModalProps) {
 
   const { defaultOptions, editing, opIdentifier } =
     useDefaultOptions<LocalLevelOptions>({
-      channels: new Array(pipelined.components).fill(0).map((_, i) => i),
+      channels: times(pipelined.components, (i) => i),
       inputMin: 0,
       inputMax: pipelined.maxValue,
       outputMin: 0,
