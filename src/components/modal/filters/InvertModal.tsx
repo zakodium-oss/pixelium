@@ -1,4 +1,3 @@
-import { BlurOptions, BorderType } from 'image-js';
 import { memo, useCallback, useMemo } from 'react';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';

@@ -1,4 +1,4 @@
-import { BlurOptions, BorderType, channelLabels, Image } from 'image-js';
+import { channelLabels, Image } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Checkbox, Field, Input } from 'react-science/ui';

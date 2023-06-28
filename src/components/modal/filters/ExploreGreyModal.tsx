@@ -1,4 +1,4 @@
-import { BlurOptions, BorderType, GreyAlgorithm, Image } from 'image-js';
+import { GreyAlgorithm, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
