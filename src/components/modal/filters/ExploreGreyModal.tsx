@@ -7,7 +7,7 @@ import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import { SET_GREY_FILTER } from '../../../state/data/DataActionTypes';
 import FastSelector from '../../FastSelector';
-import FilterModal from '../FilterModal';
+import FilterModal from '../PreviewModal';
 
 interface ExportGreyModalProps {
   previewImageIdentifier: string;

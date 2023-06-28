@@ -21,7 +21,7 @@ const modalStyle = css`
   height: 75vh;
 `;
 
-interface FilterModalProps {
+interface PreviewModalProps {
   isOpenDialog: boolean;
   closeDialog: () => void;
   previewImageIdentifier: string;
@@ -57,7 +57,7 @@ const AlgorithmError = styled.div`
   font-weight: bold;
 `;
 
-function FilterModal({
+function PreviewModal({
   isOpenDialog,
   closeDialog,
   previewImageIdentifier,
@@ -67,7 +67,7 @@ function FilterModal({
   apply,
   previewed,
   editing,
-}: FilterModalProps) {
+}: PreviewModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
   const viewDispatch = useViewDispatch();
@@ -120,4 +120,4 @@ function FilterModal({
   );
 }
 
-export default memo(FilterModal);
+export default memo(PreviewModal);

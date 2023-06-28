@@ -7,7 +7,7 @@ import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import { SET_FLIP } from '../../../state/data/DataActionTypes';
-import FilterModal from '../FilterModal';
+import FilterModal from '../PreviewModal';
 
 interface FlipModalProps {
   previewImageIdentifier: string;

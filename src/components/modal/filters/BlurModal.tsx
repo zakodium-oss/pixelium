@@ -7,7 +7,7 @@ import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import { SET_BLUR } from '../../../state/data/DataActionTypes';
-import FilterModal from '../FilterModal';
+import FilterModal from '../PreviewModal';
 
 interface BlurModalProps {
   previewImageIdentifier: string;
