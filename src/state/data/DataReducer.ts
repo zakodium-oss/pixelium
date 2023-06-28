@@ -9,6 +9,7 @@ import {
   LevelOptions,
   PixelateOptions,
   MedianFilterOptions,
+  Roi,
 } from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
@@ -30,6 +31,8 @@ import {
   PipelineAddPixelateAction,
   PipelineAddMedianFilterAction,
 } from './actions/PipelineActions';
+import * as RoiActions from './actions/RoiActions';
+import { SetROIAction } from './actions/RoiActions';
 
 interface InnerPipelineOperation<T extends string, R, O = undefined> {
   type: T;
@@ -58,6 +61,7 @@ export interface DataFile {
   image: Image;
   pipeline: PipelineOperations[];
   metadata: { name: string; relativePath: string };
+  rois: Roi[];
 }
 
 export interface DataState {
@@ -83,7 +87,8 @@ export type DataActions =
   | PipelineAddMedianFilterAction
   | PipelineAddMaskAction
   | RemovePipelineOperationAction
-  | TogglePipelineOperationAction;
+  | TogglePipelineOperationAction
+  | SetROIAction;
 
 function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
   switch (action.type) {
@@ -113,6 +118,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.removeOperation(draft, action.payload);
     case Type.TOGGLE_PIPELINE_OPERATION:
       return PipelineActions.toggleOperation(draft, action.payload);
+    case Type.SET_ROI:
+      return RoiActions.setROIs(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }

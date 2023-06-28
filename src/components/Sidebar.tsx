@@ -10,6 +10,7 @@ import useImageMetadata from '../hooks/useImageMetadata';
 
 import Histograms from './histogram/Histograms';
 import PipelineTable from './pipeline/PipelineTable';
+import ROITable from './rois/ROITable';
 
 const MissingMetadata = styled.div`
   margin-top: 8px;
@@ -66,6 +67,9 @@ function Sidebar() {
         </Accordion.Item>
         <Accordion.Item title="Pipeline">
           <PipelineTable identifier={currentTab} />
+        </Accordion.Item>
+        <Accordion.Item title="ROIs">
+          <ROITable identifier={currentTab} />
         </Accordion.Item>
       </Accordion>
     </div>

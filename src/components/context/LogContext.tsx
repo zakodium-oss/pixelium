@@ -23,6 +23,8 @@ interface LogProviderProps {
   children: ReactNode;
 }
 
+export let logger: FifoLogger;
+
 export function LogProvider({ children }: LogProviderProps) {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const loggerRef = useRef<FifoLogger>(
@@ -32,6 +34,8 @@ export function LogProvider({ children }: LogProviderProps) {
       },
     }),
   );
+
+  logger = loggerRef.current;
 
   const clear = useCallback(() => {
     loggerRef.current.clear();

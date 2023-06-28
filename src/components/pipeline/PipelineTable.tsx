@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import {
   Button,
@@ -29,6 +29,13 @@ const ActionsContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   gap: 0.25rem;
+`;
+
+const Empty = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 `;
 
 interface PipelineTableProps {
@@ -90,6 +97,13 @@ function PipelineTable({ identifier }: PipelineTableProps) {
     [dataDispatch, identifier],
   );
 
+  const pipeline = useMemo(
+    () => data.images[identifier].pipeline,
+    [data, identifier],
+  );
+
+  if (pipeline.length === 0) return <Empty>Pipeline is empty</Empty>;
+
   return (
     <Table>
       <Table.Header>
@@ -99,7 +113,7 @@ function PipelineTable({ identifier }: PipelineTableProps) {
         <ValueRenderers.Title value="Enabled" />
         <ValueRenderers.Title value="Actions" />
       </Table.Header>
-      {data.images[identifier].pipeline.map((operation, index) => (
+      {pipeline.map((operation, index) => (
         <Table.Row key={operation.identifier}>
           <ValueRenderers.Number value={index + 1} />
           <ValueRenderers.Text

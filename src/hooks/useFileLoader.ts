@@ -35,6 +35,7 @@ export default function useFileLoader() {
             image,
             metadata,
             pipeline: [],
+            rois: [],
           });
         } catch {
           logger.error(`Error decoding file ${file.name}`);

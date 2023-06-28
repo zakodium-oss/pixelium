@@ -12,6 +12,7 @@ import {
 } from 'image-js';
 import { Draft } from 'immer';
 
+import { logger } from '../../../components/context/LogContext';
 import {
   DataActionType,
   REMOVE_PIPELINE_OPERATION,
@@ -479,91 +480,98 @@ function runPipeline(
     const applyOn = index === 0 ? baseImage : pipeline[index - 1].result;
     if (applyOn === undefined) break;
 
-    switch (operation.type) {
-      case 'GREY_FILTER': {
-        if (applyOn instanceof Image) {
-          operation.result = applyOn.grey({
-            algorithm: operation.options.algorithm,
-          });
+    try {
+      switch (operation.type) {
+        case 'GREY_FILTER': {
+          if (applyOn instanceof Image) {
+            operation.result = applyOn.grey({
+              algorithm: operation.options.algorithm,
+            });
+          }
+          break;
         }
-        break;
-      }
-      case 'BLUR': {
-        if (applyOn instanceof Image) {
-          operation.result = applyOn.blur({
-            width: operation.options.width,
-            height: operation.options.height,
-            borderType: operation.options.borderType,
-            borderValue: operation.options.borderValue,
-          });
+        case 'BLUR': {
+          if (applyOn instanceof Image) {
+            operation.result = applyOn.blur({
+              width: operation.options.width,
+              height: operation.options.height,
+              borderType: operation.options.borderType,
+              borderValue: operation.options.borderValue,
+            });
+          }
+          break;
         }
-        break;
-      }
-      case 'MASK': {
-        if (applyOn instanceof Image) {
-          operation.result = applyOn.threshold({
-            algorithm: operation.options.algorithm,
-          });
+        case 'MASK': {
+          if (applyOn instanceof Image) {
+            operation.result = applyOn.threshold({
+              algorithm: operation.options.algorithm,
+            });
+          }
+          break;
         }
-        break;
-      }
-      case 'GAUSSIAN_BLUR': {
-        if (applyOn instanceof Image) {
-          operation.result = applyOn.gaussianBlur({
-            sigmaX: operation.options.sigmaX,
-            sigmaY: operation.options.sigmaY,
-            sizeX: operation.options.sizeX,
-            sizeY: operation.options.sizeY,
-          });
+        case 'GAUSSIAN_BLUR': {
+          if (applyOn instanceof Image) {
+            operation.result = applyOn.gaussianBlur({
+              sigmaX: operation.options.sigmaX,
+              sigmaY: operation.options.sigmaY,
+              sizeX: operation.options.sizeX,
+              sizeY: operation.options.sizeY,
+            });
+          }
+          break;
         }
-        break;
-      }
-      case 'INVERT': {
-        operation.result = applyOn.invert();
-        break;
-      }
-      case 'FLIP': {
-        if (applyOn instanceof Image) {
-          operation.result = applyOn.flip({
-            axis: operation.options.axis,
-          });
+        case 'INVERT': {
+          operation.result = applyOn.invert();
+          break;
         }
-        break;
-      }
-      case 'LEVEL': {
-        if (applyOn instanceof Image) {
-          operation.result = applyOn.level({
-            channels: operation.options.channels,
-            inputMin: operation.options.inputMin,
-            inputMax: operation.options.inputMax,
-            outputMin: operation.options.outputMin,
-            outputMax: operation.options.outputMax,
-            gamma: operation.options.gamma,
-          });
+        case 'FLIP': {
+          if (applyOn instanceof Image) {
+            operation.result = applyOn.flip({
+              axis: operation.options.axis,
+            });
+          }
+          break;
         }
-        break;
-      }
-      case 'PIXELATE': {
-        if (applyOn instanceof Image) {
-          operation.result = applyOn.pixelate({
-            cellSize: operation.options.cellSize,
-            algorithm: operation.options.algorithm,
-          });
+        case 'LEVEL': {
+          if (applyOn instanceof Image) {
+            operation.result = applyOn.level({
+              channels: operation.options.channels,
+              inputMin: operation.options.inputMin,
+              inputMax: operation.options.inputMax,
+              outputMin: operation.options.outputMin,
+              outputMax: operation.options.outputMax,
+              gamma: operation.options.gamma,
+            });
+          }
+          break;
         }
-        break;
-      }
-      case 'MEDIAN_FILTER': {
-        if (applyOn instanceof Image) {
-          operation.result = applyOn.medianFilter({
-            cellSize: operation.options.cellSize,
-            borderType: operation.options.borderType,
-            borderValue: operation.options.borderValue,
-          });
+        case 'PIXELATE': {
+          if (applyOn instanceof Image) {
+            operation.result = applyOn.pixelate({
+              cellSize: operation.options.cellSize,
+              algorithm: operation.options.algorithm,
+            });
+          }
+          break;
         }
-        break;
+        case 'MEDIAN_FILTER': {
+          if (applyOn instanceof Image) {
+            operation.result = applyOn.medianFilter({
+              cellSize: operation.options.cellSize,
+              borderType: operation.options.borderType,
+              borderValue: operation.options.borderValue,
+            });
+          }
+          break;
+        }
+        default:
+          throw new Error(`Unknown operation`);
       }
-      default:
-        throw new Error(`Unknown operation`);
+    } catch (error: any) {
+      setTimeout(() => {
+        logger.error(`Error while running operation ${error}`);
+      });
+      break;
     }
   }
 }
