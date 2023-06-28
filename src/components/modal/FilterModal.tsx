@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Image, Mask } from 'image-js';
-import { memo, ReactNode } from 'react';
+import { memo, ReactNode, useCallback } from 'react';
 import { Button, Modal } from 'react-science/ui';
 
 import useImage from '../../hooks/useImage';
+import useViewDispatch from '../../hooks/useViewDispatch';
+import { SET_EDIT_MODE_IDENTIFIER } from '../../state/view/ViewActionTypes';
 import { buttons } from '../../utils/colors';
 import ImageViewer from '../ImageViewer';
 
@@ -28,6 +30,7 @@ interface FilterModalProps {
   viewIdentifier: string;
   apply: () => void;
   previewed: Image | Mask | null;
+  editing: boolean;
 }
 
 const ImageViewerContainer = styled.div`
@@ -63,14 +66,25 @@ function FilterModal({
   viewIdentifier,
   apply,
   previewed,
+  editing,
 }: FilterModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
+
+  const viewDispatch = useViewDispatch();
+
+  const internalApply = useCallback(() => {
+    viewDispatch({
+      type: SET_EDIT_MODE_IDENTIFIER,
+      payload: null,
+    });
+    apply();
+  }, [apply, viewDispatch]);
 
   return (
     <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
       <div css={modalStyle}>
         <StyledModalHeader>
-          <Modal.Header>{title}</Modal.Header>
+          <Modal.Header>{editing ? `Editing : ${title}` : title}</Modal.Header>
         </StyledModalHeader>
         <Modal.Body>
           <StyledModalBody>
@@ -96,8 +110,8 @@ function FilterModal({
         </Modal.Body>
         <Modal.Footer>
           <FooterStyled>
-            <Button backgroundColor={buttons.info} onClick={apply}>
-              Add filter
+            <Button backgroundColor={buttons.info} onClick={internalApply}>
+              {editing ? 'Edit filter' : 'Add filter'}
             </Button>
           </FooterStyled>
         </Modal.Footer>

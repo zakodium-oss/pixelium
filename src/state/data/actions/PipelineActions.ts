@@ -12,98 +12,149 @@ import {
 } from 'image-js';
 import { Draft } from 'immer';
 
-import { DataActionType } from '../DataActionTypes';
+import {
+  DataActionType,
+  REMOVE_PIPELINE_OPERATION,
+  SET_BLUR,
+  SET_FLIP,
+  SET_GAUSSIAN_BLUR,
+  SET_GREY_FILTER,
+  SET_INVERT,
+  SET_LEVEL,
+  SET_MASK,
+  SET_MEDIAN_FILTER,
+  SET_PIXELATE,
+  TOGGLE_PIPELINE_OPERATION,
+} from '../DataActionTypes';
 import { DataState, PipelineOperations } from '../DataReducer';
 
 export type PipelineAddGreyFilterAction = DataActionType<
-  'ADD_GREY_FILTER',
-  { identifier: string; options: GreyOptions }
+  typeof SET_GREY_FILTER,
+  { identifier: string; opIdentifier?: string; options: GreyOptions }
 >;
 
 export type PipelineAddBlurAction = DataActionType<
-  'ADD_BLUR',
-  { identifier: string; options: BlurOptions }
+  typeof SET_BLUR,
+  { identifier: string; opIdentifier?: string; options: BlurOptions }
 >;
 
 export type PipelineAddGaussianBlurAction = DataActionType<
-  'ADD_GAUSSIAN_BLUR',
-  { identifier: string; options: GaussianBlurXYOptions }
+  typeof SET_GAUSSIAN_BLUR,
+  { identifier: string; opIdentifier?: string; options: GaussianBlurXYOptions }
 >;
 
 export type PipelineAddInvertAction = DataActionType<
-  'ADD_INVERT',
-  { identifier: string }
+  typeof SET_INVERT,
+  { identifier: string; opIdentifier?: string }
 >;
 
 export type PipelineAddFlipAction = DataActionType<
-  'ADD_FLIP',
-  { identifier: string; options: FlipOptions }
+  typeof SET_FLIP,
+  { identifier: string; opIdentifier?: string; options: FlipOptions }
 >;
 
 export type PipelineAddLevelAction = DataActionType<
-  'ADD_LEVEL',
-  { identifier: string; options: LevelOptions }
+  typeof SET_LEVEL,
+  { identifier: string; opIdentifier?: string; options: LevelOptions }
 >;
 
 export type PipelineAddPixelateAction = DataActionType<
-  'ADD_PIXELATE',
-  { identifier: string; options: PixelateOptions }
+  typeof SET_PIXELATE,
+  { identifier: string; opIdentifier?: string; options: PixelateOptions }
 >;
 
 export type PipelineAddMedianFilterAction = DataActionType<
-  'ADD_MEDIAN_FILTER',
-  { identifier: string; options: MedianFilterOptions }
+  typeof SET_MEDIAN_FILTER,
+  { identifier: string; opIdentifier?: string; options: MedianFilterOptions }
 >;
 
 export type PipelineAddMaskAction = DataActionType<
-  'ADD_MASK',
-  { identifier: string; options: ThresholdOptionsAlgorithm }
+  typeof SET_MASK,
+  {
+    identifier: string;
+    opIdentifier?: string;
+    options: ThresholdOptionsAlgorithm;
+  }
 >;
 
 export type RemovePipelineOperationAction = DataActionType<
-  'REMOVE_PIPELINE_OPERATION',
+  typeof REMOVE_PIPELINE_OPERATION,
   { identifier: string; opIdentifier: string }
 >;
 
 export type TogglePipelineOperationAction = DataActionType<
-  'TOGGLE_PIPELINE_OPERATION',
+  typeof TOGGLE_PIPELINE_OPERATION,
   { identifier: string; opIdentifier: string; checked: boolean }
 >;
 
 export function addGreyFilter(
   draft: Draft<DataState>,
-  { identifier, options }: { identifier: string; options: GreyOptions },
+  {
+    identifier,
+    opIdentifier = uuid(),
+    options,
+  }: { identifier: string; opIdentifier?: string; options: GreyOptions },
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
   const { pipeline, image } = dataFile;
 
-  pipeline.push({
-    identifier: uuid(),
-    type: 'GREY_FILTER',
-    isActive: true,
-    options,
-  });
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: uuid(),
+      type: 'GREY_FILTER',
+      isActive: true,
+      options,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'GREY_FILTER',
+      isActive: true,
+      options,
+    };
+  }
 
   runPipeline(pipeline, image);
 }
 
 export function addBlur(
   draft: Draft<DataState>,
-  { identifier, options }: { identifier: string; options: BlurOptions },
+  {
+    identifier,
+    opIdentifier = uuid(),
+    options,
+  }: { identifier: string; opIdentifier?: string; options: BlurOptions },
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
   const { pipeline, image } = dataFile;
 
-  pipeline.push({
-    identifier: uuid(),
-    type: 'BLUR',
-    isActive: true,
-    options,
-  });
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: opIdentifier,
+      type: 'BLUR',
+      isActive: true,
+      options,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'BLUR',
+      isActive: true,
+      options,
+    };
+  }
 
   runPipeline(pipeline, image);
 }
@@ -112,114 +163,219 @@ export function addGaussianBlur(
   draft: Draft<DataState>,
   {
     identifier,
+    opIdentifier = uuid(),
     options,
-  }: { identifier: string; options: GaussianBlurXYOptions },
+  }: {
+    identifier: string;
+    opIdentifier?: string;
+    options: GaussianBlurXYOptions;
+  },
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
   const { pipeline, image } = dataFile;
 
-  pipeline.push({
-    identifier: uuid(),
-    type: 'GAUSSIAN_BLUR',
-    isActive: true,
-    options,
-  });
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: uuid(),
+      type: 'GAUSSIAN_BLUR',
+      isActive: true,
+      options,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'GAUSSIAN_BLUR',
+      isActive: true,
+      options,
+    };
+  }
 
   runPipeline(pipeline, image);
 }
 
 export function addInvert(
   draft: Draft<DataState>,
-  { identifier }: { identifier: string },
+  {
+    identifier,
+    opIdentifier = uuid(),
+  }: { identifier: string; opIdentifier?: string },
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
   const { pipeline, image } = dataFile;
 
-  pipeline.push({
-    identifier: uuid(),
-    type: 'INVERT',
-    isActive: true,
-  });
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: uuid(),
+      type: 'INVERT',
+      isActive: true,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'INVERT',
+      isActive: true,
+    };
+  }
 
   runPipeline(pipeline, image);
 }
 
 export function addFlip(
   draft: Draft<DataState>,
-  { identifier, options }: { identifier: string; options: FlipOptions },
+  {
+    identifier,
+    opIdentifier = uuid(),
+    options,
+  }: { identifier: string; opIdentifier?: string; options: FlipOptions },
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
   const { pipeline, image } = dataFile;
 
-  pipeline.push({
-    identifier: uuid(),
-    type: 'FLIP',
-    isActive: true,
-    options,
-  });
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: uuid(),
+      type: 'FLIP',
+      isActive: true,
+      options,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'FLIP',
+      isActive: true,
+      options,
+    };
+  }
 
   runPipeline(pipeline, image);
 }
 
 export function addLevel(
   draft: Draft<DataState>,
-  { identifier, options }: { identifier: string; options: LevelOptions },
+  {
+    identifier,
+    opIdentifier = uuid(),
+    options,
+  }: { identifier: string; opIdentifier?: string; options: LevelOptions },
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
   const { pipeline, image } = dataFile;
 
-  pipeline.push({
-    identifier: uuid(),
-    type: 'LEVEL',
-    isActive: true,
-    options,
-  });
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: uuid(),
+      type: 'LEVEL',
+      isActive: true,
+      options,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'LEVEL',
+      isActive: true,
+      options,
+    };
+  }
 
   runPipeline(pipeline, image);
 }
 
 export function addPixelate(
   draft: Draft<DataState>,
-  { identifier, options }: { identifier: string; options: PixelateOptions },
+  {
+    identifier,
+    opIdentifier = uuid(),
+    options,
+  }: { identifier: string; opIdentifier?: string; options: PixelateOptions },
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
   const { pipeline, image } = dataFile;
 
-  pipeline.push({
-    identifier: uuid(),
-    type: 'PIXELATE',
-    isActive: true,
-    options,
-  });
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: uuid(),
+      type: 'PIXELATE',
+      isActive: true,
+      options,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'PIXELATE',
+      isActive: true,
+      options,
+    };
+  }
 
   runPipeline(pipeline, image);
 }
 
 export function addMedianFilter(
   draft: Draft<DataState>,
-  { identifier, options }: { identifier: string; options: MedianFilterOptions },
+  {
+    identifier,
+    opIdentifier = uuid(),
+    options,
+  }: {
+    identifier: string;
+    opIdentifier?: string;
+    options: MedianFilterOptions;
+  },
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
   const { pipeline, image } = dataFile;
 
-  pipeline.push({
-    identifier: uuid(),
-    type: 'MEDIAN_FILTER',
-    isActive: true,
-    options,
-  });
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: uuid(),
+      type: 'MEDIAN_FILTER',
+      isActive: true,
+      options,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'MEDIAN_FILTER',
+      isActive: true,
+      options,
+    };
+  }
 
   runPipeline(pipeline, image);
 }
@@ -228,20 +384,38 @@ export function addMask(
   draft: Draft<DataState>,
   {
     identifier,
+    opIdentifier = uuid(),
     options,
-  }: { identifier: string; options: ThresholdOptionsAlgorithm },
+  }: {
+    identifier: string;
+    opIdentifier?: string;
+    options: ThresholdOptionsAlgorithm;
+  },
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
   const { pipeline, image } = dataFile;
 
-  pipeline.push({
-    identifier: uuid(),
-    type: 'MASK',
-    isActive: true,
-    options,
-  });
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: uuid(),
+      type: 'MASK',
+      isActive: true,
+      options,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'MASK',
+      isActive: true,
+      options,
+    };
+  }
 
   runPipeline(pipeline, image);
 }

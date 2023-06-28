@@ -3,9 +3,10 @@ import { memo, useCallback, useMemo, useState } from 'react';
 import { Field, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
-import { ADD_FLIP } from '../../../state/data/DataActionTypes';
+import { SET_FLIP } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface FlipModalProps {
@@ -15,12 +16,12 @@ interface FlipModalProps {
 function FlipModal({ previewImageIdentifier }: FlipModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
-  const dataDispatch = useDataDispatch();
-  const { isOpen, close } = useModal('flip');
+  const { defaultOptions, editing, opIdentifier } =
+    useDefaultOptions<FlipOptions>({
+      axis: 'horizontal',
+    });
 
-  const [options, setOptions] = useState<FlipOptions>({
-    axis: 'horizontal',
-  });
+  const [options, setOptions] = useState<FlipOptions>(defaultOptions);
   const axisOptions = useMemo(
     () => [
       [
@@ -37,16 +38,20 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
     [options, pipelined],
   );
 
+  const dataDispatch = useDataDispatch();
+  const { isOpen, close } = useModal('flip');
+
   const addFlipFilter = useCallback(() => {
     dataDispatch({
-      type: ADD_FLIP,
+      type: SET_FLIP,
       payload: {
         identifier: previewImageIdentifier,
+        opIdentifier,
         options,
       },
     });
     close();
-  }, [close, dataDispatch, options, previewImageIdentifier]);
+  }, [close, dataDispatch, opIdentifier, options, previewImageIdentifier]);
 
   return (
     <FilterModal
@@ -57,6 +62,7 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
       viewIdentifier="__flip_preview"
       apply={addFlipFilter}
       previewed={flippedImage}
+      editing={editing}
     >
       <Field name="axis" label="Axis">
         <Select

@@ -3,25 +3,29 @@ import { memo, useCallback, useMemo, useState } from 'react';
 import { Field, Input } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
-import { ADD_GAUSSIAN_BLUR } from '../../../state/data/DataActionTypes';
+import { SET_GAUSSIAN_BLUR } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface GaussianBlurModalProps {
   previewImageIdentifier: string;
 }
 
-function BlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
+function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
-  const [gaussianBlurOptions, setGaussianBlurOptions] =
-    useState<GaussianBlurXYOptions>({
+  const { defaultOptions, editing, opIdentifier } =
+    useDefaultOptions<GaussianBlurXYOptions>({
       sigmaX: 1,
       sigmaY: 1,
       sizeX: 1,
       sizeY: 1,
     });
+
+  const [gaussianBlurOptions, setGaussianBlurOptions] =
+    useState<GaussianBlurXYOptions>(defaultOptions);
 
   const blurredImage = useMemo(() => {
     if (pipelined instanceof Image) {
@@ -40,14 +44,21 @@ function BlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
 
   const addGaussianBlurFilter = useCallback(() => {
     dataDispatch({
-      type: ADD_GAUSSIAN_BLUR,
+      type: SET_GAUSSIAN_BLUR,
       payload: {
         identifier: previewImageIdentifier,
+        opIdentifier,
         options: gaussianBlurOptions,
       },
     });
     close();
-  }, [gaussianBlurOptions, close, dataDispatch, previewImageIdentifier]);
+  }, [
+    dataDispatch,
+    previewImageIdentifier,
+    opIdentifier,
+    gaussianBlurOptions,
+    close,
+  ]);
 
   return (
     <FilterModal
@@ -58,6 +69,7 @@ function BlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
       viewIdentifier="__gaussian_blur_preview"
       apply={addGaussianBlurFilter}
       previewed={blurredImage}
+      editing={editing}
     >
       <Field name="sigmaX" label="Sigma X">
         <Input
@@ -119,4 +131,4 @@ function BlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
   );
 }
 
-export default memo(BlurModal);
+export default memo(GaussianBlurModal);

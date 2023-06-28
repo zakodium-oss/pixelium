@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { memo, useCallback } from 'react';
-import { FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import {
   Button,
   Checkbox,
@@ -9,18 +9,26 @@ import {
   ValueRenderers,
 } from 'react-science/ui';
 
+import useCurrentTab from '../../hooks/useCurrentTab';
 import useData from '../../hooks/useData';
 import useDataDispatch from '../../hooks/useDataDispatch';
+import useViewDispatch from '../../hooks/useViewDispatch';
 import {
   REMOVE_PIPELINE_OPERATION,
   TOGGLE_PIPELINE_OPERATION,
 } from '../../state/data/DataActionTypes';
+import {
+  OPEN_MODAL,
+  SET_EDIT_MODE_IDENTIFIER,
+} from '../../state/view/ViewActionTypes';
+import { getModalNameFromOperationType } from '../../state/view/ViewReducer';
 import { buttons } from '../../utils/colors';
 
 const ActionsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  gap: 0.25rem;
 `;
 
 interface PipelineTableProps {
@@ -30,6 +38,8 @@ interface PipelineTableProps {
 function PipelineTable({ identifier }: PipelineTableProps) {
   const data = useData();
   const dataDispatch = useDataDispatch();
+  const viewDispatch = useViewDispatch();
+  const currentTab = useCurrentTab();
 
   const handleDelete = useCallback(
     (opIdentifier: string) => {
@@ -42,6 +52,28 @@ function PipelineTable({ identifier }: PipelineTableProps) {
       });
     },
     [dataDispatch, identifier],
+  );
+
+  const handleEdit = useCallback(
+    (opIdentifier: string) => {
+      const operation = data.images[identifier].pipeline.find(
+        (operation) => operation.identifier === opIdentifier,
+      );
+      if (!operation) return;
+
+      viewDispatch({
+        type: SET_EDIT_MODE_IDENTIFIER,
+        payload:
+          currentTab === undefined
+            ? null
+            : { identifier: currentTab, opIdentifier },
+      });
+      viewDispatch({
+        type: OPEN_MODAL,
+        payload: getModalNameFromOperationType(operation.type),
+      });
+    },
+    [currentTab, data.images, identifier, viewDispatch],
   );
 
   const handleToggle = useCallback(
@@ -89,6 +121,12 @@ function PipelineTable({ identifier }: PipelineTableProps) {
           </ValueRenderers.Component>
           <ValueRenderers.Component>
             <ActionsContainer>
+              <Button
+                backgroundColor={buttons.info}
+                onClick={() => handleEdit(operation.identifier)}
+              >
+                <FaEdit />
+              </Button>
               <Button
                 backgroundColor={buttons.danger}
                 onClick={() => handleDelete(operation.identifier)}

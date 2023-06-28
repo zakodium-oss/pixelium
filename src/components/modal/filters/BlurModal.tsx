@@ -3,9 +3,10 @@ import { memo, useCallback, useMemo, useState } from 'react';
 import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
-import { ADD_BLUR } from '../../../state/data/DataActionTypes';
+import { SET_BLUR } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface BlurModalProps {
@@ -15,12 +16,15 @@ interface BlurModalProps {
 function BlurModal({ previewImageIdentifier }: BlurModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
-  const [blurOptions, setBlurOptions] = useState<BlurOptions>({
-    width: 1,
-    height: 1,
-    borderType: BorderType.REFLECT_101,
-    borderValue: undefined,
-  });
+  const { defaultOptions, editing, opIdentifier } =
+    useDefaultOptions<BlurOptions>({
+      width: 1,
+      height: 1,
+      borderType: BorderType.REFLECT_101,
+      borderValue: undefined,
+    });
+
+  const [blurOptions, setBlurOptions] = useState<BlurOptions>(defaultOptions);
 
   const blurredImage = useMemo(() => {
     if (pipelined instanceof Image) {
@@ -39,14 +43,15 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
 
   const addBlurFilter = useCallback(() => {
     dataDispatch({
-      type: ADD_BLUR,
+      type: SET_BLUR,
       payload: {
         identifier: previewImageIdentifier,
+        opIdentifier,
         options: blurOptions,
       },
     });
     close();
-  }, [blurOptions, close, dataDispatch, previewImageIdentifier]);
+  }, [blurOptions, close, dataDispatch, opIdentifier, previewImageIdentifier]);
 
   const borderTypeOptions = useMemo(
     () => [
@@ -67,6 +72,7 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
       viewIdentifier="__blur_preview"
       apply={addBlurFilter}
       previewed={blurredImage}
+      editing={editing}
     >
       <Field name="kernelWidth" label="Kernel width">
         <Input

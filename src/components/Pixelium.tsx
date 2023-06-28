@@ -32,6 +32,7 @@ import ExportTool from './tools/ExportTool';
 import GreyTool from './tools/FilterTool';
 import ImportTool from './tools/ImportTool';
 import MaskTool from './tools/MaskTool';
+import ROITool from './tools/ROITool';
 
 interface PixeliumProps {
   data?: DataState;
@@ -92,6 +93,7 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                           <ExportTool />
                           <GreyTool />
                           <MaskTool />
+                          <ROITool />
                         </Toolbar>
                         <SplitPane
                           direction="horizontal"

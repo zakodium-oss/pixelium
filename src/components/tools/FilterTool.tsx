@@ -11,6 +11,7 @@ import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
 import useView from '../../hooks/useView';
 import useViewDispatch from '../../hooks/useViewDispatch';
+import { OPEN_MODAL } from '../../state/view/ViewActionTypes';
 import isBinary from '../../utils/isBinary';
 import isColor from '../../utils/isColor';
 import BlurModal from '../modal/filters/BlurModal';
@@ -87,7 +88,7 @@ function FilterTool() {
     (selected: MenuOption<string>) => {
       if (selected.data === undefined) return;
       viewDispatch({
-        type: 'OPEN_MODAL',
+        type: OPEN_MODAL,
         payload: selected.data,
       });
     },

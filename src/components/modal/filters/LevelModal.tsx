@@ -1,12 +1,13 @@
-import { channelLabels, Image } from 'image-js';
+import { BlurOptions, BorderType, channelLabels, Image } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Checkbox, Field, Input } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
-import { ADD_LEVEL } from '../../../state/data/DataActionTypes';
+import { SET_LEVEL } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface LevelModalProps {
@@ -25,33 +26,37 @@ interface LocalLevelOptions {
 function LevelModal({ previewImageIdentifier }: LevelModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
-  const dataDispatch = useDataDispatch();
-  const { isOpen, close } = useModal('level');
+  const { defaultOptions, editing, opIdentifier } =
+    useDefaultOptions<LocalLevelOptions>({
+      channels: new Array(pipelined.components).fill(0).map((_, i) => i),
+      inputMin: 0,
+      inputMax: pipelined.maxValue,
+      outputMin: 0,
+      outputMax: pipelined.maxValue,
+      gamma: 1,
+    });
 
-  const [options, setOptions] = useState<LocalLevelOptions>({
-    channels: new Array(pipelined.components).fill(0).map((_, i) => i),
-    inputMin: 0,
-    inputMax: pipelined.maxValue,
-    outputMin: 0,
-    outputMax: pipelined.maxValue,
-    gamma: 1,
-  });
+  const [options, setOptions] = useState<LocalLevelOptions>(defaultOptions);
 
   const leveledImage = useMemo(
     () => (pipelined instanceof Image ? pipelined.level(options) : pipelined),
     [options, pipelined],
   );
 
+  const dataDispatch = useDataDispatch();
+  const { isOpen, close } = useModal('level');
+
   const addLevelFilter = useCallback(() => {
     dataDispatch({
-      type: ADD_LEVEL,
+      type: SET_LEVEL,
       payload: {
         identifier: previewImageIdentifier,
+        opIdentifier,
         options,
       },
     });
     close();
-  }, [close, dataDispatch, options, previewImageIdentifier]);
+  }, [close, dataDispatch, opIdentifier, options, previewImageIdentifier]);
 
   return (
     <FilterModal
@@ -62,6 +67,7 @@ function LevelModal({ previewImageIdentifier }: LevelModalProps) {
       viewIdentifier="__level_preview"
       apply={addLevelFilter}
       previewed={leveledImage}
+      editing={editing}
     >
       <Field name="level" label="Level">
         {times(pipelined.components, (i) => (

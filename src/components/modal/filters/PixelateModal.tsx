@@ -3,9 +3,10 @@ import { memo, useCallback, useMemo, useState } from 'react';
 import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
-import { ADD_PIXELATE } from '../../../state/data/DataActionTypes';
+import { SET_PIXELATE } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface PixelateModalProps {
@@ -15,13 +16,13 @@ interface PixelateModalProps {
 function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
-  const dataDispatch = useDataDispatch();
-  const { isOpen, close } = useModal('pixelate');
+  const { defaultOptions, editing, opIdentifier } =
+    useDefaultOptions<PixelateOptions>({
+      cellSize: 2,
+      algorithm: 'center',
+    });
 
-  const [options, setOptions] = useState<PixelateOptions>({
-    cellSize: 2,
-    algorithm: 'center',
-  });
+  const [options, setOptions] = useState<PixelateOptions>(defaultOptions);
   const algorithmOptions = useMemo(
     () => [
       [
@@ -45,16 +46,20 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
     return null;
   }, [options, pipelined]);
 
+  const dataDispatch = useDataDispatch();
+  const { isOpen, close } = useModal('pixelate');
+
   const addPixelateFilter = useCallback(() => {
     dataDispatch({
-      type: ADD_PIXELATE,
+      type: SET_PIXELATE,
       payload: {
         identifier: previewImageIdentifier,
+        opIdentifier,
         options,
       },
     });
     close();
-  }, [close, dataDispatch, options, previewImageIdentifier]);
+  }, [close, dataDispatch, opIdentifier, options, previewImageIdentifier]);
 
   return (
     <FilterModal
@@ -65,6 +70,7 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
       viewIdentifier="__pixelate_preview"
       apply={addPixelateFilter}
       previewed={pixelatedImage}
+      editing={editing}
     >
       <Field name="cellSize" label="Cell size">
         <Input

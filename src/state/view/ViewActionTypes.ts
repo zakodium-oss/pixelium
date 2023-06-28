@@ -6,3 +6,4 @@ export const OPEN_TAB = 'OPEN_TAB';
 export const SET_PAN_ZOOM = 'SET_PAN_ZOOM';
 export const OPEN_MODAL = 'OPEN_MODAL';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
+export const SET_EDIT_MODE_IDENTIFIER = 'SET_EDIT_MODE_IDENTIFIER';

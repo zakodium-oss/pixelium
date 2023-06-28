@@ -91,23 +91,23 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return LoadActions.setLoading(draft, action.payload);
     case Type.LOAD_DROP:
       return LoadActions.loadDrop(draft, action.payload);
-    case Type.ADD_GREY_FILTER:
+    case Type.SET_GREY_FILTER:
       return PipelineActions.addGreyFilter(draft, action.payload);
-    case Type.ADD_BLUR:
+    case Type.SET_BLUR:
       return PipelineActions.addBlur(draft, action.payload);
-    case Type.ADD_GAUSSIAN_BLUR:
+    case Type.SET_GAUSSIAN_BLUR:
       return PipelineActions.addGaussianBlur(draft, action.payload);
-    case Type.ADD_INVERT:
+    case Type.SET_INVERT:
       return PipelineActions.addInvert(draft, action.payload);
-    case Type.ADD_MASK:
+    case Type.SET_MASK:
       return PipelineActions.addMask(draft, action.payload);
-    case Type.ADD_FLIP:
+    case Type.SET_FLIP:
       return PipelineActions.addFlip(draft, action.payload);
-    case Type.ADD_LEVEL:
+    case Type.SET_LEVEL:
       return PipelineActions.addLevel(draft, action.payload);
-    case Type.ADD_PIXELATE:
+    case Type.SET_PIXELATE:
       return PipelineActions.addPixelate(draft, action.payload);
-    case Type.ADD_MEDIAN_FILTER:
+    case Type.SET_MEDIAN_FILTER:
       return PipelineActions.addMedianFilter(draft, action.payload);
     case Type.REMOVE_PIPELINE_OPERATION:
       return PipelineActions.removeOperation(draft, action.payload);

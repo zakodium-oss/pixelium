@@ -1,9 +1,11 @@
+import { BlurOptions, BorderType } from 'image-js';
 import { memo, useCallback, useMemo } from 'react';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
-import { ADD_INVERT } from '../../../state/data/DataActionTypes';
+import { SET_INVERT } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface InvertModalProps {
@@ -13,6 +15,8 @@ interface InvertModalProps {
 function InvertModal({ previewImageIdentifier }: InvertModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
+  const { editing, opIdentifier } = useDefaultOptions<undefined>(undefined);
+
   const invertedImage = useMemo(() => pipelined.invert(), [pipelined]);
 
   const dataDispatch = useDataDispatch();
@@ -20,13 +24,14 @@ function InvertModal({ previewImageIdentifier }: InvertModalProps) {
 
   const addInvertFilter = useCallback(() => {
     dataDispatch({
-      type: ADD_INVERT,
+      type: SET_INVERT,
       payload: {
         identifier: previewImageIdentifier,
+        opIdentifier,
       },
     });
     close();
-  }, [close, dataDispatch, previewImageIdentifier]);
+  }, [close, dataDispatch, opIdentifier, previewImageIdentifier]);
 
   return (
     <FilterModal
@@ -37,6 +42,7 @@ function InvertModal({ previewImageIdentifier }: InvertModalProps) {
       viewIdentifier="__invert_preview"
       apply={addInvertFilter}
       previewed={invertedImage}
+      editing={editing}
     />
   );
 }

@@ -7,7 +7,7 @@ import { Button, Modal } from 'react-science/ui';
 import useDataDispatch from '../../hooks/useDataDispatch';
 import useImage from '../../hooks/useImage';
 import useModal from '../../hooks/useModal';
-import { ADD_MASK } from '../../state/data/DataActionTypes';
+import { SET_MASK } from '../../state/data/DataActionTypes';
 import { buttons } from '../../utils/colors';
 import FastSelector from '../FastSelector';
 import ImageViewer from '../ImageViewer';
@@ -75,7 +75,7 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
 
   const addMask = useCallback(() => {
     dataDispatch({
-      type: ADD_MASK,
+      type: SET_MASK,
       payload: {
         identifier: previewImageIdentifier,
         options: {

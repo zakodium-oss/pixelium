@@ -3,9 +3,10 @@ import { memo, useCallback, useMemo, useState } from 'react';
 import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
-import { ADD_MEDIAN_FILTER } from '../../../state/data/DataActionTypes';
+import { SET_MEDIAN_FILTER } from '../../../state/data/DataActionTypes';
 import FilterModal from '../FilterModal';
 
 interface MedianFilterModalProps {
@@ -15,12 +16,15 @@ interface MedianFilterModalProps {
 function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
-  const [medianFilterOptions, setMedianFilterOptions] =
-    useState<MedianFilterOptions>({
+  const { defaultOptions, editing, opIdentifier } =
+    useDefaultOptions<MedianFilterOptions>({
       cellSize: 1,
       borderType: BorderType.REFLECT_101,
       borderValue: undefined,
     });
+
+  const [medianFilterOptions, setMedianFilterOptions] =
+    useState<MedianFilterOptions>(defaultOptions);
 
   const filteredImage = useMemo(() => {
     if (medianFilterOptions.cellSize % 2 !== 1) {
@@ -39,14 +43,21 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
 
   const addMedianFilter = useCallback(() => {
     dataDispatch({
-      type: ADD_MEDIAN_FILTER,
+      type: SET_MEDIAN_FILTER,
       payload: {
         identifier: previewImageIdentifier,
+        opIdentifier,
         options: medianFilterOptions,
       },
     });
     close();
-  }, [medianFilterOptions, close, dataDispatch, previewImageIdentifier]);
+  }, [
+    dataDispatch,
+    previewImageIdentifier,
+    opIdentifier,
+    medianFilterOptions,
+    close,
+  ]);
 
   const borderTypeOptions = useMemo(
     () => [
@@ -67,6 +78,7 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
       viewIdentifier="__median_filter_preview"
       apply={addMedianFilter}
       previewed={filteredImage}
+      editing={editing}
     >
       <Field name="cellSize" label="Cell size">
         <Input

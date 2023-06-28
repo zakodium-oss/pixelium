@@ -1,10 +1,11 @@
-import { GreyAlgorithm, Image } from 'image-js';
+import { BlurOptions, BorderType, GreyAlgorithm, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
-import { ADD_GREY_FILTER } from '../../../state/data/DataActionTypes';
+import { SET_GREY_FILTER } from '../../../state/data/DataActionTypes';
 import FastSelector from '../../FastSelector';
 import FilterModal from '../FilterModal';
 
@@ -15,9 +16,11 @@ interface ExportGreyModalProps {
 function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
   const { pipelined } = useImage(previewImageIdentifier);
 
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState<
-    GreyAlgorithm | undefined
-  >(GreyAlgorithm.LUMA_709);
+  const { defaultOptions, editing, opIdentifier } =
+    useDefaultOptions<GreyAlgorithm>(GreyAlgorithm.LUMA_709);
+
+  const [selectedAlgorithm, setSelectedAlgorithm] =
+    useState<GreyAlgorithm>(defaultOptions);
 
   const greyImage = useMemo(
     () =>
@@ -34,16 +37,23 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
 
   const addGreyFilter = useCallback(() => {
     dataDispatch({
-      type: ADD_GREY_FILTER,
+      type: SET_GREY_FILTER,
       payload: {
         identifier: previewImageIdentifier,
+        opIdentifier,
         options: {
           algorithm: selectedAlgorithm,
         },
       },
     });
     close();
-  }, [close, dataDispatch, previewImageIdentifier, selectedAlgorithm]);
+  }, [
+    close,
+    dataDispatch,
+    opIdentifier,
+    previewImageIdentifier,
+    selectedAlgorithm,
+  ]);
 
   return (
     <FilterModal
@@ -54,6 +64,7 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
       viewIdentifier="__grey_filter_preview"
       apply={addGreyFilter}
       previewed={greyImage}
+      editing={editing}
     >
       <FastSelector
         options={Object.values(GreyAlgorithm)}

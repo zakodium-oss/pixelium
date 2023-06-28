@@ -5,8 +5,6 @@ import useData from './useData';
 const DEFAULT = {
   original: EMPTY_IMAGE,
   pipelined: EMPTY_IMAGE,
-  pipelinedAsImage: EMPTY_IMAGE,
-  pipelinedAsMask: null,
 };
 
 export default function useImage(identifier?: string) {
