@@ -19,7 +19,7 @@ function FilterTool() {
 
   const currentTab = useCurrentTab();
 
-  const { pipelined } = useImage(currentTab || '');
+  const { pipelined } = useImage(currentTab);
 
   const filterOptions = useMemo<MenuOptions<string>>(
     () => [

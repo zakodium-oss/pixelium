@@ -7,7 +7,10 @@ const DEFAULT = {
   pipelined: EMPTY_IMAGE,
 };
 
-export default function useImage(identifier?: string, toOperation?: string) {
+export default function useImage(
+  identifier: string | undefined,
+  toOperation?: string,
+) {
   const { images } = useData();
 
   if (!identifier) return DEFAULT;
