@@ -14,21 +14,30 @@ export default function useImage(identifier?: string, toOperation?: string) {
   const dataFile = images[identifier];
   if (!dataFile) return DEFAULT;
 
-  const stopAt =
+  // if not bounded, execute the whole pipeline
+  const executeAll = toOperation === undefined;
+  if (executeAll) {
+    return {
+      original: dataFile.image,
+      pipelined:
+        dataFile.pipeline.findLast(
+          (operation) => operation.isActive && operation.result !== undefined,
+        )?.result || dataFile.image,
+    };
+  }
+
+  // if bounded, execute until the operation before the target operation
+  const executeTo =
     dataFile.pipeline.findIndex(
       (operation) => operation.identifier === toOperation,
     ) - 1;
 
-  const lastToExecute = stopAt >= 0 ? dataFile.pipeline[stopAt] : undefined;
-
   const pipelined =
     dataFile.pipeline.findLast(
-      (operation) =>
+      (operation, index) =>
         operation.isActive &&
-        operation.result !== undefined &&
-        (lastToExecute === undefined
-          ? true
-          : operation.identifier === lastToExecute.identifier),
+        index <= executeTo &&
+        operation.result !== undefined,
     )?.result || dataFile.image;
 
   return {
