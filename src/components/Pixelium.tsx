@@ -89,7 +89,7 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                           overflow: 'hidden',
                         }}
                       >
-                        <Toolbar orientation={'vertical'}>
+                        <Toolbar orientation="vertical">
                           <ImportTool />
                           <ExportTool />
                           <GreyTool />

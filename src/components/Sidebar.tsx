@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { Image, ImageColorModel } from 'image-js';
 import { memo, useMemo } from 'react';
 import { ValueRenderers, Accordion, Table } from 'react-science/ui';
@@ -6,17 +5,11 @@ import { ValueRenderers, Accordion, Table } from 'react-science/ui';
 import useCurrentTab from '../hooks/useCurrentTab';
 import useImage from '../hooks/useImage';
 import useImageInformations from '../hooks/useImageInformations';
-import useImageMetadata from '../hooks/useImageMetadata';
 
 import Histograms from './histogram/Histograms';
+import MetadataTable from './metadatas/MetadataTable';
 import PipelineTable from './pipeline/PipelineTable';
 import ROITable from './rois/ROITable';
-
-const MissingMetadata = styled.div`
-  margin-top: 8px;
-  font-size: 1.5em;
-  text-align: center;
-`;
 
 function Sidebar() {
   const currentTab = useCurrentTab();
@@ -24,7 +17,6 @@ function Sidebar() {
   const { original, pipelined } = useImage(currentTab);
 
   const generalInformations = useImageInformations(original);
-  const metadatas = useImageMetadata(original);
 
   const pipelinedAsImage = useMemo(
     () =>
@@ -49,18 +41,7 @@ function Sidebar() {
           </Table>
         </Accordion.Item>
         <Accordion.Item title="Metadatas">
-          {metadatas.length === 0 ? (
-            <MissingMetadata>No metadatas found</MissingMetadata>
-          ) : (
-            <Table>
-              {metadatas.map(({ key, render }) => (
-                <Table.Row key={key}>
-                  <ValueRenderers.Text value={key} />
-                  {render}
-                </Table.Row>
-              ))}
-            </Table>
-          )}
+          <MetadataTable />
         </Accordion.Item>
         <Accordion.Item title="Histograms">
           <Histograms image={pipelinedAsImage} />
