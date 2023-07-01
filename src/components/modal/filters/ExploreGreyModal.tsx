@@ -1,4 +1,4 @@
-import { GreyAlgorithm, Image } from 'image-js';
+import { GreyAlgorithm, GreyOptions, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
@@ -14,22 +14,17 @@ interface ExportGreyModalProps {
 }
 
 function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
-  const { pipelined } = useImage(previewImageIdentifier);
-
   const { defaultOptions, editing, opIdentifier } =
-    useDefaultOptions<GreyAlgorithm>(GreyAlgorithm.LUMA_709);
+    useDefaultOptions<GreyOptions>({ algorithm: GreyAlgorithm.LUMA_709 });
 
-  const [selectedAlgorithm, setSelectedAlgorithm] =
-    useState<GreyAlgorithm>(defaultOptions);
+  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
+
+  const [greyOptions, setGreyOptions] = useState<GreyOptions>(defaultOptions);
 
   const greyImage = useMemo(
     () =>
-      pipelined instanceof Image
-        ? pipelined.grey({
-            algorithm: selectedAlgorithm,
-          })
-        : pipelined,
-    [selectedAlgorithm, pipelined],
+      pipelined instanceof Image ? pipelined.grey(greyOptions) : pipelined,
+    [pipelined, greyOptions],
   );
 
   const dataDispatch = useDataDispatch();
@@ -41,35 +36,27 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
       payload: {
         identifier: previewImageIdentifier,
         opIdentifier,
-        options: {
-          algorithm: selectedAlgorithm,
-        },
+        options: greyOptions,
       },
     });
     close();
-  }, [
-    close,
-    dataDispatch,
-    opIdentifier,
-    previewImageIdentifier,
-    selectedAlgorithm,
-  ]);
+  }, [close, dataDispatch, greyOptions, opIdentifier, previewImageIdentifier]);
 
   return (
     <FilterModal
-      previewImageIdentifier={previewImageIdentifier}
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Explore grey filters"
       viewIdentifier="__grey_filter_preview"
       apply={addGreyFilter}
-      previewed={greyImage}
+      original={pipelined}
+      preview={greyImage}
       editing={editing}
     >
       <FastSelector
         options={Object.values(GreyAlgorithm)}
-        selected={selectedAlgorithm}
-        setSelected={setSelectedAlgorithm}
+        selected={greyOptions.algorithm as GreyAlgorithm}
+        setSelected={(algorithm) => setGreyOptions({ algorithm })}
       />
     </FilterModal>
   );

@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
+import { CLOSE_MODAL, OPEN_MODAL } from '../state/view/ViewActionTypes';
 import { ModalName } from '../state/view/ViewReducer';
 
 import useView from './useView';
@@ -14,11 +15,11 @@ export default function useModal(identifier: ModalName) {
     [view.modals, identifier],
   );
   const open = useCallback(
-    () => viewDispatch({ type: 'OPEN_MODAL', payload: identifier }),
+    () => viewDispatch({ type: OPEN_MODAL, payload: identifier }),
     [viewDispatch, identifier],
   );
   const close = useCallback(
-    () => viewDispatch({ type: 'CLOSE_MODAL', payload: identifier }),
+    () => viewDispatch({ type: CLOSE_MODAL, payload: identifier }),
     [viewDispatch, identifier],
   );
 

@@ -9,22 +9,12 @@ import {
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
-import useView from '../../hooks/useView';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import { OPEN_MODAL } from '../../state/view/ViewActionTypes';
 import isBinary from '../../utils/isBinary';
 import isColor from '../../utils/isColor';
-import BlurModal from '../modal/filters/BlurModal';
-import ExploreGreyModal from '../modal/filters/ExploreGreyModal';
-import FlipModal from '../modal/filters/FlipModal';
-import GaussianBlurModal from '../modal/filters/GaussianBlurModal';
-import InvertModal from '../modal/filters/InvertModal';
-import LevelModal from '../modal/filters/LevelModal';
-import MedianFilterModal from '../modal/filters/MedianFilterModal';
-import PixelateModal from '../modal/filters/PixelateModal';
 
 function FilterTool() {
-  const view = useView();
   const viewDispatch = useViewDispatch();
 
   const currentTab = useCurrentTab();
@@ -99,35 +89,15 @@ function FilterTool() {
   if (pipelined === undefined) return null;
 
   return (
-    <>
-      <DropdownMenu
-        trigger="click"
-        onSelect={selectOption}
-        options={filterOptions}
-      >
-        <Toolbar.Item title="Filters">
-          <FaFilter />
-        </Toolbar.Item>
-      </DropdownMenu>
-      {view.modals.grey && (
-        <ExploreGreyModal previewImageIdentifier={currentTab} />
-      )}
-      {view.modals.blur && <BlurModal previewImageIdentifier={currentTab} />}
-      {view.modals.gaussianBlur && (
-        <GaussianBlurModal previewImageIdentifier={currentTab} />
-      )}
-      {view.modals.invert && (
-        <InvertModal previewImageIdentifier={currentTab} />
-      )}
-      {view.modals.flip && <FlipModal previewImageIdentifier={currentTab} />}
-      {view.modals.level && <LevelModal previewImageIdentifier={currentTab} />}
-      {view.modals.pixelate && (
-        <PixelateModal previewImageIdentifier={currentTab} />
-      )}
-      {view.modals.median && (
-        <MedianFilterModal previewImageIdentifier={currentTab} />
-      )}
-    </>
+    <DropdownMenu
+      trigger="click"
+      onSelect={selectOption}
+      options={filterOptions}
+    >
+      <Toolbar.Item title="Filters">
+        <FaFilter />
+      </Toolbar.Item>
+    </DropdownMenu>
   );
 }
 

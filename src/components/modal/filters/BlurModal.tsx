@@ -14,8 +14,6 @@ interface BlurModalProps {
 }
 
 function BlurModal({ previewImageIdentifier }: BlurModalProps) {
-  const { pipelined } = useImage(previewImageIdentifier);
-
   const { defaultOptions, editing, opIdentifier } =
     useDefaultOptions<BlurOptions>({
       width: 1,
@@ -23,6 +21,8 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
       borderType: BorderType.REFLECT_101,
       borderValue: undefined,
     });
+
+  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
 
   const [blurOptions, setBlurOptions] = useState<BlurOptions>(defaultOptions);
 
@@ -65,13 +65,13 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
 
   return (
     <FilterModal
-      previewImageIdentifier={previewImageIdentifier}
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Blur image"
       viewIdentifier="__blur_preview"
       apply={addBlurFilter}
-      previewed={blurredImage}
+      original={pipelined}
+      preview={blurredImage}
       editing={editing}
     >
       <Field name="kernelWidth" label="Kernel width">

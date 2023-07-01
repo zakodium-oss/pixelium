@@ -14,14 +14,14 @@ interface MedianFilterModalProps {
 }
 
 function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
-  const { pipelined } = useImage(previewImageIdentifier);
-
   const { defaultOptions, editing, opIdentifier } =
     useDefaultOptions<MedianFilterOptions>({
       cellSize: 1,
       borderType: BorderType.REFLECT_101,
       borderValue: undefined,
     });
+
+  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
 
   const [medianFilterOptions, setMedianFilterOptions] =
     useState<MedianFilterOptions>(defaultOptions);
@@ -71,13 +71,13 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
 
   return (
     <FilterModal
-      previewImageIdentifier={previewImageIdentifier}
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Median filter"
       viewIdentifier="__median_filter_preview"
       apply={addMedianFilter}
-      previewed={filteredImage}
+      original={pipelined}
+      preview={filteredImage}
       editing={editing}
     >
       <Field name="cellSize" label="Cell size">

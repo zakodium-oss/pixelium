@@ -7,6 +7,7 @@ import useDataDispatch from '../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
+import useView from '../../../hooks/useView';
 import { SET_LEVEL } from '../../../state/data/DataActionTypes';
 import FilterModal from '../PreviewModal';
 
@@ -24,7 +25,12 @@ interface LocalLevelOptions {
 }
 
 function LevelModal({ previewImageIdentifier }: LevelModalProps) {
-  const { pipelined } = useImage(previewImageIdentifier);
+  const view = useView();
+
+  const { pipelined } = useImage(
+    previewImageIdentifier,
+    view.editMode?.opIdentifier,
+  );
 
   const { defaultOptions, editing, opIdentifier } =
     useDefaultOptions<LocalLevelOptions>({
@@ -60,13 +66,13 @@ function LevelModal({ previewImageIdentifier }: LevelModalProps) {
 
   return (
     <FilterModal
-      previewImageIdentifier={previewImageIdentifier}
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Level image"
       viewIdentifier="__level_preview"
       apply={addLevelFilter}
-      previewed={leveledImage}
+      original={pipelined}
+      preview={leveledImage}
       editing={editing}
     >
       <Field name="level" label="Level">

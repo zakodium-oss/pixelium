@@ -1,62 +1,29 @@
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
-import { Mask, ThresholdAlgorithm } from 'image-js';
+import { Mask, ThresholdAlgorithm, ThresholdOptionsAlgorithm } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Button, Modal } from 'react-science/ui';
 
 import useDataDispatch from '../../hooks/useDataDispatch';
+import useDefaultOptions from '../../hooks/useDefaultOptions';
 import useImage from '../../hooks/useImage';
 import useModal from '../../hooks/useModal';
 import { SET_MASK } from '../../state/data/DataActionTypes';
-import { buttons } from '../../utils/colors';
 import FastSelector from '../FastSelector';
-import ImageViewer from '../ImageViewer';
 
-import StyledModalBody from './utils/StyledModalBody';
-import StyledModalHeader from './utils/StyledModalHeader';
-
-const modalStyle = css`
-  display: flex;
-  flex-direction: column;
-  width: 75vw;
-  max-height: 75vh;
-`;
+import PreviewModal from './PreviewModal';
 
 interface ExportGreyModalProps {
   previewImageIdentifier: string;
 }
 
-const ImageViewerContainer = styled.div`
-  width: 40%;
-  border: 1px solid #9e9e9e;
-  border-radius: 4px;
-`;
-
-const FooterStyled = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-`;
-
-const AlgorithmError = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-
-  color: red;
-  font-size: 1.25rem;
-  font-weight: bold;
-`;
-
-const viewIdentifier = '__mask_preview';
-
 function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
-  const { pipelined } = useImage(previewImageIdentifier);
+  const { defaultOptions, editing, opIdentifier } =
+    useDefaultOptions<ThresholdOptionsAlgorithm>({
+      algorithm: ThresholdAlgorithm.HUANG,
+    });
 
-  const [algorithm, setAlgorithm] = useState<ThresholdAlgorithm | undefined>(
-    ThresholdAlgorithm.HUANG,
-  );
+  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
+
+  const [maskOptions, setMaskOptions] =
+    useState<ThresholdOptionsAlgorithm>(defaultOptions);
 
   const maskImage = useMemo(() => {
     if (pipelined instanceof Mask) {
@@ -64,11 +31,11 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
     }
 
     try {
-      return pipelined.threshold({ algorithm });
+      return pipelined.threshold(maskOptions);
     } catch {
       return null;
     }
-  }, [pipelined, algorithm]);
+  }, [pipelined, maskOptions]);
 
   const dataDispatch = useDataDispatch();
   const { isOpen, close } = useModal('mask');
@@ -78,50 +45,30 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
       type: SET_MASK,
       payload: {
         identifier: previewImageIdentifier,
-        options: {
-          algorithm,
-        },
+        opIdentifier,
+        options: maskOptions,
       },
     });
     close();
-  }, [close, dataDispatch, previewImageIdentifier, algorithm]);
+  }, [dataDispatch, previewImageIdentifier, opIdentifier, maskOptions, close]);
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
-      <div css={modalStyle}>
-        <StyledModalHeader>
-          <Modal.Header>Explore masks</Modal.Header>
-        </StyledModalHeader>
-        <Modal.Body>
-          <StyledModalBody>
-            <ImageViewerContainer>
-              <ImageViewer identifier={viewIdentifier} image={pipelined} />
-            </ImageViewerContainer>
-            <div style={{ width: '20%', paddingInline: '20px' }}>
-              <FastSelector
-                options={Object.values(ThresholdAlgorithm)}
-                selected={algorithm}
-                setSelected={setAlgorithm}
-              />
-            </div>
-            <ImageViewerContainer>
-              {maskImage === null ? (
-                <AlgorithmError>Error running algorithm</AlgorithmError>
-              ) : (
-                <ImageViewer identifier={viewIdentifier} image={maskImage} />
-              )}
-            </ImageViewerContainer>
-          </StyledModalBody>
-        </Modal.Body>
-        <Modal.Footer>
-          <FooterStyled>
-            <Button backgroundColor={buttons.info} onClick={addMask}>
-              Add filter
-            </Button>
-          </FooterStyled>
-        </Modal.Footer>
-      </div>
-    </Modal>
+    <PreviewModal
+      closeDialog={close}
+      isOpenDialog={isOpen}
+      title="Explore mask"
+      viewIdentifier="__mask_preview"
+      apply={addMask}
+      original={pipelined}
+      preview={maskImage}
+      editing={editing}
+    >
+      <FastSelector
+        options={Object.values(ThresholdAlgorithm)}
+        selected={maskOptions.algorithm}
+        setSelected={(algorithm) => setMaskOptions({ algorithm })}
+      />
+    </PreviewModal>
   );
 }
 

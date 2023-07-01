@@ -14,8 +14,6 @@ interface GaussianBlurModalProps {
 }
 
 function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
-  const { pipelined } = useImage(previewImageIdentifier);
-
   const { defaultOptions, editing, opIdentifier } =
     useDefaultOptions<GaussianBlurXYOptions>({
       sigmaX: 1,
@@ -23,6 +21,8 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
       sizeX: 1,
       sizeY: 1,
     });
+
+  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
 
   const [gaussianBlurOptions, setGaussianBlurOptions] =
     useState<GaussianBlurXYOptions>(defaultOptions);
@@ -62,13 +62,13 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
 
   return (
     <FilterModal
-      previewImageIdentifier={previewImageIdentifier}
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Gaussian blur image"
       viewIdentifier="__gaussian_blur_preview"
       apply={addGaussianBlurFilter}
-      previewed={blurredImage}
+      original={pipelined}
+      preview={blurredImage}
       editing={editing}
     >
       <Field name="sigmaX" label="Sigma X">

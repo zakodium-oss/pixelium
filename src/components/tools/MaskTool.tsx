@@ -6,7 +6,6 @@ import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
 import useModal from '../../hooks/useModal';
 import isGrey from '../../utils/isGrey';
-import ExploreMaskModal from '../modal/ExploreMaskModal';
 
 function MaskTool() {
   const { open } = useModal('mask');
@@ -19,12 +18,9 @@ function MaskTool() {
   if (!isGrey(pipelined)) return null;
 
   return (
-    <>
-      <Toolbar.Item title="Mask" onClick={open}>
-        <FaMask />
-      </Toolbar.Item>
-      <ExploreMaskModal previewImageIdentifier={currentTab} />
-    </>
+    <Toolbar.Item title="Mask" onClick={open}>
+      <FaMask />
+    </Toolbar.Item>
   );
 }
 

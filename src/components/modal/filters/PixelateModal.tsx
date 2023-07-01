@@ -14,13 +14,13 @@ interface PixelateModalProps {
 }
 
 function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
-  const { pipelined } = useImage(previewImageIdentifier);
-
   const { defaultOptions, editing, opIdentifier } =
     useDefaultOptions<PixelateOptions>({
       cellSize: 2,
       algorithm: 'center',
     });
+
+  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
 
   const [options, setOptions] = useState<PixelateOptions>(defaultOptions);
   const algorithmOptions = useMemo(
@@ -63,13 +63,13 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
 
   return (
     <FilterModal
-      previewImageIdentifier={previewImageIdentifier}
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Pixelate image"
       viewIdentifier="__pixelate_preview"
       apply={addPixelateFilter}
-      previewed={pixelatedImage}
+      original={pipelined}
+      preview={pixelatedImage}
       editing={editing}
     >
       <Field name="cellSize" label="Cell size">

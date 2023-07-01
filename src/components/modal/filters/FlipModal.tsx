@@ -14,12 +14,12 @@ interface FlipModalProps {
 }
 
 function FlipModal({ previewImageIdentifier }: FlipModalProps) {
-  const { pipelined } = useImage(previewImageIdentifier);
-
   const { defaultOptions, editing, opIdentifier } =
     useDefaultOptions<FlipOptions>({
       axis: 'horizontal',
     });
+
+  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
 
   const [options, setOptions] = useState<FlipOptions>(defaultOptions);
   const axisOptions = useMemo(
@@ -55,13 +55,13 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
 
   return (
     <FilterModal
-      previewImageIdentifier={previewImageIdentifier}
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Flip image"
       viewIdentifier="__flip_preview"
       apply={addFlipFilter}
-      previewed={flippedImage}
+      original={pipelined}
+      preview={flippedImage}
       editing={editing}
     >
       <Field name="axis" label="Axis">

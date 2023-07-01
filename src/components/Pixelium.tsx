@@ -28,6 +28,7 @@ import { GlobalProvider } from './context/GlobalContext';
 import { LogProvider } from './context/LogContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
+import ModalContainer from './modal/ModalContainer';
 import ExportTool from './tools/ExportTool';
 import GreyTool from './tools/FilterTool';
 import ImportTool from './tools/ImportTool';
@@ -94,6 +95,7 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                           <GreyTool />
                           <MaskTool />
                           <ROITool />
+                          <ModalContainer />
                         </Toolbar>
                         <SplitPane
                           direction="horizontal"

@@ -15,6 +15,7 @@ export function openModal(draft: Draft<ViewState>, payload: string) {
 }
 export function closeModal(draft: Draft<ViewState>, payload: string) {
   draft.modals[payload] = false;
+  draft.editMode = null;
 }
 
 export function setEditModeIdentifier(

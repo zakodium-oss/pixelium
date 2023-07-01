@@ -12,9 +12,9 @@ interface InvertModalProps {
 }
 
 function InvertModal({ previewImageIdentifier }: InvertModalProps) {
-  const { pipelined } = useImage(previewImageIdentifier);
-
   const { editing, opIdentifier } = useDefaultOptions<undefined>(undefined);
+
+  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
 
   const invertedImage = useMemo(() => pipelined.invert(), [pipelined]);
 
@@ -34,13 +34,13 @@ function InvertModal({ previewImageIdentifier }: InvertModalProps) {
 
   return (
     <FilterModal
-      previewImageIdentifier={previewImageIdentifier}
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Invert image"
       viewIdentifier="__invert_preview"
       apply={addInvertFilter}
-      previewed={invertedImage}
+      original={pipelined}
+      preview={invertedImage}
       editing={editing}
     />
   );

@@ -4,7 +4,6 @@ import { Image, Mask } from 'image-js';
 import { memo, ReactNode, useCallback } from 'react';
 import { Button, Modal } from 'react-science/ui';
 
-import useImage from '../../hooks/useImage';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import { SET_EDIT_MODE_IDENTIFIER } from '../../state/view/ViewActionTypes';
 import { buttons } from '../../utils/colors';
@@ -24,12 +23,12 @@ const modalStyle = css`
 interface PreviewModalProps {
   isOpenDialog: boolean;
   closeDialog: () => void;
-  previewImageIdentifier: string;
   children?: ReactNode;
   title: string;
   viewIdentifier: string;
   apply: () => void;
-  previewed: Image | Mask | null;
+  original: Image | Mask;
+  preview: Image | Mask | null;
   editing: boolean;
 }
 
@@ -60,16 +59,14 @@ const AlgorithmError = styled.div`
 function PreviewModal({
   isOpenDialog,
   closeDialog,
-  previewImageIdentifier,
   children = null,
   title,
   viewIdentifier,
   apply,
-  previewed,
+  original,
+  preview,
   editing,
 }: PreviewModalProps) {
-  const { pipelined } = useImage(previewImageIdentifier);
-
   const viewDispatch = useViewDispatch();
 
   const internalApply = useCallback(() => {
@@ -89,7 +86,7 @@ function PreviewModal({
         <Modal.Body>
           <StyledModalBody>
             <ImageViewerContainer>
-              <ImageViewer identifier={viewIdentifier} image={pipelined} />
+              <ImageViewer identifier={viewIdentifier} image={original} />
             </ImageViewerContainer>
             <div
               style={{
@@ -100,10 +97,10 @@ function PreviewModal({
               {children}
             </div>
             <ImageViewerContainer>
-              {previewed === null ? (
+              {preview === null ? (
                 <AlgorithmError>Error running algorithm</AlgorithmError>
               ) : (
-                <ImageViewer identifier={viewIdentifier} image={previewed} />
+                <ImageViewer identifier={viewIdentifier} image={preview} />
               )}
             </ImageViewerContainer>
           </StyledModalBody>

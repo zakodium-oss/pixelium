@@ -75,6 +75,7 @@ function PipelineTable({ identifier }: PipelineTableProps) {
             ? null
             : { identifier: currentTab, opIdentifier },
       });
+
       viewDispatch({
         type: OPEN_MODAL,
         payload: getModalNameFromOperationType(operation.type),
