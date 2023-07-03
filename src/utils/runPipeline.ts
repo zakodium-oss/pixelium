@@ -163,6 +163,28 @@ export default function runPipeline(
           });
           break;
         }
+        case 'OPEN': {
+          const result = applyOn.open({
+            kernel: operation.options.kernel,
+            iterations: operation.options.iterations,
+          });
+          pipelineSteps.push({
+            identifier: operation.identifier,
+            result,
+          });
+          break;
+        }
+        case 'CLOSE': {
+          const result = applyOn.close({
+            kernel: operation.options.kernel,
+            iterations: operation.options.iterations,
+          });
+          pipelineSteps.push({
+            identifier: operation.identifier,
+            result,
+          });
+          break;
+        }
         default:
           throw new Error(`Unknown operation type ${(operation as any).type}`);
       }

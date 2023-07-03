@@ -1,6 +1,7 @@
 import { v4 as uuid } from '@lukeed/uuid';
 import {
   BlurOptions,
+  CloseOptions,
   DilateOptions,
   ErodeOptions,
   FlipOptions,
@@ -8,6 +9,7 @@ import {
   GreyOptions,
   LevelOptions,
   MedianFilterOptions,
+  OpenOptions,
   PixelateOptions,
   ThresholdOptionsAlgorithm,
 } from 'image-js';
@@ -17,6 +19,7 @@ import {
   DataActionType,
   REMOVE_PIPELINE_OPERATION,
   SET_BLUR,
+  SET_CLOSE,
   SET_DILATE,
   SET_ERODE,
   SET_FLIP,
@@ -26,6 +29,7 @@ import {
   SET_LEVEL,
   SET_MASK,
   SET_MEDIAN_FILTER,
+  SET_OPEN,
   SET_PIXELATE,
   TOGGLE_PIPELINE_OPERATION,
 } from '../DataActionTypes';
@@ -88,6 +92,16 @@ export type PipelineAddDilateAction = DataActionType<
 export type PipelineAddErodeAction = DataActionType<
   typeof SET_ERODE,
   { identifier: string; opIdentifier?: string; options: ErodeOptions }
+>;
+
+export type PipelineAddOpenAction = DataActionType<
+  typeof SET_OPEN,
+  { identifier: string; opIdentifier?: string; options: OpenOptions }
+>;
+
+export type PipelineAddCloseAction = DataActionType<
+  typeof SET_CLOSE,
+  { identifier: string; opIdentifier?: string; options: CloseOptions }
 >;
 
 export type RemovePipelineOperationAction = DataActionType<
@@ -477,6 +491,74 @@ export function addErode(
     pipeline[existingIndex] = {
       identifier: opIdentifier,
       type: 'ERODE',
+      isActive: true,
+      options,
+    };
+  }
+}
+
+export function addOpen(
+  draft: Draft<DataState>,
+  {
+    identifier,
+    opIdentifier = uuid(),
+    options,
+  }: { identifier: string; opIdentifier?: string; options: OpenOptions },
+) {
+  const dataFile = draft.images[identifier];
+  if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
+
+  const { pipeline } = dataFile;
+
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: uuid(),
+      type: 'OPEN',
+      isActive: true,
+      options,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'OPEN',
+      isActive: true,
+      options,
+    };
+  }
+}
+
+export function addClose(
+  draft: Draft<DataState>,
+  {
+    identifier,
+    opIdentifier = uuid(),
+    options,
+  }: { identifier: string; opIdentifier?: string; options: CloseOptions },
+) {
+  const dataFile = draft.images[identifier];
+  if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
+
+  const { pipeline } = dataFile;
+
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: uuid(),
+      type: 'CLOSE',
+      isActive: true,
+      options,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'CLOSE',
       isActive: true,
       options,
     };

@@ -11,6 +11,8 @@ import {
   Roi,
   DilateOptions,
   ErodeOptions,
+  OpenOptions,
+  CloseOptions,
 } from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
@@ -33,6 +35,8 @@ import {
   PipelineAddMedianFilterAction,
   PipelineAddDilateAction,
   PipelineAddErodeAction,
+  PipelineAddOpenAction,
+  PipelineAddCloseAction,
 } from './actions/PipelineActions';
 import * as RoiActions from './actions/RoiActions';
 import { SetROIAction } from './actions/RoiActions';
@@ -59,7 +63,9 @@ export type PipelineOperations =
   | PipelineOperation<'MEDIAN_FILTER', MedianFilterOptions>
   | PipelineOperation<'MASK', ThresholdOptionsAlgorithm>
   | PipelineOperation<'DILATE', DilateOptions>
-  | PipelineOperation<'ERODE', ErodeOptions>;
+  | PipelineOperation<'ERODE', ErodeOptions>
+  | PipelineOperation<'OPEN', OpenOptions>
+  | PipelineOperation<'CLOSE', CloseOptions>;
 
 export interface DataFile {
   image: Image;
@@ -92,6 +98,8 @@ export type DataActions =
   | PipelineAddMaskAction
   | PipelineAddDilateAction
   | PipelineAddErodeAction
+  | PipelineAddOpenAction
+  | PipelineAddCloseAction
   | RemovePipelineOperationAction
   | TogglePipelineOperationAction
   | SetROIAction;
@@ -130,6 +138,10 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.addDilate(draft, action.payload);
     case Type.SET_ERODE:
       return PipelineActions.addErode(draft, action.payload);
+    case Type.SET_OPEN:
+      return PipelineActions.addOpen(draft, action.payload);
+    case Type.SET_CLOSE:
+      return PipelineActions.addClose(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }

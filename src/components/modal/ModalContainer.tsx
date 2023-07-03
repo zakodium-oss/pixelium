@@ -12,8 +12,10 @@ import LevelModal from './filters/LevelModal';
 import MedianFilterModal from './filters/MedianFilterModal';
 import PixelateModal from './filters/PixelateModal';
 import ExploreMaskModal from './mask/ExploreMaskModal';
+import CloseModal from './morphology/CloseModal';
 import DilateModal from './morphology/DilateModal';
 import ErodeModal from './morphology/ErodeModal';
+import OpenModal from './morphology/OpenModal';
 
 function ModalContainer() {
   const view = useView();
@@ -48,6 +50,8 @@ function ModalContainer() {
         <DilateModal previewImageIdentifier={currentTab} />
       )}
       {view.modals.erode && <ErodeModal previewImageIdentifier={currentTab} />}
+      {view.modals.open && <OpenModal previewImageIdentifier={currentTab} />}
+      {view.modals.close && <CloseModal previewImageIdentifier={currentTab} />}
     </>
   );
 }

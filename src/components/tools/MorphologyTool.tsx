@@ -34,6 +34,18 @@ function MorphologyTool() {
         type: 'option',
         disabled: isColor(pipelined),
       },
+      {
+        label: 'Open',
+        data: 'open',
+        type: 'option',
+        disabled: isColor(pipelined),
+      },
+      {
+        label: 'Close',
+        data: 'close',
+        type: 'option',
+        disabled: isColor(pipelined),
+      },
     ],
     [pipelined],
   );
