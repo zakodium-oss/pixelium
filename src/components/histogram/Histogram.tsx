@@ -1,16 +1,30 @@
-import { Image, channelLabels, ImageColorModel } from 'image-js';
-import { memo, useCallback } from 'react';
+import { Image, channelLabels, ImageColorModel, Mask } from 'image-js';
+import { memo, useCallback, useMemo } from 'react';
 import { ResponsiveChart } from 'react-d3-utils';
 import { Axis, BarSeries, Heading, Plot } from 'react-plot';
 
 interface HistogramProps {
-  image: Image;
+  image: Image | Mask;
   colorModel: ImageColorModel;
   channel: number;
 }
 
 function Histogram({ image, colorModel, channel }: HistogramProps) {
-  const values = image.histogram({ channel });
+  const converted = useMemo(
+    () =>
+      image instanceof Image ? image : image.convertColor(ImageColorModel.GREY),
+    [image],
+  );
+
+  const slots = useMemo(() => {
+    const { bitDepth, maxValue } = image;
+    return bitDepth <= 8 ? maxValue + 1 : 2 ** 8;
+  }, [image]);
+
+  const values = useMemo(
+    () => converted.histogram({ channel, slots }),
+    [channel, converted, slots],
+  );
 
   const data = Array.from(values).map((value, index) => ({
     x: index,
