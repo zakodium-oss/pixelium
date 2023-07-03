@@ -95,9 +95,9 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                           <Toolbar orientation="vertical">
                             <ImportTool />
                             <ExportTool />
-                            <MorphologyTool />
                             <GreyTool />
                             <MaskTool />
+                            <MorphologyTool />
                             <ROITool />
                             <ModalContainer />
                           </Toolbar>
