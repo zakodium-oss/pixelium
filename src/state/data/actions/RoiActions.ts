@@ -11,7 +11,7 @@ export type SetROIAction = DataActionType<
 
 export function setROIs(
   draft: Draft<DataState>,
-  payload: { identifier: string; rois: Roi[] },
+  payload: SetROIAction['payload'],
 ) {
   draft.images[payload.identifier].rois = payload.rois;
 }

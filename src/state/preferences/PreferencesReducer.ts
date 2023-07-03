@@ -25,7 +25,7 @@ function innerPreferencesReducer(
 ) {
   switch (action.type) {
     case Type.INITIALIZE_PREFERENCES:
-      return InitActions.initializePreferences(draft, action);
+      return InitActions.initializePreferences(draft, action.payload);
     default:
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       throw new Error(`Type ${action.type} is not handled.`);

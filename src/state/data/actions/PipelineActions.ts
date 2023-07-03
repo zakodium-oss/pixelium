@@ -120,7 +120,7 @@ export function addGreyFilter(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: { identifier: string; opIdentifier?: string; options: GreyOptions },
+  }: PipelineAddGreyFilterAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -154,7 +154,7 @@ export function addBlur(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: { identifier: string; opIdentifier?: string; options: BlurOptions },
+  }: PipelineAddBlurAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -188,11 +188,7 @@ export function addGaussianBlur(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: {
-    identifier: string;
-    opIdentifier?: string;
-    options: GaussianBlurXYOptions;
-  },
+  }: PipelineAddGaussianBlurAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -222,10 +218,7 @@ export function addGaussianBlur(
 
 export function addInvert(
   draft: Draft<DataState>,
-  {
-    identifier,
-    opIdentifier = uuid(),
-  }: { identifier: string; opIdentifier?: string },
+  { identifier, opIdentifier = uuid() }: PipelineAddInvertAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -257,7 +250,7 @@ export function addFlip(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: { identifier: string; opIdentifier?: string; options: FlipOptions },
+  }: PipelineAddFlipAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -291,7 +284,7 @@ export function addLevel(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: { identifier: string; opIdentifier?: string; options: LevelOptions },
+  }: PipelineAddLevelAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -325,7 +318,7 @@ export function addPixelate(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: { identifier: string; opIdentifier?: string; options: PixelateOptions },
+  }: PipelineAddPixelateAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -359,11 +352,7 @@ export function addMedianFilter(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: {
-    identifier: string;
-    opIdentifier?: string;
-    options: MedianFilterOptions;
-  },
+  }: PipelineAddMedianFilterAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -397,11 +386,7 @@ export function addMask(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: {
-    identifier: string;
-    opIdentifier?: string;
-    options: ThresholdOptionsAlgorithm;
-  },
+  }: PipelineAddMaskAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -435,7 +420,7 @@ export function addDilate(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: { identifier: string; opIdentifier?: string; options: DilateOptions },
+  }: PipelineAddDilateAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -469,7 +454,7 @@ export function addErode(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: { identifier: string; opIdentifier?: string; options: ErodeOptions },
+  }: PipelineAddErodeAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -503,7 +488,7 @@ export function addOpen(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: { identifier: string; opIdentifier?: string; options: OpenOptions },
+  }: PipelineAddOpenAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -537,7 +522,7 @@ export function addClose(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: { identifier: string; opIdentifier?: string; options: CloseOptions },
+  }: PipelineAddCloseAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -567,7 +552,7 @@ export function addClose(
 
 export function removeOperation(
   draft: Draft<DataState>,
-  { identifier, opIdentifier }: { identifier: string; opIdentifier: string },
+  { identifier, opIdentifier }: RemovePipelineOperationAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
@@ -590,7 +575,7 @@ export function toggleOperation(
     identifier,
     opIdentifier,
     checked,
-  }: { identifier: string; opIdentifier: string; checked: boolean },
+  }: TogglePipelineOperationAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

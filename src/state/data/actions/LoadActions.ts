@@ -7,7 +7,10 @@ import { DataState, DataFile } from '../DataReducer';
 export type SetLoadingAction = DataActionType<'SET_LOADING', boolean>;
 export type LoadDropAction = DataActionType<'LOAD_DROP', DataFile[]>;
 
-export function setLoading(draft: Draft<DataState>, payload: boolean) {
+export function setLoading(
+  draft: Draft<DataState>,
+  payload: SetLoadingAction['payload'],
+) {
   draft.isLoading = payload;
 }
 

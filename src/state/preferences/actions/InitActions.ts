@@ -10,8 +10,8 @@ export type InitializePreferenceAction = PreferenceActionType<
 
 export function initializePreferences(
   draft: Draft<PreferencesState>,
-  action: InitializePreferenceAction,
+  payload: InitializePreferenceAction['payload'],
 ) {
   // eslint-disable-next-line no-useless-return
-  if (!action.payload?.preferences) return;
+  if (!payload.preferences) return;
 }

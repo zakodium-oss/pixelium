@@ -18,7 +18,7 @@ export type SetPanZoomAction = ViewActionType<
 
 export function setPanZoom(
   draft: Draft<ViewState>,
-  { identifier, panZoom }: { identifier: string; panZoom: PanZoomData },
+  { identifier, panZoom }: SetPanZoomAction['payload'],
 ) {
   draft.imageViewerProps[identifier] = panZoom;
 }

@@ -10,17 +10,23 @@ export type SetEditModeIdentifierAction = ViewActionType<
   { identifier: string; opIdentifier: string } | null
 >;
 
-export function openModal(draft: Draft<ViewState>, payload: string) {
+export function openModal(
+  draft: Draft<ViewState>,
+  payload: OpenModalAction['payload'],
+) {
   draft.modals[payload] = true;
 }
-export function closeModal(draft: Draft<ViewState>, payload: string) {
+export function closeModal(
+  draft: Draft<ViewState>,
+  payload: CloseModalAction['payload'],
+) {
   draft.modals[payload] = false;
   draft.editMode = null;
 }
 
 export function setEditModeIdentifier(
   draft: Draft<ViewState>,
-  payload: { identifier: string; opIdentifier: string } | null,
+  payload: SetEditModeIdentifierAction['payload'],
 ) {
   draft.editMode = payload;
 }
