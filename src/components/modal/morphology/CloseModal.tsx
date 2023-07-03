@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { CloseOptions } from 'image-js';
-import cloneDeep from 'lodash/cloneDeep';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Checkbox, Field, Input } from 'react-science/ui';
@@ -10,6 +9,8 @@ import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import { SET_CLOSE } from '../../../state/data/DataActionTypes';
+import changeKernelCell from '../../../utils/changeKernelCell';
+import resizeKernel from '../../../utils/resizeKernel';
 import FilterModal from '../PreviewModal';
 
 interface CloseModalProps {
@@ -21,37 +22,6 @@ const KernelRow = styled.div`
   flex-direction: row;
   justify-content: space-between;
 `;
-
-function changeCell(kernel: number[][], x: number, y: number, value: boolean) {
-  const newKernel = cloneDeep(kernel);
-  newKernel[y][x] = value ? 1 : 0;
-  return newKernel;
-}
-
-function resizeKernel(kernel: number[][], newValue: number, axis: 'x' | 'y') {
-  const newKernel = cloneDeep(kernel);
-  const oldValue = axis === 'x' ? kernel[0].length : kernel.length;
-  if (newValue > oldValue) {
-    const diff = newValue - oldValue;
-    times(diff, () => {
-      if (axis === 'x') {
-        for (const row of newKernel) row.push(0);
-      } else {
-        newKernel.push(new Array(newValue).fill(0));
-      }
-    });
-  } else if (newValue < oldValue) {
-    const diff = oldValue - newValue;
-    times(diff, () => {
-      if (axis === 'x') {
-        for (const row of newKernel) row.pop();
-      } else {
-        newKernel.pop();
-      }
-    });
-  }
-  return newKernel;
-}
 
 interface InternalCloseOptions extends CloseOptions {
   kernel: number[][];
@@ -178,7 +148,7 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
                   onChange={(checked) =>
                     setCloseOptions({
                       ...closeOptions,
-                      kernel: changeCell(
+                      kernel: changeKernelCell(
                         closeOptions.kernel,
                         w,
                         h,
