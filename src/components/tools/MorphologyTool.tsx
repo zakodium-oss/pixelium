@@ -28,6 +28,12 @@ function MorphologyTool() {
         type: 'option',
         disabled: isColor(pipelined),
       },
+      {
+        label: 'Erode',
+        data: 'erode',
+        type: 'option',
+        disabled: isColor(pipelined),
+      },
     ],
     [pipelined],
   );

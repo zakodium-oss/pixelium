@@ -10,6 +10,7 @@ import {
   MedianFilterOptions,
   Roi,
   DilateOptions,
+  ErodeOptions,
 } from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
@@ -31,6 +32,7 @@ import {
   PipelineAddPixelateAction,
   PipelineAddMedianFilterAction,
   PipelineAddDilateAction,
+  PipelineAddErodeAction,
 } from './actions/PipelineActions';
 import * as RoiActions from './actions/RoiActions';
 import { SetROIAction } from './actions/RoiActions';
@@ -56,7 +58,8 @@ export type PipelineOperations =
   | PipelineOperation<'PIXELATE', PixelateOptions>
   | PipelineOperation<'MEDIAN_FILTER', MedianFilterOptions>
   | PipelineOperation<'MASK', ThresholdOptionsAlgorithm>
-  | PipelineOperation<'DILATE', DilateOptions>;
+  | PipelineOperation<'DILATE', DilateOptions>
+  | PipelineOperation<'ERODE', ErodeOptions>;
 
 export interface DataFile {
   image: Image;
@@ -88,6 +91,7 @@ export type DataActions =
   | PipelineAddMedianFilterAction
   | PipelineAddMaskAction
   | PipelineAddDilateAction
+  | PipelineAddErodeAction
   | RemovePipelineOperationAction
   | TogglePipelineOperationAction
   | SetROIAction;
@@ -124,6 +128,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return RoiActions.setROIs(draft, action.payload);
     case Type.SET_DILATE:
       return PipelineActions.addDilate(draft, action.payload);
+    case Type.SET_ERODE:
+      return PipelineActions.addErode(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }

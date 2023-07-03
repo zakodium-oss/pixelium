@@ -28,6 +28,7 @@ export const OP_TYPE_MODAL_MAP: {
   MASK: 'mask',
   MEDIAN_FILTER: 'median',
   DILATE: 'dilate',
+  ERODE: 'erode',
 };
 
 export function getModalNameFromOperationType(
@@ -49,7 +50,8 @@ export type ModalName =
   | 'about'
   | 'export'
   | 'median'
-  | 'dilate';
+  | 'dilate'
+  | 'erode';
 
 export interface ViewState {
   currentTab?: string;
@@ -84,6 +86,7 @@ export const initialViewState: ViewState = {
     export: false,
     median: false,
     dilate: false,
+    erode: false,
   },
   editMode: null,
 };

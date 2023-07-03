@@ -13,6 +13,7 @@ import MedianFilterModal from './filters/MedianFilterModal';
 import PixelateModal from './filters/PixelateModal';
 import ExploreMaskModal from './mask/ExploreMaskModal';
 import DilateModal from './morphology/DilateModal';
+import ErodeModal from './morphology/ErodeModal';
 
 function ModalContainer() {
   const view = useView();
@@ -46,6 +47,7 @@ function ModalContainer() {
       {view.modals.dilate && (
         <DilateModal previewImageIdentifier={currentTab} />
       )}
+      {view.modals.erode && <ErodeModal previewImageIdentifier={currentTab} />}
     </>
   );
 }

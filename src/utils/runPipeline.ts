@@ -152,13 +152,22 @@ export default function runPipeline(
           });
           break;
         }
+        case 'ERODE': {
+          const result = applyOn.erode({
+            kernel: operation.options.kernel,
+            iterations: operation.options.iterations,
+          });
+          pipelineSteps.push({
+            identifier: operation.identifier,
+            result,
+          });
+          break;
+        }
         default:
-          throw new Error(`Unknown operation`);
+          throw new Error(`Unknown operation type ${(operation as any).type}`);
       }
     } catch (error: any) {
-      setTimeout(() => {
-        logger.error(`Error while running operation ${error}`);
-      });
+      logger.error(error.message);
       break;
     }
   }
