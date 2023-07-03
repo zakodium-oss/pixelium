@@ -5,9 +5,17 @@ import * as Type from './PreferenceActionTypes';
 import * as InitActions from './actions/InitActions';
 import type { InitializePreferenceAction } from './actions/InitActions';
 
-export interface PreferencesState {}
+interface RoiPreferences {
+  columns: string[];
+}
 
-export const initialPreferencesState: PreferencesState = {};
+export interface PreferencesState {
+  roisPreferences: Record<string, RoiPreferences>;
+}
+
+export const initialPreferencesState: PreferencesState = {
+  roisPreferences: {},
+};
 
 export type PreferencesActions = InitializePreferenceAction;
 

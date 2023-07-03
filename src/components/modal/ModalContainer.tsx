@@ -3,7 +3,6 @@ import { memo } from 'react';
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useView from '../../hooks/useView';
 
-import ExploreMaskModal from './ExploreMaskModal';
 import BlurModal from './filters/BlurModal';
 import ExploreGreyModal from './filters/ExploreGreyModal';
 import FlipModal from './filters/FlipModal';
@@ -12,6 +11,8 @@ import InvertModal from './filters/InvertModal';
 import LevelModal from './filters/LevelModal';
 import MedianFilterModal from './filters/MedianFilterModal';
 import PixelateModal from './filters/PixelateModal';
+import ExploreMaskModal from './mask/ExploreMaskModal';
+import DilateModal from './morphology/DilateModal';
 
 function ModalContainer() {
   const view = useView();
@@ -41,6 +42,9 @@ function ModalContainer() {
       )}
       {view.modals.median && (
         <MedianFilterModal previewImageIdentifier={currentTab} />
+      )}
+      {view.modals.dilate && (
+        <DilateModal previewImageIdentifier={currentTab} />
       )}
     </>
   );

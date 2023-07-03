@@ -33,6 +33,7 @@ import ExportTool from './tools/ExportTool';
 import GreyTool from './tools/FilterTool';
 import ImportTool from './tools/ImportTool';
 import MaskTool from './tools/MaskTool';
+import MorphologyTool from './tools/MorphologyTool';
 import ROITool from './tools/ROITool';
 
 interface PixeliumProps {
@@ -92,6 +93,7 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                         <Toolbar orientation="vertical">
                           <ImportTool />
                           <ExportTool />
+                          <MorphologyTool />
                           <GreyTool />
                           <MaskTool />
                           <ROITool />

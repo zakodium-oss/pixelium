@@ -1,6 +1,7 @@
 import { v4 as uuid } from '@lukeed/uuid';
 import {
   BlurOptions,
+  DilateOptions,
   FlipOptions,
   GaussianBlurXYOptions,
   GreyOptions,
@@ -17,6 +18,7 @@ import {
   DataActionType,
   REMOVE_PIPELINE_OPERATION,
   SET_BLUR,
+  SET_DILATE,
   SET_FLIP,
   SET_GAUSSIAN_BLUR,
   SET_GREY_FILTER,
@@ -76,6 +78,11 @@ export type PipelineAddMaskAction = DataActionType<
     opIdentifier?: string;
     options: ThresholdOptionsAlgorithm;
   }
+>;
+
+export type PipelineAddDilateAction = DataActionType<
+  typeof SET_DILATE,
+  { identifier: string; opIdentifier?: string; options: DilateOptions }
 >;
 
 export type RemovePipelineOperationAction = DataActionType<
@@ -421,6 +428,42 @@ export function addMask(
   runPipeline(pipeline, image);
 }
 
+export function addDilate(
+  draft: Draft<DataState>,
+  {
+    identifier,
+    opIdentifier = uuid(),
+    options,
+  }: { identifier: string; opIdentifier?: string; options: DilateOptions },
+) {
+  const dataFile = draft.images[identifier];
+  if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
+
+  const { pipeline, image } = dataFile;
+
+  const existingIndex = pipeline.findIndex(
+    (operation) => operation.identifier === opIdentifier,
+  );
+
+  if (existingIndex === -1) {
+    pipeline.push({
+      identifier: uuid(),
+      type: 'DILATE',
+      isActive: true,
+      options,
+    });
+  } else {
+    pipeline[existingIndex] = {
+      identifier: opIdentifier,
+      type: 'DILATE',
+      isActive: true,
+      options,
+    };
+  }
+
+  runPipeline(pipeline, image);
+}
+
 export function removeOperation(
   draft: Draft<DataState>,
   { identifier, opIdentifier }: { identifier: string; opIdentifier: string },
@@ -562,6 +605,13 @@ function runPipeline(
               borderValue: operation.options.borderValue,
             });
           }
+          break;
+        }
+        case 'DILATE': {
+          operation.result = applyOn.dilate({
+            kernel: operation.options.kernel,
+            iterations: operation.options.iterations,
+          });
           break;
         }
         default:

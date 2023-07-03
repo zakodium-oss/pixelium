@@ -10,6 +10,7 @@ import {
   PixelateOptions,
   MedianFilterOptions,
   Roi,
+  DilateOptions,
 } from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
@@ -30,6 +31,7 @@ import {
   PipelineAddLevelAction,
   PipelineAddPixelateAction,
   PipelineAddMedianFilterAction,
+  PipelineAddDilateAction,
 } from './actions/PipelineActions';
 import * as RoiActions from './actions/RoiActions';
 import { SetROIAction } from './actions/RoiActions';
@@ -55,7 +57,8 @@ export type PipelineOperations =
   | PipelineOperation<'LEVEL', Image, LevelOptions>
   | PipelineOperation<'PIXELATE', Image, PixelateOptions>
   | PipelineOperation<'MEDIAN_FILTER', Image, MedianFilterOptions>
-  | PipelineOperation<'MASK', Mask, ThresholdOptionsAlgorithm>;
+  | PipelineOperation<'MASK', Mask, ThresholdOptionsAlgorithm>
+  | PipelineOperation<'DILATE', Image | Mask, DilateOptions>;
 
 export interface DataFile {
   image: Image;
@@ -86,6 +89,7 @@ export type DataActions =
   | PipelineAddPixelateAction
   | PipelineAddMedianFilterAction
   | PipelineAddMaskAction
+  | PipelineAddDilateAction
   | RemovePipelineOperationAction
   | TogglePipelineOperationAction
   | SetROIAction;
@@ -120,6 +124,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.toggleOperation(draft, action.payload);
     case Type.SET_ROI:
       return RoiActions.setROIs(draft, action.payload);
+    case Type.SET_DILATE:
+      return PipelineActions.addDilate(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }
