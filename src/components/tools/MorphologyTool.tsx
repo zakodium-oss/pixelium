@@ -11,7 +11,7 @@ import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import { OPEN_MODAL } from '../../state/view/ViewActionTypes';
-import isBinary from '../../utils/isBinary';
+import isColor from '../../utils/isColor';
 
 function MorphologyTool() {
   const viewDispatch = useViewDispatch();
@@ -26,7 +26,7 @@ function MorphologyTool() {
         label: 'Dilate',
         data: 'dilate',
         type: 'option',
-        disabled: !isBinary(pipelined),
+        disabled: isColor(pipelined),
       },
     ],
     [pipelined],
