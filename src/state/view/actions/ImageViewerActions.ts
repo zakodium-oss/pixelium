@@ -1,6 +1,6 @@
 import { Draft } from 'immer';
 
-import { ViewActionType } from '../ViewActionTypes';
+import { SET_PAN_ZOOM, ViewActionType } from '../ViewActionTypes';
 import { ViewState } from '../ViewReducer';
 
 interface PanZoomData {
@@ -9,7 +9,7 @@ interface PanZoomData {
 }
 
 export type SetPanZoomAction = ViewActionType<
-  'SET_PAN_ZOOM',
+  typeof SET_PAN_ZOOM,
   {
     identifier: string;
     panZoom: PanZoomData;

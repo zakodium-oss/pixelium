@@ -1,12 +1,17 @@
 import { Draft } from 'immer';
 
-import { ViewActionType } from '../ViewActionTypes';
+import {
+  CLOSE_MODAL,
+  OPEN_MODAL,
+  SET_EDIT_MODE_IDENTIFIER,
+  ViewActionType,
+} from '../ViewActionTypes';
 import { ViewState } from '../ViewReducer';
 
-export type OpenModalAction = ViewActionType<'OPEN_MODAL', string>;
-export type CloseModalAction = ViewActionType<'CLOSE_MODAL', string>;
+export type OpenModalAction = ViewActionType<typeof OPEN_MODAL, string>;
+export type CloseModalAction = ViewActionType<typeof CLOSE_MODAL, string>;
 export type SetEditModeIdentifierAction = ViewActionType<
-  'SET_EDIT_MODE_IDENTIFIER',
+  typeof SET_EDIT_MODE_IDENTIFIER,
   { identifier: string; opIdentifier: string } | null
 >;
 

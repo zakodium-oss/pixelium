@@ -1,11 +1,11 @@
 import { v4 as uuid } from '@lukeed/uuid';
 import { Draft } from 'immer';
 
-import { DataActionType } from '../DataActionTypes';
+import { DataActionType, LOAD_DROP, SET_LOADING } from '../DataActionTypes';
 import { DataState, DataFile } from '../DataReducer';
 
-export type SetLoadingAction = DataActionType<'SET_LOADING', boolean>;
-export type LoadDropAction = DataActionType<'LOAD_DROP', DataFile[]>;
+export type SetLoadingAction = DataActionType<typeof SET_LOADING, boolean>;
+export type LoadDropAction = DataActionType<typeof LOAD_DROP, DataFile[]>;
 
 export function setLoading(
   draft: Draft<DataState>,

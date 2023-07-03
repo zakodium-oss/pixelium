@@ -1,10 +1,13 @@
 import { Draft } from 'immer';
 
-import { PreferenceActionType } from '../PreferenceActionTypes';
+import {
+  INITIALIZE_PREFERENCES,
+  PreferenceActionType,
+} from '../PreferenceActionTypes';
 import { PreferencesState } from '../PreferencesReducer';
 
 export type InitializePreferenceAction = PreferenceActionType<
-  'INITIALIZE_PREFERENCES',
+  typeof INITIALIZE_PREFERENCES,
   { preferences: PreferencesState }
 >;
 
