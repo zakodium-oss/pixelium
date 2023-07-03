@@ -17,7 +17,7 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
   const { defaultOptions, editing, opIdentifier } =
     useDefaultOptions<GreyOptions>({ algorithm: GreyAlgorithm.LUMA_709 });
 
-  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
+  const { pipelined } = useImage(opIdentifier);
 
   const [greyOptions, setGreyOptions] = useState<GreyOptions>(defaultOptions);
 

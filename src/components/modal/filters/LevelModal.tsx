@@ -27,10 +27,7 @@ interface LocalLevelOptions {
 function LevelModal({ previewImageIdentifier }: LevelModalProps) {
   const view = useView();
 
-  const { pipelined } = useImage(
-    previewImageIdentifier,
-    view.editMode?.opIdentifier,
-  );
+  const { pipelined } = useImage(view.editMode?.opIdentifier);
 
   const { defaultOptions, editing, opIdentifier } =
     useDefaultOptions<LocalLevelOptions>({

@@ -19,7 +19,7 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
       axis: 'horizontal',
     });
 
-  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
+  const { pipelined } = useImage(opIdentifier);
 
   const [options, setOptions] = useState<FlipOptions>(defaultOptions);
   const axisOptions = useMemo(

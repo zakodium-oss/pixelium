@@ -23,7 +23,7 @@ function ImageViewer({
   const view = useView();
   const viewDispatch = useViewDispatch();
 
-  const { original, pipelined } = useImage(identifier);
+  const { original, pipelined } = useImage();
 
   const imageToShow = useMemo(() => {
     if (image !== undefined) return image;

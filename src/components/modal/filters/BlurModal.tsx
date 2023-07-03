@@ -22,7 +22,7 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
       borderValue: undefined,
     });
 
-  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
+  const { pipelined } = useImage(opIdentifier);
 
   const [blurOptions, setBlurOptions] = useState<BlurOptions>(defaultOptions);
 

@@ -14,7 +14,7 @@ import ROITable from './rois/ROITable';
 function Sidebar() {
   const currentTab = useCurrentTab();
 
-  const { original, pipelined } = useImage(currentTab);
+  const { original, pipelined } = useImage();
 
   const generalInformations = useImageInformations(original);
 

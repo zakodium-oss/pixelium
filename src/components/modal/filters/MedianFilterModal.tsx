@@ -21,7 +21,7 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
       borderValue: undefined,
     });
 
-  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
+  const { pipelined } = useImage(opIdentifier);
 
   const [medianFilterOptions, setMedianFilterOptions] =
     useState<MedianFilterOptions>(defaultOptions);

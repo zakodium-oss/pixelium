@@ -22,7 +22,7 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
       sizeY: 1,
     });
 
-  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
+  const { pipelined } = useImage(opIdentifier);
 
   const [gaussianBlurOptions, setGaussianBlurOptions] =
     useState<GaussianBlurXYOptions>(defaultOptions);

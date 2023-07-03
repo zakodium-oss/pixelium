@@ -14,7 +14,7 @@ interface InvertModalProps {
 function InvertModal({ previewImageIdentifier }: InvertModalProps) {
   const { editing, opIdentifier } = useDefaultOptions<undefined>(undefined);
 
-  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
+  const { pipelined } = useImage(opIdentifier);
 
   const invertedImage = useMemo(() => pipelined.invert(), [pipelined]);
 

@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { Table, ValueRenderers } from 'react-science/ui';
 
-import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
 import useImageMetadata from '../../hooks/useImageMetadata';
 
@@ -12,8 +11,7 @@ const MissingMetadata = styled.div`
 `;
 
 export default function MetadataTable() {
-  const currentTab = useCurrentTab();
-  const { original } = useImage(currentTab);
+  const { original } = useImage();
 
   const metadata = useImageMetadata(original);
 

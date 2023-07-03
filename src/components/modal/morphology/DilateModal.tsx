@@ -68,7 +68,7 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
       iterations: 1,
     });
 
-  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
+  const { pipelined } = useImage(opIdentifier);
 
   const [dilateOptions, setDilateOptions] = useState<InternalDilateOptions>({
     ...defaultOptions,

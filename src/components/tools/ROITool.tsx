@@ -11,7 +11,7 @@ import isBinary from '../../utils/isBinary';
 function ROITool() {
   const currentTab = useCurrentTab();
 
-  const { pipelined } = useImage(currentTab);
+  const { pipelined } = useImage();
 
   const dataDispatch = useDataDispatch();
 

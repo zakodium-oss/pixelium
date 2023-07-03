@@ -11,7 +11,7 @@ function MaskTool() {
   const { open } = useModal('mask');
   const currentTab = useCurrentTab();
 
-  const { pipelined } = useImage(currentTab);
+  const { pipelined } = useImage();
 
   if (currentTab === undefined) return null;
   if (pipelined === undefined) return null;

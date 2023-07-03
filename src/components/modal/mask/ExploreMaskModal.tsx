@@ -19,7 +19,7 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
       algorithm: ThresholdAlgorithm.HUANG,
     });
 
-  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
+  const { pipelined } = useImage(opIdentifier);
 
   const [maskOptions, setMaskOptions] =
     useState<ThresholdOptionsAlgorithm>(defaultOptions);

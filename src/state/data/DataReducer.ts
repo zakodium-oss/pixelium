@@ -1,7 +1,6 @@
 import {
   Image,
   GreyOptions,
-  Mask,
   ThresholdOptionsAlgorithm,
   BlurOptions,
   GaussianBlurXYOptions,
@@ -36,29 +35,28 @@ import {
 import * as RoiActions from './actions/RoiActions';
 import { SetROIAction } from './actions/RoiActions';
 
-interface InnerPipelineOperation<T extends string, R, O = undefined> {
+interface InnerPipelineOperation<T extends string, O = undefined> {
   type: T;
   options: O;
   isActive: boolean;
-  result?: R;
   identifier: string;
 }
 
-type PipelineOperation<T extends string, R, O> = O extends undefined
-  ? Omit<InnerPipelineOperation<T, R>, 'options'>
-  : InnerPipelineOperation<T, R, O>;
+type PipelineOperation<T extends string, O> = O extends undefined
+  ? Omit<InnerPipelineOperation<T>, 'options'>
+  : InnerPipelineOperation<T, O>;
 
 export type PipelineOperations =
-  | PipelineOperation<'GREY_FILTER', Image, GreyOptions>
-  | PipelineOperation<'BLUR', Image, BlurOptions>
-  | PipelineOperation<'GAUSSIAN_BLUR', Image, GaussianBlurXYOptions>
-  | PipelineOperation<'INVERT', Image | Mask, undefined>
-  | PipelineOperation<'FLIP', Image, FlipOptions>
-  | PipelineOperation<'LEVEL', Image, LevelOptions>
-  | PipelineOperation<'PIXELATE', Image, PixelateOptions>
-  | PipelineOperation<'MEDIAN_FILTER', Image, MedianFilterOptions>
-  | PipelineOperation<'MASK', Mask, ThresholdOptionsAlgorithm>
-  | PipelineOperation<'DILATE', Image | Mask, DilateOptions>;
+  | PipelineOperation<'GREY_FILTER', GreyOptions>
+  | PipelineOperation<'BLUR', BlurOptions>
+  | PipelineOperation<'GAUSSIAN_BLUR', GaussianBlurXYOptions>
+  | PipelineOperation<'INVERT', undefined>
+  | PipelineOperation<'FLIP', FlipOptions>
+  | PipelineOperation<'LEVEL', LevelOptions>
+  | PipelineOperation<'PIXELATE', PixelateOptions>
+  | PipelineOperation<'MEDIAN_FILTER', MedianFilterOptions>
+  | PipelineOperation<'MASK', ThresholdOptionsAlgorithm>
+  | PipelineOperation<'DILATE', DilateOptions>;
 
 export interface DataFile {
   image: Image;

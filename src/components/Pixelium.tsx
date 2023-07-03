@@ -26,6 +26,7 @@ import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
 import { GlobalProvider } from './context/GlobalContext';
 import { LogProvider } from './context/LogContext';
+import { PipelineProvider } from './context/PipelineContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
 import ModalContainer from './modal/ModalContainer';
@@ -80,35 +81,37 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
               <PreferencesProvider value={preferencesState}>
                 <ViewProvider value={viewState}>
                   <DispatchProvider value={dispatchers}>
-                    <div css={pixeliumContainerStyle} ref={rootRef}>
-                      <Header />
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          height: '100%',
-                          overflow: 'hidden',
-                        }}
-                      >
-                        <Toolbar orientation="vertical">
-                          <ImportTool />
-                          <ExportTool />
-                          <MorphologyTool />
-                          <GreyTool />
-                          <MaskTool />
-                          <ROITool />
-                          <ModalContainer />
-                        </Toolbar>
-                        <SplitPane
-                          direction="horizontal"
-                          size="20%"
-                          controlledSide="end"
+                    <PipelineProvider identifier={viewState.currentTab}>
+                      <div css={pixeliumContainerStyle} ref={rootRef}>
+                        <Header />
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            height: '100%',
+                            overflow: 'hidden',
+                          }}
                         >
-                          <CenterPanel />
-                          <Sidebar />
-                        </SplitPane>
+                          <Toolbar orientation="vertical">
+                            <ImportTool />
+                            <ExportTool />
+                            <MorphologyTool />
+                            <GreyTool />
+                            <MaskTool />
+                            <ROITool />
+                            <ModalContainer />
+                          </Toolbar>
+                          <SplitPane
+                            direction="horizontal"
+                            size="20%"
+                            controlledSide="end"
+                          >
+                            <CenterPanel />
+                            <Sidebar />
+                          </SplitPane>
+                        </div>
                       </div>
-                    </div>
+                    </PipelineProvider>
                   </DispatchProvider>
                 </ViewProvider>
               </PreferencesProvider>

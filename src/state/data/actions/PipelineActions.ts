@@ -13,7 +13,6 @@ import {
 } from 'image-js';
 import { Draft } from 'immer';
 
-import { logger } from '../../../components/context/LogContext';
 import {
   DataActionType,
   REMOVE_PIPELINE_OPERATION,
@@ -127,8 +126,6 @@ export function addGreyFilter(
       options,
     };
   }
-
-  runPipeline(pipeline, image);
 }
 
 export function addBlur(
@@ -163,8 +160,6 @@ export function addBlur(
       options,
     };
   }
-
-  runPipeline(pipeline, image);
 }
 
 export function addGaussianBlur(
@@ -203,8 +198,6 @@ export function addGaussianBlur(
       options,
     };
   }
-
-  runPipeline(pipeline, image);
 }
 
 export function addInvert(
@@ -236,8 +229,6 @@ export function addInvert(
       isActive: true,
     };
   }
-
-  runPipeline(pipeline, image);
 }
 
 export function addFlip(
@@ -272,8 +263,6 @@ export function addFlip(
       options,
     };
   }
-
-  runPipeline(pipeline, image);
 }
 
 export function addLevel(
@@ -308,8 +297,6 @@ export function addLevel(
       options,
     };
   }
-
-  runPipeline(pipeline, image);
 }
 
 export function addPixelate(
@@ -344,8 +331,6 @@ export function addPixelate(
       options,
     };
   }
-
-  runPipeline(pipeline, image);
 }
 
 export function addMedianFilter(
@@ -384,8 +369,6 @@ export function addMedianFilter(
       options,
     };
   }
-
-  runPipeline(pipeline, image);
 }
 
 export function addMask(
@@ -424,8 +407,6 @@ export function addMask(
       options,
     };
   }
-
-  runPipeline(pipeline, image);
 }
 
 export function addDilate(
@@ -460,8 +441,6 @@ export function addDilate(
       options,
     };
   }
-
-  runPipeline(pipeline, image);
 }
 
 export function removeOperation(
@@ -481,8 +460,6 @@ export function removeOperation(
   }
 
   pipeline.splice(indexToRemove, 1);
-
-  runPipeline(pipeline, image);
 }
 
 export function toggleOperation(
@@ -506,122 +483,5 @@ export function toggleOperation(
     operation.isActive = checked
       ? index <= selectedIndex
       : index < selectedIndex;
-  }
-
-  runPipeline(pipeline, image);
-}
-
-function runPipeline(
-  pipeline: Draft<PipelineOperations>[],
-  baseImage: Draft<Image>,
-) {
-  for (const [index, operation] of pipeline.entries()) {
-    if (!operation.isActive) {
-      break;
-    }
-
-    const applyOn = index === 0 ? baseImage : pipeline[index - 1].result;
-    if (applyOn === undefined) break;
-
-    try {
-      switch (operation.type) {
-        case 'GREY_FILTER': {
-          if (applyOn instanceof Image) {
-            operation.result = applyOn.grey({
-              algorithm: operation.options.algorithm,
-            });
-          }
-          break;
-        }
-        case 'BLUR': {
-          if (applyOn instanceof Image) {
-            operation.result = applyOn.blur({
-              width: operation.options.width,
-              height: operation.options.height,
-              borderType: operation.options.borderType,
-              borderValue: operation.options.borderValue,
-            });
-          }
-          break;
-        }
-        case 'MASK': {
-          if (applyOn instanceof Image) {
-            operation.result = applyOn.threshold({
-              algorithm: operation.options.algorithm,
-            });
-          }
-          break;
-        }
-        case 'GAUSSIAN_BLUR': {
-          if (applyOn instanceof Image) {
-            operation.result = applyOn.gaussianBlur({
-              sigmaX: operation.options.sigmaX,
-              sigmaY: operation.options.sigmaY,
-              sizeX: operation.options.sizeX,
-              sizeY: operation.options.sizeY,
-            });
-          }
-          break;
-        }
-        case 'INVERT': {
-          operation.result = applyOn.invert();
-          break;
-        }
-        case 'FLIP': {
-          if (applyOn instanceof Image) {
-            operation.result = applyOn.flip({
-              axis: operation.options.axis,
-            });
-          }
-          break;
-        }
-        case 'LEVEL': {
-          if (applyOn instanceof Image) {
-            operation.result = applyOn.level({
-              channels: operation.options.channels,
-              inputMin: operation.options.inputMin,
-              inputMax: operation.options.inputMax,
-              outputMin: operation.options.outputMin,
-              outputMax: operation.options.outputMax,
-              gamma: operation.options.gamma,
-            });
-          }
-          break;
-        }
-        case 'PIXELATE': {
-          if (applyOn instanceof Image) {
-            operation.result = applyOn.pixelate({
-              cellSize: operation.options.cellSize,
-              algorithm: operation.options.algorithm,
-            });
-          }
-          break;
-        }
-        case 'MEDIAN_FILTER': {
-          if (applyOn instanceof Image) {
-            operation.result = applyOn.medianFilter({
-              cellSize: operation.options.cellSize,
-              borderType: operation.options.borderType,
-              borderValue: operation.options.borderValue,
-            });
-          }
-          break;
-        }
-        case 'DILATE': {
-          operation.result = applyOn.dilate({
-            kernel: operation.options.kernel,
-            iterations: operation.options.iterations,
-          });
-          break;
-        }
-        default:
-          throw new Error(`Unknown operation`);
-      }
-    } catch (error: any) {
-      setTimeout(() => {
-        logger.error(`Error while running operation ${error}`);
-      });
-      break;
-    }
   }
 }

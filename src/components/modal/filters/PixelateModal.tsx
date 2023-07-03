@@ -20,7 +20,7 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
       algorithm: 'center',
     });
 
-  const { pipelined } = useImage(previewImageIdentifier, opIdentifier);
+  const { pipelined } = useImage(opIdentifier);
 
   const [options, setOptions] = useState<PixelateOptions>(defaultOptions);
   const algorithmOptions = useMemo(

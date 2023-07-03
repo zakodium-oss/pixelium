@@ -18,7 +18,7 @@ function MorphologyTool() {
 
   const currentTab = useCurrentTab();
 
-  const { pipelined } = useImage(currentTab);
+  const { pipelined } = useImage();
 
   const morphOptions = useMemo<MenuOptions<string>>(
     () => [
