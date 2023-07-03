@@ -1,14 +1,15 @@
-import { Image, channelLabels } from 'image-js';
+import { Image, channelLabels, ImageColorModel } from 'image-js';
 import { memo, useCallback } from 'react';
 import { ResponsiveChart } from 'react-d3-utils';
 import { Axis, BarSeries, Heading, Plot } from 'react-plot';
 
 interface HistogramProps {
   image: Image;
+  colorModel: ImageColorModel;
   channel: number;
 }
 
-function Histogram({ image, channel }: HistogramProps) {
+function Histogram({ image, colorModel, channel }: HistogramProps) {
   const values = image.histogram({ channel });
 
   const data = Array.from(values).map((value, index) => ({
@@ -18,9 +19,9 @@ function Histogram({ image, channel }: HistogramProps) {
 
   const title = useCallback(
     (channel: number) => {
-      return `${channelLabels[image.colorModel][channel]} channel`;
+      return `${channelLabels[colorModel][channel]} channel`;
     },
-    [image.colorModel],
+    [colorModel],
   );
 
   return (

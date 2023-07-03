@@ -1,13 +1,11 @@
 import styled from '@emotion/styled';
-import { Image } from 'image-js';
+import { Image, ImageColorModel } from 'image-js';
 import times from 'lodash/times';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
+
+import useImage from '../../hooks/useImage';
 
 import Histogram from './Histogram';
-
-interface HistogramsProps {
-  image: Image;
-}
 
 const HistogramsContainer = styled.div`
   display: flex;
@@ -17,11 +15,26 @@ const HistogramsContainer = styled.div`
   padding: 8px 0;
 `;
 
-function Histograms({ image }: HistogramsProps) {
+function Histograms() {
+  const { pipelined } = useImage();
+
+  const image = useMemo(
+    () =>
+      pipelined instanceof Image
+        ? pipelined
+        : pipelined.convertColor(ImageColorModel.GREY),
+    [pipelined],
+  );
+
   return (
     <HistogramsContainer>
       {times(image.components, (i) => (
-        <Histogram key={i} image={image} channel={i} />
+        <Histogram
+          key={i}
+          image={image}
+          colorModel={pipelined.colorModel}
+          channel={i}
+        />
       ))}
     </HistogramsContainer>
   );

@@ -5,7 +5,6 @@ import {
   FlipOptions,
   GaussianBlurXYOptions,
   GreyOptions,
-  Image,
   LevelOptions,
   MedianFilterOptions,
   PixelateOptions,
@@ -28,7 +27,7 @@ import {
   SET_PIXELATE,
   TOGGLE_PIPELINE_OPERATION,
 } from '../DataActionTypes';
-import { DataState, PipelineOperations } from '../DataReducer';
+import { DataState } from '../DataReducer';
 
 export type PipelineAddGreyFilterAction = DataActionType<
   typeof SET_GREY_FILTER,
@@ -105,7 +104,7 @@ export function addGreyFilter(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const existingIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -139,7 +138,7 @@ export function addBlur(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const existingIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -177,7 +176,7 @@ export function addGaussianBlur(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const existingIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -210,7 +209,7 @@ export function addInvert(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const existingIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -242,7 +241,7 @@ export function addFlip(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const existingIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -276,7 +275,7 @@ export function addLevel(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const existingIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -310,7 +309,7 @@ export function addPixelate(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const existingIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -348,7 +347,7 @@ export function addMedianFilter(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const existingIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -386,7 +385,7 @@ export function addMask(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const existingIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -420,7 +419,7 @@ export function addDilate(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const existingIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -450,7 +449,7 @@ export function removeOperation(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const indexToRemove = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,
@@ -473,7 +472,7 @@ export function toggleOperation(
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
 
-  const { pipeline, image } = dataFile;
+  const { pipeline } = dataFile;
 
   const selectedIndex = pipeline.findIndex(
     (operation) => operation.identifier === opIdentifier,

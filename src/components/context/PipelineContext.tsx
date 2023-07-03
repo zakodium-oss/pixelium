@@ -1,4 +1,3 @@
-import { useWhatChanged } from '@simbathesailor/use-what-changed';
 import { Image, Mask } from 'image-js';
 import { createContext, ReactNode, useCallback, useMemo } from 'react';
 
