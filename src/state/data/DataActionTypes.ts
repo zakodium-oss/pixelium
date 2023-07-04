@@ -2,24 +2,26 @@ export type DataActionType<Action, Payload = void> = Payload extends void
   ? { type: Action }
   : { type: Action; payload: Payload };
 
-export const INCREMENT = 'INCREMENT';
 export const SET_LOADING = 'SET_LOADING';
 
 export const LOAD_DROP = 'LOAD_DROP';
 
-export const SET_GREY_FILTER = 'SET_GREY_FILTER';
-export const SET_BLUR = 'SET_BLUR';
-export const SET_GAUSSIAN_BLUR = 'SET_GAUSSIAN_BLUR';
-export const SET_INVERT = 'SET_INVERT';
-export const SET_FLIP = 'SET_FLIP';
-export const SET_LEVEL = 'SET_LEVEL';
-export const SET_PIXELATE = 'SET_PIXELATE';
-export const SET_MEDIAN_FILTER = 'SET_MEDIAN_FILTER';
-export const SET_MASK = 'SET_MASK';
-export const SET_DILATE = 'SET_DILATE';
-export const SET_ERODE = 'SET_ERODE';
-export const SET_OPEN = 'SET_OPEN';
-export const SET_CLOSE = 'SET_CLOSE';
-export const REMOVE_PIPELINE_OPERATION = 'REMOVE_PIPELINE_OPERATION';
-export const TOGGLE_PIPELINE_OPERATION = 'TOGGLE_PIPELINE_OPERATION';
+export {
+  SET_GREY_FILTER,
+  SET_BLUR,
+  SET_FLIP,
+  SET_GAUSSIAN_BLUR,
+  SET_INVERT,
+  SET_LEVEL,
+  SET_PIXELATE,
+  SET_MEDIAN_FILTER,
+  SET_MASK,
+  SET_DILATE,
+  SET_ERODE,
+  SET_OPEN,
+  SET_CLOSE,
+  REMOVE_PIPELINE_OPERATION,
+  TOGGLE_PIPELINE_OPERATION,
+} from './actions/pipeline/PipelineActions';
+
 export const SET_ROI = 'SET_ROI';

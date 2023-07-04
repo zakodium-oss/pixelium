@@ -26,28 +26,24 @@ function MorphologyTool() {
         label: 'Dilate',
         data: 'dilate',
         type: 'option',
-        disabled: isColor(pipelined),
       },
       {
         label: 'Erode',
         data: 'erode',
         type: 'option',
-        disabled: isColor(pipelined),
       },
       {
         label: 'Open',
         data: 'open',
         type: 'option',
-        disabled: isColor(pipelined),
       },
       {
         label: 'Close',
         data: 'close',
         type: 'option',
-        disabled: isColor(pipelined),
       },
     ],
-    [pipelined],
+    [],
   );
 
   const selectOption = useCallback(
@@ -63,6 +59,7 @@ function MorphologyTool() {
 
   if (currentTab === undefined) return null;
   if (pipelined === undefined) return null;
+  if (isColor(pipelined)) return null;
 
   return (
     <DropdownMenu

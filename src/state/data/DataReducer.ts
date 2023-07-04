@@ -20,26 +20,10 @@ import { Reducer } from 'react';
 import * as Type from './DataActionTypes';
 import * as LoadActions from './actions/LoadActions';
 import type { SetLoadingAction, LoadDropAction } from './actions/LoadActions';
-import * as PipelineActions from './actions/PipelineActions';
-import {
-  PipelineAddGreyFilterAction,
-  RemovePipelineOperationAction,
-  PipelineAddMaskAction,
-  PipelineAddBlurAction,
-  TogglePipelineOperationAction,
-  PipelineAddGaussianBlurAction,
-  PipelineAddInvertAction,
-  PipelineAddFlipAction,
-  PipelineAddLevelAction,
-  PipelineAddPixelateAction,
-  PipelineAddMedianFilterAction,
-  PipelineAddDilateAction,
-  PipelineAddErodeAction,
-  PipelineAddOpenAction,
-  PipelineAddCloseAction,
-} from './actions/PipelineActions';
 import * as RoiActions from './actions/RoiActions';
 import { SetROIAction } from './actions/RoiActions';
+import * as PipelineActions from './actions/pipeline/PipelineActions';
+import type { PipelineActionsTypes } from './actions/pipeline/PipelineActions';
 
 interface InnerPipelineOperation<T extends string, O = undefined> {
   type: T;
@@ -87,22 +71,8 @@ export const initialDataState: DataState = {
 export type DataActions =
   | SetLoadingAction
   | LoadDropAction
-  | PipelineAddGreyFilterAction
-  | PipelineAddBlurAction
-  | PipelineAddGaussianBlurAction
-  | PipelineAddInvertAction
-  | PipelineAddFlipAction
-  | PipelineAddLevelAction
-  | PipelineAddPixelateAction
-  | PipelineAddMedianFilterAction
-  | PipelineAddMaskAction
-  | PipelineAddDilateAction
-  | PipelineAddErodeAction
-  | PipelineAddOpenAction
-  | PipelineAddCloseAction
-  | RemovePipelineOperationAction
-  | TogglePipelineOperationAction
-  | SetROIAction;
+  | SetROIAction
+  | PipelineActionsTypes;
 
 function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
   switch (action.type) {
