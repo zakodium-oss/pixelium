@@ -12,7 +12,7 @@ export type PipelineAddCloseAction = DataActionType<
   { identifier: string; opIdentifier?: string; options: CloseOptions }
 >;
 
-export function addClose(
+export function setClose(
   draft: Draft<DataState>,
   {
     identifier,

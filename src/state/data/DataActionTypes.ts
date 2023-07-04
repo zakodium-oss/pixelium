@@ -20,8 +20,8 @@ export {
   SET_ERODE,
   SET_OPEN,
   SET_CLOSE,
-  REMOVE_PIPELINE_OPERATION,
-  TOGGLE_PIPELINE_OPERATION,
+  REMOVE_OPERATION,
+  TOGGLE_OPERATION,
 } from './actions/pipeline/PipelineActions';
 
 export const SET_ROI = 'SET_ROI';

@@ -81,37 +81,37 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
     case Type.LOAD_DROP:
       return LoadActions.loadDrop(draft, action.payload);
     case Type.SET_GREY_FILTER:
-      return PipelineActions.addGreyFilter(draft, action.payload);
+      return PipelineActions.setGreyFilter(draft, action.payload);
     case Type.SET_BLUR:
-      return PipelineActions.addBlur(draft, action.payload);
+      return PipelineActions.setBlur(draft, action.payload);
     case Type.SET_GAUSSIAN_BLUR:
-      return PipelineActions.addGaussianBlur(draft, action.payload);
+      return PipelineActions.setGaussianBlur(draft, action.payload);
     case Type.SET_INVERT:
-      return PipelineActions.addInvert(draft, action.payload);
+      return PipelineActions.setInvert(draft, action.payload);
     case Type.SET_MASK:
-      return PipelineActions.addMask(draft, action.payload);
+      return PipelineActions.setMask(draft, action.payload);
     case Type.SET_FLIP:
-      return PipelineActions.addFlip(draft, action.payload);
+      return PipelineActions.setFlip(draft, action.payload);
     case Type.SET_LEVEL:
-      return PipelineActions.addLevel(draft, action.payload);
+      return PipelineActions.setLevel(draft, action.payload);
     case Type.SET_PIXELATE:
-      return PipelineActions.addPixelate(draft, action.payload);
+      return PipelineActions.setPixelate(draft, action.payload);
     case Type.SET_MEDIAN_FILTER:
-      return PipelineActions.addMedianFilter(draft, action.payload);
-    case Type.REMOVE_PIPELINE_OPERATION:
+      return PipelineActions.setMedianFilter(draft, action.payload);
+    case Type.REMOVE_OPERATION:
       return PipelineActions.removeOperation(draft, action.payload);
-    case Type.TOGGLE_PIPELINE_OPERATION:
+    case Type.TOGGLE_OPERATION:
       return PipelineActions.toggleOperation(draft, action.payload);
     case Type.SET_ROI:
       return RoiActions.setROIs(draft, action.payload);
     case Type.SET_DILATE:
-      return PipelineActions.addDilate(draft, action.payload);
+      return PipelineActions.setDilate(draft, action.payload);
     case Type.SET_ERODE:
-      return PipelineActions.addErode(draft, action.payload);
+      return PipelineActions.setErode(draft, action.payload);
     case Type.SET_OPEN:
-      return PipelineActions.addOpen(draft, action.payload);
+      return PipelineActions.setOpen(draft, action.payload);
     case Type.SET_CLOSE:
-      return PipelineActions.addClose(draft, action.payload);
+      return PipelineActions.setClose(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }

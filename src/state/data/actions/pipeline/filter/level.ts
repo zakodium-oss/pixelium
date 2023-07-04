@@ -12,7 +12,7 @@ export type PipelineAddLevelAction = DataActionType<
   { identifier: string; opIdentifier?: string; options: LevelOptions }
 >;
 
-export function addLevel(
+export function setLevel(
   draft: Draft<DataState>,
   {
     identifier,

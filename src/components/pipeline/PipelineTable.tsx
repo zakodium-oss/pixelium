@@ -14,8 +14,8 @@ import useData from '../../hooks/useData';
 import useDataDispatch from '../../hooks/useDataDispatch';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import {
-  REMOVE_PIPELINE_OPERATION,
-  TOGGLE_PIPELINE_OPERATION,
+  REMOVE_OPERATION,
+  TOGGLE_OPERATION,
 } from '../../state/data/DataActionTypes';
 import {
   OPEN_MODAL,
@@ -51,7 +51,7 @@ function PipelineTable({ identifier }: PipelineTableProps) {
   const handleDelete = useCallback(
     (opIdentifier: string) => {
       dataDispatch({
-        type: REMOVE_PIPELINE_OPERATION,
+        type: REMOVE_OPERATION,
         payload: {
           identifier,
           opIdentifier,
@@ -87,7 +87,7 @@ function PipelineTable({ identifier }: PipelineTableProps) {
   const handleToggle = useCallback(
     (opIdentifier: string, checked: CheckedState) => {
       dataDispatch({
-        type: TOGGLE_PIPELINE_OPERATION,
+        type: TOGGLE_OPERATION,
         payload: {
           identifier,
           opIdentifier,

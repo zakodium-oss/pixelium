@@ -12,7 +12,7 @@ export type PipelineAddErodeAction = DataActionType<
   { identifier: string; opIdentifier?: string; options: ErodeOptions }
 >;
 
-export function addErode(
+export function setErode(
   draft: Draft<DataState>,
   {
     identifier,

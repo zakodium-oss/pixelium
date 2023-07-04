@@ -16,7 +16,7 @@ export type PipelineAddMaskAction = DataActionType<
   }
 >;
 
-export function addMask(
+export function setMask(
   draft: Draft<DataState>,
   {
     identifier,

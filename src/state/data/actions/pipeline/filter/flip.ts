@@ -12,7 +12,7 @@ export type PipelineAddFlipAction = DataActionType<
   { identifier: string; opIdentifier?: string; options: FlipOptions }
 >;
 
-export function addFlip(
+export function setFlip(
   draft: Draft<DataState>,
   {
     identifier,

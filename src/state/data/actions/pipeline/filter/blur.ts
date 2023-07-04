@@ -12,7 +12,7 @@ export type PipelineAddBlurAction = DataActionType<
   { identifier: string; opIdentifier?: string; options: BlurOptions }
 >;
 
-export function addBlur(
+export function setBlur(
   draft: Draft<DataState>,
   {
     identifier,

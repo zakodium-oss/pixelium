@@ -12,7 +12,7 @@ export type PipelineAddGreyFilterAction = DataActionType<
   { identifier: string; opIdentifier?: string; options: GreyOptions }
 >;
 
-export function addGreyFilter(
+export function setGreyFilter(
   draft: Draft<DataState>,
   {
     identifier,

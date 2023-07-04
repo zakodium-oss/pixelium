@@ -12,7 +12,7 @@ export type PipelineAddGaussianBlurAction = DataActionType<
   { identifier: string; opIdentifier?: string; options: GaussianBlurXYOptions }
 >;
 
-export function addGaussianBlur(
+export function setGaussianBlur(
   draft: Draft<DataState>,
   {
     identifier,

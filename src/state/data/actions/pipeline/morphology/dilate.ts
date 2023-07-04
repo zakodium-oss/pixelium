@@ -12,7 +12,7 @@ export type PipelineAddDilateAction = DataActionType<
   { identifier: string; opIdentifier?: string; options: DilateOptions }
 >;
 
-export function addDilate(
+export function setDilate(
   draft: Draft<DataState>,
   {
     identifier,

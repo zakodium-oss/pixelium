@@ -12,7 +12,7 @@ export type PipelineAddPixelateAction = DataActionType<
   { identifier: string; opIdentifier?: string; options: PixelateOptions }
 >;
 
-export function addPixelate(
+export function setPixelate(
   draft: Draft<DataState>,
   {
     identifier,

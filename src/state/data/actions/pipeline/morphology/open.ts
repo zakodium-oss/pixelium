@@ -12,7 +12,7 @@ export type PipelineAddOpenAction = DataActionType<
   { identifier: string; opIdentifier?: string; options: OpenOptions }
 >;
 
-export function addOpen(
+export function setOpen(
   draft: Draft<DataState>,
   {
     identifier,

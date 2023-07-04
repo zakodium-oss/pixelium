@@ -3,16 +3,16 @@ import { Draft } from 'immer';
 import { DataActionType } from '../../DataActionTypes';
 import { DataState } from '../../DataReducer';
 
-export const REMOVE_PIPELINE_OPERATION = 'REMOVE_PIPELINE_OPERATION';
-export const TOGGLE_PIPELINE_OPERATION = 'TOGGLE_PIPELINE_OPERATION';
+export const REMOVE_OPERATION = 'REMOVE_OPERATION';
+export const TOGGLE_OPERATION = 'TOGGLE_OPERATION';
 
 export type RemovePipelineOperationAction = DataActionType<
-  typeof REMOVE_PIPELINE_OPERATION,
+  typeof REMOVE_OPERATION,
   { identifier: string; opIdentifier: string }
 >;
 
 export type TogglePipelineOperationAction = DataActionType<
-  typeof TOGGLE_PIPELINE_OPERATION,
+  typeof TOGGLE_OPERATION,
   { identifier: string; opIdentifier: string; checked: boolean }
 >;
 

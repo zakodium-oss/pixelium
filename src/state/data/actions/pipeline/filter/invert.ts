@@ -11,7 +11,7 @@ export type PipelineAddInvertAction = DataActionType<
   { identifier: string; opIdentifier?: string }
 >;
 
-export function addInvert(
+export function setInvert(
   draft: Draft<DataState>,
   { identifier, opIdentifier = uuid() }: PipelineAddInvertAction['payload'],
 ) {

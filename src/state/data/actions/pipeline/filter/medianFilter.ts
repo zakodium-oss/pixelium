@@ -12,7 +12,7 @@ export type PipelineAddMedianFilterAction = DataActionType<
   { identifier: string; opIdentifier?: string; options: MedianFilterOptions }
 >;
 
-export function addMedianFilter(
+export function setMedianFilter(
   draft: Draft<DataState>,
   {
     identifier,
