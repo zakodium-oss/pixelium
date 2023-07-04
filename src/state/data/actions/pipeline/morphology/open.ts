@@ -2,6 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { OpenOptions } from 'image-js';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../../types/ExtractOperation';
 import { DataActionType } from '../../../DataActionTypes';
 import { DataState } from '../../../DataReducer';
 
@@ -11,6 +12,8 @@ export type PipelineSetOpenAction = DataActionType<
   typeof SET_OPEN,
   { identifier: string; opIdentifier?: string; options: OpenOptions }
 >;
+
+export type OpenOperation = ExtractOperation<PipelineSetOpenAction>;
 
 export function setOpen(
   draft: Draft<DataState>,

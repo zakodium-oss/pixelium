@@ -2,6 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { DilateOptions } from 'image-js';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../../types/ExtractOperation';
 import { DataActionType } from '../../../DataActionTypes';
 import { DataState } from '../../../DataReducer';
 
@@ -11,6 +12,8 @@ export type PipelineSetDilateAction = DataActionType<
   typeof SET_DILATE,
   { identifier: string; opIdentifier?: string; options: DilateOptions }
 >;
+
+export type DilateOperation = ExtractOperation<PipelineSetDilateAction>;
 
 export function setDilate(
   draft: Draft<DataState>,

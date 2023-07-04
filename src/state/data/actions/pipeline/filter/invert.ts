@@ -1,6 +1,7 @@
 import { v4 as uuid } from '@lukeed/uuid';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../../types/ExtractOperation';
 import { DataActionType } from '../../../DataActionTypes';
 import { DataState } from '../../../DataReducer';
 
@@ -10,6 +11,8 @@ export type PipelineSetInvertAction = DataActionType<
   typeof SET_INVERT,
   { identifier: string; opIdentifier?: string }
 >;
+
+export type InvertOperation = ExtractOperation<PipelineSetInvertAction>;
 
 export function setInvert(
   draft: Draft<DataState>,

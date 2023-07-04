@@ -2,6 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { GaussianBlurXYOptions } from 'image-js';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../../types/ExtractOperation';
 import { DataActionType } from '../../../DataActionTypes';
 import { DataState } from '../../../DataReducer';
 
@@ -11,6 +12,9 @@ export type PipelineSetGaussianBlurAction = DataActionType<
   typeof SET_GAUSSIAN_BLUR,
   { identifier: string; opIdentifier?: string; options: GaussianBlurXYOptions }
 >;
+
+export type GaussianBlurOperation =
+  ExtractOperation<PipelineSetGaussianBlurAction>;
 
 export function setGaussianBlur(
   draft: Draft<DataState>,

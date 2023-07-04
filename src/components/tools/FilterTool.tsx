@@ -70,6 +70,12 @@ function FilterTool() {
         type: 'option',
         disabled: isBinary(pipelined),
       },
+      {
+        label: 'Gradient filter',
+        data: 'gradient',
+        type: 'option',
+        disabled: isBinary(pipelined),
+      },
     ],
     [pipelined],
   );

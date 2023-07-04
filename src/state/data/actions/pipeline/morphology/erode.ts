@@ -2,6 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { ErodeOptions } from 'image-js';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../../types/ExtractOperation';
 import { DataActionType } from '../../../DataActionTypes';
 import { DataState } from '../../../DataReducer';
 
@@ -11,6 +12,8 @@ export type PipelineSetErodeAction = DataActionType<
   typeof SET_ERODE,
   { identifier: string; opIdentifier?: string; options: ErodeOptions }
 >;
+
+export type ErodeOperation = ExtractOperation<PipelineSetErodeAction>;
 
 export function setErode(
   draft: Draft<DataState>,

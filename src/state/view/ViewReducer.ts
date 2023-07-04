@@ -1,7 +1,7 @@
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
 
-import { PipelineOperations } from '../data/DataReducer';
+import { PipelineOperations } from '../data/actions/pipeline/PipelineOperations';
 
 import * as Type from './ViewActionTypes';
 import { SetPanZoomAction } from './actions/ImageViewerActions';
@@ -31,6 +31,7 @@ export const OP_TYPE_MODAL_MAP: {
   ERODE: 'erode',
   OPEN: 'open',
   CLOSE: 'close',
+  GRADIENT_FILTER: 'gradient',
 };
 
 export function getModalNameFromOperationType(
@@ -55,7 +56,8 @@ export type ModalName =
   | 'dilate'
   | 'erode'
   | 'open'
-  | 'close';
+  | 'close'
+  | 'gradient';
 
 export interface ViewState {
   currentTab?: string;
@@ -93,6 +95,7 @@ export const initialViewState: ViewState = {
     erode: false,
     open: false,
     close: false,
+    gradient: false,
   },
   editMode: null,
 };

@@ -2,6 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { CloseOptions } from 'image-js';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../../types/ExtractOperation';
 import { DataActionType } from '../../../DataActionTypes';
 import { DataState } from '../../../DataReducer';
 
@@ -11,6 +12,8 @@ export type PipelineSetCloseAction = DataActionType<
   typeof SET_CLOSE,
   { identifier: string; opIdentifier?: string; options: CloseOptions }
 >;
+
+export type CloseOperation = ExtractOperation<PipelineSetCloseAction>;
 
 export function setClose(
   draft: Draft<DataState>,

@@ -2,6 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { FlipOptions } from 'image-js';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../../types/ExtractOperation';
 import { DataActionType } from '../../../DataActionTypes';
 import { DataState } from '../../../DataReducer';
 
@@ -11,6 +12,8 @@ export type PipelineSetFlipAction = DataActionType<
   typeof SET_FLIP,
   { identifier: string; opIdentifier?: string; options: FlipOptions }
 >;
+
+export type FlipOperation = ExtractOperation<PipelineSetFlipAction>;
 
 export function setFlip(
   draft: Draft<DataState>,

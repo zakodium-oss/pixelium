@@ -1,19 +1,4 @@
-import {
-  Image,
-  GreyOptions,
-  ThresholdOptionsAlgorithm,
-  BlurOptions,
-  GaussianBlurXYOptions,
-  FlipOptions,
-  LevelOptions,
-  PixelateOptions,
-  MedianFilterOptions,
-  Roi,
-  DilateOptions,
-  ErodeOptions,
-  OpenOptions,
-  CloseOptions,
-} from 'image-js';
+import { Image, Roi } from 'image-js';
 import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
 
@@ -24,32 +9,7 @@ import * as RoiActions from './actions/RoiActions';
 import { SetROIAction } from './actions/RoiActions';
 import * as PipelineActions from './actions/pipeline/PipelineActions';
 import type { PipelineActionsTypes } from './actions/pipeline/PipelineActions';
-
-interface InnerPipelineOperation<T extends string, O = undefined> {
-  type: T;
-  options: O;
-  isActive: boolean;
-  identifier: string;
-}
-
-type PipelineOperation<T extends string, O> = O extends undefined
-  ? Omit<InnerPipelineOperation<T>, 'options'>
-  : InnerPipelineOperation<T, O>;
-
-export type PipelineOperations =
-  | PipelineOperation<'GREY_FILTER', GreyOptions>
-  | PipelineOperation<'BLUR', BlurOptions>
-  | PipelineOperation<'GAUSSIAN_BLUR', GaussianBlurXYOptions>
-  | PipelineOperation<'INVERT', undefined>
-  | PipelineOperation<'FLIP', FlipOptions>
-  | PipelineOperation<'LEVEL', LevelOptions>
-  | PipelineOperation<'PIXELATE', PixelateOptions>
-  | PipelineOperation<'MEDIAN_FILTER', MedianFilterOptions>
-  | PipelineOperation<'MASK', ThresholdOptionsAlgorithm>
-  | PipelineOperation<'DILATE', DilateOptions>
-  | PipelineOperation<'ERODE', ErodeOptions>
-  | PipelineOperation<'OPEN', OpenOptions>
-  | PipelineOperation<'CLOSE', CloseOptions>;
+import type { PipelineOperations } from './actions/pipeline/PipelineOperations';
 
 export interface DataFile {
   image: Image;
@@ -112,6 +72,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.setOpen(draft, action.payload);
     case Type.SET_CLOSE:
       return PipelineActions.setClose(draft, action.payload);
+    case Type.SET_GRADIENT_FILTER:
+      return PipelineActions.setGradientFilter(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }

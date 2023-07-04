@@ -2,6 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { GreyOptions } from 'image-js';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../../types/ExtractOperation';
 import { DataActionType } from '../../../DataActionTypes';
 import { DataState } from '../../../DataReducer';
 
@@ -11,6 +12,8 @@ export type PipelineSetGreyFilterAction = DataActionType<
   typeof SET_GREY_FILTER,
   { identifier: string; opIdentifier?: string; options: GreyOptions }
 >;
+
+export type GreyFilterOperation = ExtractOperation<PipelineSetGreyFilterAction>;
 
 export function setGreyFilter(
   draft: Draft<DataState>,

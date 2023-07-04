@@ -2,6 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { ThresholdOptionsAlgorithm } from 'image-js';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../types/ExtractOperation';
 import { DataActionType } from '../../DataActionTypes';
 import { DataState } from '../../DataReducer';
 
@@ -15,6 +16,8 @@ export type PipelineSetMaskAction = DataActionType<
     options: ThresholdOptionsAlgorithm;
   }
 >;
+
+export type MaskOperation = ExtractOperation<PipelineSetMaskAction>;
 
 export function setMask(
   draft: Draft<DataState>,

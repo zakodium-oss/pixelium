@@ -1,7 +1,7 @@
 import { Image, Mask } from 'image-js';
 
 import { logger } from '../components/context/LogContext';
-import { PipelineOperations } from '../state/data/DataReducer';
+import { PipelineOperations } from '../state/data/actions/pipeline/PipelineOperations';
 
 interface PipelineStep {
   identifier: string;

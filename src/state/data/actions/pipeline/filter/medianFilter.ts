@@ -2,6 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { MedianFilterOptions } from 'image-js';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../../types/ExtractOperation';
 import { DataActionType } from '../../../DataActionTypes';
 import { DataState } from '../../../DataReducer';
 
@@ -11,6 +12,9 @@ export type PipelineSetMedianFilterAction = DataActionType<
   typeof SET_MEDIAN_FILTER,
   { identifier: string; opIdentifier?: string; options: MedianFilterOptions }
 >;
+
+export type MedianFilterOperation =
+  ExtractOperation<PipelineSetMedianFilterAction>;
 
 export function setMedianFilter(
   draft: Draft<DataState>,

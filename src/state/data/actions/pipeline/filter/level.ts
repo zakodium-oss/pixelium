@@ -2,6 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { LevelOptions } from 'image-js';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../../types/ExtractOperation';
 import { DataActionType } from '../../../DataActionTypes';
 import { DataState } from '../../../DataReducer';
 
@@ -11,6 +12,8 @@ export type PipelineSetLevelAction = DataActionType<
   typeof SET_LEVEL,
   { identifier: string; opIdentifier?: string; options: LevelOptions }
 >;
+
+export type LevelOperation = ExtractOperation<PipelineSetLevelAction>;
 
 export function setLevel(
   draft: Draft<DataState>,

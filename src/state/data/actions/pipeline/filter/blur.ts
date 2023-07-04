@@ -2,6 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { BlurOptions } from 'image-js';
 import { Draft } from 'immer';
 
+import { ExtractOperation } from '../../../../../types/ExtractOperation';
 import { DataActionType } from '../../../DataActionTypes';
 import { DataState } from '../../../DataReducer';
 
@@ -11,6 +12,8 @@ export type PipelineSetBlurAction = DataActionType<
   typeof SET_BLUR,
   { identifier: string; opIdentifier?: string; options: BlurOptions }
 >;
+
+export type PipelineBlurOperation = ExtractOperation<PipelineSetBlurAction>;
 
 export function setBlur(
   draft: Draft<DataState>,
