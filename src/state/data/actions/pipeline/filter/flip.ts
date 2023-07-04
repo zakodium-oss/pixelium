@@ -7,7 +7,7 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_FLIP = 'SET_FLIP';
 
-export type PipelineAddFlipAction = DataActionType<
+export type PipelineSetFlipAction = DataActionType<
   typeof SET_FLIP,
   { identifier: string; opIdentifier?: string; options: FlipOptions }
 >;
@@ -18,7 +18,7 @@ export function setFlip(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddFlipAction['payload'],
+  }: PipelineSetFlipAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

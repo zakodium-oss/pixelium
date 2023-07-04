@@ -7,7 +7,7 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_BLUR = 'SET_BLUR';
 
-export type PipelineAddBlurAction = DataActionType<
+export type PipelineSetBlurAction = DataActionType<
   typeof SET_BLUR,
   { identifier: string; opIdentifier?: string; options: BlurOptions }
 >;
@@ -18,7 +18,7 @@ export function setBlur(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddBlurAction['payload'],
+  }: PipelineSetBlurAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

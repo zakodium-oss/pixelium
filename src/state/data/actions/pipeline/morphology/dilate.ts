@@ -7,7 +7,7 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_DILATE = 'SET_DILATE';
 
-export type PipelineAddDilateAction = DataActionType<
+export type PipelineSetDilateAction = DataActionType<
   typeof SET_DILATE,
   { identifier: string; opIdentifier?: string; options: DilateOptions }
 >;
@@ -18,7 +18,7 @@ export function setDilate(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddDilateAction['payload'],
+  }: PipelineSetDilateAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

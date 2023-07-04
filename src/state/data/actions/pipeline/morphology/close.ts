@@ -7,7 +7,7 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_CLOSE = 'SET_CLOSE';
 
-export type PipelineAddCloseAction = DataActionType<
+export type PipelineSetCloseAction = DataActionType<
   typeof SET_CLOSE,
   { identifier: string; opIdentifier?: string; options: CloseOptions }
 >;
@@ -18,7 +18,7 @@ export function setClose(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddCloseAction['payload'],
+  }: PipelineSetCloseAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

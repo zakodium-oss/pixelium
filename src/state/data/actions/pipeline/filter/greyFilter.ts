@@ -7,7 +7,7 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_GREY_FILTER = 'SET_GREY_FILTER';
 
-export type PipelineAddGreyFilterAction = DataActionType<
+export type PipelineSetGreyFilterAction = DataActionType<
   typeof SET_GREY_FILTER,
   { identifier: string; opIdentifier?: string; options: GreyOptions }
 >;
@@ -18,7 +18,7 @@ export function setGreyFilter(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddGreyFilterAction['payload'],
+  }: PipelineSetGreyFilterAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

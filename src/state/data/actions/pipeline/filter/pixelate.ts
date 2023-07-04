@@ -7,7 +7,7 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_PIXELATE = 'SET_PIXELATE';
 
-export type PipelineAddPixelateAction = DataActionType<
+export type PipelineSetPixelateAction = DataActionType<
   typeof SET_PIXELATE,
   { identifier: string; opIdentifier?: string; options: PixelateOptions }
 >;
@@ -18,7 +18,7 @@ export function setPixelate(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddPixelateAction['payload'],
+  }: PipelineSetPixelateAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

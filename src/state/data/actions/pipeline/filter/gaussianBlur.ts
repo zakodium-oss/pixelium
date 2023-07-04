@@ -7,7 +7,7 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_GAUSSIAN_BLUR = 'SET_GAUSSIAN_BLUR';
 
-export type PipelineAddGaussianBlurAction = DataActionType<
+export type PipelineSetGaussianBlurAction = DataActionType<
   typeof SET_GAUSSIAN_BLUR,
   { identifier: string; opIdentifier?: string; options: GaussianBlurXYOptions }
 >;
@@ -18,7 +18,7 @@ export function setGaussianBlur(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddGaussianBlurAction['payload'],
+  }: PipelineSetGaussianBlurAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

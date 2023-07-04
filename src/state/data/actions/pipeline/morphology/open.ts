@@ -7,7 +7,7 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_OPEN = 'SET_OPEN';
 
-export type PipelineAddOpenAction = DataActionType<
+export type PipelineSetOpenAction = DataActionType<
   typeof SET_OPEN,
   { identifier: string; opIdentifier?: string; options: OpenOptions }
 >;
@@ -18,7 +18,7 @@ export function setOpen(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddOpenAction['payload'],
+  }: PipelineSetOpenAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

@@ -7,7 +7,7 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_LEVEL = 'SET_LEVEL';
 
-export type PipelineAddLevelAction = DataActionType<
+export type PipelineSetLevelAction = DataActionType<
   typeof SET_LEVEL,
   { identifier: string; opIdentifier?: string; options: LevelOptions }
 >;
@@ -18,7 +18,7 @@ export function setLevel(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddLevelAction['payload'],
+  }: PipelineSetLevelAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

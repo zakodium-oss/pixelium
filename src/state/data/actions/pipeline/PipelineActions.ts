@@ -1,20 +1,20 @@
-import type { PipelineAddBlurAction } from './filter/blur';
-import type { PipelineAddFlipAction } from './filter/flip';
-import type { PipelineAddGaussianBlurAction } from './filter/gaussianBlur';
-import type { PipelineAddGreyFilterAction } from './filter/greyFilter';
-import type { PipelineAddInvertAction } from './filter/invert';
-import type { PipelineAddLevelAction } from './filter/level';
-import type { PipelineAddMedianFilterAction } from './filter/medianFilter';
-import type { PipelineAddPixelateAction } from './filter/pixelate';
-import type { PipelineAddMaskAction } from './mask';
+import type { PipelineSetBlurAction } from './filter/blur';
+import type { PipelineSetFlipAction } from './filter/flip';
+import type { PipelineSetGaussianBlurAction } from './filter/gaussianBlur';
+import type { PipelineSetGreyFilterAction } from './filter/greyFilter';
+import type { PipelineSetInvertAction } from './filter/invert';
+import type { PipelineSetLevelAction } from './filter/level';
+import type { PipelineSetMedianFilterAction } from './filter/medianFilter';
+import type { PipelineSetPixelateAction } from './filter/pixelate';
+import type { PipelineSetMaskAction } from './mask';
 import type {
   TogglePipelineOperationAction,
   RemovePipelineOperationAction,
 } from './meta';
-import type { PipelineAddCloseAction } from './morphology/close';
-import type { PipelineAddDilateAction } from './morphology/dilate';
-import type { PipelineAddErodeAction } from './morphology/erode';
-import type { PipelineAddOpenAction } from './morphology/open';
+import type { PipelineSetCloseAction } from './morphology/close';
+import type { PipelineSetDilateAction } from './morphology/dilate';
+import type { PipelineSetErodeAction } from './morphology/erode';
+import type { PipelineSetOpenAction } from './morphology/open';
 
 export { setGreyFilter, SET_GREY_FILTER } from './filter/greyFilter';
 export { setBlur, SET_BLUR } from './filter/blur';
@@ -33,18 +33,18 @@ export { toggleOperation, TOGGLE_OPERATION } from './meta';
 export { removeOperation, REMOVE_OPERATION } from './meta';
 
 export type PipelineActionsTypes =
-  | PipelineAddGreyFilterAction
-  | PipelineAddBlurAction
-  | PipelineAddGaussianBlurAction
-  | PipelineAddInvertAction
-  | PipelineAddFlipAction
-  | PipelineAddLevelAction
-  | PipelineAddPixelateAction
-  | PipelineAddMedianFilterAction
-  | PipelineAddMaskAction
-  | PipelineAddDilateAction
-  | PipelineAddErodeAction
-  | PipelineAddOpenAction
-  | PipelineAddCloseAction
+  | PipelineSetGreyFilterAction
+  | PipelineSetBlurAction
+  | PipelineSetGaussianBlurAction
+  | PipelineSetInvertAction
+  | PipelineSetFlipAction
+  | PipelineSetLevelAction
+  | PipelineSetPixelateAction
+  | PipelineSetMedianFilterAction
+  | PipelineSetMaskAction
+  | PipelineSetDilateAction
+  | PipelineSetErodeAction
+  | PipelineSetOpenAction
+  | PipelineSetCloseAction
   | TogglePipelineOperationAction
   | RemovePipelineOperationAction;

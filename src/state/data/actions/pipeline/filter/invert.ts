@@ -6,14 +6,14 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_INVERT = 'SET_INVERT';
 
-export type PipelineAddInvertAction = DataActionType<
+export type PipelineSetInvertAction = DataActionType<
   typeof SET_INVERT,
   { identifier: string; opIdentifier?: string }
 >;
 
 export function setInvert(
   draft: Draft<DataState>,
-  { identifier, opIdentifier = uuid() }: PipelineAddInvertAction['payload'],
+  { identifier, opIdentifier = uuid() }: PipelineSetInvertAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

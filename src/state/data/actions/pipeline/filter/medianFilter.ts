@@ -7,7 +7,7 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_MEDIAN_FILTER = 'SET_MEDIAN_FILTER';
 
-export type PipelineAddMedianFilterAction = DataActionType<
+export type PipelineSetMedianFilterAction = DataActionType<
   typeof SET_MEDIAN_FILTER,
   { identifier: string; opIdentifier?: string; options: MedianFilterOptions }
 >;
@@ -18,7 +18,7 @@ export function setMedianFilter(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddMedianFilterAction['payload'],
+  }: PipelineSetMedianFilterAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

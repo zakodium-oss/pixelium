@@ -7,7 +7,7 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_ERODE = 'SET_ERODE';
 
-export type PipelineAddErodeAction = DataActionType<
+export type PipelineSetErodeAction = DataActionType<
   typeof SET_ERODE,
   { identifier: string; opIdentifier?: string; options: ErodeOptions }
 >;
@@ -18,7 +18,7 @@ export function setErode(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddErodeAction['payload'],
+  }: PipelineSetErodeAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);

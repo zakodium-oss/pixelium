@@ -7,7 +7,7 @@ import { DataState } from '../../DataReducer';
 
 export const SET_MASK = 'SET_MASK';
 
-export type PipelineAddMaskAction = DataActionType<
+export type PipelineSetMaskAction = DataActionType<
   typeof SET_MASK,
   {
     identifier: string;
@@ -22,7 +22,7 @@ export function setMask(
     identifier,
     opIdentifier = uuid(),
     options,
-  }: PipelineAddMaskAction['payload'],
+  }: PipelineSetMaskAction['payload'],
 ) {
   const dataFile = draft.images[identifier];
   if (dataFile === undefined) throw new Error(`Image ${identifier} not found`);
