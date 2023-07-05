@@ -8,8 +8,7 @@ import useImageInformations from '../hooks/useImageInformations';
 import Histograms from './histogram/Histograms';
 import MetadataTable from './metadatas/MetadataTable';
 import PipelineTable from './pipeline/PipelineTable';
-import ROITable from './rois/ROITable';
-import ROIToolbar from './rois/ROIToolbar';
+import ROIAccordion from './rois/ROIAccordion';
 
 function Sidebar() {
   const currentTab = useCurrentTab();
@@ -41,10 +40,7 @@ function Sidebar() {
         <Accordion.Item title="Pipeline">
           <PipelineTable identifier={currentTab} />
         </Accordion.Item>
-        <Accordion.Item title="ROIs">
-          <ROIToolbar identifier={currentTab} />
-          <ROITable identifier={currentTab} />
-        </Accordion.Item>
+        <ROIAccordion />
       </Accordion>
     </div>
   );

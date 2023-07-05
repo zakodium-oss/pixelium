@@ -1,11 +1,14 @@
 import styled from '@emotion/styled';
 import { Roi } from 'image-js';
 import { memo, useCallback, useState } from 'react';
-import { FaCogs, FaCopy } from 'react-icons/fa';
+import { FaCopy } from 'react-icons/fa';
+import { FaTableColumns } from 'react-icons/fa6';
 import { Toolbar } from 'react-science/ui';
 import { useCopyToClipboard } from 'react-use';
 
-import useRois from '../../hooks/useRois';
+import useROIs from '../../hooks/useROIs';
+import useViewDispatch from '../../hooks/useViewDispatch';
+import { SET_EDIT_ROI_PREFERENCE } from '../../state/view/ViewActionTypes';
 
 const RightAligned = styled.div`
   display: flex;
@@ -40,7 +43,8 @@ function roisToTSV(rois: Roi[]) {
 const copyToClipBoardDefaultText = 'Copy to clipboard';
 
 function ROIToolbar({ identifier }: ROIToolbarProps) {
-  const rois = useRois(identifier);
+  const rois = useROIs(identifier);
+  const viewDispatch = useViewDispatch();
 
   const [copyToClipBoardText, setCopyToClipBoardText] = useState(
     copyToClipBoardDefaultText,
@@ -56,11 +60,19 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
     }, 1000);
   }, [copyToClipboard, rois]);
 
+  const handleEditROIPreference = useCallback(() => {
+    viewDispatch({ type: SET_EDIT_ROI_PREFERENCE, payload: true });
+  }, [viewDispatch]);
+
   return (
     <RightAligned>
       <Toolbar orientation="horizontal">
-        <Toolbar.Item title="ROI preferences" titleOrientation="horizontal">
-          <FaCogs />
+        <Toolbar.Item
+          title="ROI preferences"
+          titleOrientation="horizontal"
+          onClick={handleEditROIPreference}
+        >
+          <FaTableColumns />
         </Toolbar.Item>
         <Toolbar.Item
           title={copyToClipBoardText}

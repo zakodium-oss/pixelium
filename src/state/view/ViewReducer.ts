@@ -6,6 +6,8 @@ import { PipelineOperations } from '../data/actions/pipeline/PipelineOperations'
 import * as Type from './ViewActionTypes';
 import { SetPanZoomAction } from './actions/ImageViewerActions';
 import * as ImageViewerActions from './actions/ImageViewerActions';
+import { SetEditROIPreferenceAction } from './actions/MiscActions';
+import * as MiscActions from './actions/MiscActions';
 import * as ModalActions from './actions/ModalActions';
 import {
   CloseModalAction,
@@ -73,6 +75,7 @@ export interface ViewState {
   >;
   modals: Record<ModalName, boolean>;
   editMode: { identifier: string; opIdentifier: string } | null;
+  editROIPreference: boolean;
 }
 
 export const initialViewState: ViewState = {
@@ -98,6 +101,7 @@ export const initialViewState: ViewState = {
     gradient: false,
   },
   editMode: null,
+  editROIPreference: false,
 };
 
 export type ViewActions =
@@ -105,7 +109,8 @@ export type ViewActions =
   | SetPanZoomAction
   | OpenModalAction
   | CloseModalAction
-  | SetEditModeIdentifierAction;
+  | SetEditModeIdentifierAction
+  | SetEditROIPreferenceAction;
 
 function innerViewReducer(draft: Draft<ViewState>, action: ViewActions) {
   switch (action.type) {
@@ -119,6 +124,8 @@ function innerViewReducer(draft: Draft<ViewState>, action: ViewActions) {
       return ModalActions.closeModal(draft, action.payload);
     case Type.SET_EDIT_MODE_IDENTIFIER:
       return ModalActions.setEditModeIdentifier(draft, action.payload);
+    case Type.SET_EDIT_ROI_PREFERENCE:
+      return MiscActions.setEditROIPreference(draft, action.payload);
     default:
       throw new Error('Unknown action type in view reducer.');
   }
