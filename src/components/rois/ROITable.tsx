@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { memo } from 'react';
 import { Table, ValueRenderers } from 'react-science/ui';
 
-import useRois from '../../hooks/useRois()';
+import useRois from '../../hooks/useRois';
 
 const Empty = styled.div`
   display: flex;
