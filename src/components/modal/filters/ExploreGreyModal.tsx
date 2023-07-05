@@ -7,7 +7,7 @@ import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import { SET_GREY_FILTER } from '../../../state/data/DataActionTypes';
 import FastSelector from '../../FastSelector';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface ExportGreyModalProps {
   previewImageIdentifier: string;
@@ -43,7 +43,7 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
   }, [close, dataDispatch, greyOptions, opIdentifier, previewImageIdentifier]);
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Explore grey filters"
@@ -58,7 +58,7 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
         selected={greyOptions.algorithm as GreyAlgorithm}
         setSelected={(algorithm) => setGreyOptions({ algorithm })}
       />
-    </FilterModal>
+    </PreviewModal>
   );
 }
 

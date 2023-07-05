@@ -9,7 +9,7 @@ import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import useView from '../../../hooks/useView';
 import { SET_LEVEL } from '../../../state/data/DataActionTypes';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface LevelModalProps {
   previewImageIdentifier: string;
@@ -62,7 +62,7 @@ function LevelModal({ previewImageIdentifier }: LevelModalProps) {
   }, [close, dataDispatch, opIdentifier, options, previewImageIdentifier]);
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Level image"
@@ -149,7 +149,7 @@ function LevelModal({ previewImageIdentifier }: LevelModalProps) {
           }
         />
       </Field>
-    </FilterModal>
+    </PreviewModal>
   );
 }
 

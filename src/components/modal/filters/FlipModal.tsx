@@ -7,7 +7,7 @@ import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import { SET_FLIP } from '../../../state/data/DataActionTypes';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface FlipModalProps {
   previewImageIdentifier: string;
@@ -54,7 +54,7 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
   }, [close, dataDispatch, opIdentifier, options, previewImageIdentifier]);
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Flip image"
@@ -75,7 +75,7 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
           }
         />
       </Field>
-    </FilterModal>
+    </PreviewModal>
   );
 }
 

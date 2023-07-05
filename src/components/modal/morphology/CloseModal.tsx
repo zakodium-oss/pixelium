@@ -11,7 +11,7 @@ import useModal from '../../../hooks/useModal';
 import { SET_CLOSE } from '../../../state/data/DataActionTypes';
 import changeKernelCell from '../../../utils/changeKernelCell';
 import resizeKernel from '../../../utils/resizeKernel';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface CloseModalProps {
   previewImageIdentifier: string;
@@ -68,7 +68,7 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
   }, [close, dataDispatch, closeOptions, opIdentifier, previewImageIdentifier]);
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Close image"
@@ -162,7 +162,7 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
           ))}
         </div>
       </Field>
-    </FilterModal>
+    </PreviewModal>
   );
 }
 

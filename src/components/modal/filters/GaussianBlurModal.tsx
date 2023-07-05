@@ -7,7 +7,7 @@ import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import { SET_GAUSSIAN_BLUR } from '../../../state/data/DataActionTypes';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface GaussianBlurModalProps {
   previewImageIdentifier: string;
@@ -61,7 +61,7 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
   ]);
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Gaussian blur image"
@@ -127,7 +127,7 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
           }}
         />
       </Field>
-    </FilterModal>
+    </PreviewModal>
   );
 }
 

@@ -7,7 +7,7 @@ import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import { SET_BLUR } from '../../../state/data/DataActionTypes';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface BlurModalProps {
   previewImageIdentifier: string;
@@ -64,7 +64,7 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
   );
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Blur image"
@@ -133,7 +133,7 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
           />
         </Field>
       )}
-    </FilterModal>
+    </PreviewModal>
   );
 }
 

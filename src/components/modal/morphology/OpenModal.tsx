@@ -11,7 +11,7 @@ import useModal from '../../../hooks/useModal';
 import { SET_OPEN } from '../../../state/data/DataActionTypes';
 import changeKernelCell from '../../../utils/changeKernelCell';
 import resizeKernel from '../../../utils/resizeKernel';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface OpenModalProps {
   previewImageIdentifier: string;
@@ -68,7 +68,7 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
   }, [close, dataDispatch, openOptions, opIdentifier, previewImageIdentifier]);
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Open image"
@@ -162,7 +162,7 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
           ))}
         </div>
       </Field>
-    </FilterModal>
+    </PreviewModal>
   );
 }
 

@@ -11,7 +11,7 @@ import useModal from '../../../hooks/useModal';
 import { SET_ERODE } from '../../../state/data/DataActionTypes';
 import changeKernelCell from '../../../utils/changeKernelCell';
 import resizeKernel from '../../../utils/resizeKernel';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface ErodeModalProps {
   previewImageIdentifier: string;
@@ -68,7 +68,7 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
   }, [close, dataDispatch, erodeOptions, opIdentifier, previewImageIdentifier]);
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Erode image"
@@ -162,7 +162,7 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
           ))}
         </div>
       </Field>
-    </FilterModal>
+    </PreviewModal>
   );
 }
 

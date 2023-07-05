@@ -7,7 +7,7 @@ import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import { SET_PIXELATE } from '../../../state/data/DataActionTypes';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface PixelateModalProps {
   previewImageIdentifier: string;
@@ -62,7 +62,7 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
   }, [close, dataDispatch, opIdentifier, options, previewImageIdentifier]);
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Pixelate image"
@@ -97,7 +97,7 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
           }
         />
       </Field>
-    </FilterModal>
+    </PreviewModal>
   );
 }
 

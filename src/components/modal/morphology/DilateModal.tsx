@@ -11,7 +11,7 @@ import useModal from '../../../hooks/useModal';
 import { SET_DILATE } from '../../../state/data/DataActionTypes';
 import changeKernelCell from '../../../utils/changeKernelCell';
 import resizeKernel from '../../../utils/resizeKernel';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface DilateModalProps {
   previewImageIdentifier: string;
@@ -74,7 +74,7 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
   ]);
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Dilate image"
@@ -168,7 +168,7 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
           ))}
         </div>
       </Field>
-    </FilterModal>
+    </PreviewModal>
   );
 }
 

@@ -7,7 +7,7 @@ import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import { SET_MEDIAN_FILTER } from '../../../state/data/DataActionTypes';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface MedianFilterModalProps {
   previewImageIdentifier: string;
@@ -70,7 +70,7 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
   );
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Median filter"
@@ -123,7 +123,7 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
           />
         </Field>
       )}
-    </FilterModal>
+    </PreviewModal>
   );
 }
 

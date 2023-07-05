@@ -5,7 +5,7 @@ import useDefaultOptions from '../../../hooks/useDefaultOptions';
 import useImage from '../../../hooks/useImage';
 import useModal from '../../../hooks/useModal';
 import { SET_INVERT } from '../../../state/data/DataActionTypes';
-import FilterModal from '../PreviewModal';
+import PreviewModal from '../PreviewModal';
 
 interface InvertModalProps {
   previewImageIdentifier: string;
@@ -33,7 +33,7 @@ function InvertModal({ previewImageIdentifier }: InvertModalProps) {
   }, [close, dataDispatch, opIdentifier, previewImageIdentifier]);
 
   return (
-    <FilterModal
+    <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
       title="Invert image"
