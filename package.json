@@ -65,7 +65,7 @@
     "lodash": "^4.17.21",
     "modern-normalize": "^2.0.0",
     "react-d3-utils": "^1.0.0",
-    "react-icons": "^4.8.0",
+    "react-icons": "^4.10.1",
     "react-kbs": "^2.1.1",
     "react-map-interaction": "^2.1.0",
     "react-plot": "^1.4.2",
