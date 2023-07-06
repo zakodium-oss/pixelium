@@ -33,7 +33,7 @@ interface PreviewModalProps {
 }
 
 const ImageViewerContainer = styled.div`
-  width: 40%;
+  width: 30%;
   flex-grow: 3;
   border: 1px solid #9e9e9e;
   border-radius: 4px;
