@@ -79,13 +79,15 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
         >
           <FaTableColumns />
         </Toolbar.Item>
-        <Toolbar.Item
-          title={copyToClipBoardText}
-          titleOrientation="horizontal"
-          onClick={handleCopyToClipboard}
-        >
-          <FaCopy />
-        </Toolbar.Item>
+        {rois.length > 0 && (
+          <Toolbar.Item
+            title={copyToClipBoardText}
+            titleOrientation="horizontal"
+            onClick={handleCopyToClipboard}
+          >
+            <FaCopy />
+          </Toolbar.Item>
+        )}
       </Toolbar>
     </RightAligned>
   );
