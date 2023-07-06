@@ -23,6 +23,7 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
     <>
       {lines.map(({ x1, y1, x2, y2 }, index) => (
         <line
+          // eslint-disable-next-line react/no-array-index-key
           key={`${roi.id}-${index}`}
           x1={x1}
           y1={y1}
