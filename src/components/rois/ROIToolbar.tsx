@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Roi } from 'image-js';
+import startCase from 'lodash/startCase';
 import { memo, useCallback, useState } from 'react';
 import { FaCopy } from 'react-icons/fa';
 import { FaTableColumns } from 'react-icons/fa6';
@@ -8,6 +9,7 @@ import { useCopyToClipboard } from 'react-use';
 
 import useROIs from '../../hooks/useROIs';
 import useViewDispatch from '../../hooks/useViewDispatch';
+import { availableRoiColumns } from '../../state/preferences/PreferencesReducer';
 import { SET_EDIT_ROI_PREFERENCE } from '../../state/view/ViewActionTypes';
 
 const RightAligned = styled.div`
@@ -20,22 +22,25 @@ interface ROIToolbarProps {
 }
 
 function roisToTSV(rois: Roi[]) {
-  return rois
-    .map((roi) => {
-      return [
-        roi.id,
-        roi.width,
-        roi.height,
-        roi.surface,
-        roi.feret.aspectRatio.toFixed(2),
-        roi.feret.minDiameter.length.toFixed(2),
-        roi.feret.maxDiameter.length.toFixed(2),
-        roi.roundness.toFixed(2),
-        roi.solidity.toFixed(2),
-        roi.sphericity.toFixed(2),
-        roi.fillRatio.toFixed(2),
-      ].join('\t');
-    })
+  const headers = [availableRoiColumns.map(startCase).join('\t')];
+  return headers
+    .concat(
+      rois.map((roi) => {
+        return [
+          roi.id,
+          roi.width,
+          roi.height,
+          roi.surface,
+          roi.feret.aspectRatio.toFixed(2),
+          roi.feret.minDiameter.length.toFixed(2),
+          roi.feret.maxDiameter.length.toFixed(2),
+          roi.roundness.toFixed(2),
+          roi.solidity.toFixed(2),
+          roi.sphericity.toFixed(2),
+          roi.fillRatio.toFixed(2),
+        ].join('\t');
+      }),
+    )
     .map((line) => `${line}\n`)
     .join('');
 }

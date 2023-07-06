@@ -46,7 +46,10 @@ function ROIEditColumnPreference({ identifier }: ROIEditColumnPreferenceProps) {
     (column: RoiColumn, checked: boolean) => {
       setShownColumns(
         checked
-          ? [...shownColumns, column]
+          ? [...shownColumns, column].sort(
+              (a, b) =>
+                availableRoiColumns.indexOf(a) - availableRoiColumns.indexOf(b),
+            )
           : shownColumns.filter((c) => c !== column),
       );
     },

@@ -7,16 +7,20 @@ import useView from '../hooks/useView';
 import useViewDispatch from '../hooks/useViewDispatch';
 import { SET_PAN_ZOOM } from '../state/view/ViewActionTypes';
 
+import ROIAnnotations from './rois/ROIAnnotations';
+
 interface ImageViewerProps {
   identifier: string;
   image?: Image | Mask;
   showOriginal?: boolean;
+  annotable?: boolean;
 }
 
 function ImageViewer({
   identifier,
   showOriginal = false,
   image,
+  annotable = false,
 }: ImageViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -66,6 +70,13 @@ function ImageViewer({
             imageRendering: 'pixelated',
           }}
         />
+        {annotable && (
+          <ROIAnnotations
+            width={imageToShow?.width}
+            height={imageToShow?.height}
+            identifier={identifier}
+          />
+        )}
       </div>
     </MapInteractionCSS>
   );

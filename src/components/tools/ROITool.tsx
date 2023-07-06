@@ -6,6 +6,7 @@ import { Toolbar } from 'react-science/ui';
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useDataDispatch from '../../hooks/useDataDispatch';
 import useImage from '../../hooks/useImage';
+import { SET_ROI } from '../../state/data/DataActionTypes';
 import isBinary from '../../utils/isBinary';
 
 function ROITool() {
@@ -19,7 +20,7 @@ function ROITool() {
     if (pipelined instanceof Image) return;
     const roiMapManager = fromMask(pipelined);
     dataDispatch({
-      type: 'SET_ROI',
+      type: SET_ROI,
       payload: {
         identifier: currentTab || '',
         rois: roiMapManager.getRois(),
