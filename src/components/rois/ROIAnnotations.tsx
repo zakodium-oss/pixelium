@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 
-import useAnnotationRef from '../../hooks/useAnnotations';
+import useAnnotationRef from '../../hooks/useAnnotationRef';
 import useROIs from '../../hooks/useROIs';
 
 import ROIAnnotation from './annotation/ROIAnnotation';

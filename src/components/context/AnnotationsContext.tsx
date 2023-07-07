@@ -7,13 +7,14 @@ import {
   useState,
 } from 'react';
 
-interface AnnotationsState {
+export interface AnnotationsState {
   svgRef: RefObject<SVGSVGElement | null>;
   setSvgRef: (ref: RefObject<SVGSVGElement>) => void;
 }
 
 export const AnnotationsContext = createContext<AnnotationsState>({
   svgRef: createRef(),
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setSvgRef: () => {},
 });
 

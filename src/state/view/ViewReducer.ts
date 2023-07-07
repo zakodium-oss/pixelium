@@ -1,5 +1,5 @@
 import { Draft, produce } from 'immer';
-import { createRef, Reducer, RefObject } from 'react';
+import { Reducer } from 'react';
 
 import { PipelineOperations } from '../data/actions/pipeline/PipelineOperations';
 

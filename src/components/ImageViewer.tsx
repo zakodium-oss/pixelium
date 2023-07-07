@@ -2,7 +2,6 @@ import { Image, Mask, writeCanvas } from 'image-js';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { MapInteractionCSS } from 'react-map-interaction';
 
-import useAnnotationRef from '../hooks/useAnnotations';
 import useImage from '../hooks/useImage';
 import useView from '../hooks/useView';
 import useViewDispatch from '../hooks/useViewDispatch';

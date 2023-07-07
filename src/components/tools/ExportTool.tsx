@@ -8,7 +8,7 @@ import {
   Toolbar,
 } from 'react-science/ui';
 
-import useAnnotationRef from '../../hooks/useAnnotations';
+import useAnnotationRef from '../../hooks/useAnnotationRef';
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
 import useLog from '../../hooks/useLog';
