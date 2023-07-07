@@ -1,7 +1,5 @@
-import { encodePng, readImg, writeCanvas } from 'image-js';
+import { ImageColorModel } from 'image-js';
 import { memo, useCallback, useMemo } from 'react';
-import { findDOMNode } from 'react-dom';
-import { createRoot } from 'react-dom/client';
 import { FaFileExport } from 'react-icons/fa';
 import {
   DropdownMenu,
@@ -13,12 +11,17 @@ import {
 import useAnnotationRef from '../../hooks/useAnnotations';
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
-import createStyleElementFromCSS from '../../utils/createStyleElementFromCSS';
-import ROIAnnotations from '../rois/ROIAnnotations';
+import useLog from '../../hooks/useLog';
+import {
+  saveAsPng,
+  saveToClipboard,
+  svgElementToImage,
+} from '../../utils/export';
 
 function ExportTool() {
   const currentTab = useCurrentTab();
   const { pipelined } = useImage();
+  const { logger } = useLog();
   const { svgRef } = useAnnotationRef();
   const exportOptions = useMemo<MenuOptions<string>>(
     () => [
@@ -27,51 +30,50 @@ function ExportTool() {
         data: 'png',
         type: 'option',
       },
+      {
+        label: 'Copy to clipboard',
+        data: 'clipboard',
+        type: 'option',
+      },
     ],
     [],
   );
 
-  const generatePNG = useCallback(() => {
+  const mergeToImage = useCallback(async () => {
     const svgElement = svgRef.current;
-    if (svgElement === null) return;
-
-    const style = createStyleElementFromCSS();
-    svgElement.insertBefore(style, svgElement.firstChild);
-    const data = new XMLSerializer().serializeToString(svgElement);
-    const dataBase64 = btoa(decodeURIComponent(encodeURIComponent(data)));
-    const svgDataUrl = `data:image/svg+xml;base64,${dataBase64}`;
-
-    const bbox = svgElement.getBBox();
-
-    const nativeImage = new Image();
-    nativeImage.addEventListener('load', () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = bbox.width;
-      canvas.height = bbox.height;
-
-      const context = canvas.getContext('2d');
-      if (context !== null) {
-        context.drawImage(nativeImage, 0, 0, bbox.width, bbox.height);
-        console.log(canvas.toDataURL('image/png'));
-        const a = document.createElement('a');
-        a.download = 'image.png';
-        document.body.append(a);
-        a.href = canvas.toDataURL('image/png');
-        a.click();
-        a.remove();
-      }
+    const annotations = await svgElementToImage(svgElement, {
+      width: pipelined.width,
+      height: pipelined.height,
     });
-    nativeImage.src = svgDataUrl;
-    style.remove();
-  }, [svgRef]);
+    const recolored = pipelined.convertColor(ImageColorModel.RGBA);
+    const toSave =
+      annotations === null ? recolored : annotations.copyTo(recolored);
+    return toSave;
+  }, [pipelined, svgRef]);
+
+  const exportPNG = useCallback(async () => {
+    return mergeToImage().then((toSave) =>
+      saveAsPng(toSave, `${currentTab || 'unnamed'}.png`),
+    );
+  }, [currentTab, mergeToImage]);
+
+  const copyToClipboard = useCallback(() => {
+    return mergeToImage().then((toSave) => saveToClipboard(toSave));
+  }, [mergeToImage]);
 
   const handleSelect = useCallback(
     (selected: MenuOption<string>) => {
       if (selected.data === 'png') {
-        generatePNG();
+        exportPNG().catch((error) =>
+          logger.error(`Failed to generate PNG: ${error}`),
+        );
+      } else if (selected.data === 'clipboard') {
+        copyToClipboard().catch((error) =>
+          logger.error(`Failed to copy to clipboard: ${error}`),
+        );
       }
     },
-    [generatePNG],
+    [copyToClipboard, exportPNG, logger],
   );
 
   return (
