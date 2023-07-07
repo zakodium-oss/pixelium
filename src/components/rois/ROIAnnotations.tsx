@@ -1,5 +1,6 @@
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 
+import useAnnotationRef from '../../hooks/useAnnotations';
 import useROIs from '../../hooks/useROIs';
 
 import ROIAnnotation from './annotation/ROIAnnotation';
@@ -20,6 +21,15 @@ function ROIAnnotations({
     () => rois.map((roi) => <ROIAnnotation key={roi.id} roi={roi} />),
     [rois],
   );
+
+  const annotationsRef = useRef<SVGSVGElement>(null);
+  const { svgRef, setSvgRef } = useAnnotationRef();
+
+  useEffect(() => {
+    if (annotationsRef.current === null) return;
+    setSvgRef(annotationsRef);
+  }, [setSvgRef, svgRef]);
+
   return (
     <div
       style={{
@@ -35,6 +45,7 @@ function ROIAnnotations({
         width="100%"
         height="100%"
         viewBox={`0 0 ${width} ${height}`}
+        ref={annotationsRef}
       >
         {annotations}
       </svg>

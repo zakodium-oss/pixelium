@@ -22,6 +22,7 @@ import {
 import CenterPanel from './CenterPanel';
 import Header from './Header';
 import Sidebar from './Sidebar';
+import { AnnotationsProvider } from './context/AnnotationsContext';
 import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
 import { GlobalProvider } from './context/GlobalContext';
@@ -82,35 +83,37 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                 <ViewProvider value={viewState}>
                   <DispatchProvider value={dispatchers}>
                     <PipelineProvider identifier={viewState.currentTab}>
-                      <div css={pixeliumContainerStyle} ref={rootRef}>
-                        <Header />
-                        <div
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            height: '100%',
-                            overflow: 'hidden',
-                          }}
-                        >
-                          <Toolbar orientation="vertical">
-                            <ImportTool />
-                            <ExportTool />
-                            <GreyTool />
-                            <MaskTool />
-                            <MorphologyTool />
-                            <ROITool />
-                            <ModalContainer />
-                          </Toolbar>
-                          <SplitPane
-                            direction="horizontal"
-                            size="20%"
-                            controlledSide="end"
+                      <AnnotationsProvider>
+                        <div css={pixeliumContainerStyle} ref={rootRef}>
+                          <Header />
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              height: '100%',
+                              overflow: 'hidden',
+                            }}
                           >
-                            <CenterPanel />
-                            <Sidebar />
-                          </SplitPane>
+                            <Toolbar orientation="vertical">
+                              <ImportTool />
+                              <ExportTool />
+                              <GreyTool />
+                              <MaskTool />
+                              <MorphologyTool />
+                              <ROITool />
+                              <ModalContainer />
+                            </Toolbar>
+                            <SplitPane
+                              direction="horizontal"
+                              size="20%"
+                              controlledSide="end"
+                            >
+                              <CenterPanel />
+                              <Sidebar />
+                            </SplitPane>
+                          </div>
                         </div>
-                      </div>
+                      </AnnotationsProvider>
                     </PipelineProvider>
                   </DispatchProvider>
                 </ViewProvider>
