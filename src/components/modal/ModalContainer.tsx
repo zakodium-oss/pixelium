@@ -3,6 +3,7 @@ import { memo } from 'react';
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useView from '../../hooks/useView';
 
+import ExportModal from './ExportModal';
 import BlurModal from './filters/BlurModal';
 import ExploreGreyModal from './filters/ExploreGreyModal';
 import FlipModal from './filters/FlipModal';
@@ -56,6 +57,7 @@ function ModalContainer() {
       {view.modals.gradient && (
         <GradientFilterModal previewImageIdentifier={currentTab} />
       )}
+      {view.modals.export && <ExportModal />}
     </>
   );
 }

@@ -4,7 +4,11 @@ import { Reducer } from 'react';
 
 import * as Type from './DataActionTypes';
 import * as LoadActions from './actions/LoadActions';
-import type { SetLoadingAction, LoadDropAction } from './actions/LoadActions';
+import type {
+  SetLoadingAction,
+  LoadDropAction,
+  LoadPixeliumAction,
+} from './actions/LoadActions';
 import * as RoiActions from './actions/RoiActions';
 import { SetROIAction } from './actions/RoiActions';
 import * as PipelineActions from './actions/pipeline/PipelineActions';
@@ -32,7 +36,8 @@ export type DataActions =
   | SetLoadingAction
   | LoadDropAction
   | SetROIAction
-  | PipelineActionsTypes;
+  | PipelineActionsTypes
+  | LoadPixeliumAction;
 
 function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
   switch (action.type) {
@@ -40,6 +45,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return LoadActions.setLoading(draft, action.payload);
     case Type.LOAD_DROP:
       return LoadActions.loadDrop(draft, action.payload);
+    case Type.LOAD_PIXELIUM:
+      return LoadActions.loadPixelium(draft, action.payload);
     case Type.SET_GREY_FILTER:
       return PipelineActions.setGreyFilter(draft, action.payload);
     case Type.SET_BLUR:

@@ -6,6 +6,8 @@ import { PipelineOperations } from '../data/actions/pipeline/PipelineOperations'
 import * as Type from './ViewActionTypes';
 import { SetPanZoomAction } from './actions/ImageViewerActions';
 import * as ImageViewerActions from './actions/ImageViewerActions';
+import * as LoadActions from './actions/LoadActions';
+import { LoadViewStateAction } from './actions/LoadActions';
 import { SetEditROIPreferenceAction } from './actions/MiscActions';
 import * as MiscActions from './actions/MiscActions';
 import * as ModalActions from './actions/ModalActions';
@@ -110,10 +112,13 @@ export type ViewActions =
   | OpenModalAction
   | CloseModalAction
   | SetEditModeIdentifierAction
-  | SetEditROIPreferenceAction;
+  | SetEditROIPreferenceAction
+  | LoadViewStateAction;
 
 function innerViewReducer(draft: Draft<ViewState>, action: ViewActions) {
   switch (action.type) {
+    case Type.LOAD_VIEW_STATE:
+      return LoadActions.loadViewState(draft, action.payload);
     case Type.OPEN_TAB:
       return TabActions.openTab(draft, action.payload);
     case Type.SET_PAN_ZOOM:

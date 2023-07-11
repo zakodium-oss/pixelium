@@ -12,6 +12,7 @@ import useAnnotationRef from '../../hooks/useAnnotationRef';
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
 import useLog from '../../hooks/useLog';
+import useModal from '../../hooks/useModal';
 import {
   saveAsPng,
   saveToClipboard,
@@ -23,6 +24,8 @@ function ExportTool() {
   const { pipelined } = useImage();
   const { logger } = useLog();
   const { svgRef } = useAnnotationRef();
+  const { open: openExportModal } = useModal('export');
+
   const exportOptions = useMemo<MenuOptions<string>>(
     () => [
       {
@@ -33,6 +36,11 @@ function ExportTool() {
       {
         label: 'Copy to clipboard',
         data: 'clipboard',
+        type: 'option',
+      },
+      {
+        label: 'Export as Pixelium file',
+        data: 'pixelium',
         type: 'option',
       },
     ],
@@ -71,9 +79,11 @@ function ExportTool() {
         copyToClipboard().catch((error) =>
           logger.error(`Failed to copy to clipboard: ${error}`),
         );
+      } else if (selected.data === 'pixelium') {
+        openExportModal();
       }
     },
-    [copyToClipboard, exportPNG, logger],
+    [copyToClipboard, exportPNG, logger, openExportModal],
   );
 
   return (

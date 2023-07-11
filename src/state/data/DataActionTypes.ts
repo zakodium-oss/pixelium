@@ -6,6 +6,8 @@ export const SET_LOADING = 'SET_LOADING';
 
 export const LOAD_DROP = 'LOAD_DROP';
 
+export const LOAD_PIXELIUM = 'LOAD_PIXELIUM';
+
 export {
   SET_GREY_FILTER,
   SET_BLUR,
