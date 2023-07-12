@@ -185,6 +185,23 @@ export default function runPipeline(
           });
           break;
         }
+        case 'RESIZE': {
+          if (applyOn instanceof Image) {
+            const result = applyOn.resize({
+              width: operation.options.width,
+              height: operation.options.height,
+              interpolationType: operation.options.interpolationType,
+              borderValue: operation.options.borderValue,
+              preserveAspectRatio: operation.options.preserveAspectRatio,
+              borderType: operation.options.borderType,
+            });
+            pipelineSteps.push({
+              identifier: operation.identifier,
+              result,
+            });
+          }
+          break;
+        }
         default:
           throw new Error(`Unknown operation type ${(operation as any).type}`);
       }

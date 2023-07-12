@@ -35,6 +35,7 @@ export const OP_TYPE_MODAL_MAP: {
   ERODE: 'erode',
   OPEN: 'open',
   CLOSE: 'close',
+  RESIZE: 'resize',
 };
 
 export function getModalNameFromOperationType(
@@ -59,7 +60,8 @@ export type ModalName =
   | 'dilate'
   | 'erode'
   | 'open'
-  | 'close';
+  | 'close'
+  | 'resize';
 
 export interface ViewState {
   currentTab?: string;
@@ -98,6 +100,7 @@ export const initialViewState: ViewState = {
     erode: false,
     open: false,
     close: false,
+    resize: false,
   },
   editMode: null,
   editROIPreference: false,

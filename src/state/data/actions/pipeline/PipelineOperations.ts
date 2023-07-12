@@ -1,4 +1,4 @@
-import type { PipelineBlurOperation } from './filter/blur';
+import type { BlurOperation } from './filter/blur';
 import type { FlipOperation } from './filter/flip';
 import type { GaussianBlurOperation } from './filter/gaussianBlur';
 import type { GreyFilterOperation } from './filter/greyFilter';
@@ -6,6 +6,7 @@ import type { InvertOperation } from './filter/invert';
 import type { LevelOperation } from './filter/level';
 import type { MedianFilterOperation } from './filter/medianFilter';
 import type { PixelateOperation } from './filter/pixelate';
+import type { ResizeOperation } from './geometry/resize';
 import type { MaskOperation } from './mask';
 import type { CloseOperation } from './morphology/close';
 import type { DilateOperation } from './morphology/dilate';
@@ -25,7 +26,7 @@ export type PipelineOperation<T extends string, O> = O extends undefined
 
 export type PipelineOperations =
   | GreyFilterOperation
-  | PipelineBlurOperation
+  | BlurOperation
   | FlipOperation
   | GaussianBlurOperation
   | InvertOperation
@@ -36,4 +37,5 @@ export type PipelineOperations =
   | DilateOperation
   | ErodeOperation
   | OpenOperation
-  | MaskOperation;
+  | MaskOperation
+  | ResizeOperation;

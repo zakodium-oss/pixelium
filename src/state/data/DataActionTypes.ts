@@ -24,6 +24,7 @@ export {
   SET_CLOSE,
   REMOVE_OPERATION,
   TOGGLE_OPERATION,
+  SET_RESIZE,
 } from './actions/pipeline/PipelineActions';
 
 export const SET_ROI = 'SET_ROI';

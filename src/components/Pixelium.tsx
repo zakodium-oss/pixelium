@@ -33,6 +33,7 @@ import { ViewProvider } from './context/ViewContext';
 import ModalContainer from './modal/ModalContainer';
 import ExportTool from './tools/ExportTool';
 import GreyTool from './tools/FilterTool';
+import GeometryTool from './tools/GeometryTool';
 import ImportTool from './tools/ImportTool';
 import MaskTool from './tools/MaskTool';
 import MorphologyTool from './tools/MorphologyTool';
@@ -100,6 +101,7 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                               <GreyTool />
                               <MaskTool />
                               <MorphologyTool />
+                              <GeometryTool />
                               <ROITool />
                               <ModalContainer />
                             </Toolbar>

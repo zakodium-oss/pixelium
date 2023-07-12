@@ -79,6 +79,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.setOpen(draft, action.payload);
     case Type.SET_CLOSE:
       return PipelineActions.setClose(draft, action.payload);
+    case Type.SET_RESIZE:
+      return PipelineActions.setResize(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }
