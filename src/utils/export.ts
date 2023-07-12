@@ -2,7 +2,6 @@ import { v4 as uuid } from '@lukeed/uuid';
 import { FifoLogger } from 'fifo-logger';
 import { FileCollection } from 'file-collection';
 import { decode, encode, encodePng, Image as ImageJS, readImg } from 'image-js';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { DataState } from '../state/data/DataReducer';
 import { PreferencesState } from '../state/preferences/PreferencesReducer';
@@ -91,17 +90,16 @@ export interface Bundle {
 }
 
 export async function extractImagesFromData(data: DataState) {
-  const toReturn = cloneDeep(data);
   const referedImages: { [key: string]: ImageJS } = {};
   for (const key of Object.keys(data.images)) {
     const image = data.images[key].image;
     const randomRef = uuid();
-    toReturn.images[key].image = randomRef as unknown as ImageJS;
+    data.images[key].image = randomRef as unknown as ImageJS;
     referedImages[randomRef] = image;
   }
 
   return {
-    data: toReturn,
+    data,
     references: referedImages,
   };
 }
@@ -113,12 +111,22 @@ export async function savePixeliumBundle({
   view,
 }: Bundle) {
   const fileCollection = new FileCollection();
-
   if (data !== null) {
-    const { data: extractedData, references } = await extractImagesFromData(
-      data,
-    );
-    await fileCollection.set('data.json', extractedData);
+    const references = {};
+    fileCollection.removeFile('data.json');
+    const string = JSON.stringify(data, (key, value) => {
+      if (ArrayBuffer.isView(value)) {
+        return Array.from(value as any);
+      }
+      if (value instanceof ImageJS) {
+        const image = value;
+        const ref = uuid();
+        references[ref] = image;
+        return ref;
+      }
+      return value;
+    });
+    await fileCollection.appendText('data.json', string);
 
     for (const key of Object.keys(references)) {
       await fileCollection.set(`refs/${key}`, encode(references[key]));
