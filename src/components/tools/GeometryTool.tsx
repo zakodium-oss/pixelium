@@ -27,6 +27,11 @@ function GeometryTool() {
         data: 'resize',
         type: 'option',
       },
+      {
+        label: 'Rotate',
+        data: 'rotate',
+        type: 'option',
+      },
     ],
     [],
   );

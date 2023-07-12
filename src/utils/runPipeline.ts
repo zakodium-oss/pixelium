@@ -1,4 +1,4 @@
-import { Image, Mask } from 'image-js';
+import { Image, Mask, RotateAngle } from 'image-js';
 
 import { logger } from '../components/context/LogContext';
 import { PipelineOperations } from '../state/data/actions/pipeline/PipelineOperations';
@@ -195,6 +195,19 @@ export default function runPipeline(
               preserveAspectRatio: operation.options.preserveAspectRatio,
               borderType: operation.options.borderType,
             });
+            pipelineSteps.push({
+              identifier: operation.identifier,
+              result,
+            });
+          }
+          break;
+        }
+        case 'ROTATE': {
+          if (applyOn instanceof Image) {
+            const result = applyOn.rotate(
+              (operation.options.angle *
+                (operation.options.clockwise ? 1 : -1)) as RotateAngle,
+            );
             pipelineSteps.push({
               identifier: operation.identifier,
               result,

@@ -13,6 +13,7 @@ import LevelModal from './filters/LevelModal';
 import MedianFilterModal from './filters/MedianFilterModal';
 import PixelateModal from './filters/PixelateModal';
 import ResizeModal from './geometry/ResizeModal';
+import RotateModal from './geometry/RotateModal';
 import ExploreMaskModal from './mask/ExploreMaskModal';
 import CloseModal from './morphology/CloseModal';
 import DilateModal from './morphology/DilateModal';
@@ -57,6 +58,9 @@ function ModalContainer() {
       {view.modals.export && <ExportModal />}
       {view.modals.resize && (
         <ResizeModal previewImageIdentifier={currentTab} />
+      )}
+      {view.modals.rotate && (
+        <RotateModal previewImageIdentifier={currentTab} />
       )}
     </>
   );

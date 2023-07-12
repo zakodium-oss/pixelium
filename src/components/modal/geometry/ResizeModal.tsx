@@ -9,11 +9,11 @@ import useModal from '../../../hooks/useModal';
 import { SET_RESIZE } from '../../../state/data/actions/pipeline/geometry/resize';
 import PreviewModal from '../PreviewModal';
 
-interface BlurModalProps {
+interface ResizeModalProps {
   previewImageIdentifier: string;
 }
 
-function ResizeModal({ previewImageIdentifier }: BlurModalProps) {
+function ResizeModal({ previewImageIdentifier }: ResizeModalProps) {
   const { defaultOptions, editing, opIdentifier } =
     useDefaultOptions<ResizeOptions>({
       width: 0,

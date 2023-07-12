@@ -7,6 +7,7 @@ import type { PipelineSetLevelAction } from './filter/level';
 import type { PipelineSetMedianFilterAction } from './filter/medianFilter';
 import type { PipelineSetPixelateAction } from './filter/pixelate';
 import { PipelineSetResizeAction } from './geometry/resize';
+import { PipelineSetRotateAction } from './geometry/rotate';
 import type { PipelineSetMaskAction } from './mask';
 import type {
   TogglePipelineOperationAction,
@@ -33,6 +34,7 @@ export { setClose, SET_CLOSE } from './morphology/close';
 export { toggleOperation, TOGGLE_OPERATION } from './meta';
 export { removeOperation, REMOVE_OPERATION } from './meta';
 export { setResize, SET_RESIZE } from './geometry/resize';
+export { setRotate, SET_ROTATE } from './geometry/rotate';
 
 export type PipelineActionsTypes =
   | PipelineSetGreyFilterAction
@@ -50,4 +52,5 @@ export type PipelineActionsTypes =
   | PipelineSetCloseAction
   | TogglePipelineOperationAction
   | RemovePipelineOperationAction
-  | PipelineSetResizeAction;
+  | PipelineSetResizeAction
+  | PipelineSetRotateAction;

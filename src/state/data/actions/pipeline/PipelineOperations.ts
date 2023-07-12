@@ -7,6 +7,7 @@ import type { LevelOperation } from './filter/level';
 import type { MedianFilterOperation } from './filter/medianFilter';
 import type { PixelateOperation } from './filter/pixelate';
 import type { ResizeOperation } from './geometry/resize';
+import { RotateOperation } from './geometry/rotate';
 import type { MaskOperation } from './mask';
 import type { CloseOperation } from './morphology/close';
 import type { DilateOperation } from './morphology/dilate';
@@ -38,4 +39,5 @@ export type PipelineOperations =
   | ErodeOperation
   | OpenOperation
   | MaskOperation
-  | ResizeOperation;
+  | ResizeOperation
+  | RotateOperation;
