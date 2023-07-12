@@ -1,7 +1,6 @@
 import type { PipelineBlurOperation } from './filter/blur';
 import type { FlipOperation } from './filter/flip';
 import type { GaussianBlurOperation } from './filter/gaussianBlur';
-import type { GradientFilterOperation } from './filter/gradientFilter';
 import type { GreyFilterOperation } from './filter/greyFilter';
 import type { InvertOperation } from './filter/invert';
 import type { LevelOperation } from './filter/level';
@@ -37,5 +36,4 @@ export type PipelineOperations =
   | DilateOperation
   | ErodeOperation
   | OpenOperation
-  | MaskOperation
-  | GradientFilterOperation;
+  | MaskOperation;

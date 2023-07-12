@@ -8,7 +8,6 @@ import BlurModal from './filters/BlurModal';
 import ExploreGreyModal from './filters/ExploreGreyModal';
 import FlipModal from './filters/FlipModal';
 import GaussianBlurModal from './filters/GaussianBlurModal';
-import GradientFilterModal from './filters/GradientFilterModal';
 import InvertModal from './filters/InvertModal';
 import LevelModal from './filters/LevelModal';
 import MedianFilterModal from './filters/MedianFilterModal';
@@ -54,9 +53,6 @@ function ModalContainer() {
       {view.modals.erode && <ErodeModal previewImageIdentifier={currentTab} />}
       {view.modals.open && <OpenModal previewImageIdentifier={currentTab} />}
       {view.modals.close && <CloseModal previewImageIdentifier={currentTab} />}
-      {view.modals.gradient && (
-        <GradientFilterModal previewImageIdentifier={currentTab} />
-      )}
       {view.modals.export && <ExportModal />}
     </>
   );

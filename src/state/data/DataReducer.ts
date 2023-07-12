@@ -79,8 +79,6 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.setOpen(draft, action.payload);
     case Type.SET_CLOSE:
       return PipelineActions.setClose(draft, action.payload);
-    case Type.SET_GRADIENT_FILTER:
-      return PipelineActions.setGradientFilter(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }

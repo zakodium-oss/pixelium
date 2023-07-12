@@ -24,7 +24,6 @@ export {
   SET_CLOSE,
   REMOVE_OPERATION,
   TOGGLE_OPERATION,
-  SET_GRADIENT_FILTER,
 } from './actions/pipeline/PipelineActions';
 
 export const SET_ROI = 'SET_ROI';

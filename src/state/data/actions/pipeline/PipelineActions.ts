@@ -1,7 +1,6 @@
 import type { PipelineSetBlurAction } from './filter/blur';
 import type { PipelineSetFlipAction } from './filter/flip';
 import type { PipelineSetGaussianBlurAction } from './filter/gaussianBlur';
-import type { PipelineSetGradientFilterAction } from './filter/gradientFilter';
 import type { PipelineSetGreyFilterAction } from './filter/greyFilter';
 import type { PipelineSetInvertAction } from './filter/invert';
 import type { PipelineSetLevelAction } from './filter/level';
@@ -32,10 +31,6 @@ export { setOpen, SET_OPEN } from './morphology/open';
 export { setClose, SET_CLOSE } from './morphology/close';
 export { toggleOperation, TOGGLE_OPERATION } from './meta';
 export { removeOperation, REMOVE_OPERATION } from './meta';
-export {
-  setGradientFilter,
-  SET_GRADIENT_FILTER,
-} from './filter/gradientFilter';
 
 export type PipelineActionsTypes =
   | PipelineSetGreyFilterAction
@@ -52,5 +47,4 @@ export type PipelineActionsTypes =
   | PipelineSetOpenAction
   | PipelineSetCloseAction
   | TogglePipelineOperationAction
-  | RemovePipelineOperationAction
-  | PipelineSetGradientFilterAction;
+  | RemovePipelineOperationAction;
