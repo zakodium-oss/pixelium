@@ -1,6 +1,6 @@
-import { GaussianBlurXYOptions, Image } from 'image-js';
+import { BorderType, GaussianBlurXYOptions, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Field, Input } from 'react-science/ui';
+import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../hooks/useDefaultOptions';
@@ -20,6 +20,7 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
       sigmaY: 1,
       sizeX: 1,
       sizeY: 1,
+      borderType: 'reflect',
     });
 
   const { pipelined } = useImage(opIdentifier);
@@ -59,6 +60,16 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
     gaussianBlurOptions,
     close,
   ]);
+
+  const borderTypeOptions = useMemo(
+    () => [
+      Object.keys(BorderType).map((borderType) => ({
+        label: BorderType[borderType],
+        value: BorderType[borderType],
+      })),
+    ],
+    [],
+  );
 
   return (
     <PreviewModal
@@ -123,6 +134,18 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
             setGaussianBlurOptions({
               ...gaussianBlurOptions,
               sizeY: e.target.valueAsNumber,
+            });
+          }}
+        />
+      </Field>
+      <Field name="borderType" label="Border type">
+        <Select
+          value={gaussianBlurOptions.borderType}
+          options={borderTypeOptions}
+          onSelect={(value) => {
+            setGaussianBlurOptions({
+              ...gaussianBlurOptions,
+              borderType: value as BorderType,
             });
           }}
         />
