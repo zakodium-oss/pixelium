@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { Roi } from 'image-js';
 import startCase from 'lodash/startCase';
 import { memo, useCallback, useState } from 'react';
@@ -10,11 +9,6 @@ import useROIs from '../../hooks/useROIs';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import { availableRoiColumns } from '../../state/preferences/PreferencesReducer';
 import { SET_EDIT_ROI_PREFERENCE } from '../../state/view/ViewActionTypes';
-
-const RightAligned = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
-`;
 
 interface ROIToolbarProps {
   identifier: string;
@@ -69,30 +63,28 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
   }, [viewDispatch]);
 
   return (
-    <RightAligned>
-      <Toolbar orientation="horizontal">
-        {rois.length > 0 && (
-          <Toolbar.Item
-            title={copyToClipBoardText}
-            titleOrientation="horizontal"
-            onClick={handleCopyToClipboard}
-          >
-            <FaCopy />
-          </Toolbar.Item>
-        )}
-        <div style={{ flex: 1 }} />
-        <div
-          style={{ display: 'flex', alignItems: 'center' }}
-        >{`[${rois.length}]`}</div>
+    <Toolbar orientation="horizontal">
+      {rois.length > 0 && (
         <Toolbar.Item
-          title="ROI preferences"
-          titleOrientation="auto"
-          onClick={handleEditROIPreference}
+          title={copyToClipBoardText}
+          titleOrientation="horizontal"
+          onClick={handleCopyToClipboard}
         >
-          <FaCog />
+          <FaCopy />
         </Toolbar.Item>
-      </Toolbar>
-    </RightAligned>
+      )}
+      <div style={{ flex: 1 }} />
+      <div
+        style={{ display: 'flex', alignItems: 'center' }}
+      >{`[${rois.length}]`}</div>
+      <Toolbar.Item
+        title="ROI preferences"
+        titleOrientation="auto"
+        onClick={handleEditROIPreference}
+      >
+        <FaCog />
+      </Toolbar.Item>
+    </Toolbar>
   );
 }
 
