@@ -44,10 +44,13 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
     ...defaultOptions,
   });
 
+  const [algoError, setAlgoError] = useState<string>();
   const erodedImage = useMemo(() => {
+    setAlgoError(undefined);
     try {
       return pipelined.erode(erodeOptions);
-    } catch {
+    } catch (error: any) {
+      setAlgoError(error.message);
       return null;
     }
   }, [erodeOptions, pipelined]);
@@ -77,6 +80,7 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
       original={pipelined}
       preview={erodedImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="iterations" label="Iterations">
         <Input

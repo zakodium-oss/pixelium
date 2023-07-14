@@ -38,11 +38,14 @@ function ResizeModal({ previewImageIdentifier }: ResizeModalProps) {
     }));
   }, [pipelined]);
 
+  const [algoError, setAlgoError] = useState<string>();
   const resizedImage = useMemo(() => {
+    setAlgoError(undefined);
     if (pipelined instanceof Image) {
       try {
         return pipelined.resize(resizeOptions);
-      } catch {
+      } catch (error: any) {
+        setAlgoError(error.message);
         return null;
       }
     }
@@ -101,6 +104,7 @@ function ResizeModal({ previewImageIdentifier }: ResizeModalProps) {
       original={pipelined}
       preview={resizedImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="preserveAspectRatio" label="Preserve aspect ratio">
         <Checkbox

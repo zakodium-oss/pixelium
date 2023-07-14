@@ -30,6 +30,7 @@ interface PreviewModalProps {
   original: Image | Mask;
   preview: Image | Mask | null;
   editing: boolean;
+  algoError?: string | undefined;
 }
 
 const ImageViewerContainer = styled.div`
@@ -66,6 +67,7 @@ function PreviewModal({
   original,
   preview,
   editing,
+  algoError = undefined,
 }: PreviewModalProps) {
   const viewDispatch = useViewDispatch();
 
@@ -98,7 +100,10 @@ function PreviewModal({
             </div>
             <ImageViewerContainer>
               {preview === null ? (
-                <AlgorithmError>Error running algorithm</AlgorithmError>
+                <AlgorithmError>
+                  Error running algorithm
+                  {algoError ? `: ${algoError}` : algoError}
+                </AlgorithmError>
               ) : (
                 <ImageViewer identifier={viewIdentifier} image={preview} />
               )}

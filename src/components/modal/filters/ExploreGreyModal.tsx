@@ -21,11 +21,19 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
 
   const [greyOptions, setGreyOptions] = useState<GreyOptions>(defaultOptions);
 
-  const greyImage = useMemo(
-    () =>
-      pipelined instanceof Image ? pipelined.grey(greyOptions) : pipelined,
-    [pipelined, greyOptions],
-  );
+  const [algoError, setAlgoError] = useState<string>();
+  const greyImage = useMemo(() => {
+    setAlgoError(undefined);
+    if (pipelined instanceof Image) {
+      try {
+        return pipelined.grey(greyOptions);
+      } catch (error: any) {
+        setAlgoError(error.message);
+        return null;
+      }
+    }
+    return null;
+  }, [pipelined, greyOptions]);
 
   const dataDispatch = useDataDispatch();
   const { isOpen, close } = useModal('grey');
@@ -52,6 +60,7 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
       original={pipelined}
       preview={greyImage}
       editing={editing}
+      algoError={algoError}
     >
       <FastSelector
         options={Object.values(GreyAlgorithm)}

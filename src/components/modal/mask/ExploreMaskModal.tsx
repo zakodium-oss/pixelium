@@ -24,14 +24,17 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
   const [maskOptions, setMaskOptions] =
     useState<ThresholdOptionsAlgorithm>(defaultOptions);
 
+  const [algoError, setAlgoError] = useState<string>();
   const maskImage = useMemo(() => {
+    setAlgoError(undefined);
     if (pipelined instanceof Mask) {
       return pipelined;
     }
 
     try {
       return pipelined.threshold(maskOptions);
-    } catch {
+    } catch (error: any) {
+      setAlgoError(error.message);
       return null;
     }
   }, [pipelined, maskOptions]);
@@ -61,6 +64,7 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
       original={pipelined}
       preview={maskImage}
       editing={editing}
+      algoError={algoError}
     >
       <FastSelector
         options={Object.values(ThresholdAlgorithm)}

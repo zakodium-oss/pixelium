@@ -28,11 +28,14 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
   const [gaussianBlurOptions, setGaussianBlurOptions] =
     useState<GaussianBlurXYOptions>(defaultOptions);
 
+  const [algoError, setAlgoError] = useState<string>();
   const blurredImage = useMemo(() => {
+    setAlgoError(undefined);
     if (pipelined instanceof Image) {
       try {
         return pipelined.gaussianBlur(gaussianBlurOptions);
-      } catch {
+      } catch (error: any) {
+        setAlgoError(error.message);
         return null;
       }
     }
@@ -81,6 +84,7 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
       original={pipelined}
       preview={blurredImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="sigmaX" label="Sigma X">
         <Input

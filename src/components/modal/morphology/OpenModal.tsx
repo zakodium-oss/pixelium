@@ -44,10 +44,13 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
     ...defaultOptions,
   });
 
+  const [algoError, setAlgoError] = useState<string>();
   const openedImage = useMemo(() => {
+    setAlgoError(undefined);
     try {
       return pipelined.open(openOptions);
-    } catch {
+    } catch (error: any) {
+      setAlgoError(error.message);
       return null;
     }
   }, [openOptions, pipelined]);
@@ -77,6 +80,7 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
       original={pipelined}
       preview={openedImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="iterations" label="Iterations">
         <Input

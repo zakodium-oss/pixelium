@@ -41,10 +41,19 @@ function LevelModal({ previewImageIdentifier }: LevelModalProps) {
 
   const [options, setOptions] = useState<LocalLevelOptions>(defaultOptions);
 
-  const leveledImage = useMemo(
-    () => (pipelined instanceof Image ? pipelined.level(options) : pipelined),
-    [options, pipelined],
-  );
+  const [algoError, setAlgoError] = useState<string>();
+  const leveledImage = useMemo(() => {
+    setAlgoError(undefined);
+    if (pipelined instanceof Image) {
+      try {
+        return pipelined.level(options);
+      } catch (error: any) {
+        setAlgoError(error.message);
+        return null;
+      }
+    }
+    return null;
+  }, [options, pipelined]);
 
   const dataDispatch = useDataDispatch();
   const { isOpen, close } = useModal('level');
@@ -71,6 +80,7 @@ function LevelModal({ previewImageIdentifier }: LevelModalProps) {
       original={pipelined}
       preview={leveledImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="level" label="Level">
         {times(pipelined.components, (i) => (

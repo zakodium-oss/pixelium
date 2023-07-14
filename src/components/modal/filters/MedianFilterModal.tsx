@@ -26,16 +26,19 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
   const [medianFilterOptions, setMedianFilterOptions] =
     useState<MedianFilterOptions>(defaultOptions);
 
+  const [algoError, setAlgoError] = useState<string>();
   const filteredImage = useMemo(() => {
-    if (medianFilterOptions.cellSize % 2 !== 1) {
-      return pipelined;
-    }
-
+    setAlgoError(undefined);
     if (pipelined instanceof Image) {
-      return pipelined.medianFilter(medianFilterOptions);
+      try {
+        return pipelined.medianFilter(medianFilterOptions);
+      } catch (error: any) {
+        setAlgoError(error.message);
+        return null;
+      }
     }
 
-    return pipelined;
+    return null;
   }, [medianFilterOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();
@@ -79,6 +82,7 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
       original={pipelined}
       preview={filteredImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="cellSize" label="Cell size">
         <Input

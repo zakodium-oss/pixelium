@@ -26,7 +26,9 @@ function RotateModal({ previewImageIdentifier }: RotateModalProps) {
   const [rotateOptions, setRotateOptions] =
     useState<RotateOptions>(defaultOptions);
 
+  const [algoError, setAlgoError] = useState<string>();
   const resizedImage = useMemo(() => {
+    setAlgoError(undefined);
     if (pipelined instanceof Image) {
       try {
         if (rotateOptions.angle === 0) return pipelined;
@@ -34,7 +36,8 @@ function RotateModal({ previewImageIdentifier }: RotateModalProps) {
           (rotateOptions.angle *
             (rotateOptions.clockwise ? 1 : -1)) as RotateAngle,
         );
-      } catch {
+      } catch (error: any) {
+        setAlgoError(error.message);
         return null;
       }
     }
@@ -82,6 +85,7 @@ function RotateModal({ previewImageIdentifier }: RotateModalProps) {
       original={pipelined}
       preview={resizedImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="clockwise" label="Clockwise">
         <Checkbox
@@ -102,7 +106,7 @@ function RotateModal({ previewImageIdentifier }: RotateModalProps) {
             if (value === undefined) return;
             setRotateOptions({
               ...rotateOptions,
-              angle: Number.parseInt(value) as RotateAngle | 0,
+              angle: Number.parseInt(value, 10) as RotateAngle | 0,
             });
           }}
         />

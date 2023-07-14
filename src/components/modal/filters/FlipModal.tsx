@@ -33,10 +33,19 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
     [],
   );
 
-  const flippedImage = useMemo(
-    () => (pipelined instanceof Image ? pipelined.flip(options) : pipelined),
-    [options, pipelined],
-  );
+  const [algoError, setAlgoError] = useState<string>();
+  const flippedImage = useMemo(() => {
+    setAlgoError(undefined);
+    if (pipelined instanceof Image) {
+      try {
+        return pipelined.flip(options);
+      } catch (error: any) {
+        setAlgoError(error.message);
+        return null;
+      }
+    }
+    return null;
+  }, [options, pipelined]);
 
   const dataDispatch = useDataDispatch();
   const { isOpen, close } = useModal('flip');
@@ -63,6 +72,7 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
       original={pipelined}
       preview={flippedImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="axis" label="Axis">
         <Select

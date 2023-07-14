@@ -34,11 +34,14 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
     [],
   );
 
+  const [algoError, setAlgoError] = useState<string>();
   const pixelatedImage = useMemo(() => {
+    setAlgoError(undefined);
     if (pipelined instanceof Image) {
       try {
         return pipelined.pixelate(options);
-      } catch {
+      } catch (error: any) {
+        setAlgoError(error.message);
         return null;
       }
     }
@@ -71,6 +74,7 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
       original={pipelined}
       preview={pixelatedImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="cellSize" label="Cell size">
         <Input

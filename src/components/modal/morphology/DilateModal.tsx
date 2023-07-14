@@ -44,10 +44,13 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
     ...defaultOptions,
   });
 
+  const [algoError, setAlgoError] = useState<string>();
   const dilatedImage = useMemo(() => {
+    setAlgoError(undefined);
     try {
       return pipelined.dilate(dilateOptions);
-    } catch {
+    } catch (error: any) {
+      setAlgoError(error.message);
       return null;
     }
   }, [dilateOptions, pipelined]);
@@ -83,6 +86,7 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
       original={pipelined}
       preview={dilatedImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="iterations" label="Iterations">
         <Input

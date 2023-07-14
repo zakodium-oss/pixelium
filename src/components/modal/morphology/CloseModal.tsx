@@ -44,10 +44,13 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
     ...defaultOptions,
   });
 
+  const [algoError, setAlgoError] = useState<string>();
   const closedImage = useMemo(() => {
+    setAlgoError(undefined);
     try {
       return pipelined.close(closeOptions);
-    } catch {
+    } catch (error: any) {
+      setAlgoError(error.message);
       return null;
     }
   }, [closeOptions, pipelined]);
@@ -77,6 +80,7 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
       original={pipelined}
       preview={closedImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="iterations" label="Iterations">
         <Input

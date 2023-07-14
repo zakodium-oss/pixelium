@@ -26,11 +26,14 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
 
   const [blurOptions, setBlurOptions] = useState<BlurOptions>(defaultOptions);
 
+  const [algoError, setAlgoError] = useState<string>();
   const blurredImage = useMemo(() => {
+    setAlgoError(undefined);
     if (pipelined instanceof Image) {
       try {
         return pipelined.blur(blurOptions);
-      } catch {
+      } catch (error: any) {
+        setAlgoError(error.message);
         return null;
       }
     }
@@ -73,6 +76,7 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
       original={pipelined}
       preview={blurredImage}
       editing={editing}
+      algoError={algoError}
     >
       <Field name="kernelWidth" label="Kernel width">
         <Input
