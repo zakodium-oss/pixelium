@@ -2,8 +2,7 @@ import styled from '@emotion/styled';
 import { Roi } from 'image-js';
 import startCase from 'lodash/startCase';
 import { memo, useCallback, useState } from 'react';
-import { FaCopy } from 'react-icons/fa';
-import { FaTableColumns } from 'react-icons/fa6';
+import { FaCog, FaCopy } from 'react-icons/fa';
 import { Toolbar } from 'react-science/ui';
 import { useCopyToClipboard } from 'react-use';
 
@@ -72,13 +71,6 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
   return (
     <RightAligned>
       <Toolbar orientation="horizontal">
-        <Toolbar.Item
-          title="ROI preferences"
-          titleOrientation="horizontal"
-          onClick={handleEditROIPreference}
-        >
-          <FaTableColumns />
-        </Toolbar.Item>
         {rois.length > 0 && (
           <Toolbar.Item
             title={copyToClipBoardText}
@@ -88,6 +80,17 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
             <FaCopy />
           </Toolbar.Item>
         )}
+        <div style={{ flex: 1 }} />
+        <div
+          style={{ display: 'flex', alignItems: 'center' }}
+        >{`[${rois.length}]`}</div>
+        <Toolbar.Item
+          title="ROI preferences"
+          titleOrientation="auto"
+          onClick={handleEditROIPreference}
+        >
+          <FaCog />
+        </Toolbar.Item>
       </Toolbar>
     </RightAligned>
   );

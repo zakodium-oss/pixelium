@@ -13,7 +13,7 @@ import {
 } from '../../state/preferences/PreferencesReducer';
 import { SET_EDIT_ROI_PREFERENCE } from '../../state/view/ViewActionTypes';
 
-function ROIEditColumnPreference() {
+function ROIEditPreference() {
   const preferences = usePreferences();
   const viewDispatch = useViewDispatch();
   const preferencesDispatch = usePreferencesDispatch();
@@ -104,4 +104,4 @@ function ROIEditColumnPreference() {
   );
 }
 
-export default memo(ROIEditColumnPreference);
+export default memo(ROIEditPreference);

@@ -4,7 +4,7 @@ import { Accordion } from 'react-science/ui';
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useView from '../../hooks/useView';
 
-import ROIEditColumnPreference from './ROIEditColumnPreference';
+import ROIEditColumnPreference from './ROIEditPreference';
 import ROITable from './ROITable';
 import ROIToolbar from './ROIToolbar';
 
