@@ -173,6 +173,7 @@ function ROIEditPreference() {
                   }
                 />
                 <ColorPickerDropdown
+                  disableAlpha
                   color={{ hex: annotationsPreferences[key].color }}
                   onChange={(color) =>
                     setAnnotationsPreferences({
