@@ -2,21 +2,18 @@ import { Draft } from 'immer';
 
 import {
   PreferenceActionType,
-  SET_ROIS_PREFERENCES,
+  SET_ROIS_COLUMNS,
 } from '../PreferenceActionTypes';
-import { PreferencesState } from '../PreferencesReducer';
+import { PreferencesState, RoiColumn } from '../PreferencesReducer';
 
-export type SetROIsPreferencesAction = PreferenceActionType<
-  typeof SET_ROIS_PREFERENCES,
-  {
-    identifier: string;
-    preferences: PreferencesState['roisPreferences'][string];
-  }
+export type SetROIsColumnsAction = PreferenceActionType<
+  typeof SET_ROIS_COLUMNS,
+  RoiColumn[]
 >;
 
-export function setROIsPreferences(
+export function setROIsColumns(
   draft: Draft<PreferencesState>,
-  { identifier, preferences }: SetROIsPreferencesAction['payload'],
+  columns: SetROIsColumnsAction['payload'],
 ) {
-  draft.roisPreferences[identifier] = preferences;
+  draft.rois.columns = columns;
 }

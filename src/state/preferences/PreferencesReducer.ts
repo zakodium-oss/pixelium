@@ -5,7 +5,7 @@ import * as Type from './PreferenceActionTypes';
 import * as InitActions from './actions/InitActions';
 import type { InitializePreferenceAction } from './actions/InitActions';
 import * as RoiPreferenceActions from './actions/RoiPreferenceActions';
-import { SetROIsPreferencesAction } from './actions/RoiPreferenceActions';
+import { SetROIsColumnsAction } from './actions/RoiPreferenceActions';
 
 export const availableRoiColumns = [
   'id',
@@ -30,16 +30,18 @@ interface RoiPreferences {
 }
 
 export interface PreferencesState {
-  roisPreferences: Record<string, RoiPreferences>;
+  rois: RoiPreferences;
 }
 
 export const initialPreferencesState: PreferencesState = {
-  roisPreferences: {},
+  rois: {
+    columns: [...availableRoiColumns],
+  },
 };
 
 export type PreferencesActions =
   | InitializePreferenceAction
-  | SetROIsPreferencesAction;
+  | SetROIsColumnsAction;
 
 function innerPreferencesReducer(
   draft: Draft<PreferencesState>,
@@ -48,8 +50,8 @@ function innerPreferencesReducer(
   switch (action.type) {
     case Type.INITIALIZE_PREFERENCES:
       return InitActions.initializePreferences(draft, action.payload);
-    case Type.SET_ROIS_PREFERENCES:
-      return RoiPreferenceActions.setROIsPreferences(draft, action.payload);
+    case Type.SET_ROIS_COLUMNS:
+      return RoiPreferenceActions.setROIsColumns(draft, action.payload);
     default:
       throw new Error('Unknown action type in preferences reducer.');
   }

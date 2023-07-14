@@ -6,10 +6,7 @@ import { Table, ValueRenderers } from 'react-science/ui';
 
 import usePreferences from '../../hooks/usePreferences';
 import useROIs from '../../hooks/useROIs';
-import {
-  availableRoiColumns,
-  RoiColumn,
-} from '../../state/preferences/PreferencesReducer';
+import { RoiColumn } from '../../state/preferences/PreferencesReducer';
 
 const Empty = styled.div`
   display: flex;
@@ -24,11 +21,12 @@ interface ROITableProps {
 
 function ROITable({ identifier }: ROITableProps) {
   const rois = useROIs(identifier);
-  const { roisPreferences } = usePreferences();
+  const preferences = usePreferences();
 
-  const shownColumns = useMemo(() => {
-    return roisPreferences[identifier]?.columns || availableRoiColumns;
-  }, [identifier, roisPreferences]);
+  const columns = useMemo(
+    () => preferences.rois.columns,
+    [preferences.rois.columns],
+  );
 
   const columnRenderer = useCallback((column: RoiColumn, roi: Roi) => {
     const {
@@ -84,13 +82,13 @@ function ROITable({ identifier }: ROITableProps) {
   return (
     <Table>
       <Table.Header>
-        {shownColumns.map((column) => (
+        {columns.map((column) => (
           <ValueRenderers.Title key={column} value={startCase(column)} />
         ))}
       </Table.Header>
       {rois.map((roi) => (
         <Table.Row key={roi.id}>
-          {shownColumns.map((column) => columnRenderer(column, roi))}
+          {columns.map((column) => columnRenderer(column, roi))}
         </Table.Row>
       ))}
     </Table>

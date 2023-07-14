@@ -22,7 +22,7 @@ function ROIAccordion() {
   return (
     <Accordion.Item title="ROIs">
       {isEditing ? (
-        <ROIEditColumnPreference identifier={currentTab} />
+        <ROIEditColumnPreference />
       ) : (
         <>
           <ROIToolbar identifier={currentTab} />
