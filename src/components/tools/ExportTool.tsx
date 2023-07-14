@@ -1,4 +1,4 @@
-import { ImageColorModel } from 'image-js';
+import { Image, ImageColorModel } from 'image-js';
 import { memo, useCallback, useMemo } from 'react';
 import { FaFileExport } from 'react-icons/fa';
 import {
@@ -53,7 +53,10 @@ function ExportTool() {
       width: pipelined.width,
       height: pipelined.height,
     });
-    const recolored = pipelined.convertColor(ImageColorModel.RGBA);
+    const recolored =
+      pipelined.colorModel === ImageColorModel.RGBA
+        ? (pipelined as Image)
+        : pipelined.convertColor(ImageColorModel.RGBA);
     const toSave =
       annotations === null ? recolored : annotations.copyTo(recolored);
     return toSave;
