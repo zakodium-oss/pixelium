@@ -72,7 +72,7 @@
     "react-kbs": "^2.1.1",
     "react-map-interaction": "^2.1.0",
     "react-plot": "^1.4.2",
-    "react-science": "^0.24.2",
+    "react-science": "^0.24.3",
     "react-use": "^17.4.0"
   },
   "volta": {
