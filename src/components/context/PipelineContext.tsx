@@ -2,6 +2,7 @@ import { Image, Mask } from 'image-js';
 import { createContext, ReactNode, useCallback, useMemo } from 'react';
 
 import useData from '../../hooks/useData';
+import useLog from '../../hooks/useLog';
 import { EMPTY_IMAGE } from '../../utils/defaults';
 import runPipeline from '../../utils/runPipeline';
 
@@ -36,10 +37,16 @@ export function PipelineProvider({
     [identifier, images],
   );
 
-  const pipelineSteps = useMemo(
-    () => runPipeline(dataFile.pipeline, dataFile.image),
-    [dataFile.image, dataFile.pipeline],
-  );
+  const { logger } = useLog();
+
+  const pipelineSteps = useMemo(() => {
+    const { pipelineSteps, pipelineError } = runPipeline(
+      dataFile.pipeline,
+      dataFile.image,
+    );
+    if (pipelineError !== undefined) logger.error(pipelineError);
+    return pipelineSteps;
+  }, [dataFile.image, dataFile.pipeline, logger]);
 
   const pipelined = useCallback(
     (toOperation?: string) => {

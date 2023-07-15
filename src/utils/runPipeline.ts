@@ -1,6 +1,5 @@
 import { Image, Mask, RotateAngle } from 'image-js';
 
-import { logger } from '../components/context/LogContext';
 import { PipelineOperations } from '../state/data/actions/pipeline/PipelineOperations';
 
 interface PipelineStep {
@@ -13,6 +12,7 @@ export default function runPipeline(
   baseImage: Image,
 ) {
   const pipelineSteps: PipelineStep[] = [];
+  let pipelineError: string | undefined;
   for (const [index, operation] of pipeline.entries()) {
     if (!operation.isActive) {
       break;
@@ -219,10 +219,10 @@ export default function runPipeline(
           throw new Error(`Unknown operation type ${(operation as any).type}`);
       }
     } catch (error: any) {
-      logger.error(error.message);
+      pipelineError = error.message;
       break;
     }
   }
 
-  return pipelineSteps;
+  return { pipelineSteps, pipelineError };
 }
