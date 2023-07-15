@@ -43,35 +43,52 @@ function ROITable({ identifier }: ROITableProps) {
     } = roi;
     switch (column) {
       case 'id':
-        return <ValueRenderers.Number value={id} />;
+        return <ValueRenderers.Number key={column} value={id} />;
       case 'column':
-        return <ValueRenderers.Number value={x} />;
+        return <ValueRenderers.Number key={column} value={x} />;
       case 'row':
-        return <ValueRenderers.Number value={y} />;
+        return <ValueRenderers.Number key={column} value={y} />;
       case 'width':
-        return <ValueRenderers.Number value={width} />;
+        return <ValueRenderers.Number key={column} value={width} />;
       case 'height':
-        return <ValueRenderers.Number value={height} />;
+        return <ValueRenderers.Number key={column} value={height} />;
       case 'surface':
-        return <ValueRenderers.Number value={surface} />;
+        return <ValueRenderers.Number key={column} value={surface} />;
       case 'feretAspectRatio':
-        return <ValueRenderers.Text value={feret.aspectRatio.toFixed(2)} />;
+        return (
+          <ValueRenderers.Text
+            key={column}
+            value={feret.aspectRatio.toFixed(2)}
+          />
+        );
       case 'feretMinDiameter':
         return (
-          <ValueRenderers.Text value={feret.minDiameter.length.toFixed(2)} />
+          <ValueRenderers.Text
+            key={column}
+            value={feret.minDiameter.length.toFixed(2)}
+          />
         );
       case 'feretMaxDiameter':
         return (
-          <ValueRenderers.Text value={feret.maxDiameter.length.toFixed(2)} />
+          <ValueRenderers.Text
+            key={column}
+            value={feret.maxDiameter.length.toFixed(2)}
+          />
         );
       case 'roundness':
-        return <ValueRenderers.Text value={roundness.toFixed(2)} />;
+        return (
+          <ValueRenderers.Text key={column} value={roundness.toFixed(2)} />
+        );
       case 'solidity':
-        return <ValueRenderers.Text value={solidity.toFixed(2)} />;
+        return <ValueRenderers.Text key={column} value={solidity.toFixed(2)} />;
       case 'sphericity':
-        return <ValueRenderers.Text value={sphericity.toFixed(2)} />;
+        return (
+          <ValueRenderers.Text key={column} value={sphericity.toFixed(2)} />
+        );
       case 'fillRatio':
-        return <ValueRenderers.Text value={fillRatio.toFixed(2)} />;
+        return (
+          <ValueRenderers.Text key={column} value={fillRatio.toFixed(2)} />
+        );
       default:
         throw new Error(`Unknown column`);
     }
