@@ -50,7 +50,7 @@ const AnnotationGroup = styled.div`
   flex-direction: row;
   margin-bottom: 0.5rem;
 
-  & > :first-child {
+  & > :first-of-type {
     white-space: nowrap;
   }
 `;
