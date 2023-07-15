@@ -119,14 +119,14 @@ function ROIEditPreference() {
           titleOrientation="horizontal"
           onClick={handleSave}
         >
-          <FaCheck />
+          <FaCheck color="green" />
         </Toolbar.Item>
         <Toolbar.Item
           title="Cancel"
           titleOrientation="horizontal"
           onClick={handleCancel}
         >
-          <FaTimes />
+          <FaTimes color="red" />
         </Toolbar.Item>
       </Toolbar>
       <PaddedContent>
