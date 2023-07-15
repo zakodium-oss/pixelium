@@ -63,7 +63,8 @@ export type ModalName =
   | 'open'
   | 'close'
   | 'resize'
-  | 'rotate';
+  | 'rotate'
+  | 'extractROI';
 
 export interface ViewState {
   currentTab?: string;
@@ -104,6 +105,7 @@ export const initialViewState: ViewState = {
     close: false,
     resize: false,
     rotate: false,
+    extractROI: false,
   },
   editMode: null,
   editROIPreference: false,

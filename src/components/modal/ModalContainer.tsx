@@ -4,6 +4,7 @@ import useCurrentTab from '../../hooks/useCurrentTab';
 import useView from '../../hooks/useView';
 
 import ExportModal from './ExportModal';
+import ExtractROIModal from './ExtractROIModal';
 import BlurModal from './filters/BlurModal';
 import ExploreGreyModal from './filters/ExploreGreyModal';
 import FlipModal from './filters/FlipModal';
@@ -62,6 +63,7 @@ function ModalContainer() {
       {view.modals.rotate && (
         <RotateModal previewImageIdentifier={currentTab} />
       )}
+      {view.modals.extractROI && <ExtractROIModal />}
     </>
   );
 }
