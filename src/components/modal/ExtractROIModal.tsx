@@ -2,7 +2,14 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { fromMask, GetRoisOptions, Image, RoiKind } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Button, Field, Input, Modal, Select } from 'react-science/ui';
+import {
+  Button,
+  Field,
+  Input,
+  Modal,
+  Select,
+  useToggleAccordion,
+} from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useDataDispatch from '../../hooks/useDataDispatch';
@@ -37,7 +44,7 @@ const FormContent = styled.div`
   gap: 10px;
 `;
 
-const defaultFormcontent = {
+const defaultFormContent = {
   minSurface: undefined,
   maxSurface: undefined,
   kind: undefined,
@@ -48,8 +55,9 @@ function ExtractROIModal() {
   const { pipelined } = useImage();
   const dataDispatch = useDataDispatch();
   const { isOpen, close } = useModal('extractROI');
+  const { open: openAccordion } = useToggleAccordion();
   const [formContent, setFormContent] =
-    useState<GetRoisOptions>(defaultFormcontent);
+    useState<GetRoisOptions>(defaultFormContent);
   const extract = useCallback(() => {
     if (pipelined instanceof Image) return;
     const roiMapManager = fromMask(pipelined);
@@ -60,9 +68,10 @@ function ExtractROIModal() {
         rois: roiMapManager.getRois(formContent),
       },
     });
-    setFormContent(defaultFormcontent);
+    setFormContent(defaultFormContent);
     close();
-  }, [close, currentTab, dataDispatch, formContent, pipelined]);
+    openAccordion('ROIs');
+  }, [close, currentTab, dataDispatch, formContent, openAccordion, pipelined]);
 
   const kindOptions = useMemo(
     () => [
