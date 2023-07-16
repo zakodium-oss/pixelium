@@ -56,18 +56,23 @@ interface PixeliumProps {
   webSource?: WebSource;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
   // Refs
   const rootRef = useRef<HTMLDivElement>(null);
 
   // Populate contexts
-  const [dataState, dispatchData] = useReducer(dataReducer, initialDataState);
+  const [dataState, dispatchData] = useReducer(
+    dataReducer,
+    data ?? initialDataState,
+  );
   const [preferencesState, dispatchPreferences] = useReducer(
     preferencesReducer,
-    initialPreferencesState,
+    preferences ?? initialPreferencesState,
   );
-  const [viewState, dispatchView] = useReducer(viewReducer, initialViewState);
+  const [viewState, dispatchView] = useReducer(
+    viewReducer,
+    view ?? initialViewState,
+  );
 
   const dispatchers = useMemo(() => {
     return {
