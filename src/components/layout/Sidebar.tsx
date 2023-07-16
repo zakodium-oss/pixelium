@@ -1,14 +1,13 @@
 import { memo } from 'react';
 import { ValueRenderers, Accordion, Table } from 'react-science/ui';
 
-import useCurrentTab from '../hooks/useCurrentTab';
-import useImage from '../hooks/useImage';
-import useImageInformations from '../hooks/useImageInformations';
-
-import Histograms from './histogram/Histograms';
-import MetadataTable from './metadatas/MetadataTable';
-import PipelineTable from './pipeline/PipelineTable';
-import ROIAccordion from './rois/ROIAccordion';
+import useCurrentTab from '../../hooks/useCurrentTab';
+import useImage from '../../hooks/useImage';
+import useImageInformations from '../../hooks/useImageInformations';
+import Histograms from '../histogram/Histograms';
+import MetadataTable from '../metadatas/MetadataTable';
+import PipelineTable from '../pipeline/PipelineTable';
+import ROIAccordion from '../rois/ROIAccordion';
 
 function Sidebar() {
   const currentTab = useCurrentTab();

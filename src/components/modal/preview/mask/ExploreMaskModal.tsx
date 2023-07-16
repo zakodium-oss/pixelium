@@ -1,12 +1,12 @@
 import { Mask, ThresholdAlgorithm, ThresholdOptionsAlgorithm } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
 
-import useDataDispatch from '../../../hooks/useDataDispatch';
-import useDefaultOptions from '../../../hooks/useDefaultOptions';
-import useImage from '../../../hooks/useImage';
-import useModal from '../../../hooks/useModal';
-import { SET_MASK } from '../../../state/data/DataActionTypes';
-import FastSelector from '../../FastSelector';
+import useDataDispatch from '../../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../../hooks/useDefaultOptions';
+import useImage from '../../../../hooks/useImage';
+import useModal from '../../../../hooks/useModal';
+import { SET_MASK } from '../../../../state/data/DataActionTypes';
+import FastSelector from '../../../FastSelector';
 import PreviewModal from '../PreviewModal';
 
 interface ExportGreyModalProps {

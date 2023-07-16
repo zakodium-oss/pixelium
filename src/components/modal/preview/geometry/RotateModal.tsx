@@ -2,12 +2,12 @@ import { Image, RotateAngle } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Checkbox, Field, Select } from 'react-science/ui';
 
-import useDataDispatch from '../../../hooks/useDataDispatch';
-import useDefaultOptions from '../../../hooks/useDefaultOptions';
-import useImage from '../../../hooks/useImage';
-import useModal from '../../../hooks/useModal';
-import { SET_ROTATE } from '../../../state/data/DataActionTypes';
-import RotateOptions from '../../../types/RotateOptions';
+import useDataDispatch from '../../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../../hooks/useDefaultOptions';
+import useImage from '../../../../hooks/useImage';
+import useModal from '../../../../hooks/useModal';
+import { SET_ROTATE } from '../../../../state/data/DataActionTypes';
+import RotateOptions from '../../../../types/RotateOptions';
 import PreviewModal from '../PreviewModal';
 
 interface RotateModalProps {

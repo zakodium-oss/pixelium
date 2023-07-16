@@ -2,11 +2,11 @@ import { BorderType, Image, InterpolationType, ResizeOptions } from 'image-js';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { Checkbox, Field, Input, Select } from 'react-science/ui';
 
-import useDataDispatch from '../../../hooks/useDataDispatch';
-import useDefaultOptions from '../../../hooks/useDefaultOptions';
-import useImage from '../../../hooks/useImage';
-import useModal from '../../../hooks/useModal';
-import { SET_RESIZE } from '../../../state/data/actions/pipeline/geometry/resize';
+import useDataDispatch from '../../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../../hooks/useDefaultOptions';
+import useImage from '../../../../hooks/useImage';
+import useModal from '../../../../hooks/useModal';
+import { SET_RESIZE } from '../../../../state/data/actions/pipeline/geometry/resize';
 import PreviewModal from '../PreviewModal';
 
 interface ResizeModalProps {

@@ -1,12 +1,11 @@
 import React, { memo, useCallback, useEffect, useMemo } from 'react';
 import { DropZoneContainer, Tabs } from 'react-science/ui';
 
-import useCurrentTab from '../hooks/useCurrentTab';
-import useData from '../hooks/useData';
-import useFileLoader from '../hooks/useFileLoader';
-import useViewDispatch from '../hooks/useViewDispatch';
-
-import ImageViewer from './ImageViewer';
+import useCurrentTab from '../../hooks/useCurrentTab';
+import useData from '../../hooks/useData';
+import useFileLoader from '../../hooks/useFileLoader';
+import useViewDispatch from '../../hooks/useViewDispatch';
+import ImageViewer from '../ImageViewer';
 
 function CenterPanel() {
   const { images } = useData();

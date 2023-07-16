@@ -21,9 +21,6 @@ import {
 } from '../state/view/ViewReducer';
 
 import AutoLoader from './AutoLoader';
-import CenterPanel from './CenterPanel';
-import Header from './Header';
-import Sidebar from './Sidebar';
 import { AnnotationsProvider } from './context/AnnotationsContext';
 import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
@@ -32,6 +29,9 @@ import { LogProvider } from './context/LogContext';
 import { PipelineProvider } from './context/PipelineContext';
 import { PreferencesProvider } from './context/PreferencesContext';
 import { ViewProvider } from './context/ViewContext';
+import CenterPanel from './layout/CenterPanel';
+import Header from './layout/Header';
+import Sidebar from './layout/Sidebar';
 import ModalContainer from './modal/ModalContainer';
 import ExportTool from './tools/ExportTool';
 import GreyTool from './tools/FilterTool';

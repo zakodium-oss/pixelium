@@ -2,11 +2,11 @@ import { BlurOptions, BorderType, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Field, Input, Select } from 'react-science/ui';
 
-import useDataDispatch from '../../../hooks/useDataDispatch';
-import useDefaultOptions from '../../../hooks/useDefaultOptions';
-import useImage from '../../../hooks/useImage';
-import useModal from '../../../hooks/useModal';
-import { SET_BLUR } from '../../../state/data/DataActionTypes';
+import useDataDispatch from '../../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../../hooks/useDefaultOptions';
+import useImage from '../../../../hooks/useImage';
+import useModal from '../../../../hooks/useModal';
+import { SET_BLUR } from '../../../../state/data/DataActionTypes';
 import PreviewModal from '../PreviewModal';
 
 interface BlurModalProps {

@@ -4,13 +4,12 @@ import { Image, Mask } from 'image-js';
 import { memo, ReactNode, useCallback } from 'react';
 import { Button, Modal } from 'react-science/ui';
 
-import useViewDispatch from '../../hooks/useViewDispatch';
-import { SET_EDIT_MODE_IDENTIFIER } from '../../state/view/ViewActionTypes';
-import { buttons } from '../../utils/colors';
-import ImageViewer from '../ImageViewer';
-
-import StyledModalBody from './utils/StyledModalBody';
-import StyledModalHeader from './utils/StyledModalHeader';
+import useViewDispatch from '../../../hooks/useViewDispatch';
+import { SET_EDIT_MODE_IDENTIFIER } from '../../../state/view/ViewActionTypes';
+import { buttons } from '../../../utils/colors';
+import ImageViewer from '../../ImageViewer';
+import StyledModalBody from '../utils/StyledModalBody';
+import StyledModalHeader from '../utils/StyledModalHeader';
 
 const modalStyle = css`
   display: flex;

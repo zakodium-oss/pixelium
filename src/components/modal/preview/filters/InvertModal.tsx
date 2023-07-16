@@ -1,10 +1,10 @@
 import { memo, useCallback, useMemo } from 'react';
 
-import useDataDispatch from '../../../hooks/useDataDispatch';
-import useDefaultOptions from '../../../hooks/useDefaultOptions';
-import useImage from '../../../hooks/useImage';
-import useModal from '../../../hooks/useModal';
-import { SET_INVERT } from '../../../state/data/DataActionTypes';
+import useDataDispatch from '../../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../../hooks/useDefaultOptions';
+import useImage from '../../../../hooks/useImage';
+import useModal from '../../../../hooks/useModal';
+import { SET_INVERT } from '../../../../state/data/DataActionTypes';
 import PreviewModal from '../PreviewModal';
 
 interface InvertModalProps {

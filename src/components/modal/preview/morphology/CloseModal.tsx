@@ -1,19 +1,19 @@
 import styled from '@emotion/styled';
-import { OpenOptions } from 'image-js';
+import { CloseOptions } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Checkbox, Field, Input } from 'react-science/ui';
 
-import useDataDispatch from '../../../hooks/useDataDispatch';
-import useDefaultOptions from '../../../hooks/useDefaultOptions';
-import useImage from '../../../hooks/useImage';
-import useModal from '../../../hooks/useModal';
-import { SET_OPEN } from '../../../state/data/DataActionTypes';
-import changeKernelCell from '../../../utils/changeKernelCell';
-import resizeKernel from '../../../utils/resizeKernel';
+import useDataDispatch from '../../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../../hooks/useDefaultOptions';
+import useImage from '../../../../hooks/useImage';
+import useModal from '../../../../hooks/useModal';
+import { SET_CLOSE } from '../../../../state/data/DataActionTypes';
+import changeKernelCell from '../../../../utils/changeKernelCell';
+import resizeKernel from '../../../../utils/resizeKernel';
 import PreviewModal from '../PreviewModal';
 
-interface OpenModalProps {
+interface CloseModalProps {
   previewImageIdentifier: string;
 }
 
@@ -23,13 +23,13 @@ const KernelRow = styled.div`
   justify-content: space-between;
 `;
 
-interface InternalOpenOptions extends OpenOptions {
+interface InternalCloseOptions extends CloseOptions {
   kernel: number[][];
 }
 
-function OpenModal({ previewImageIdentifier }: OpenModalProps) {
+function CloseModal({ previewImageIdentifier }: CloseModalProps) {
   const { defaultOptions, editing, opIdentifier } =
-    useDefaultOptions<InternalOpenOptions>({
+    useDefaultOptions<InternalCloseOptions>({
       kernel: [
         [1, 1, 1],
         [1, 1, 1],
@@ -40,45 +40,45 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
 
   const { pipelined } = useImage(opIdentifier);
 
-  const [openOptions, setOpenOptions] = useState<InternalOpenOptions>({
+  const [closeOptions, setCloseOptions] = useState<InternalCloseOptions>({
     ...defaultOptions,
   });
 
   const [algoError, setAlgoError] = useState<string>();
-  const openedImage = useMemo(() => {
+  const closedImage = useMemo(() => {
     setAlgoError(undefined);
     try {
-      return pipelined.open(openOptions);
+      return pipelined.close(closeOptions);
     } catch (error: any) {
       setAlgoError(error.message);
       return null;
     }
-  }, [openOptions, pipelined]);
+  }, [closeOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();
-  const { isOpen, close } = useModal('open');
+  const { isOpen, close } = useModal('close');
 
-  const addOpenMorph = useCallback(() => {
+  const addCloseMorph = useCallback(() => {
     dataDispatch({
-      type: SET_OPEN,
+      type: SET_CLOSE,
       payload: {
         identifier: previewImageIdentifier,
         opIdentifier,
-        options: openOptions,
+        options: closeOptions,
       },
     });
     close();
-  }, [close, dataDispatch, openOptions, opIdentifier, previewImageIdentifier]);
+  }, [close, dataDispatch, closeOptions, opIdentifier, previewImageIdentifier]);
 
   return (
     <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
-      title="Open image"
-      viewIdentifier="__open_preview"
-      apply={addOpenMorph}
+      title="Close image"
+      viewIdentifier="__close_preview"
+      apply={addCloseMorph}
       original={pipelined}
-      preview={openedImage}
+      preview={closedImage}
       editing={editing}
       algoError={algoError}
     >
@@ -87,10 +87,10 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
           type="number"
           name="iterations"
           min={1}
-          value={openOptions.iterations}
+          value={closeOptions.iterations}
           onChange={(e) => {
-            setOpenOptions({
-              ...openOptions,
+            setCloseOptions({
+              ...closeOptions,
               iterations: e.target.valueAsNumber,
             });
           }}
@@ -102,12 +102,12 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
           name="kernelWidth"
           step={2}
           min={1}
-          value={openOptions.kernel[0].length}
+          value={closeOptions.kernel[0].length}
           onChange={(e) => {
-            setOpenOptions({
-              ...openOptions,
+            setCloseOptions({
+              ...closeOptions,
               kernel: resizeKernel(
-                openOptions.kernel,
+                closeOptions.kernel,
                 e.target.valueAsNumber,
                 'x',
               ),
@@ -121,12 +121,12 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
           name="kernelHeight"
           step={2}
           min={1}
-          value={openOptions.kernel.length}
+          value={closeOptions.kernel.length}
           onChange={(e) => {
-            setOpenOptions({
-              ...openOptions,
+            setCloseOptions({
+              ...closeOptions,
               kernel: resizeKernel(
-                openOptions.kernel,
+                closeOptions.kernel,
                 e.target.valueAsNumber,
                 'y',
               ),
@@ -143,17 +143,17 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
             justifyContent: 'space-between',
           }}
         >
-          {times(openOptions.kernel.length, (h) => (
+          {times(closeOptions.kernel.length, (h) => (
             <KernelRow key={h}>
-              {times(openOptions.kernel[0].length, (w) => (
+              {times(closeOptions.kernel[0].length, (w) => (
                 <Checkbox
                   key={w}
-                  checked={openOptions.kernel[h][w] === 1}
+                  checked={closeOptions.kernel[h][w] === 1}
                   onChange={(checked) =>
-                    setOpenOptions({
-                      ...openOptions,
+                    setCloseOptions({
+                      ...closeOptions,
                       kernel: changeKernelCell(
-                        openOptions.kernel,
+                        closeOptions.kernel,
                         w,
                         h,
                         checked as boolean,
@@ -170,4 +170,4 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
   );
 }
 
-export default memo(OpenModal);
+export default memo(CloseModal);

@@ -3,23 +3,25 @@ import { memo } from 'react';
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useView from '../../hooks/useView';
 
+import AboutModal from './AboutModal';
 import ExportModal from './ExportModal';
 import ExtractROIModal from './ExtractROIModal';
-import BlurModal from './filters/BlurModal';
-import ExploreGreyModal from './filters/ExploreGreyModal';
-import FlipModal from './filters/FlipModal';
-import GaussianBlurModal from './filters/GaussianBlurModal';
-import InvertModal from './filters/InvertModal';
-import LevelModal from './filters/LevelModal';
-import MedianFilterModal from './filters/MedianFilterModal';
-import PixelateModal from './filters/PixelateModal';
-import ResizeModal from './geometry/ResizeModal';
-import RotateModal from './geometry/RotateModal';
-import ExploreMaskModal from './mask/ExploreMaskModal';
-import CloseModal from './morphology/CloseModal';
-import DilateModal from './morphology/DilateModal';
-import ErodeModal from './morphology/ErodeModal';
-import OpenModal from './morphology/OpenModal';
+import LogModal from './LogModal';
+import BlurModal from './preview/filters/BlurModal';
+import ExploreGreyModal from './preview/filters/ExploreGreyModal';
+import FlipModal from './preview/filters/FlipModal';
+import GaussianBlurModal from './preview/filters/GaussianBlurModal';
+import InvertModal from './preview/filters/InvertModal';
+import LevelModal from './preview/filters/LevelModal';
+import MedianFilterModal from './preview/filters/MedianFilterModal';
+import PixelateModal from './preview/filters/PixelateModal';
+import ResizeModal from './preview/geometry/ResizeModal';
+import RotateModal from './preview/geometry/RotateModal';
+import ExploreMaskModal from './preview/mask/ExploreMaskModal';
+import CloseModal from './preview/morphology/CloseModal';
+import DilateModal from './preview/morphology/DilateModal';
+import ErodeModal from './preview/morphology/ErodeModal';
+import OpenModal from './preview/morphology/OpenModal';
 
 function ModalContainer() {
   const view = useView();
@@ -64,6 +66,8 @@ function ModalContainer() {
         <RotateModal previewImageIdentifier={currentTab} />
       )}
       {view.modals.extractROI && <ExtractROIModal />}
+      {view.modals.log && <LogModal />}
+      {view.modals.about && <AboutModal />}
     </>
   );
 }

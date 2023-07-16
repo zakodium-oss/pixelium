@@ -1,19 +1,19 @@
 import styled from '@emotion/styled';
-import { ErodeOptions } from 'image-js';
+import { OpenOptions } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Checkbox, Field, Input } from 'react-science/ui';
 
-import useDataDispatch from '../../../hooks/useDataDispatch';
-import useDefaultOptions from '../../../hooks/useDefaultOptions';
-import useImage from '../../../hooks/useImage';
-import useModal from '../../../hooks/useModal';
-import { SET_ERODE } from '../../../state/data/DataActionTypes';
-import changeKernelCell from '../../../utils/changeKernelCell';
-import resizeKernel from '../../../utils/resizeKernel';
+import useDataDispatch from '../../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../../hooks/useDefaultOptions';
+import useImage from '../../../../hooks/useImage';
+import useModal from '../../../../hooks/useModal';
+import { SET_OPEN } from '../../../../state/data/DataActionTypes';
+import changeKernelCell from '../../../../utils/changeKernelCell';
+import resizeKernel from '../../../../utils/resizeKernel';
 import PreviewModal from '../PreviewModal';
 
-interface ErodeModalProps {
+interface OpenModalProps {
   previewImageIdentifier: string;
 }
 
@@ -23,13 +23,13 @@ const KernelRow = styled.div`
   justify-content: space-between;
 `;
 
-interface InternalErodeOptions extends ErodeOptions {
+interface InternalOpenOptions extends OpenOptions {
   kernel: number[][];
 }
 
-function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
+function OpenModal({ previewImageIdentifier }: OpenModalProps) {
   const { defaultOptions, editing, opIdentifier } =
-    useDefaultOptions<InternalErodeOptions>({
+    useDefaultOptions<InternalOpenOptions>({
       kernel: [
         [1, 1, 1],
         [1, 1, 1],
@@ -40,45 +40,45 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
 
   const { pipelined } = useImage(opIdentifier);
 
-  const [erodeOptions, setErodeOptions] = useState<InternalErodeOptions>({
+  const [openOptions, setOpenOptions] = useState<InternalOpenOptions>({
     ...defaultOptions,
   });
 
   const [algoError, setAlgoError] = useState<string>();
-  const erodedImage = useMemo(() => {
+  const openedImage = useMemo(() => {
     setAlgoError(undefined);
     try {
-      return pipelined.erode(erodeOptions);
+      return pipelined.open(openOptions);
     } catch (error: any) {
       setAlgoError(error.message);
       return null;
     }
-  }, [erodeOptions, pipelined]);
+  }, [openOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();
-  const { isOpen, close } = useModal('erode');
+  const { isOpen, close } = useModal('open');
 
-  const addDilateMorph = useCallback(() => {
+  const addOpenMorph = useCallback(() => {
     dataDispatch({
-      type: SET_ERODE,
+      type: SET_OPEN,
       payload: {
         identifier: previewImageIdentifier,
         opIdentifier,
-        options: erodeOptions,
+        options: openOptions,
       },
     });
     close();
-  }, [close, dataDispatch, erodeOptions, opIdentifier, previewImageIdentifier]);
+  }, [close, dataDispatch, openOptions, opIdentifier, previewImageIdentifier]);
 
   return (
     <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
-      title="Erode image"
-      viewIdentifier="__erode_preview"
-      apply={addDilateMorph}
+      title="Open image"
+      viewIdentifier="__open_preview"
+      apply={addOpenMorph}
       original={pipelined}
-      preview={erodedImage}
+      preview={openedImage}
       editing={editing}
       algoError={algoError}
     >
@@ -87,10 +87,10 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
           type="number"
           name="iterations"
           min={1}
-          value={erodeOptions.iterations}
+          value={openOptions.iterations}
           onChange={(e) => {
-            setErodeOptions({
-              ...erodeOptions,
+            setOpenOptions({
+              ...openOptions,
               iterations: e.target.valueAsNumber,
             });
           }}
@@ -102,12 +102,12 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
           name="kernelWidth"
           step={2}
           min={1}
-          value={erodeOptions.kernel[0].length}
+          value={openOptions.kernel[0].length}
           onChange={(e) => {
-            setErodeOptions({
-              ...erodeOptions,
+            setOpenOptions({
+              ...openOptions,
               kernel: resizeKernel(
-                erodeOptions.kernel,
+                openOptions.kernel,
                 e.target.valueAsNumber,
                 'x',
               ),
@@ -121,12 +121,12 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
           name="kernelHeight"
           step={2}
           min={1}
-          value={erodeOptions.kernel.length}
+          value={openOptions.kernel.length}
           onChange={(e) => {
-            setErodeOptions({
-              ...erodeOptions,
+            setOpenOptions({
+              ...openOptions,
               kernel: resizeKernel(
-                erodeOptions.kernel,
+                openOptions.kernel,
                 e.target.valueAsNumber,
                 'y',
               ),
@@ -143,17 +143,17 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
             justifyContent: 'space-between',
           }}
         >
-          {times(erodeOptions.kernel.length, (h) => (
+          {times(openOptions.kernel.length, (h) => (
             <KernelRow key={h}>
-              {times(erodeOptions.kernel[0].length, (w) => (
+              {times(openOptions.kernel[0].length, (w) => (
                 <Checkbox
                   key={w}
-                  checked={erodeOptions.kernel[h][w] === 1}
+                  checked={openOptions.kernel[h][w] === 1}
                   onChange={(checked) =>
-                    setErodeOptions({
-                      ...erodeOptions,
+                    setOpenOptions({
+                      ...openOptions,
                       kernel: changeKernelCell(
-                        erodeOptions.kernel,
+                        openOptions.kernel,
                         w,
                         h,
                         checked as boolean,
@@ -170,4 +170,4 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
   );
 }
 
-export default memo(ErodeModal);
+export default memo(OpenModal);

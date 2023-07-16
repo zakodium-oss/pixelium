@@ -1,19 +1,19 @@
 import styled from '@emotion/styled';
-import { CloseOptions } from 'image-js';
+import { DilateOptions } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Checkbox, Field, Input } from 'react-science/ui';
 
-import useDataDispatch from '../../../hooks/useDataDispatch';
-import useDefaultOptions from '../../../hooks/useDefaultOptions';
-import useImage from '../../../hooks/useImage';
-import useModal from '../../../hooks/useModal';
-import { SET_CLOSE } from '../../../state/data/DataActionTypes';
-import changeKernelCell from '../../../utils/changeKernelCell';
-import resizeKernel from '../../../utils/resizeKernel';
+import useDataDispatch from '../../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../../hooks/useDefaultOptions';
+import useImage from '../../../../hooks/useImage';
+import useModal from '../../../../hooks/useModal';
+import { SET_DILATE } from '../../../../state/data/DataActionTypes';
+import changeKernelCell from '../../../../utils/changeKernelCell';
+import resizeKernel from '../../../../utils/resizeKernel';
 import PreviewModal from '../PreviewModal';
 
-interface CloseModalProps {
+interface DilateModalProps {
   previewImageIdentifier: string;
 }
 
@@ -23,13 +23,13 @@ const KernelRow = styled.div`
   justify-content: space-between;
 `;
 
-interface InternalCloseOptions extends CloseOptions {
+interface InternalDilateOptions extends DilateOptions {
   kernel: number[][];
 }
 
-function CloseModal({ previewImageIdentifier }: CloseModalProps) {
+function DilateModal({ previewImageIdentifier }: DilateModalProps) {
   const { defaultOptions, editing, opIdentifier } =
-    useDefaultOptions<InternalCloseOptions>({
+    useDefaultOptions<InternalDilateOptions>({
       kernel: [
         [1, 1, 1],
         [1, 1, 1],
@@ -40,45 +40,51 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
 
   const { pipelined } = useImage(opIdentifier);
 
-  const [closeOptions, setCloseOptions] = useState<InternalCloseOptions>({
+  const [dilateOptions, setDilateOptions] = useState<InternalDilateOptions>({
     ...defaultOptions,
   });
 
   const [algoError, setAlgoError] = useState<string>();
-  const closedImage = useMemo(() => {
+  const dilatedImage = useMemo(() => {
     setAlgoError(undefined);
     try {
-      return pipelined.close(closeOptions);
+      return pipelined.dilate(dilateOptions);
     } catch (error: any) {
       setAlgoError(error.message);
       return null;
     }
-  }, [closeOptions, pipelined]);
+  }, [dilateOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();
-  const { isOpen, close } = useModal('close');
+  const { isOpen, close } = useModal('dilate');
 
-  const addCloseMorph = useCallback(() => {
+  const addDilateMorph = useCallback(() => {
     dataDispatch({
-      type: SET_CLOSE,
+      type: SET_DILATE,
       payload: {
         identifier: previewImageIdentifier,
         opIdentifier,
-        options: closeOptions,
+        options: dilateOptions,
       },
     });
     close();
-  }, [close, dataDispatch, closeOptions, opIdentifier, previewImageIdentifier]);
+  }, [
+    close,
+    dataDispatch,
+    dilateOptions,
+    opIdentifier,
+    previewImageIdentifier,
+  ]);
 
   return (
     <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
-      title="Close image"
-      viewIdentifier="__close_preview"
-      apply={addCloseMorph}
+      title="Dilate image"
+      viewIdentifier="__dilate_preview"
+      apply={addDilateMorph}
       original={pipelined}
-      preview={closedImage}
+      preview={dilatedImage}
       editing={editing}
       algoError={algoError}
     >
@@ -87,10 +93,10 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
           type="number"
           name="iterations"
           min={1}
-          value={closeOptions.iterations}
+          value={dilateOptions.iterations}
           onChange={(e) => {
-            setCloseOptions({
-              ...closeOptions,
+            setDilateOptions({
+              ...dilateOptions,
               iterations: e.target.valueAsNumber,
             });
           }}
@@ -102,12 +108,12 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
           name="kernelWidth"
           step={2}
           min={1}
-          value={closeOptions.kernel[0].length}
+          value={dilateOptions.kernel[0].length}
           onChange={(e) => {
-            setCloseOptions({
-              ...closeOptions,
+            setDilateOptions({
+              ...dilateOptions,
               kernel: resizeKernel(
-                closeOptions.kernel,
+                dilateOptions.kernel,
                 e.target.valueAsNumber,
                 'x',
               ),
@@ -121,12 +127,12 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
           name="kernelHeight"
           step={2}
           min={1}
-          value={closeOptions.kernel.length}
+          value={dilateOptions.kernel.length}
           onChange={(e) => {
-            setCloseOptions({
-              ...closeOptions,
+            setDilateOptions({
+              ...dilateOptions,
               kernel: resizeKernel(
-                closeOptions.kernel,
+                dilateOptions.kernel,
                 e.target.valueAsNumber,
                 'y',
               ),
@@ -143,17 +149,17 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
             justifyContent: 'space-between',
           }}
         >
-          {times(closeOptions.kernel.length, (h) => (
+          {times(dilateOptions.kernel.length, (h) => (
             <KernelRow key={h}>
-              {times(closeOptions.kernel[0].length, (w) => (
+              {times(dilateOptions.kernel[0].length, (w) => (
                 <Checkbox
                   key={w}
-                  checked={closeOptions.kernel[h][w] === 1}
+                  checked={dilateOptions.kernel[h][w] === 1}
                   onChange={(checked) =>
-                    setCloseOptions({
-                      ...closeOptions,
+                    setDilateOptions({
+                      ...dilateOptions,
                       kernel: changeKernelCell(
-                        closeOptions.kernel,
+                        dilateOptions.kernel,
                         w,
                         h,
                         checked as boolean,
@@ -170,4 +176,4 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
   );
 }
 
-export default memo(CloseModal);
+export default memo(DilateModal);

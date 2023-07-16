@@ -1,19 +1,19 @@
 import styled from '@emotion/styled';
-import { DilateOptions } from 'image-js';
+import { ErodeOptions } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Checkbox, Field, Input } from 'react-science/ui';
 
-import useDataDispatch from '../../../hooks/useDataDispatch';
-import useDefaultOptions from '../../../hooks/useDefaultOptions';
-import useImage from '../../../hooks/useImage';
-import useModal from '../../../hooks/useModal';
-import { SET_DILATE } from '../../../state/data/DataActionTypes';
-import changeKernelCell from '../../../utils/changeKernelCell';
-import resizeKernel from '../../../utils/resizeKernel';
+import useDataDispatch from '../../../../hooks/useDataDispatch';
+import useDefaultOptions from '../../../../hooks/useDefaultOptions';
+import useImage from '../../../../hooks/useImage';
+import useModal from '../../../../hooks/useModal';
+import { SET_ERODE } from '../../../../state/data/DataActionTypes';
+import changeKernelCell from '../../../../utils/changeKernelCell';
+import resizeKernel from '../../../../utils/resizeKernel';
 import PreviewModal from '../PreviewModal';
 
-interface DilateModalProps {
+interface ErodeModalProps {
   previewImageIdentifier: string;
 }
 
@@ -23,13 +23,13 @@ const KernelRow = styled.div`
   justify-content: space-between;
 `;
 
-interface InternalDilateOptions extends DilateOptions {
+interface InternalErodeOptions extends ErodeOptions {
   kernel: number[][];
 }
 
-function DilateModal({ previewImageIdentifier }: DilateModalProps) {
+function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
   const { defaultOptions, editing, opIdentifier } =
-    useDefaultOptions<InternalDilateOptions>({
+    useDefaultOptions<InternalErodeOptions>({
       kernel: [
         [1, 1, 1],
         [1, 1, 1],
@@ -40,51 +40,45 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
 
   const { pipelined } = useImage(opIdentifier);
 
-  const [dilateOptions, setDilateOptions] = useState<InternalDilateOptions>({
+  const [erodeOptions, setErodeOptions] = useState<InternalErodeOptions>({
     ...defaultOptions,
   });
 
   const [algoError, setAlgoError] = useState<string>();
-  const dilatedImage = useMemo(() => {
+  const erodedImage = useMemo(() => {
     setAlgoError(undefined);
     try {
-      return pipelined.dilate(dilateOptions);
+      return pipelined.erode(erodeOptions);
     } catch (error: any) {
       setAlgoError(error.message);
       return null;
     }
-  }, [dilateOptions, pipelined]);
+  }, [erodeOptions, pipelined]);
 
   const dataDispatch = useDataDispatch();
-  const { isOpen, close } = useModal('dilate');
+  const { isOpen, close } = useModal('erode');
 
   const addDilateMorph = useCallback(() => {
     dataDispatch({
-      type: SET_DILATE,
+      type: SET_ERODE,
       payload: {
         identifier: previewImageIdentifier,
         opIdentifier,
-        options: dilateOptions,
+        options: erodeOptions,
       },
     });
     close();
-  }, [
-    close,
-    dataDispatch,
-    dilateOptions,
-    opIdentifier,
-    previewImageIdentifier,
-  ]);
+  }, [close, dataDispatch, erodeOptions, opIdentifier, previewImageIdentifier]);
 
   return (
     <PreviewModal
       closeDialog={close}
       isOpenDialog={isOpen}
-      title="Dilate image"
-      viewIdentifier="__dilate_preview"
+      title="Erode image"
+      viewIdentifier="__erode_preview"
       apply={addDilateMorph}
       original={pipelined}
-      preview={dilatedImage}
+      preview={erodedImage}
       editing={editing}
       algoError={algoError}
     >
@@ -93,10 +87,10 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
           type="number"
           name="iterations"
           min={1}
-          value={dilateOptions.iterations}
+          value={erodeOptions.iterations}
           onChange={(e) => {
-            setDilateOptions({
-              ...dilateOptions,
+            setErodeOptions({
+              ...erodeOptions,
               iterations: e.target.valueAsNumber,
             });
           }}
@@ -108,12 +102,12 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
           name="kernelWidth"
           step={2}
           min={1}
-          value={dilateOptions.kernel[0].length}
+          value={erodeOptions.kernel[0].length}
           onChange={(e) => {
-            setDilateOptions({
-              ...dilateOptions,
+            setErodeOptions({
+              ...erodeOptions,
               kernel: resizeKernel(
-                dilateOptions.kernel,
+                erodeOptions.kernel,
                 e.target.valueAsNumber,
                 'x',
               ),
@@ -127,12 +121,12 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
           name="kernelHeight"
           step={2}
           min={1}
-          value={dilateOptions.kernel.length}
+          value={erodeOptions.kernel.length}
           onChange={(e) => {
-            setDilateOptions({
-              ...dilateOptions,
+            setErodeOptions({
+              ...erodeOptions,
               kernel: resizeKernel(
-                dilateOptions.kernel,
+                erodeOptions.kernel,
                 e.target.valueAsNumber,
                 'y',
               ),
@@ -149,17 +143,17 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
             justifyContent: 'space-between',
           }}
         >
-          {times(dilateOptions.kernel.length, (h) => (
+          {times(erodeOptions.kernel.length, (h) => (
             <KernelRow key={h}>
-              {times(dilateOptions.kernel[0].length, (w) => (
+              {times(erodeOptions.kernel[0].length, (w) => (
                 <Checkbox
                   key={w}
-                  checked={dilateOptions.kernel[h][w] === 1}
+                  checked={erodeOptions.kernel[h][w] === 1}
                   onChange={(checked) =>
-                    setDilateOptions({
-                      ...dilateOptions,
+                    setErodeOptions({
+                      ...erodeOptions,
                       kernel: changeKernelCell(
-                        dilateOptions.kernel,
+                        erodeOptions.kernel,
                         w,
                         h,
                         checked as boolean,
@@ -176,4 +170,4 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
   );
 }
 
-export default memo(DilateModal);
+export default memo(ErodeModal);
