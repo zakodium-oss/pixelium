@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 
-import { GlobalContext } from '../components/context/GlobalContext';
+import { RootContext } from '../components/context/RootContext';
 
-export default function useGlobal() {
-  const state = useContext(GlobalContext);
+export default function useRoot() {
+  const state = useContext(RootContext);
   if (!state) {
     throw new Error('useGlobal must be used within a GlobalProvider');
   }

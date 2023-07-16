@@ -24,10 +24,10 @@ import AutoLoader from './AutoLoader';
 import { AnnotationsProvider } from './context/AnnotationsContext';
 import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
-import { GlobalProvider } from './context/GlobalContext';
 import { LogProvider } from './context/LogContext';
 import { PipelineProvider } from './context/PipelineContext';
 import { PreferencesProvider } from './context/PreferencesContext';
+import { RootProvider } from './context/RootContext';
 import { ViewProvider } from './context/ViewContext';
 import CenterPanel from './layout/CenterPanel';
 import Header from './layout/Header';
@@ -84,7 +84,7 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
 
   return (
     <RootLayout>
-      <GlobalProvider value={{ rootRef }}>
+      <RootProvider value={{ rootRef }}>
         <KbsProvider>
           <LogProvider>
             <DataProvider value={dataState}>
@@ -133,7 +133,7 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
             </DataProvider>
           </LogProvider>
         </KbsProvider>
-      </GlobalProvider>
+      </RootProvider>
     </RootLayout>
   );
 }
