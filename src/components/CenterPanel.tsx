@@ -37,7 +37,7 @@ function CenterPanel() {
     }
   }, [openTab, currentTab, tabsItems]);
 
-  const handleOnDrop = useFileLoader();
+  const { handleFileLoad: handleOnDrop } = useFileLoader();
 
   return (
     <div style={{ width: '100%' }}>

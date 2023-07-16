@@ -1,4 +1,9 @@
-import { fileCollectionFromFiles, FileCollectionItem } from 'filelist-utils';
+import {
+  fileCollectionFromFiles,
+  FileCollection,
+  fileCollectionFromWebSource,
+  WebSource,
+} from 'filelist-utils';
 import { decode } from 'image-js';
 import { useCallback } from 'react';
 
@@ -23,15 +28,8 @@ export default function useFileLoader() {
   const viewDispatch = useViewDispatch();
 
   const { logger } = useLog();
-
-  const loadFiles = useCallback(
-    async (files: File[]) => {
-      const fileCollection = await fileCollectionFromFiles(files)
-        .then((fileCollection) => fileCollection.files)
-        .catch(() => {
-          logger.error('Error loading files');
-          return [] as FileCollectionItem[];
-        });
+  const loadFileCollection = useCallback(
+    async (fileCollection: FileCollection) => {
       const dataFiles: DataFile[] = [];
 
       // for each image, decode it
@@ -85,6 +83,17 @@ export default function useFileLoader() {
     [dataDispatch, logger, preferencesDispatch, viewDispatch],
   );
 
+  const loadFiles = useCallback(
+    async (files: File[]) => {
+      const fileCollection = await fileCollectionFromFiles(files).catch(() => {
+        logger.error('Error loading files');
+        return new FileCollection([]);
+      });
+      return loadFileCollection(fileCollection);
+    },
+    [loadFileCollection, logger],
+  );
+
   const handleFileLoad = useCallback(
     (acceptedFiles) => {
       dataDispatch({ type: SET_LOADING, payload: true });
@@ -99,5 +108,20 @@ export default function useFileLoader() {
     [dataDispatch, loadFiles, logger],
   );
 
-  return handleFileLoad;
+  const handleWebSource = useCallback(
+    (source: WebSource) => {
+      dataDispatch({ type: SET_LOADING, payload: true });
+      return fileCollectionFromWebSource(source)
+        .then(loadFileCollection)
+        .then((count) => {
+          if (count > 0) {
+            logger.info(`${count} images loaded from WebSource`);
+          }
+        })
+        .finally(() => dataDispatch({ type: SET_LOADING, payload: false }));
+    },
+    [dataDispatch, loadFileCollection, logger],
+  );
+
+  return { handleFileLoad, handleWebSource };
 }

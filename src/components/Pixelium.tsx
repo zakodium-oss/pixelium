@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { WebSource } from 'filelist-utils';
 import { memo, useMemo, useReducer, useRef } from 'react';
 import { KbsProvider } from 'react-kbs';
 import { RootLayout, SplitPane, Toolbar } from 'react-science/ui';
@@ -19,6 +20,7 @@ import {
   ViewState,
 } from '../state/view/ViewReducer';
 
+import AutoLoader from './AutoLoader';
 import CenterPanel from './CenterPanel';
 import Header from './Header';
 import Sidebar from './Sidebar';
@@ -39,12 +41,6 @@ import MaskTool from './tools/MaskTool';
 import MorphologyTool from './tools/MorphologyTool';
 import ROITool from './tools/ROITool';
 
-interface PixeliumProps {
-  data?: DataState;
-  preferences?: PreferencesState;
-  view?: ViewState;
-}
-
 const pixeliumContainerStyle = css`
   width: 100%;
   height: 100%;
@@ -53,8 +49,15 @@ const pixeliumContainerStyle = css`
   flex-direction: column;
 `;
 
+interface PixeliumProps {
+  data?: DataState;
+  preferences?: PreferencesState;
+  view?: ViewState;
+  webSource?: WebSource;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function Pixelium({ data, preferences, view }: PixeliumProps) {
+function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
   // Refs
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -85,36 +88,38 @@ function Pixelium({ data, preferences, view }: PixeliumProps) {
                   <DispatchProvider value={dispatchers}>
                     <PipelineProvider identifier={viewState.currentTab}>
                       <AnnotationsProvider>
-                        <div css={pixeliumContainerStyle} ref={rootRef}>
-                          <Header />
-                          <div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'row',
-                              height: '100%',
-                              overflow: 'hidden',
-                            }}
-                          >
-                            <Toolbar orientation="vertical">
-                              <ImportTool />
-                              <ExportTool />
-                              <GreyTool />
-                              <MaskTool />
-                              <MorphologyTool />
-                              <GeometryTool />
-                              <ROITool />
-                              <ModalContainer />
-                            </Toolbar>
-                            <SplitPane
-                              direction="horizontal"
-                              size="20%"
-                              controlledSide="end"
+                        <AutoLoader webSource={webSource}>
+                          <div css={pixeliumContainerStyle} ref={rootRef}>
+                            <Header />
+                            <div
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                height: '100%',
+                                overflow: 'hidden',
+                              }}
                             >
-                              <CenterPanel />
-                              <Sidebar />
-                            </SplitPane>
+                              <Toolbar orientation="vertical">
+                                <ImportTool />
+                                <ExportTool />
+                                <GreyTool />
+                                <MaskTool />
+                                <MorphologyTool />
+                                <GeometryTool />
+                                <ROITool />
+                                <ModalContainer />
+                              </Toolbar>
+                              <SplitPane
+                                direction="horizontal"
+                                size="20%"
+                                controlledSide="end"
+                              >
+                                <CenterPanel />
+                                <Sidebar />
+                              </SplitPane>
+                            </div>
                           </div>
-                        </div>
+                        </AutoLoader>
                       </AnnotationsProvider>
                     </PipelineProvider>
                   </DispatchProvider>

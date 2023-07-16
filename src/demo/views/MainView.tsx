@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
-import { memo } from 'react';
+import { WebSource } from 'filelist-utils';
+import { memo, useState } from 'react';
 
 import Pixelium from '../../components/Pixelium';
 import Sidebar from '../Sidebar';
@@ -13,9 +14,11 @@ const wrapperStyle = css`
 `;
 
 function MainView() {
+  const [webSource, setWebSource] = useState<WebSource>();
+
   return (
     <div css={wrapperStyle}>
-      <Sidebar />
+      <Sidebar setWebSource={setWebSource} />
       <div
         style={{
           padding: '20px',
@@ -24,7 +27,7 @@ function MainView() {
           minWidth: '0',
         }}
       >
-        <Pixelium />
+        <Pixelium webSource={webSource} />
       </div>
     </div>
   );

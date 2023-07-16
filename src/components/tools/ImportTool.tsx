@@ -13,7 +13,7 @@ function ImportTool() {
     }
   }, []);
 
-  const handleFileLoad = useFileLoader();
+  const { handleFileLoad } = useFileLoader();
 
   const handleOnChange = useCallback(
     (event) => {
