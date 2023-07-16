@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { fromMask, GetRoisOptions, Image, RoiKind } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -22,7 +21,7 @@ import isBinary from '../../utils/isBinary';
 import StyledModalBody from './utils/StyledModalBody';
 import StyledModalHeader from './utils/StyledModalHeader';
 
-const modalStyle = css`
+const ExtractROIStyle = styled.div`
   display: flex;
   flex-direction: column;
   width: 500px;
@@ -90,7 +89,7 @@ function ExtractROIModal() {
 
   return (
     <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
-      <div css={modalStyle}>
+      <ExtractROIStyle>
         <StyledModalHeader>
           <Modal.Header>Extract ROIs</Modal.Header>
         </StyledModalHeader>
@@ -142,7 +141,7 @@ function ExtractROIModal() {
             </Button>
           </FooterStyled>
         </Modal.Footer>
-      </div>
+      </ExtractROIStyle>
     </Modal>
   );
 }

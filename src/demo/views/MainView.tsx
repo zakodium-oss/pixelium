@@ -1,11 +1,11 @@
-import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { WebSource } from 'filelist-utils';
 import { memo, useState } from 'react';
 
 import Pixelium from '../../components/Pixelium';
 import Sidebar from '../Sidebar';
 
-const wrapperStyle = css`
+const MainViewWrapper = styled.div`
   display: flex;
   max-width: 100vw;
   height: 100vh;
@@ -17,7 +17,7 @@ function MainView() {
   const [webSource, setWebSource] = useState<WebSource>();
 
   return (
-    <div css={wrapperStyle}>
+    <MainViewWrapper>
       <Sidebar setWebSource={setWebSource} />
       <div
         style={{
@@ -29,7 +29,7 @@ function MainView() {
       >
         <Pixelium webSource={webSource} />
       </div>
-    </div>
+    </MainViewWrapper>
   );
 }
 

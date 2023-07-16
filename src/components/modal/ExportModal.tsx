@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Button, Checkbox, Field, Input, Modal } from 'react-science/ui';
 
@@ -13,7 +13,7 @@ import { savePixeliumBundle } from '../../utils/export';
 import StyledModalBody from './utils/StyledModalBody';
 import StyledModalHeader from './utils/StyledModalHeader';
 
-const modalStyle = css`
+const ExportStyle = styled.div`
   display: flex;
   flex-direction: column;
   width: 500px;
@@ -79,7 +79,7 @@ function ExportModal() {
 
   return (
     <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
-      <div css={modalStyle}>
+      <ExportStyle>
         <StyledModalHeader>
           <Modal.Header>
             <div className="header">Export Pixelium file</div>
@@ -146,7 +146,7 @@ function ExportModal() {
             </span>
           </Button>
         </Modal.Footer>
-      </div>
+      </ExportStyle>
     </Modal>
   );
 }

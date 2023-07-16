@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { WebSource } from 'filelist-utils';
 import { memo, useMemo, useReducer, useRef } from 'react';
 import { KbsProvider } from 'react-kbs';
@@ -41,7 +41,7 @@ import MaskTool from './tools/MaskTool';
 import MorphologyTool from './tools/MorphologyTool';
 import ROITool from './tools/ROITool';
 
-const pixeliumContainerStyle = css`
+const PixeliumStyle = styled.div`
   width: 100%;
   height: 100%;
   background-color: white;
@@ -94,7 +94,7 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                     <PipelineProvider identifier={viewState.currentTab}>
                       <AnnotationsProvider>
                         <AutoLoader webSource={webSource}>
-                          <div css={pixeliumContainerStyle} ref={rootRef}>
+                          <PixeliumStyle ref={rootRef}>
                             <Header />
                             <div
                               style={{
@@ -123,7 +123,7 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                                 <Sidebar />
                               </SplitPane>
                             </div>
-                          </div>
+                          </PixeliumStyle>
                         </AutoLoader>
                       </AnnotationsProvider>
                     </PipelineProvider>

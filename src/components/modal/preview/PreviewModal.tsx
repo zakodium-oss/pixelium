@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Image, Mask } from 'image-js';
 import { memo, ReactNode, useCallback } from 'react';
@@ -11,7 +10,7 @@ import ImageViewer from '../../ImageViewer';
 import StyledModalBody from '../utils/StyledModalBody';
 import StyledModalHeader from '../utils/StyledModalHeader';
 
-const modalStyle = css`
+const PreviewModalStyle = styled.div`
   display: flex;
   flex-direction: column;
   width: 75vw;
@@ -80,7 +79,7 @@ function PreviewModal({
 
   return (
     <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
-      <div css={modalStyle}>
+      <PreviewModalStyle>
         <StyledModalHeader>
           <Modal.Header>{editing ? `Editing : ${title}` : title}</Modal.Header>
         </StyledModalHeader>
@@ -116,7 +115,7 @@ function PreviewModal({
             </Button>
           </FooterStyled>
         </Modal.Footer>
-      </div>
+      </PreviewModalStyle>
     </Modal>
   );
 }

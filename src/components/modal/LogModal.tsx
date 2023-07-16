@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { CSSProperties, memo, useMemo } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { Button, Modal, Table, ValueRenderers } from 'react-science/ui';
@@ -10,7 +10,7 @@ import { buttons, getRowColor } from '../../utils/colors';
 import StyledModalBody from './utils/StyledModalBody';
 import StyledModalHeader from './utils/StyledModalHeader';
 
-const modalStyle = css`
+const LogModalStyle = styled.div`
   display: flex;
   flex-direction: column;
   width: 50vw;
@@ -53,7 +53,7 @@ function LogModal() {
 
   return (
     <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
-      <div css={modalStyle}>
+      <LogModalStyle>
         <StyledModalHeader>
           <Modal.Header>Log history</Modal.Header>
         </StyledModalHeader>
@@ -118,7 +118,7 @@ function LogModal() {
             </span>
           </Button>
         </Modal.Footer>
-      </div>
+      </LogModalStyle>
     </Modal>
   );
 }

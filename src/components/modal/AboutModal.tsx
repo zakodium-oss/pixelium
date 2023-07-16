@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { memo } from 'react';
 import { Modal } from 'react-science/ui';
 
@@ -7,7 +7,7 @@ import useModal from '../../hooks/useModal';
 import StyledModalBody from './utils/StyledModalBody';
 import StyledModalHeader from './utils/StyledModalHeader';
 
-const modalStyle = css`
+const AboutModalStyle = styled.div`
   display: flex;
   flex-direction: column;
   width: 500px;
@@ -22,14 +22,14 @@ function AboutModal() {
 
   return (
     <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
-      <div css={modalStyle}>
+      <AboutModalStyle>
         <StyledModalHeader>
           <Modal.Header>About Pixelium</Modal.Header>
         </StyledModalHeader>
         <StyledModalBody>
           <Modal.Body>Nothing to see here at this time.</Modal.Body>
         </StyledModalBody>
-      </div>
+      </AboutModalStyle>
     </Modal>
   );
 }
