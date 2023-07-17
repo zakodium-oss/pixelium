@@ -1191,6 +1191,10 @@ ${indentData}`)}function formatNumber(_e,et,tt){return(_e>=0&&tt?` ${formatNumbe
     padding: 10px 0;
     border-bottom: 1px solid white;
   }
+
+  button {
+    cursor: pointer;
+  }
 `,ButtonGroup=newStyled.div`
   display: flex;
   flex-direction: column;
