@@ -27,6 +27,10 @@ const StyledSidebar = styled.div`
     padding: 10px 0;
     border-bottom: 1px solid white;
   }
+
+  button {
+    cursor: pointer;
+  }
 `;
 
 const ButtonGroup = styled.div`
