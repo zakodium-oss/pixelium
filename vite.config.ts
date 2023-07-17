@@ -3,5 +3,4 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react({ jsxImportSource: '@emotion/react' })],
-  base: '/pixelium/',
 });
