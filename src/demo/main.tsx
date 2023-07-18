@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 
-import MainView from './demo/views/MainView';
+import MainView from './views/MainView';
 
 import 'modern-normalize/modern-normalize.css';
 
