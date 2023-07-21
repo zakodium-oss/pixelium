@@ -39,13 +39,15 @@ function ROIAnnotations({
     setSvgRef(annotationsRef);
   }, [setSvgRef, svgRef]);
 
+  const viewBox = useMemo(() => `0 0 ${width} ${height}`, [width, height]);
+
   return (
     <AnnotationsWrapper width={width} height={height}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="100%"
         height="100%"
-        viewBox={`0 0 ${width} ${height}`}
+        viewBox={viewBox}
         ref={annotationsRef}
       >
         {annotations}
