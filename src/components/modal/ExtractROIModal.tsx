@@ -10,7 +10,6 @@ import {
   useToggleAccordion,
 } from 'react-science/ui';
 
-import useCurrentTab from '../../hooks/useCurrentTab';
 import useDataDispatch from '../../hooks/useDataDispatch';
 import useImage from '../../hooks/useImage';
 import useModal from '../../hooks/useModal';
@@ -49,8 +48,11 @@ const defaultFormContent = {
   kind: undefined,
 };
 
-function ExtractROIModal() {
-  const currentTab = useCurrentTab();
+interface ExtractROIProps {
+  identifier: string;
+}
+
+function ExtractROIModal({ identifier }: ExtractROIProps) {
   const { pipelined } = useImage();
   const dataDispatch = useDataDispatch();
   const { isOpen, close } = useModal('extractROI');
@@ -63,14 +65,14 @@ function ExtractROIModal() {
     dataDispatch({
       type: SET_ROI,
       payload: {
-        identifier: currentTab || '',
+        identifier,
         rois: roiMapManager.getRois(formContent),
       },
     });
     setFormContent(defaultFormContent);
     close();
     openAccordion('ROIs');
-  }, [close, currentTab, dataDispatch, formContent, openAccordion, pipelined]);
+  }, [close, identifier, dataDispatch, formContent, openAccordion, pipelined]);
 
   const kindOptions = useMemo(
     () => [
@@ -83,7 +85,6 @@ function ExtractROIModal() {
     [],
   );
 
-  if (currentTab === undefined) return null;
   if (pipelined === undefined) return null;
   if (!isBinary(pipelined)) return null;
 
