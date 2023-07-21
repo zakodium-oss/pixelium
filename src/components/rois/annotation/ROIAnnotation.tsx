@@ -1,5 +1,5 @@
 import { Roi } from 'image-js';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 
 import ConvexHullAnnotation from './ConvexHullAnnotation';
 import FeretAnnotation from './FeretAnnotation';
@@ -11,8 +11,10 @@ interface ROIAnnotationProps {
 function ROIAnnotation({ roi }: ROIAnnotationProps) {
   const { column: x, row: y } = roi.origin;
 
+  const transform = useMemo(() => `translate(${x}, ${y})`, [x, y]);
+
   return (
-    <g transform={`translate(${x}, ${y})`}>
+    <g transform={transform}>
       <MBRAnnotation roi={roi} />
       <FeretAnnotation roi={roi} />
       <ConvexHullAnnotation roi={roi} />
