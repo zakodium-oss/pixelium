@@ -18,7 +18,7 @@
     "compile:cjs": "tsc --project tsconfig.cjs.json",
     "clean-lib": "rimraf lib lib-cjs",
     "test": "npm run eslint && npm run prettier && npm run check-types",
-    "deploy": "npm run build && gh-pages -d build"
+    "deploy": "npm run build && echo pixelium.zakodium.com > ./build/CNAME && gh-pages -d build"
   },
   "repository": {
     "type": "git",
