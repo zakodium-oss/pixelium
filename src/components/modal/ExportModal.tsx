@@ -27,6 +27,11 @@ const ExportStyle = styled.div`
   }
 `;
 
+const SaveButtonInner = styled.span`
+  display: flex;
+  align-items: center;
+`;
+
 function ExportModal() {
   const { isOpen, close } = useModal('export');
   const data = useData();
@@ -136,14 +141,7 @@ function ExportModal() {
         </Modal.Body>
         <Modal.Footer>
           <Button backgroundColor={buttons.info} onClick={save}>
-            <span
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              Save
-            </span>
+            <SaveButtonInner>Save</SaveButtonInner>
           </Button>
         </Modal.Footer>
       </ExportStyle>

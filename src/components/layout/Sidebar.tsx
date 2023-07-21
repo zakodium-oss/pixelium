@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { memo } from 'react';
 import { ValueRenderers, Accordion, Table } from 'react-science/ui';
 
@@ -9,6 +10,11 @@ import MetadataTable from '../metadatas/MetadataTable';
 import PipelineTable from '../pipeline/PipelineTable';
 import ROIAccordion from '../rois/ROIAccordion';
 
+const StyledSidebar = styled.div`
+  width: 100%;
+  min-width: 300px;
+`;
+
 function Sidebar() {
   const currentTab = useCurrentTab();
 
@@ -18,7 +24,7 @@ function Sidebar() {
 
   if (currentTab === undefined) return null;
   return (
-    <div style={{ width: '100%', minWidth: 300 }}>
+    <StyledSidebar>
       <Accordion>
         <Accordion.Item title="General informations">
           <Table>
@@ -41,7 +47,7 @@ function Sidebar() {
         </Accordion.Item>
         <ROIAccordion />
       </Accordion>
-    </div>
+    </StyledSidebar>
   );
 }
 

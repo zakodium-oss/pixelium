@@ -55,6 +55,11 @@ const AlgorithmError = styled.div`
   font-weight: bold;
 `;
 
+const CenterColumn = styled.div`
+  flex-grow: 1;
+  padding-inline: 20px;
+`;
+
 function PreviewModal({
   isOpenDialog,
   closeDialog,
@@ -88,14 +93,7 @@ function PreviewModal({
             <ImageViewerContainer>
               <ImageViewer identifier={viewIdentifier} image={original} />
             </ImageViewerContainer>
-            <div
-              style={{
-                flexGrow: 1,
-                paddingInline: '20px',
-              }}
-            >
-              {children}
-            </div>
+            <CenterColumn>{children}</CenterColumn>
             <ImageViewerContainer>
               {preview === null ? (
                 <AlgorithmError>

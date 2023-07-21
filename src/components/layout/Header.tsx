@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { SvgLogoZakodium } from 'cheminfo-font';
 import { memo } from 'react';
 import {
@@ -13,6 +14,17 @@ import useGlobal from '../../hooks/useGlobal';
 import useLog from '../../hooks/useLog';
 import useModal from '../../hooks/useModal';
 import { getNotificationColor } from '../../utils/colors';
+
+const UnreadChip = styled.span<{ unreadLevel: number }>`
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+  background-color: ${({ unreadLevel }) => getNotificationColor(unreadLevel)};
+  border-radius: 50%;
+  min-width: 14px;
+  font-size: 0.75em;
+  color: white;
+`;
 
 function PixeliumHeader() {
   const { rootRef } = useGlobal();
@@ -55,20 +67,7 @@ function PixeliumHeader() {
         >
           <FaBug />
           {unreadCount > 0 && (
-            <span
-              style={{
-                position: 'absolute',
-                top: '0.5em',
-                left: '0.5em',
-                backgroundColor: getNotificationColor(unreadLevel),
-                borderRadius: '50%',
-                minWidth: '14px',
-                fontSize: '0.75em',
-                color: 'white',
-              }}
-            >
-              {unreadCount}
-            </span>
+            <UnreadChip unreadLevel={unreadLevel}>{unreadCount}</UnreadChip>
           )}
         </Toolbar.Item>
         <Toolbar.Item title="Settings">

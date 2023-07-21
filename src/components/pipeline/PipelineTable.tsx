@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { memo, useCallback, useMemo } from 'react';
+import { CSSProperties, memo, useCallback, useMemo } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import {
   Button,
@@ -37,6 +37,8 @@ const Empty = styled.div`
   justify-content: center;
   height: 100%;
 `;
+
+const pointerStyle: CSSProperties = { cursor: 'pointer' };
 
 interface PipelineTableProps {
   identifier: string;
@@ -117,10 +119,7 @@ function PipelineTable({ identifier }: PipelineTableProps) {
       {pipeline.map((operation, index) => (
         <Table.Row key={operation.identifier}>
           <ValueRenderers.Number value={index + 1} />
-          <ValueRenderers.Text
-            value={operation.type}
-            style={{ cursor: 'pointer' }}
-          />
+          <ValueRenderers.Text value={operation.type} style={pointerStyle} />
           {'options' in operation ? (
             <ValueRenderers.Object value={operation.options} />
           ) : (

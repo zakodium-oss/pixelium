@@ -1,5 +1,13 @@
+import styled from '@emotion/styled';
 import { Image, Mask, writeCanvas } from 'image-js';
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import {
+  CSSProperties,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { MapInteractionCSS } from 'react-map-interaction';
 
 import useImage from '../hooks/useImage';
@@ -15,6 +23,15 @@ interface ImageViewerProps {
   showOriginal?: boolean;
   annotable?: boolean;
 }
+
+const RelativeBox = styled.div`
+  position: relative;
+`;
+
+const canvasStyle: CSSProperties = {
+  objectFit: 'contain',
+  imageRendering: 'pixelated',
+};
 
 function ImageViewer({
   identifier,
@@ -60,14 +77,8 @@ function ImageViewer({
 
   return (
     <MapInteractionCSS value={panZoom} onChange={setPanZoom} maxScale={20}>
-      <div style={{ position: 'relative' }}>
-        <canvas
-          ref={canvasRef}
-          style={{
-            objectFit: 'contain',
-            imageRendering: 'pixelated',
-          }}
-        />
+      <RelativeBox>
+        <canvas ref={canvasRef} style={canvasStyle} />
         {annotable && (
           <ROIAnnotations
             width={imageToShow?.width}
@@ -75,7 +86,7 @@ function ImageViewer({
             identifier={identifier}
           />
         )}
-      </div>
+      </RelativeBox>
     </MapInteractionCSS>
   );
 }

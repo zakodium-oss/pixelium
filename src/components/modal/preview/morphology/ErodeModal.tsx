@@ -23,6 +23,12 @@ const KernelRow = styled.div`
   justify-content: space-between;
 `;
 
+const KernelGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 interface InternalErodeOptions extends ErodeOptions {
   kernel: number[][];
 }
@@ -136,13 +142,7 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
       </Field>
 
       <Field name="kernel" label="Kernel">
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
-        >
+        <KernelGrid>
           {times(erodeOptions.kernel.length, (h) => (
             <KernelRow key={h}>
               {times(erodeOptions.kernel[0].length, (w) => (
@@ -164,7 +164,7 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
               ))}
             </KernelRow>
           ))}
-        </div>
+        </KernelGrid>
       </Field>
     </PreviewModal>
   );

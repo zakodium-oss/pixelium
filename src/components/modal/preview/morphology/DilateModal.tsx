@@ -23,6 +23,12 @@ const KernelRow = styled.div`
   justify-content: space-between;
 `;
 
+const KernelGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 interface InternalDilateOptions extends DilateOptions {
   kernel: number[][];
 }
@@ -142,13 +148,7 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
       </Field>
 
       <Field name="kernel" label="Kernel">
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
-        >
+        <KernelGrid>
           {times(dilateOptions.kernel.length, (h) => (
             <KernelRow key={h}>
               {times(dilateOptions.kernel[0].length, (w) => (
@@ -170,7 +170,7 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
               ))}
             </KernelRow>
           ))}
-        </div>
+        </KernelGrid>
       </Field>
     </PreviewModal>
   );

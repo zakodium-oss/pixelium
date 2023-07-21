@@ -1,7 +1,14 @@
+import styled from '@emotion/styled';
 import { Roi } from 'image-js';
 import { memo, useMemo } from 'react';
 
 import usePreferences from '../../../hooks/usePreferences';
+
+const StyledPolygon = styled.polygon<{ color: string }>`
+  fill: none;
+  stroke: ${({ color }) => color};
+  strokewidth: 1;
+`;
 
 interface MBRAnnotationProps {
   roi: Roi;
@@ -25,12 +32,7 @@ function MBRAnnotation({ roi }: MBRAnnotationProps) {
     return null;
   }
 
-  return (
-    <polygon
-      points={svgPoints}
-      style={{ fill: 'none', stroke: color, strokeWidth: 1 }}
-    />
-  );
+  return <StyledPolygon points={svgPoints} color={color} />;
 }
 
 export default memo(MBRAnnotation);

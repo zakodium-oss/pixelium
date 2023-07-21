@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { Roi } from 'image-js';
 import { memo, useMemo } from 'react';
 
@@ -6,6 +7,12 @@ import usePreferences from '../../../hooks/usePreferences';
 interface FeretAnnotationProps {
   roi: Roi;
 }
+
+const StyledLine = styled.line`
+  fill: none;
+  stroke: ${({ color }) => color};
+  strokewidth: 1;
+`;
 
 function FeretAnnotation({ roi }: FeretAnnotationProps) {
   const { minDiameter, maxDiameter } = roi.feret;
@@ -39,14 +46,14 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
   return (
     <>
       {lines.map(({ x1, y1, x2, y2 }, index) => (
-        <line
+        <StyledLine
           // eslint-disable-next-line react/no-array-index-key
           key={`${roi.id}-${index}`}
           x1={x1}
           y1={y1}
           x2={x2}
           y2={y2}
-          style={{ fill: 'none', stroke: color, strokeWidth: 1 }}
+          color={color}
         />
       ))}
     </>

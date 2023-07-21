@@ -23,6 +23,12 @@ const KernelRow = styled.div`
   justify-content: space-between;
 `;
 
+const KernelGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 interface InternalOpenOptions extends OpenOptions {
   kernel: number[][];
 }
@@ -136,13 +142,7 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
       </Field>
 
       <Field name="kernel" label="Kernel">
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
-        >
+        <KernelGrid>
           {times(openOptions.kernel.length, (h) => (
             <KernelRow key={h}>
               {times(openOptions.kernel[0].length, (w) => (
@@ -164,7 +164,7 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
               ))}
             </KernelRow>
           ))}
-        </div>
+        </KernelGrid>
       </Field>
     </PreviewModal>
   );

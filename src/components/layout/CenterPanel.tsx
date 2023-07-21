@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import React, { memo, useCallback, useEffect, useMemo } from 'react';
 import { DropZoneContainer, Tabs } from 'react-science/ui';
 
@@ -6,6 +7,10 @@ import useData from '../../hooks/useData';
 import useFileLoader from '../../hooks/useFileLoader';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import ImageViewer from '../ImageViewer';
+
+const StyledCenterPanel = styled.div`
+  width: 100%;
+`;
 
 function CenterPanel() {
   const { images } = useData();
@@ -39,7 +44,7 @@ function CenterPanel() {
   const { handleFileLoad: handleOnDrop } = useFileLoader();
 
   return (
-    <div style={{ width: '100%' }}>
+    <StyledCenterPanel>
       <DropZoneContainer
         emptyText="Drag and drop here either an image or a Pixelium file."
         onDrop={handleOnDrop}
@@ -53,7 +58,7 @@ function CenterPanel() {
           />
         ) : null}
       </DropZoneContainer>
-    </div>
+    </StyledCenterPanel>
   );
 }
 

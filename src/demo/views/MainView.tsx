@@ -13,22 +13,22 @@ const MainViewWrapper = styled.div`
   overflow: hidden;
 `;
 
+const PixeliumWrapper = styled.div`
+  flex: 1;
+  padding: 20px;
+  background-color: lightgray;
+  min-width: 0;
+`;
+
 function MainView() {
   const [webSource, setWebSource] = useState<WebSource>();
 
   return (
     <MainViewWrapper>
       <Sidebar setWebSource={setWebSource} />
-      <div
-        style={{
-          padding: '20px',
-          backgroundColor: 'lightgray',
-          flex: '1',
-          minWidth: '0',
-        }}
-      >
+      <PixeliumWrapper>
         <Pixelium webSource={webSource} />
-      </div>
+      </PixeliumWrapper>
     </MainViewWrapper>
   );
 }

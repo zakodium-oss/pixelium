@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import startCase from 'lodash/startCase';
-import { memo, useCallback, useMemo, useState } from 'react';
+import { CSSProperties, memo, useCallback, useMemo, useState } from 'react';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import {
   Checkbox,
@@ -54,6 +54,10 @@ const AnnotationGroup = styled.div`
     white-space: nowrap;
   }
 `;
+
+const tableStyle: CSSProperties = {
+  width: '100%',
+};
 
 function ROIEditPreference() {
   const preferences = usePreferences();
@@ -132,7 +136,7 @@ function ROIEditPreference() {
       <PaddedContent>
         <EditGroup>
           <RoiEditTitle>Shown columns</RoiEditTitle>
-          <Table style={{ width: '100%' }}>
+          <Table style={tableStyle}>
             <Table.Header>
               <ValueRenderers.Title value="Label" />
               <ValueRenderers.Title value="Name" />

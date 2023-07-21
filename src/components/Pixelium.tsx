@@ -56,6 +56,13 @@ interface PixeliumProps {
   webSource?: WebSource;
 }
 
+const PixeliumMainStyle = styled.div`
+  display: flex;
+  flexdirection: row;
+  height: 100%;
+  overflow: hidden;
+`;
+
 function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
   // Refs
   const rootRef = useRef<HTMLDivElement>(null);
@@ -96,14 +103,7 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                         <AutoLoader webSource={webSource}>
                           <PixeliumStyle ref={rootRef}>
                             <Header />
-                            <div
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                height: '100%',
-                                overflow: 'hidden',
-                              }}
-                            >
+                            <PixeliumMainStyle>
                               <Toolbar orientation="vertical">
                                 <ImportTool />
                                 <ExportTool />
@@ -122,7 +122,7 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                                 <CenterPanel />
                                 <Sidebar />
                               </SplitPane>
-                            </div>
+                            </PixeliumMainStyle>
                           </PixeliumStyle>
                         </AutoLoader>
                       </AnnotationsProvider>

@@ -1,8 +1,13 @@
+import styled from '@emotion/styled';
 import { memo, useCallback, useRef } from 'react';
 import { FaFileImport } from 'react-icons/fa';
 import { Toolbar } from 'react-science/ui';
 
 import useFileLoader from '../../hooks/useFileLoader';
+
+const StyledImportInput = styled.input`
+  display: none;
+`;
 
 function ImportTool() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -25,11 +30,10 @@ function ImportTool() {
   return (
     <Toolbar.Item title={'Import file'} onClick={openFileDialog}>
       <FaFileImport />
-      <input
+      <StyledImportInput
         ref={inputRef}
         type="file"
         multiple
-        style={{ display: 'none' }}
         onChange={handleOnChange}
       />
     </Toolbar.Item>

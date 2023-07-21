@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { Roi } from 'image-js';
 import startCase from 'lodash/startCase';
 import { memo, useCallback, useState } from 'react';
@@ -40,6 +41,15 @@ function roisToTSV(rois: Roi[]) {
 
 const copyToClipBoardDefaultText = 'Copy to clipboard';
 
+const Separator = styled.div`
+  flex: 1;
+`;
+
+const ROICount = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 function ROIToolbar({ identifier }: ROIToolbarProps) {
   const rois = useROIs(identifier);
   const viewDispatch = useViewDispatch();
@@ -73,10 +83,8 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
           <FaCopy />
         </Toolbar.Item>
       )}
-      <div style={{ flex: 1 }} />
-      <div
-        style={{ display: 'flex', alignItems: 'center' }}
-      >{`[${rois.length}]`}</div>
+      <Separator />
+      <ROICount>{`[${rois.length}]`}</ROICount>
       <Toolbar.Item
         title="ROI preferences"
         titleOrientation="auto"

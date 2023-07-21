@@ -36,6 +36,15 @@ const LogModalStyle = styled.div`
   }
 `;
 
+const TrashButtonInner = styled.span`
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: 8px;
+  }
+`;
+
 const tableHeaderStyle: CSSProperties = {
   textAlign: 'left',
 };
@@ -112,10 +121,10 @@ function LogModal() {
         </Modal.Body>
         <Modal.Footer>
           <Button backgroundColor={buttons.danger} onClick={clear}>
-            <span style={{ display: 'flex', alignItems: 'center' }}>
+            <TrashButtonInner>
               <FaTrash />
-              <span style={{ marginLeft: '8px' }}>Clear logs</span>
-            </span>
+              <span>Clear logs</span>
+            </TrashButtonInner>
           </Button>
         </Modal.Footer>
       </LogModalStyle>
