@@ -58,7 +58,7 @@ interface PixeliumProps {
 
 const PixeliumMainStyle = styled.div`
   display: flex;
-  flexdirection: row;
+  flex-direction: row;
   height: 100%;
   overflow: hidden;
 `;
