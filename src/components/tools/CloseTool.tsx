@@ -20,6 +20,8 @@ function CloseTool() {
     viewDispatch({ type: CLOSE_TAB });
   }, [currentTab, dataDispatch, viewDispatch]);
 
+  if (currentTab === undefined) return null;
+
   return (
     <Toolbar.Item title="Close current image" onClick={closeImage}>
       <FaTimes />
