@@ -8,6 +8,7 @@ import type {
   SetLoadingAction,
   LoadDropAction,
   LoadPixeliumAction,
+  CloseImageAction,
 } from './actions/LoadActions';
 import * as RoiActions from './actions/RoiActions';
 import { SetROIAction } from './actions/RoiActions';
@@ -37,7 +38,8 @@ export type DataActions =
   | LoadDropAction
   | SetROIAction
   | PipelineActionsTypes
-  | LoadPixeliumAction;
+  | LoadPixeliumAction
+  | CloseImageAction;
 
 function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
   switch (action.type) {
@@ -83,6 +85,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.setResize(draft, action.payload);
     case Type.SET_ROTATE:
       return PipelineActions.setRotate(draft, action.payload);
+    case Type.CLOSE_IMAGE:
+      return LoadActions.closeImage(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }

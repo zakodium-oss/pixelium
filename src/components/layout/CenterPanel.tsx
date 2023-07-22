@@ -6,31 +6,40 @@ import useCurrentTab from '../../hooks/useCurrentTab';
 import useData from '../../hooks/useData';
 import useFileLoader from '../../hooks/useFileLoader';
 import useViewDispatch from '../../hooks/useViewDispatch';
+import { OPEN_TAB } from '../../state/view/ViewActionTypes';
 import ImageViewer from '../ImageViewer';
 
 const StyledCenterPanel = styled.div`
   width: 100%;
 `;
 
+const TabTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`;
+
 function CenterPanel() {
   const { images } = useData();
+  const viewDispatch = useViewDispatch();
 
   const tabsItems = useMemo(
     () =>
       Object.keys(images).map((identifier) => ({
         id: identifier,
-        title: images[identifier].metadata.name,
+        title: <TabTitle>{images[identifier].metadata.name}</TabTitle>,
         content: <ImageViewer identifier={identifier} annotable />,
       })),
     [images],
   );
 
   const currentTab = useCurrentTab();
-  const viewDispatch = useViewDispatch();
 
   const openTab = useCallback(
     (identifier: string) => {
-      viewDispatch({ type: 'OPEN_TAB', payload: identifier });
+      viewDispatch({ type: OPEN_TAB, payload: identifier });
     },
     [viewDispatch],
   );

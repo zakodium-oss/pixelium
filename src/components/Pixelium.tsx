@@ -33,6 +33,7 @@ import CenterPanel from './layout/CenterPanel';
 import Header from './layout/Header';
 import Sidebar from './layout/Sidebar';
 import ModalContainer from './modal/ModalContainer';
+import CloseTool from './tools/CloseTool';
 import ExportTool from './tools/ExportTool';
 import GreyTool from './tools/FilterTool';
 import GeometryTool from './tools/GeometryTool';
@@ -112,6 +113,7 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                                 <MorphologyTool />
                                 <GeometryTool />
                                 <ROITool />
+                                <CloseTool />
                                 <ModalContainer />
                               </Toolbar>
                               <SplitPane

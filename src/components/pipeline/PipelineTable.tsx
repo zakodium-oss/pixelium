@@ -101,7 +101,7 @@ function PipelineTable({ identifier }: PipelineTableProps) {
   );
 
   const pipeline = useMemo(
-    () => data.images[identifier].pipeline,
+    () => data.images[identifier]?.pipeline ?? [],
     [data, identifier],
   );
 

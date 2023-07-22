@@ -17,7 +17,7 @@ import {
   SetEditModeIdentifierAction,
 } from './actions/ModalActions';
 import * as TabActions from './actions/TabActions';
-import { OpenTabAction } from './actions/TabActions';
+import { CloseTabAction, OpenTabAction } from './actions/TabActions';
 
 export const OP_TYPE_MODAL_MAP: {
   [key in PipelineOperations['type']]: ModalName;
@@ -67,7 +67,7 @@ export type ModalName =
   | 'extractROI';
 
 export interface ViewState {
-  currentTab?: string;
+  currentTab: string | undefined;
   imageViewerProps: Record<
     string,
     {
@@ -113,6 +113,7 @@ export const initialViewState: ViewState = {
 
 export type ViewActions =
   | OpenTabAction
+  | CloseTabAction
   | SetPanZoomAction
   | OpenModalAction
   | CloseModalAction
@@ -126,6 +127,8 @@ function innerViewReducer(draft: Draft<ViewState>, action: ViewActions) {
       return LoadActions.loadViewState(draft, action.payload);
     case Type.OPEN_TAB:
       return TabActions.openTab(draft, action.payload);
+    case Type.CLOSE_TAB:
+      return TabActions.closeTab(draft);
     case Type.SET_PAN_ZOOM:
       return ImageViewerActions.setPanZoom(draft, action.payload);
     case Type.OPEN_MODAL:

@@ -8,6 +8,8 @@ export const LOAD_DROP = 'LOAD_DROP';
 
 export const LOAD_PIXELIUM = 'LOAD_PIXELIUM';
 
+export const CLOSE_IMAGE = 'CLOSE_IMAGE';
+
 export {
   SET_GREY_FILTER,
   SET_BLUR,
