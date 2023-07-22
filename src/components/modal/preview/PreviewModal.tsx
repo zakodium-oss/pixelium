@@ -109,7 +109,7 @@ function PreviewModal({
         <Modal.Footer>
           <FooterStyled>
             <Button backgroundColor={buttons.info} onClick={internalApply}>
-              {editing ? 'Edit filter' : 'Add filter'}
+              {editing ? 'Edit operation' : 'Add operation'}
             </Button>
           </FooterStyled>
         </Modal.Footer>
