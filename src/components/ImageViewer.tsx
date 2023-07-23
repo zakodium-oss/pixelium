@@ -15,7 +15,7 @@ import useView from '../hooks/useView';
 import useViewDispatch from '../hooks/useViewDispatch';
 import { SET_PAN_ZOOM } from '../state/view/ViewActionTypes';
 
-import ROIAnnotations from './rois/ROIAnnotations';
+import ROIAnnotations from './roi/ROIAnnotations';
 
 interface ImageViewerProps {
   identifier: string;

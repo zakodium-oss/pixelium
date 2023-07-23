@@ -33,14 +33,14 @@ import CenterPanel from './layout/CenterPanel';
 import Header from './layout/Header';
 import Sidebar from './layout/Sidebar';
 import ModalContainer from './modal/ModalContainer';
-import CloseTool from './tools/CloseTool';
-import ExportTool from './tools/ExportTool';
-import GreyTool from './tools/FilterTool';
-import GeometryTool from './tools/GeometryTool';
-import ImportTool from './tools/ImportTool';
-import MaskTool from './tools/MaskTool';
-import MorphologyTool from './tools/MorphologyTool';
-import ROITool from './tools/ROITool';
+import CloseTool from './tool/CloseTool';
+import ExportTool from './tool/ExportTool';
+import GreyTool from './tool/FilterTool';
+import GeometryTool from './tool/GeometryTool';
+import ImportTool from './tool/ImportTool';
+import MaskTool from './tool/MaskTool';
+import MorphologyTool from './tool/MorphologyTool';
+import ROITool from './tool/ROITool';
 
 const PixeliumStyle = styled.div`
   width: 100%;

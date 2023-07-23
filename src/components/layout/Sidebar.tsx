@@ -6,9 +6,9 @@ import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
 import useImageInformations from '../../hooks/useImageInformations';
 import Histograms from '../histogram/Histograms';
-import MetadataTable from '../metadatas/MetadataTable';
+import MetadataTable from '../metadata/MetadataTable';
 import PipelineTable from '../pipeline/PipelineTable';
-import ROIAccordion from '../rois/ROIAccordion';
+import ROIAccordion from '../roi/ROIAccordion';
 
 const StyledSidebar = styled.div`
   width: 100%;
