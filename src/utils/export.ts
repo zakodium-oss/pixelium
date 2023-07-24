@@ -114,29 +114,38 @@ export async function savePixeliumBundle({
   if (data !== null) {
     const references = {};
     fileCollection.removeFile('data.json');
-    const string = JSON.stringify(data, (key, value) => {
+    const dataJson = JSON.stringify(data, (key, value) => {
       if (ArrayBuffer.isView(value)) {
         return Array.from(value as any);
       }
+
       if (value instanceof ImageJS) {
         const image = value;
         const ref = uuid();
         references[ref] = image;
         return ref;
       }
+
       return value;
     });
-    await fileCollection.appendText('data.json', string);
+    await fileCollection.appendText('data.json', dataJson);
 
     for (const key of Object.keys(references)) {
       await fileCollection.set(`refs/${key}`, encode(references[key]));
     }
   }
   if (preferences !== null) {
-    await fileCollection.set('preferences.json', preferences);
+    const preferencesJson = JSON.stringify(preferences);
+    await fileCollection.appendText('preferences.json', preferencesJson);
   }
   if (view !== null) {
-    await fileCollection.set('view.json', view);
+    const viewJson = JSON.stringify(view, (key, value) => {
+      if (key === 'export') {
+        return false;
+      }
+      return value;
+    });
+    await fileCollection.appendText('view.json', viewJson);
   }
 
   const buffer = await fileCollection.toIum({ includeData: true });
