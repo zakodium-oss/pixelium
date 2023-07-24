@@ -1,18 +1,11 @@
-import styled from '@emotion/styled';
 import { Roi } from 'image-js';
-import { memo, useMemo } from 'react';
+import { CSSProperties, memo, useMemo } from 'react';
 
 import usePreferences from '../../../hooks/usePreferences';
 
 interface FeretAnnotationProps {
   roi: Roi;
 }
-
-const StyledLine = styled.line`
-  fill: none;
-  stroke: ${({ color }) => color};
-  strokewidth: 1;
-`;
 
 function FeretAnnotation({ roi }: FeretAnnotationProps) {
   const { minDiameter, maxDiameter } = roi.feret;
@@ -41,19 +34,28 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
     [preferences.rois.annotations.feretDiameters.color],
   );
 
+  const lineStyle: CSSProperties = useMemo(
+    () => ({
+      fill: 'none',
+      stroke: color,
+      strokewidth: 1,
+    }),
+    [color],
+  );
+
   if (!preferences.rois.annotations.feretDiameters.enabled) return null;
 
   return (
     <>
       {lines.map(({ x1, y1, x2, y2 }, index) => (
-        <StyledLine
+        <line
           // eslint-disable-next-line react/no-array-index-key
           key={`${roi.id}-${index}`}
           x1={x1}
           y1={y1}
           x2={x2}
           y2={y2}
-          color={color}
+          style={lineStyle}
         />
       ))}
     </>

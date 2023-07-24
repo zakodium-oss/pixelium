@@ -1,5 +1,4 @@
-import styled from '@emotion/styled';
-import { memo, useEffect, useMemo, useRef } from 'react';
+import { CSSProperties, memo, useEffect, useMemo, useRef } from 'react';
 
 import useAnnotationRef from '../../hooks/useAnnotationRef';
 import useROIs from '../../hooks/useROIs';
@@ -11,14 +10,6 @@ interface ROIAnnotationsProps {
   width?: number;
   height?: number;
 }
-
-const AnnotationsWrapper = styled.div<{ width: number; height: number }>`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: ${({ width }) => width}px;
-  height ${({ height }) => height}px;
-`;
 
 function ROIAnnotations({
   identifier,
@@ -40,9 +31,19 @@ function ROIAnnotations({
   }, [setSvgRef, svgRef]);
 
   const viewBox = useMemo(() => `0 0 ${width} ${height}`, [width, height]);
+  const style: CSSProperties = useMemo(
+    () => ({
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width: `${width}px`,
+      height: `${height}px`,
+    }),
+    [width, height],
+  );
 
   return (
-    <AnnotationsWrapper width={width} height={height}>
+    <div style={style}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="100%"
@@ -52,7 +53,7 @@ function ROIAnnotations({
       >
         {annotations}
       </svg>
-    </AnnotationsWrapper>
+    </div>
   );
 }
 
