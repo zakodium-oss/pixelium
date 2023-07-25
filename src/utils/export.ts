@@ -24,11 +24,6 @@ export function svgElementToImage(
     cloned.width.baseVal.valueAsString = `${width}px`;
     cloned.height.baseVal.valueAsString = `${height}px`;
 
-    const svg = `${cloned.outerHTML}`;
-    const blob = new Blob([svg], {
-      type: 'image/svg+xml',
-    });
-
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
@@ -39,6 +34,9 @@ export function svgElementToImage(
     }
 
     const img = new Image();
+    const blob = new Blob([cloned.outerHTML], {
+      type: 'image/svg+xml',
+    });
     const url = URL.createObjectURL(blob);
     img.addEventListener('load', () => {
       ctx.drawImage(img, 0, 0);
@@ -120,9 +118,8 @@ export async function savePixeliumBundle({
       }
 
       if (value instanceof ImageJS) {
-        const image = value;
         const ref = uuid();
-        references[ref] = image;
+        references[ref] = value;
         return ref;
       }
 
