@@ -1,10 +1,18 @@
 import styled from '@emotion/styled';
-import { CSSProperties, memo, useCallback, useMemo } from 'react';
+import {
+  CSSProperties,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import {
   Button,
   Checkbox,
   CheckedState,
+  Select,
   Table,
   ValueRenderers,
 } from 'react-science/ui';
@@ -14,6 +22,7 @@ import useData from '../../hooks/useData';
 import useDataDispatch from '../../hooks/useDataDispatch';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import {
+  COPY_OPERATIONS,
   REMOVE_OPERATION,
   TOGGLE_OPERATION,
 } from '../../state/data/DataActionTypes';
@@ -33,9 +42,11 @@ const ActionsContainer = styled.div`
 
 const Empty = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
+  padding-inline: 50px;
 `;
 
 const pointerStyle: CSSProperties = { cursor: 'pointer' };
@@ -105,7 +116,45 @@ function PipelineTable({ identifier }: PipelineTableProps) {
     [data, identifier],
   );
 
-  if (pipeline.length === 0) return <Empty>Pipeline is empty</Empty>;
+  const otherImagesOptions = useMemo(
+    () => [
+      Object.keys(data.images)
+        .filter((key) => data.images[key].pipeline.length > 0)
+        .map((imageKey) => ({
+          label: data.images[imageKey].metadata.name,
+          value: imageKey,
+        })),
+    ],
+    [data.images],
+  );
+
+  const [imageKeyToImport, setImageKeyToImport] = useState<string>();
+
+  useEffect(() => {
+    if (imageKeyToImport === undefined) return;
+    dataDispatch({
+      type: COPY_OPERATIONS,
+      payload: {
+        fromIdentifier: imageKeyToImport,
+        toIdentifier: identifier,
+      },
+    });
+    setImageKeyToImport(undefined);
+  }, [dataDispatch, identifier, imageKeyToImport]);
+
+  if (pipeline.length === 0) {
+    return (
+      <Empty>
+        <p>Pipeline is empty.</p>
+        <p>Import from another image:</p>
+        <Select
+          value={imageKeyToImport}
+          onSelect={setImageKeyToImport}
+          options={otherImagesOptions}
+        />
+      </Empty>
+    );
+  }
 
   return (
     <Table>

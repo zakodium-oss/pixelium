@@ -15,6 +15,7 @@ import { SetROIAction } from './actions/RoiActions';
 import * as PipelineActions from './actions/pipeline/PipelineActions';
 import type { PipelineActionsTypes } from './actions/pipeline/PipelineActions';
 import type { PipelineOperations } from './actions/pipeline/PipelineOperations';
+import { CopyPipelineOperationsAction } from './actions/pipeline/meta';
 
 export interface DataFile {
   image: Image;
@@ -39,7 +40,8 @@ export type DataActions =
   | SetROIAction
   | PipelineActionsTypes
   | LoadPixeliumAction
-  | CloseImageAction;
+  | CloseImageAction
+  | CopyPipelineOperationsAction;
 
 function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
   switch (action.type) {
@@ -87,6 +89,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return PipelineActions.setRotate(draft, action.payload);
     case Type.CLOSE_IMAGE:
       return LoadActions.closeImage(draft, action.payload);
+    case Type.COPY_OPERATIONS:
+      return PipelineActions.copyOperations(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }

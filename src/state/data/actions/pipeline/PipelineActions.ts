@@ -12,6 +12,7 @@ import type { PipelineSetMaskAction } from './mask';
 import type {
   TogglePipelineOperationAction,
   RemovePipelineOperationAction,
+  CopyPipelineOperationsAction,
 } from './meta';
 import type { PipelineSetCloseAction } from './morphology/close';
 import type { PipelineSetDilateAction } from './morphology/dilate';
@@ -33,6 +34,7 @@ export { setOpen, SET_OPEN } from './morphology/open';
 export { setClose, SET_CLOSE } from './morphology/close';
 export { toggleOperation, TOGGLE_OPERATION } from './meta';
 export { removeOperation, REMOVE_OPERATION } from './meta';
+export { copyOperations, COPY_OPERATIONS } from './meta';
 export { setResize, SET_RESIZE } from './geometry/resize';
 export { setRotate, SET_ROTATE } from './geometry/rotate';
 
@@ -53,4 +55,5 @@ export type PipelineActionsTypes =
   | TogglePipelineOperationAction
   | RemovePipelineOperationAction
   | PipelineSetResizeAction
-  | PipelineSetRotateAction;
+  | PipelineSetRotateAction
+  | CopyPipelineOperationsAction;
