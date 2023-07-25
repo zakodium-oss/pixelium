@@ -88,27 +88,17 @@ function LogModal() {
                     />
                   </Table.Header>
                   {reversedLogs.map((log) => {
-                    const cellStyle: CSSProperties = {
+                    const rowStyle: CSSProperties = {
                       backgroundColor: getRowColor(log.level),
                     };
                     return (
-                      <Table.Row key={log.id}>
-                        <ValueRenderers.Number
-                          style={cellStyle}
-                          value={log.id}
-                        />
+                      <Table.Row key={log.id} style={rowStyle}>
+                        <ValueRenderers.Number value={log.id} />
                         <ValueRenderers.Text
-                          style={cellStyle}
                           value={logsDataFormat.format(log.time)}
                         />
-                        <ValueRenderers.Text
-                          style={cellStyle}
-                          value={log.levelLabel}
-                        />
-                        <ValueRenderers.Text
-                          style={cellStyle}
-                          value={log.message}
-                        />
+                        <ValueRenderers.Text value={log.levelLabel} />
+                        <ValueRenderers.Text value={log.message} />
                       </Table.Row>
                     );
                   })}
