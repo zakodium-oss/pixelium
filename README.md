@@ -51,6 +51,15 @@ It's also possible to pass wanted data, preferences or view data as initial valu
 
 Another example of usage is available in the [demo source code](https://github.com/zakodium-oss/pixelium/blob/main/src/demo/views/MainView.tsx).
 
+## Development
+
+This will run the demo application in local environment.
+```
+git clone git@github.com:zakodium-oss/pixelium.git
+cd pixelium
+npm install
+npm run dev
+``` 
 
 ## Licensing
 
