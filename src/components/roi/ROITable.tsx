@@ -56,38 +56,43 @@ function ROITable({ identifier }: ROITableProps) {
         return <ValueRenderers.Number key={column} value={surface} />;
       case 'feretAspectRatio':
         return (
-          <ValueRenderers.Text
+          <ValueRenderers.Number
             key={column}
-            value={feret.aspectRatio.toFixed(2)}
+            value={feret.aspectRatio}
+            fixed={2}
           />
         );
       case 'feretMinDiameter':
         return (
-          <ValueRenderers.Text
+          <ValueRenderers.Number
             key={column}
-            value={feret.minDiameter.length.toFixed(2)}
+            value={feret.minDiameter.length}
+            fixed={2}
           />
         );
       case 'feretMaxDiameter':
         return (
-          <ValueRenderers.Text
+          <ValueRenderers.Number
             key={column}
-            value={feret.maxDiameter.length.toFixed(2)}
+            value={feret.maxDiameter.length}
+            fixed={2}
           />
         );
       case 'roundness':
         return (
-          <ValueRenderers.Text key={column} value={roundness.toFixed(2)} />
+          <ValueRenderers.Number key={column} value={roundness} fixed={2} />
         );
       case 'solidity':
-        return <ValueRenderers.Text key={column} value={solidity.toFixed(2)} />;
+        return (
+          <ValueRenderers.Number key={column} value={solidity} fixed={2} />
+        );
       case 'sphericity':
         return (
-          <ValueRenderers.Text key={column} value={sphericity.toFixed(2)} />
+          <ValueRenderers.Number key={column} value={sphericity} fixed={2} />
         );
       case 'fillRatio':
         return (
-          <ValueRenderers.Text key={column} value={fillRatio.toFixed(2)} />
+          <ValueRenderers.Number key={column} value={fillRatio} fixed={2} />
         );
       default:
         throw new Error(`Unknown column`);
