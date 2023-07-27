@@ -52,6 +52,18 @@ It's also possible to pass wanted data, preferences or view data as initial valu
 Another example of usage is available in the [demo source code](https://github.com/zakodium-oss/pixelium/blob/main/src/demo/views/MainView.tsx).
 
 
+## Licensing
+
+This software is licensed under the [MIT license](https://github.com/zakodium-oss/pixelium/blob/main/LICENSE). All rights reserved.
+
+<table border="0">
+ <tr>
+    <td><img src="https://github.com/zakodium-oss/pixelium/assets/2575182/f1907231-8d61-4876-8317-85991c6e0369" /></td>
+    <td><img src="https://github.com/zakodium-oss/pixelium/assets/2575182/4438d79f-7d45-4493-ba69-b506fc9790e9" /></td>
+ </tr>
+</table>
+
+
 [ci-image]: https://img.shields.io/github/actions/workflow/status/zakodium-oss/pixelium/code-quality.yml
 [ci-url]: https://github.com/zakodium-oss/pixelium/actions/workflows/code-quality.yml
 [license-image]: https://img.shields.io/github/license/zakodium-oss/pixelium.svg
