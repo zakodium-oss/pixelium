@@ -109,6 +109,11 @@ function AboutModal() {
                   <img src={hearcLogo} />
                 </a>
               </ImageColumns>
+              <p>
+                Initially developed by Xavier Stouder as part of his Bachelor
+                thesis at the University of Applied Sciences and Arts Western
+                Switzerland (HES-SO).
+              </p>
               <p>All rights reserved. Released under MIT license.</p>
             </AboutContent>
           </Modal.Body>
