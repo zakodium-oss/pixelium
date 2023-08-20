@@ -3,7 +3,7 @@ import { Roi } from 'image-js';
 import startCase from 'lodash/startCase';
 import { memo, useCallback, useState } from 'react';
 import { FaCog, FaCopy } from 'react-icons/fa';
-import { Toolbar } from 'react-science/ui';
+import { Toolbar, PanelHeader } from 'react-science/ui';
 import { useCopyToClipboard } from 'react-use';
 
 import useROIs from '../../hooks/useROIs';
@@ -73,26 +73,19 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
   }, [viewDispatch]);
 
   return (
-    <Toolbar orientation="horizontal">
+    <PanelHeader total={rois.length} onClickSettings={handleEditROIPreference}>
       {rois.length > 0 && (
-        <Toolbar.Item
-          title={copyToClipBoardText}
-          titleOrientation="horizontal"
-          onClick={handleCopyToClipboard}
-        >
-          <FaCopy />
-        </Toolbar.Item>
+        <Toolbar orientation="horizontal">
+          <Toolbar.Item
+            title={copyToClipBoardText}
+            titleOrientation="horizontal"
+            onClick={handleCopyToClipboard}
+          >
+            <FaCopy />
+          </Toolbar.Item>
+        </Toolbar>
       )}
-      <Separator />
-      <ROICount>{`[${rois.length}]`}</ROICount>
-      <Toolbar.Item
-        title="ROI preferences"
-        titleOrientation="auto"
-        onClick={handleEditROIPreference}
-      >
-        <FaCog />
-      </Toolbar.Item>
-    </Toolbar>
+    </PanelHeader>
   );
 }
 
