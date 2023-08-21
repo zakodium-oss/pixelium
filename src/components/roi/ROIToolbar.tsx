@@ -1,8 +1,7 @@
-import styled from '@emotion/styled';
 import { Roi } from 'image-js';
 import startCase from 'lodash/startCase';
 import { memo, useCallback, useState } from 'react';
-import { FaCog, FaCopy } from 'react-icons/fa';
+import { FaCopy } from 'react-icons/fa';
 import { Toolbar, PanelHeader } from 'react-science/ui';
 import { useCopyToClipboard } from 'react-use';
 
@@ -40,15 +39,6 @@ function roisToTSV(rois: Roi[]) {
 }
 
 const copyToClipBoardDefaultText = 'Copy to clipboard';
-
-const Separator = styled.div`
-  flex: 1;
-`;
-
-const ROICount = styled.div`
-  display: flex;
-  align-items: center;
-`;
 
 function ROIToolbar({ identifier }: ROIToolbarProps) {
   const rois = useROIs(identifier);
