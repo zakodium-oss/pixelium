@@ -30,6 +30,7 @@ export const availableAnnotations = [
   'convexHull',
   'minimalBoundingRectangle',
   'feretDiameters',
+  'surface',
 ] as const;
 
 export type RoiColumn = (typeof availableRoiColumns)[number];
@@ -38,6 +39,8 @@ export type AnnotationsPreferences = {
   [key in AnnotationType]: {
     enabled: boolean;
     color: string;
+    fontColor: string;
+    fontSize: number;
   };
 };
 
@@ -57,14 +60,26 @@ export const initialPreferencesState: PreferencesState = {
       convexHull: {
         enabled: true,
         color: '#ff0000',
+        fontColor: '#ff0000',
+        fontSize: 2,
       },
       minimalBoundingRectangle: {
         enabled: true,
         color: '#0000ff',
+        fontColor: '#0000ff',
+        fontSize: 2,
       },
       feretDiameters: {
         enabled: true,
         color: '#000000',
+        fontColor: '#ff00ff',
+        fontSize: 2,
+      },
+      surface: {
+        enabled: false,
+        color: '#00ff00',
+        fontColor: '#00ff00',
+        fontSize: 2,
       },
     },
   },
