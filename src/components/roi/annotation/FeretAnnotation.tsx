@@ -48,7 +48,7 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
   const textStyle: CSSProperties = useMemo(
     () => ({
       fill: fontColor,
-      fontSize: fontSize,
+      fontSize,
       textAnchor: 'middle',
       dominantBaseline: 'central',
     }),
@@ -64,16 +64,11 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
         const x = x2 > x1 ? (x2 + x1 + 2) / 2 : (x2 + x1 - 2) / 2;
         const y = y1 > y2 ? (y2 + y1 + 2) / 2 : (y2 + y1 - 2) / 2;
         return (
-          <g>
-            <line
-              // eslint-disable-next-line react/no-array-index-key
-              key={`${roi.id}-${index}`}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              style={lineStyle}
-            />
+          <g
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${roi.id}-${index}`}
+          >
+            <line x1={x1} y1={y1} x2={x2} y2={y2} style={lineStyle} />
             <text
               x={0}
               y={0}

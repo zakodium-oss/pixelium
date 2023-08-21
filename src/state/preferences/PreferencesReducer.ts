@@ -76,7 +76,7 @@ export const initialPreferencesState: PreferencesState = {
         fontSize: 2,
       },
       surface: {
-        enabled: false,
+        enabled: true,
         color: '#00ff00',
         fontColor: '#00ff00',
         fontSize: 2,

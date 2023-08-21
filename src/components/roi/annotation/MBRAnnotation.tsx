@@ -32,7 +32,7 @@ function MBRAnnotation({ roi }: MBRAnnotationProps) {
   const textStyle: CSSProperties = useMemo(
     () => ({
       fill: fontColor,
-      fontSize: fontSize,
+      fontSize,
       textAnchor: 'middle',
       dominantBaseline: 'text-after-edge',
     }),

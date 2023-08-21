@@ -27,7 +27,14 @@ function SurfaceAnnotation({ roi }: SurfaceAnnotationProps) {
   if (!enabled) return null;
 
   return roi.points.map(([column, row]) => (
-    <rect x={column} y={row} width="1" height="1" style={rectStyle} />
+    <rect
+      key={`${column}-${row}`}
+      x={column}
+      y={row}
+      width="1"
+      height="1"
+      style={rectStyle}
+    />
   ));
 }
 
