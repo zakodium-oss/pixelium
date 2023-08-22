@@ -16,10 +16,8 @@ function MBRAnnotation({ roi }: MBRAnnotationProps) {
     [roi.mbr.points],
   );
   const preferences = usePreferences();
-  const { color, enabled, fontSize, fontColor } = useMemo(
-    () => preferences.rois.annotations.minimalBoundingRectangle,
-    [preferences.rois.annotations.minimalBoundingRectangle],
-  );
+  const { color, enabled, fontSize, fontColor } =
+    preferences.rois.annotations.minimalBoundingRectangle;
 
   const polygonStyle: CSSProperties = useMemo(
     () => ({

@@ -17,10 +17,8 @@ function ConvexHullAnnotation({ roi }: ConvexHullAnnotationProps) {
   );
 
   const preferences = usePreferences();
-  const { color, enabled, fontColor, fontSize } = useMemo(
-    () => preferences.rois.annotations.convexHull,
-    [preferences.rois.annotations.convexHull],
-  );
+  const { color, enabled, fontColor, fontSize } =
+    preferences.rois.annotations.convexHull;
 
   const polygonStyle: CSSProperties = useMemo(
     () => ({

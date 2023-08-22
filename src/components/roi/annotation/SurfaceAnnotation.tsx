@@ -10,10 +10,7 @@ interface SurfaceAnnotationProps {
 function SurfaceAnnotation({ roi }: SurfaceAnnotationProps) {
   const preferences = usePreferences();
 
-  const { color, enabled } = useMemo(
-    () => preferences.rois.annotations.surface,
-    [preferences.rois.annotations.surface],
-  );
+  const { color, enabled } = preferences.rois.annotations.surface;
 
   const rectStyle: CSSProperties = useMemo(
     () => ({

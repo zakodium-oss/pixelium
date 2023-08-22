@@ -31,10 +31,8 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
   );
 
   const preferences = usePreferences();
-  const { color, enabled, fontColor, fontSize } = useMemo(
-    () => preferences.rois.annotations.feretDiameters,
-    [preferences.rois.annotations.feretDiameters],
-  );
+  const { color, enabled, fontColor, fontSize } =
+    preferences.rois.annotations.feretDiameters;
 
   const lineStyle: CSSProperties = useMemo(
     () => ({
