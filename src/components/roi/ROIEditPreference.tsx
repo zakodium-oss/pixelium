@@ -5,6 +5,7 @@ import { FaCheck, FaTimes } from 'react-icons/fa';
 import {
   Checkbox,
   ColorPickerDropdown,
+  PanelPreferencesToolbar,
   Table,
   Toolbar,
   ValueRenderers,
@@ -117,22 +118,7 @@ function ROIEditPreference() {
 
   return (
     <>
-      <Toolbar orientation="horizontal">
-        <Toolbar.Item
-          title="Save"
-          titleOrientation="horizontal"
-          onClick={handleSave}
-        >
-          <FaCheck color="green" />
-        </Toolbar.Item>
-        <Toolbar.Item
-          title="Cancel"
-          titleOrientation="horizontal"
-          onClick={handleCancel}
-        >
-          <FaTimes color="red" />
-        </Toolbar.Item>
-      </Toolbar>
+      <PanelPreferencesToolbar onClose={handleCancel} onSave={handleSave} />
       <PaddedContent>
         <EditGroup>
           <RoiEditTitle>Shown columns</RoiEditTitle>
