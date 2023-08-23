@@ -53,7 +53,7 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
     [fontColor, fontSize],
   );
 
-  if (!enabled) return null;
+  if (!enabled && !displayValue) return null;
 
   return (
     <>
@@ -66,7 +66,9 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
             // eslint-disable-next-line react/no-array-index-key
             key={`${roi.id}-${index}`}
           >
-            <line x1={x1} y1={y1} x2={x2} y2={y2} style={lineStyle} />
+            {enabled && (
+              <line x1={x1} y1={y1} x2={x2} y2={y2} style={lineStyle} />
+            )}
             {displayValue && (
               <text
                 x={0}

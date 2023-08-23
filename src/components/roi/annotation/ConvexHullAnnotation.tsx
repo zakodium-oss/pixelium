@@ -38,11 +38,11 @@ function ConvexHullAnnotation({ roi }: ConvexHullAnnotationProps) {
     [fontColor, fontSize],
   );
 
-  if (!enabled) return null;
+  if (!enabled && !displayValue) return null;
 
   return (
     <g>
-      <polygon points={svgPoints} style={polygonStyle} />
+      {enabled && <polygon points={svgPoints} style={polygonStyle} />}
       {displayValue && (
         <text x={roi.width / 2} y={roi.height + 1} style={textStyle}>
           {roi.convexHull.surface}
