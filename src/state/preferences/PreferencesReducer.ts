@@ -41,6 +41,7 @@ export type AnnotationsPreferences = {
     color: string;
     fontColor: string;
     fontSize: number;
+    displayValue: boolean;
   };
 };
 
@@ -62,24 +63,28 @@ export const initialPreferencesState: PreferencesState = {
         color: '#ff0000',
         fontColor: '#ff0000',
         fontSize: 2,
+        displayValue: true,
       },
       minimalBoundingRectangle: {
         enabled: true,
         color: '#0000ff',
         fontColor: '#0000ff',
         fontSize: 2,
+        displayValue: true,
       },
       feretDiameters: {
         enabled: true,
-        color: '#000000',
+        color: '#ff00ff',
         fontColor: '#ff00ff',
         fontSize: 2,
+        displayValue: true,
       },
       surface: {
-        enabled: true,
+        enabled: false,
         color: '#00ff00',
         fontColor: '#00ff00',
         fontSize: 2,
+        displayValue: true,
       },
     },
   },

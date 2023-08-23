@@ -17,7 +17,7 @@ function ConvexHullAnnotation({ roi }: ConvexHullAnnotationProps) {
   );
 
   const preferences = usePreferences();
-  const { color, enabled, fontColor, fontSize } =
+  const { color, enabled, fontColor, fontSize, displayValue } =
     preferences.rois.annotations.convexHull;
 
   const polygonStyle: CSSProperties = useMemo(
@@ -43,9 +43,11 @@ function ConvexHullAnnotation({ roi }: ConvexHullAnnotationProps) {
   return (
     <g>
       <polygon points={svgPoints} style={polygonStyle} />
-      <text x={roi.width / 2} y={roi.height + 1} style={textStyle}>
-        {roi.convexHull.surface}
-      </text>
+      {displayValue && (
+        <text x={roi.width / 2} y={roi.height + 1} style={textStyle}>
+          {roi.convexHull.surface}
+        </text>
+      )}
     </g>
   );
 }

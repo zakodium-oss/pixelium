@@ -148,6 +148,7 @@ function ROIEditPreference() {
             <Table.Header>
               <ValueRenderers.Title value="Kind" />
               <ValueRenderers.Title value="Color" />
+              <ValueRenderers.Title value="Display" />
               <ValueRenderers.Title value="Display value" />
               <ValueRenderers.Title value="Font size" />
               <ValueRenderers.Title value="Font color" />
@@ -179,6 +180,20 @@ function ROIEditPreference() {
                         [key]: {
                           ...annotationsPreferences[key],
                           enabled: checked as boolean,
+                        },
+                      })
+                    }
+                  />
+                </ValueRenderers.Component>
+                <ValueRenderers.Component>
+                  <Checkbox
+                    checked={annotationsPreferences[key].displayValue}
+                    onChange={(checked) =>
+                      setAnnotationsPreferences({
+                        ...annotationsPreferences,
+                        [key]: {
+                          ...annotationsPreferences[key],
+                          displayValue: checked as boolean,
                         },
                       })
                     }

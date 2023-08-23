@@ -31,7 +31,7 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
   );
 
   const preferences = usePreferences();
-  const { color, enabled, fontColor, fontSize } =
+  const { color, enabled, fontColor, fontSize, displayValue } =
     preferences.rois.annotations.feretDiameters;
 
   const lineStyle: CSSProperties = useMemo(
@@ -67,14 +67,16 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
             key={`${roi.id}-${index}`}
           >
             <line x1={x1} y1={y1} x2={x2} y2={y2} style={lineStyle} />
-            <text
-              x={0}
-              y={0}
-              transform={`translate(${x}, ${y})  rotate(${rotation})`}
-              style={textStyle}
-            >
-              {length.toFixed(2)}
-            </text>
+            {displayValue && (
+              <text
+                x={0}
+                y={0}
+                transform={`translate(${x}, ${y})  rotate(${rotation})`}
+                style={textStyle}
+              >
+                {length.toFixed(2)}
+              </text>
+            )}
           </g>
         );
       })}
