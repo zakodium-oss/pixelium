@@ -1,13 +1,12 @@
 import styled from '@emotion/styled';
 import startCase from 'lodash/startCase';
 import { CSSProperties, memo, useCallback, useMemo, useState } from 'react';
-import { FaCheck, FaTimes } from 'react-icons/fa';
 import {
   Checkbox,
   ColorPickerDropdown,
   Input,
+  PanelPreferencesToolbar,
   Table,
-  Toolbar,
   ValueRenderers,
 } from 'react-science/ui';
 
@@ -25,6 +24,7 @@ import {
 import { SET_EDIT_ROI_PREFERENCE } from '../../state/view/ViewActionTypes';
 
 const PaddedContent = styled.div`
+  overflow: auto;
   padding: 0.5rem;
 `;
 
@@ -100,23 +100,15 @@ function ROIEditPreference() {
   const handleCancel = useMemo(() => close, [close]);
 
   return (
-    <>
-      <Toolbar orientation="horizontal">
-        <Toolbar.Item
-          title="Save"
-          titleOrientation="horizontal"
-          onClick={handleSave}
-        >
-          <FaCheck color="green" />
-        </Toolbar.Item>
-        <Toolbar.Item
-          title="Cancel"
-          titleOrientation="horizontal"
-          onClick={handleCancel}
-        >
-          <FaTimes color="red" />
-        </Toolbar.Item>
-      </Toolbar>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        width: '100%',
+      }}
+    >
+      <PanelPreferencesToolbar onClose={handleCancel} onSave={handleSave} />
       <PaddedContent>
         <EditGroup>
           <RoiEditTitle>Shown columns</RoiEditTitle>
@@ -235,7 +227,7 @@ function ROIEditPreference() {
           </Table>
         </EditGroup>
       </PaddedContent>
-    </>
+    </div>
   );
 }
 
