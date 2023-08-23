@@ -63,7 +63,7 @@
     "@emotion/styled": "^11.11.0",
     "image-js": "0.0.0-next-ce6a4f4a28",
     "immer": "^10.0.2",
-    "react-science": "^0.24.3",
+    "react-science": "^0.26.2",
     "lodash": "^4.17.21",
     "react-use": "^17.4.0",
     "react-plot": "^1.4.2",

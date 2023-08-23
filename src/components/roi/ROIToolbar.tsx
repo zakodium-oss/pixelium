@@ -1,9 +1,8 @@
-import styled from '@emotion/styled';
 import { Roi } from 'image-js';
 import startCase from 'lodash/startCase';
 import { memo, useCallback, useState } from 'react';
-import { FaCog, FaCopy } from 'react-icons/fa';
-import { Toolbar } from 'react-science/ui';
+import { FaCopy } from 'react-icons/fa';
+import { Toolbar, PanelHeader } from 'react-science/ui';
 import { useCopyToClipboard } from 'react-use';
 
 import useROIs from '../../hooks/useROIs';
@@ -41,15 +40,6 @@ function roisToTSV(rois: Roi[]) {
 
 const copyToClipBoardDefaultText = 'Copy to clipboard';
 
-const Separator = styled.div`
-  flex: 1;
-`;
-
-const ROICount = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 function ROIToolbar({ identifier }: ROIToolbarProps) {
   const rois = useROIs(identifier);
   const viewDispatch = useViewDispatch();
@@ -73,26 +63,19 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
   }, [viewDispatch]);
 
   return (
-    <Toolbar orientation="horizontal">
+    <PanelHeader total={rois.length} onClickSettings={handleEditROIPreference}>
       {rois.length > 0 && (
-        <Toolbar.Item
-          title={copyToClipBoardText}
-          titleOrientation="horizontal"
-          onClick={handleCopyToClipboard}
-        >
-          <FaCopy />
-        </Toolbar.Item>
+        <Toolbar orientation="horizontal">
+          <Toolbar.Item
+            title={copyToClipBoardText}
+            titleOrientation="horizontal"
+            onClick={handleCopyToClipboard}
+          >
+            <FaCopy />
+          </Toolbar.Item>
+        </Toolbar>
       )}
-      <Separator />
-      <ROICount>{`[${rois.length}]`}</ROICount>
-      <Toolbar.Item
-        title="ROI preferences"
-        titleOrientation="auto"
-        onClick={handleEditROIPreference}
-      >
-        <FaCog />
-      </Toolbar.Item>
-    </Toolbar>
+    </PanelHeader>
   );
 }
 

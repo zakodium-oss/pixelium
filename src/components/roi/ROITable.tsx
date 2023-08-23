@@ -102,18 +102,24 @@ function ROITable({ identifier }: ROITableProps) {
   if (rois.length === 0) return <Empty>No ROIs generated</Empty>;
 
   return (
-    <Table>
-      <Table.Header>
-        {columns.map((column) => (
-          <ValueRenderers.Title key={column} value={startCase(column)} />
+    <div
+      style={{
+        overflow: 'auto',
+      }}
+    >
+      <Table>
+        <Table.Header>
+          {columns.map((column) => (
+            <ValueRenderers.Title key={column} value={startCase(column)} />
+          ))}
+        </Table.Header>
+        {rois.map((roi) => (
+          <Table.Row key={roi.id}>
+            {columns.map((column) => columnRenderer(column, roi))}
+          </Table.Row>
         ))}
-      </Table.Header>
-      {rois.map((roi) => (
-        <Table.Row key={roi.id}>
-          {columns.map((column) => columnRenderer(column, roi))}
-        </Table.Row>
-      ))}
-    </Table>
+      </Table>
+    </div>
   );
 }
 
