@@ -1,13 +1,11 @@
 import styled from '@emotion/styled';
 import startCase from 'lodash/startCase';
 import { CSSProperties, memo, useCallback, useMemo, useState } from 'react';
-import { FaCheck, FaTimes } from 'react-icons/fa';
 import {
   Checkbox,
   ColorPickerDropdown,
   PanelPreferencesToolbar,
   Table,
-  Toolbar,
   ValueRenderers,
 } from 'react-science/ui';
 
