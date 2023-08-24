@@ -4,6 +4,7 @@ import { memo, useMemo } from 'react';
 import ConvexHullAnnotation from './ConvexHullAnnotation';
 import FeretAnnotation from './FeretAnnotation';
 import MBRAnnotation from './MBRAnnotation';
+import SurfaceAnnotation from './SurfaceAnnotation';
 
 interface ROIAnnotationProps {
   roi: Roi;
@@ -15,6 +16,7 @@ function ROIAnnotation({ roi }: ROIAnnotationProps) {
 
   return (
     <g transform={transform}>
+      <SurfaceAnnotation roi={roi} />
       <MBRAnnotation roi={roi} />
       <FeretAnnotation roi={roi} />
       <ConvexHullAnnotation roi={roi} />
