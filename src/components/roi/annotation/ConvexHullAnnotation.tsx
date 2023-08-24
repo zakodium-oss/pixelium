@@ -17,10 +17,8 @@ function ConvexHullAnnotation({ roi }: ConvexHullAnnotationProps) {
   );
 
   const preferences = usePreferences();
-  const color = useMemo(
-    () => preferences.rois.annotations.convexHull.color,
-    [preferences.rois.annotations.convexHull.color],
-  );
+  const { color, enabled, fontColor, fontSize, displayValue } =
+    preferences.rois.annotations.convexHull;
 
   const polygonStyle: CSSProperties = useMemo(
     () => ({
@@ -30,10 +28,28 @@ function ConvexHullAnnotation({ roi }: ConvexHullAnnotationProps) {
     }),
     [color],
   );
+  const textStyle: CSSProperties = useMemo(
+    () => ({
+      fill: fontColor,
+      fontSize,
+      textAnchor: 'middle',
+      dominantBaseline: 'text-before-edge',
+    }),
+    [fontColor, fontSize],
+  );
 
-  if (!preferences.rois.annotations.convexHull.enabled) return null;
+  if (!enabled && !displayValue) return null;
 
-  return <polygon points={svgPoints} style={polygonStyle} />;
+  return (
+    <g>
+      {enabled && <polygon points={svgPoints} style={polygonStyle} />}
+      {displayValue && (
+        <text x={roi.width / 2} y={roi.height + 1} style={textStyle}>
+          {roi.convexHull.surface}
+        </text>
+      )}
+    </g>
+  );
 }
 
 export default memo(ConvexHullAnnotation);

@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
 import startCase from 'lodash/startCase';
 import { CSSProperties, memo, useCallback, useMemo, useState } from 'react';
-import { FaCheck, FaTimes } from 'react-icons/fa';
 import {
   Checkbox,
   ColorPickerDropdown,
+  Input,
+  PanelPreferencesToolbar,
   Table,
-  Toolbar,
   ValueRenderers,
 } from 'react-science/ui';
 
@@ -24,6 +24,7 @@ import {
 import { SET_EDIT_ROI_PREFERENCE } from '../../state/view/ViewActionTypes';
 
 const PaddedContent = styled.div`
+  overflow: auto;
   padding: 0.5rem;
 `;
 
@@ -36,23 +37,6 @@ const EditGroup = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
-`;
-
-const CheckboxGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  & > * {
-  }
-`;
-
-const AnnotationGroup = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 0.5rem;
-
-  & > :first-of-type {
-    white-space: nowrap;
-  }
 `;
 
 const tableStyle: CSSProperties = {
@@ -116,23 +100,15 @@ function ROIEditPreference() {
   const handleCancel = useMemo(() => close, [close]);
 
   return (
-    <>
-      <Toolbar orientation="horizontal">
-        <Toolbar.Item
-          title="Save"
-          titleOrientation="horizontal"
-          onClick={handleSave}
-        >
-          <FaCheck color="green" />
-        </Toolbar.Item>
-        <Toolbar.Item
-          title="Cancel"
-          titleOrientation="horizontal"
-          onClick={handleCancel}
-        >
-          <FaTimes color="red" />
-        </Toolbar.Item>
-      </Toolbar>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        width: '100%',
+      }}
+    >
+      <PanelPreferencesToolbar onClose={handleCancel} onSave={handleSave} />
       <PaddedContent>
         <EditGroup>
           <RoiEditTitle>Shown columns</RoiEditTitle>
@@ -160,41 +136,98 @@ function ROIEditPreference() {
         </EditGroup>
         <EditGroup>
           <RoiEditTitle>Annotations</RoiEditTitle>
-          <CheckboxGroup>
+          <Table style={tableStyle}>
+            <Table.Header>
+              <ValueRenderers.Title value="Kind" />
+              <ValueRenderers.Title value="Color" />
+              <ValueRenderers.Title value="Display" />
+              <ValueRenderers.Title value="Display value" />
+              <ValueRenderers.Title value="Font size" />
+              <ValueRenderers.Title value="Font color" />
+            </Table.Header>
             {Object.keys(annotationsPreferences).map((key) => (
-              <AnnotationGroup key={key}>
-                <Checkbox
-                  label={startCase(key)}
-                  checked={annotationsPreferences[key].enabled}
-                  onChange={(checked) =>
-                    setAnnotationsPreferences({
-                      ...annotationsPreferences,
-                      [key]: {
-                        ...annotationsPreferences[key],
-                        enabled: checked as boolean,
-                      },
-                    })
-                  }
-                />
-                <ColorPickerDropdown
-                  disableAlpha
-                  color={{ hex: annotationsPreferences[key].color }}
-                  onChange={(color) =>
-                    setAnnotationsPreferences({
-                      ...annotationsPreferences,
-                      [key]: {
-                        ...annotationsPreferences[key],
-                        color: color.hex,
-                      },
-                    })
-                  }
-                />
-              </AnnotationGroup>
+              <Table.Row key={key}>
+                <ValueRenderers.Text value={startCase(key)} />
+                <ValueRenderers.Component>
+                  <ColorPickerDropdown
+                    disableAlpha
+                    color={{ hex: annotationsPreferences[key].color }}
+                    onChange={(color) =>
+                      setAnnotationsPreferences({
+                        ...annotationsPreferences,
+                        [key]: {
+                          ...annotationsPreferences[key],
+                          color: color.hex,
+                        },
+                      })
+                    }
+                  />
+                </ValueRenderers.Component>
+                <ValueRenderers.Component>
+                  <Checkbox
+                    checked={annotationsPreferences[key].enabled}
+                    onChange={(checked) =>
+                      setAnnotationsPreferences({
+                        ...annotationsPreferences,
+                        [key]: {
+                          ...annotationsPreferences[key],
+                          enabled: checked as boolean,
+                        },
+                      })
+                    }
+                  />
+                </ValueRenderers.Component>
+                <ValueRenderers.Component>
+                  <Checkbox
+                    checked={annotationsPreferences[key].displayValue}
+                    onChange={(checked) =>
+                      setAnnotationsPreferences({
+                        ...annotationsPreferences,
+                        [key]: {
+                          ...annotationsPreferences[key],
+                          displayValue: checked as boolean,
+                        },
+                      })
+                    }
+                  />
+                </ValueRenderers.Component>
+                <ValueRenderers.Component>
+                  <Input
+                    type="number"
+                    value={annotationsPreferences[key].fontSize}
+                    onChange={(event) => {
+                      const newValue = event.target.valueAsNumber;
+                      setAnnotationsPreferences({
+                        ...annotationsPreferences,
+                        [key]: {
+                          ...annotationsPreferences[key],
+                          fontSize: newValue,
+                        },
+                      });
+                    }}
+                  />
+                </ValueRenderers.Component>
+                <ValueRenderers.Component>
+                  <ColorPickerDropdown
+                    disableAlpha
+                    color={{ hex: annotationsPreferences[key].fontColor }}
+                    onChange={(color) =>
+                      setAnnotationsPreferences({
+                        ...annotationsPreferences,
+                        [key]: {
+                          ...annotationsPreferences[key],
+                          fontColor: color.hex,
+                        },
+                      })
+                    }
+                  />
+                </ValueRenderers.Component>
+              </Table.Row>
             ))}
-          </CheckboxGroup>
+          </Table>
         </EditGroup>
       </PaddedContent>
-    </>
+    </div>
   );
 }
 

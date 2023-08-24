@@ -24,10 +24,17 @@ function ROIAccordion() {
       {isEditing ? (
         <ROIEditColumnPreference />
       ) : (
-        <>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            width: '100%',
+          }}
+        >
           <ROIToolbar identifier={currentTab} />
           <ROITable identifier={currentTab} />
-        </>
+        </div>
       )}
     </Accordion.Item>
   );

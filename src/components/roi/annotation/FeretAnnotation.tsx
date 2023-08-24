@@ -18,46 +18,70 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
             { column: columnA, row: rowA },
             { column: columnB, row: rowB },
           ],
+          length,
         }) => ({
           x1: columnA,
           y1: rowA,
           x2: columnB,
           y2: rowB,
+          length,
         }),
       ),
     [maxDiameter, minDiameter],
   );
 
   const preferences = usePreferences();
-  const color = useMemo(
-    () => preferences.rois.annotations.feretDiameters.color,
-    [preferences.rois.annotations.feretDiameters.color],
-  );
+  const { color, enabled, fontColor, fontSize, displayValue } =
+    preferences.rois.annotations.feretDiameters;
 
   const lineStyle: CSSProperties = useMemo(
     () => ({
       fill: 'none',
       stroke: color,
-      strokewidth: 1,
+      strokewidth: 2,
     }),
     [color],
   );
 
-  if (!preferences.rois.annotations.feretDiameters.enabled) return null;
+  const textStyle: CSSProperties = useMemo(
+    () => ({
+      fill: fontColor,
+      fontSize,
+      textAnchor: 'middle',
+      dominantBaseline: 'central',
+    }),
+    [fontColor, fontSize],
+  );
+
+  if (!enabled && !displayValue) return null;
 
   return (
     <>
-      {lines.map(({ x1, y1, x2, y2 }, index) => (
-        <line
-          // eslint-disable-next-line react/no-array-index-key
-          key={`${roi.id}-${index}`}
-          x1={x1}
-          y1={y1}
-          x2={x2}
-          y2={y2}
-          style={lineStyle}
-        />
-      ))}
+      {lines.map(({ x1, y1, x2, y2, length }, index) => {
+        const rotation = Math.atan((y2 - y1) / (x2 - x1)) * (180 / Math.PI);
+        const x = x2 > x1 ? (x2 + x1 + 2) / 2 : (x2 + x1 - 2) / 2;
+        const y = y1 > y2 ? (y2 + y1 + 2) / 2 : (y2 + y1 - 2) / 2;
+        return (
+          <g
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${roi.id}-${index}`}
+          >
+            {enabled && (
+              <line x1={x1} y1={y1} x2={x2} y2={y2} style={lineStyle} />
+            )}
+            {displayValue && (
+              <text
+                x={0}
+                y={0}
+                transform={`translate(${x}, ${y})  rotate(${rotation})`}
+                style={textStyle}
+              >
+                {length.toFixed(2)}
+              </text>
+            )}
+          </g>
+        );
+      })}
     </>
   );
 }

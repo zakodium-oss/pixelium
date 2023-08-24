@@ -16,10 +16,8 @@ function MBRAnnotation({ roi }: MBRAnnotationProps) {
     [roi.mbr.points],
   );
   const preferences = usePreferences();
-  const color = useMemo(
-    () => preferences.rois.annotations.minimalBoundingRectangle.color,
-    [preferences.rois.annotations.minimalBoundingRectangle.color],
-  );
+  const { color, enabled, fontSize, fontColor, displayValue } =
+    preferences.rois.annotations.minimalBoundingRectangle;
 
   const polygonStyle: CSSProperties = useMemo(
     () => ({
@@ -29,12 +27,28 @@ function MBRAnnotation({ roi }: MBRAnnotationProps) {
     }),
     [color],
   );
+  const textStyle: CSSProperties = useMemo(
+    () => ({
+      fill: fontColor,
+      fontSize,
+      textAnchor: 'middle',
+      dominantBaseline: 'text-after-edge',
+    }),
+    [fontColor, fontSize],
+  );
 
-  if (!preferences.rois.annotations.minimalBoundingRectangle.enabled) {
-    return null;
-  }
+  if (!enabled && !displayValue) return null;
 
-  return <polygon points={svgPoints} style={polygonStyle} />;
+  return (
+    <g>
+      {enabled && <polygon points={svgPoints} style={polygonStyle} />}
+      {displayValue && (
+        <text x={roi.width / 2} y={-1} style={textStyle}>
+          {roi.width} x {roi.height} ({roi.surface} pixels)
+        </text>
+      )}
+    </g>
+  );
 }
 
 export default memo(MBRAnnotation);
