@@ -23,14 +23,16 @@ function ConvexHullAnnotation({ roi }: ConvexHullAnnotationProps) {
   const polygonStyle: CSSProperties = useMemo(
     () => ({
       fill: 'none',
-      stroke: color,
+      stroke: color.hex,
+      strokeOpacity: color.a,
       strokewidth: 1,
     }),
     [color],
   );
   const textStyle: CSSProperties = useMemo(
     () => ({
-      fill: fontColor,
+      fill: fontColor.hex,
+      fillOpacity: fontColor.a,
       fontSize,
       textAnchor: 'middle',
       dominantBaseline: 'text-before-edge',

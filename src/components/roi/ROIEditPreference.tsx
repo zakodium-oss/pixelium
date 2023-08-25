@@ -98,7 +98,16 @@ function ROIEditPreference() {
   }, [annotationsPreferences, close, preferencesDispatch, shownColumns]);
 
   const handleCancel = useMemo(() => close, [close]);
-
+  function hexToRgb(hex: string) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : { r: 0, g: 0, b: 0 };
+  }
   return (
     <div
       style={{
@@ -150,17 +159,19 @@ function ROIEditPreference() {
                 <ValueRenderers.Text value={startCase(key)} />
                 <ValueRenderers.Component>
                   <ColorPickerDropdown
-                    disableAlpha
-                    color={{ hex: annotationsPreferences[key].color }}
-                    onChange={(color) =>
+                    color={{
+                      a: annotationsPreferences[key].color.a,
+                      ...hexToRgb(annotationsPreferences[key].color.hex),
+                    }}
+                    onChange={(color) => {
                       setAnnotationsPreferences({
                         ...annotationsPreferences,
                         [key]: {
                           ...annotationsPreferences[key],
-                          color: color.hex,
+                          color: { hex: color.hex, a: color.rgb.a },
                         },
-                      })
-                    }
+                      });
+                    }}
                   />
                 </ValueRenderers.Component>
                 <ValueRenderers.Component>
@@ -209,17 +220,20 @@ function ROIEditPreference() {
                 </ValueRenderers.Component>
                 <ValueRenderers.Component>
                   <ColorPickerDropdown
-                    disableAlpha
-                    color={{ hex: annotationsPreferences[key].fontColor }}
-                    onChange={(color) =>
+                    color={{
+                      a: annotationsPreferences[key].fontColor.a,
+                      ...hexToRgb(annotationsPreferences[key].fontColor.hex),
+                    }}
+                    onChange={(color) => {
+                      console.log(color);
                       setAnnotationsPreferences({
                         ...annotationsPreferences,
                         [key]: {
                           ...annotationsPreferences[key],
-                          fontColor: color.hex,
+                          fontColor: { hex: color.hex, a: color.rgb.a },
                         },
-                      })
-                    }
+                      });
+                    }}
                   />
                 </ValueRenderers.Component>
               </Table.Row>
