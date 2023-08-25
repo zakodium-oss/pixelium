@@ -1,12 +1,10 @@
 import styled from '@emotion/styled';
 import { memo } from 'react';
-import { ValueRenderers, Accordion, Table } from 'react-science/ui';
+import { Accordion } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
-import useImage from '../../hooks/useImage';
-import useImageInformations from '../../hooks/useImageInformations';
 import Histograms from '../histogram/Histograms';
-import MetadataTable from '../metadata/MetadataTable';
+import InformationPanel from '../information/InformationPanel';
 import PipelineTable from '../pipeline/PipelineTable';
 import ROIAccordion from '../roi/ROIAccordion';
 
@@ -18,26 +16,12 @@ const StyledSidebar = styled.div`
 function Sidebar() {
   const currentTab = useCurrentTab();
 
-  const { original } = useImage();
-
-  const generalInformations = useImageInformations(original);
-
   if (currentTab === undefined) return null;
   return (
     <StyledSidebar>
       <Accordion>
-        <Accordion.Item title="General informations">
-          <Table>
-            {generalInformations.map(({ key, render }) => (
-              <Table.Row key={key}>
-                <ValueRenderers.Text value={key} />
-                {render}
-              </Table.Row>
-            ))}
-          </Table>
-        </Accordion.Item>
-        <Accordion.Item title="Metadatas">
-          <MetadataTable />
+        <Accordion.Item title="Informations">
+          <InformationPanel />
         </Accordion.Item>
         <Accordion.Item title="Histograms">
           <Histograms />
