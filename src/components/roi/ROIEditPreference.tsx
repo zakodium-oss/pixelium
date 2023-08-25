@@ -98,16 +98,7 @@ function ROIEditPreference() {
   }, [annotationsPreferences, close, preferencesDispatch, shownColumns]);
 
   const handleCancel = useMemo(() => close, [close]);
-  function hexToRgb(hex: string) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
-      ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16),
-        }
-      : { r: 0, g: 0, b: 0 };
-  }
+
   return (
     <div
       style={{
@@ -224,16 +215,15 @@ function ROIEditPreference() {
                       a: annotationsPreferences[key].fontColor.a,
                       ...hexToRgb(annotationsPreferences[key].fontColor.hex),
                     }}
-                    onChange={(color) => {
-                      console.log(color);
+                    onChange={(color) =>
                       setAnnotationsPreferences({
                         ...annotationsPreferences,
                         [key]: {
                           ...annotationsPreferences[key],
                           fontColor: { hex: color.hex, a: color.rgb.a },
                         },
-                      });
-                    }}
+                      })
+                    }
                   />
                 </ValueRenderers.Component>
               </Table.Row>
@@ -244,5 +234,13 @@ function ROIEditPreference() {
     </div>
   );
 }
-
+function hexToRgb(hex: string) {
+  if (hex.length !== 7) {
+    hex = hex.replace(/#/, '#000000');
+  }
+  const r = Number.parseInt(hex.slice(1, 3), 16);
+  const g = Number.parseInt(hex.slice(3, 5), 16);
+  const b = Number.parseInt(hex.slice(5, 7), 16);
+  return { r, g, b };
+}
 export default memo(ROIEditPreference);
