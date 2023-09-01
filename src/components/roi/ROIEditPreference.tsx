@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { colord } from 'colord';
 import startCase from 'lodash/startCase';
 import { CSSProperties, memo, useCallback, useMemo, useState } from 'react';
 import {
@@ -151,8 +152,9 @@ function ROIEditPreference() {
                 <ValueRenderers.Component>
                   <ColorPickerDropdown
                     color={{
-                      a: annotationsPreferences[key].color.a,
-                      ...hexToRgb(annotationsPreferences[key].color.hex),
+                      hex: colord(annotationsPreferences[key].color.hex)
+                        .alpha(annotationsPreferences[key].color.a)
+                        .toHex(),
                     }}
                     onChange={(color) => {
                       setAnnotationsPreferences({
@@ -212,8 +214,9 @@ function ROIEditPreference() {
                 <ValueRenderers.Component>
                   <ColorPickerDropdown
                     color={{
-                      a: annotationsPreferences[key].fontColor.a,
-                      ...hexToRgb(annotationsPreferences[key].fontColor.hex),
+                      hex: colord(annotationsPreferences[key].fontColor.hex)
+                        .alpha(annotationsPreferences[key].fontColor.a)
+                        .toHex(),
                     }}
                     onChange={(color) =>
                       setAnnotationsPreferences({
@@ -233,14 +236,5 @@ function ROIEditPreference() {
       </PaddedContent>
     </div>
   );
-}
-function hexToRgb(hex: string) {
-  if (hex.length !== 7) {
-    hex = hex.replace(/#/, '#000000');
-  }
-  const r = Number.parseInt(hex.slice(1, 3), 16);
-  const g = Number.parseInt(hex.slice(3, 5), 16);
-  const b = Number.parseInt(hex.slice(5, 7), 16);
-  return { r, g, b };
 }
 export default memo(ROIEditPreference);
