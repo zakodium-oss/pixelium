@@ -38,8 +38,8 @@ export type AnnotationType = (typeof availableAnnotations)[number];
 export type AnnotationsPreferences = {
   [key in AnnotationType]: {
     enabled: boolean;
-    color: string;
-    fontColor: string;
+    color: { hex: string; a: number };
+    fontColor: { hex: string; a: number };
     fontSize: number;
     displayValue: boolean;
   };
@@ -60,31 +60,31 @@ export const initialPreferencesState: PreferencesState = {
     annotations: {
       convexHull: {
         enabled: true,
-        color: '#ff0000',
-        fontColor: '#ff0000',
-        fontSize: 2,
+        color: { hex: '#ff0000', a: 0.5 },
+        fontColor: { hex: '#ff0000', a: 0.5 },
+        fontSize: 9,
         displayValue: true,
       },
       minimalBoundingRectangle: {
         enabled: true,
-        color: '#0000ff',
-        fontColor: '#0000ff',
-        fontSize: 2,
-        displayValue: true,
+        color: { hex: '#0000ff', a: 0.5 },
+        fontColor: { hex: '#0000ff', a: 0.5 },
+        fontSize: 9,
+        displayValue: false,
       },
       feretDiameters: {
         enabled: true,
-        color: '#ff00ff',
-        fontColor: '#ff00ff',
-        fontSize: 2,
-        displayValue: true,
+        color: { hex: '#ff00ff', a: 0.5 },
+        fontColor: { hex: '#ff00ff', a: 0.5 },
+        fontSize: 9,
+        displayValue: false,
       },
       surface: {
         enabled: false,
-        color: '#00ff00',
-        fontColor: '#00ff00',
-        fontSize: 2,
-        displayValue: true,
+        color: { hex: '#00ff00', a: 0.5 },
+        fontColor: { hex: '#00ff00', a: 0.5 },
+        fontSize: 9,
+        displayValue: false,
       },
     },
   },

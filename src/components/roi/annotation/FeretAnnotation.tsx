@@ -37,7 +37,8 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
   const lineStyle: CSSProperties = useMemo(
     () => ({
       fill: 'none',
-      stroke: color,
+      stroke: color.hex,
+      strokeOpacity: color.a,
       strokewidth: 2,
     }),
     [color],
@@ -45,7 +46,8 @@ function FeretAnnotation({ roi }: FeretAnnotationProps) {
 
   const textStyle: CSSProperties = useMemo(
     () => ({
-      fill: fontColor,
+      fill: fontColor.hex,
+      fillOpacity: fontColor.a,
       fontSize,
       textAnchor: 'middle',
       dominantBaseline: 'central',

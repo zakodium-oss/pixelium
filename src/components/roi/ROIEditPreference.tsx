@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { colord } from 'colord';
 import startCase from 'lodash/startCase';
 import { CSSProperties, memo, useCallback, useMemo, useState } from 'react';
 import {
@@ -150,17 +151,20 @@ function ROIEditPreference() {
                 <ValueRenderers.Text value={startCase(key)} />
                 <ValueRenderers.Component>
                   <ColorPickerDropdown
-                    disableAlpha
-                    color={{ hex: annotationsPreferences[key].color }}
-                    onChange={(color) =>
+                    color={{
+                      hex: colord(annotationsPreferences[key].color.hex)
+                        .alpha(annotationsPreferences[key].color.a)
+                        .toHex(),
+                    }}
+                    onChange={(color) => {
                       setAnnotationsPreferences({
                         ...annotationsPreferences,
                         [key]: {
                           ...annotationsPreferences[key],
-                          color: color.hex,
+                          color: { hex: color.hex, a: color.rgb.a },
                         },
-                      })
-                    }
+                      });
+                    }}
                   />
                 </ValueRenderers.Component>
                 <ValueRenderers.Component>
@@ -209,14 +213,17 @@ function ROIEditPreference() {
                 </ValueRenderers.Component>
                 <ValueRenderers.Component>
                   <ColorPickerDropdown
-                    disableAlpha
-                    color={{ hex: annotationsPreferences[key].fontColor }}
+                    color={{
+                      hex: colord(annotationsPreferences[key].fontColor.hex)
+                        .alpha(annotationsPreferences[key].fontColor.a)
+                        .toHex(),
+                    }}
                     onChange={(color) =>
                       setAnnotationsPreferences({
                         ...annotationsPreferences,
                         [key]: {
                           ...annotationsPreferences[key],
-                          fontColor: color.hex,
+                          fontColor: { hex: color.hex, a: color.rgb.a },
                         },
                       })
                     }
@@ -230,5 +237,4 @@ function ROIEditPreference() {
     </div>
   );
 }
-
 export default memo(ROIEditPreference);

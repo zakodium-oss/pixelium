@@ -14,8 +14,10 @@ function SurfaceAnnotation({ roi }: SurfaceAnnotationProps) {
 
   const rectStyle: CSSProperties = useMemo(
     () => ({
-      fill: color,
-      stroke: color,
+      fill: color.hex,
+      fillOpacity: color.a,
+      stroke: color.hex,
+      strokeOpacity: color.a,
       strokeWidth: 0.1,
     }),
     [color],
