@@ -22,14 +22,16 @@ function MBRAnnotation({ roi }: MBRAnnotationProps) {
   const polygonStyle: CSSProperties = useMemo(
     () => ({
       fill: 'none',
-      stroke: color,
+      stroke: color.hex,
+      strokeOpacity: color.a,
       strokewidth: 1,
     }),
     [color],
   );
   const textStyle: CSSProperties = useMemo(
     () => ({
-      fill: fontColor,
+      fill: fontColor.hex,
+      fillOpacity: fontColor.a,
       fontSize,
       textAnchor: 'middle',
       dominantBaseline: 'text-after-edge',
@@ -44,7 +46,7 @@ function MBRAnnotation({ roi }: MBRAnnotationProps) {
       {enabled && <polygon points={svgPoints} style={polygonStyle} />}
       {displayValue && (
         <text x={roi.width / 2} y={-1} style={textStyle}>
-          {roi.width} x {roi.height} ({roi.surface} pixels)
+          {roi.width}x{roi.height} ({roi.surface}px)
         </text>
       )}
     </g>
