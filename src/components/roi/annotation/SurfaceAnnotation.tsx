@@ -1,6 +1,5 @@
 import { Roi } from 'image-js';
-import { CSSProperties, memo, useMemo } from 'react';
-
+import { CSSProperties, memo, useEffect, useMemo } from 'react';
 import usePreferences from '../../../hooks/usePreferences';
 
 interface SurfaceAnnotationProps {
@@ -10,31 +9,41 @@ interface SurfaceAnnotationProps {
 function SurfaceAnnotation({ roi }: SurfaceAnnotationProps) {
   const preferences = usePreferences();
 
+  const svgPath = useMemo(() => {
+    const pathCommands: string[] = [];
+    const mask = roi.getMask();
+    const width = mask.width;
+    const height = mask.height;
+    for (let column = 0; column < width; column++) {
+      for (let row = 0; row < height; row++) {
+        if (mask.getBit(column, row) === 1) {
+          pathCommands.push(`M${column},${row}`);
+
+          if (row + 1 <= height) {
+            pathCommands.push(`V${row + 1}`);
+          }
+          if (column + 1 <= width) {
+            pathCommands.push(`H${column + 1}`);
+          }
+          pathCommands.push(`V${row}`);
+        }
+      }
+    }
+    return pathCommands.join(' ');
+  }, []);
   const { color, enabled } = preferences.rois.annotations.surface;
 
-  const rectStyle: CSSProperties = useMemo(
+  const pathStyle: CSSProperties = useMemo(
     () => ({
       fill: color.hex,
       fillOpacity: color.a,
-      stroke: color.hex,
-      strokeOpacity: color.a,
-      strokeWidth: 0.1,
     }),
     [color],
   );
 
   if (!enabled) return null;
 
-  return roi.points.map(([column, row]) => (
-    <rect
-      key={`${column}-${row}`}
-      x={column}
-      y={row}
-      width="1"
-      height="1"
-      style={rectStyle}
-    />
-  ));
+  return <path d={svgPath} style={pathStyle} />;
 }
 
 export default memo(SurfaceAnnotation);
