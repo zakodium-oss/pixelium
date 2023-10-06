@@ -1,5 +1,6 @@
 import { Roi } from 'image-js';
 import { CSSProperties, memo, useMemo } from 'react';
+
 import usePreferences from '../../../hooks/usePreferences';
 
 interface SurfaceAnnotationProps {
@@ -8,6 +9,7 @@ interface SurfaceAnnotationProps {
 
 function SurfaceAnnotation({ roi }: SurfaceAnnotationProps) {
   const preferences = usePreferences();
+  const { color, enabled } = preferences.rois.annotations.surface;
 
   const svgPath = useMemo(() => {
     const pathCommands: string[] = [];
@@ -30,8 +32,7 @@ function SurfaceAnnotation({ roi }: SurfaceAnnotationProps) {
       }
     }
     return pathCommands.join(' ');
-  }, []);
-  const { color, enabled } = preferences.rois.annotations.surface;
+  }, [roi]);
 
   const pathStyle: CSSProperties = useMemo(
     () => ({
