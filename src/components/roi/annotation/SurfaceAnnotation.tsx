@@ -1,5 +1,5 @@
 import { Roi } from 'image-js';
-import { CSSProperties, memo, useEffect, useMemo } from 'react';
+import { CSSProperties, memo, useMemo } from 'react';
 import usePreferences from '../../../hooks/usePreferences';
 
 interface SurfaceAnnotationProps {
