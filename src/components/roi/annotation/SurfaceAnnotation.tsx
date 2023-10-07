@@ -12,6 +12,7 @@ function SurfaceAnnotation({ roi }: SurfaceAnnotationProps) {
   const { color, enabled } = preferences.rois.annotations.surface;
 
   const svgPath = useMemo(() => {
+    if (!enabled) return '';
     const pathCommands: string[] = [];
     const mask = roi.getMask();
     const width = mask.width;
@@ -20,19 +21,20 @@ function SurfaceAnnotation({ roi }: SurfaceAnnotationProps) {
       for (let row = 0; row < height; row++) {
         if (mask.getBit(column, row) === 1) {
           pathCommands.push(`M${column},${row}`);
+          let maxRow = 1;
+          for (; row + maxRow <= height; maxRow++) {
+            if (mask.getBit(column, row + maxRow) !== 1) {
+              break;
+            }
+          }
 
-          if (row + 1 <= height) {
-            pathCommands.push(`V${row + 1}`);
-          }
-          if (column + 1 <= width) {
-            pathCommands.push(`H${column + 1}`);
-          }
-          pathCommands.push(`V${row}`);
+          pathCommands.push(`V${row + maxRow}`, `H${column + 1}`, `V${row}`);
+          row = row + maxRow;
         }
       }
     }
     return pathCommands.join(' ');
-  }, [roi]);
+  }, [roi, enabled]);
 
   const pathStyle: CSSProperties = useMemo(
     () => ({
