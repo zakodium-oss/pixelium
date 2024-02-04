@@ -5,7 +5,7 @@ import { ViewState } from '../ViewReducer';
 
 interface PanZoomData {
   scale: number;
-  translation: { x: number; y: number };
+  translation: [number, number];
 }
 
 export type SetPanZoomAction = ViewActionType<

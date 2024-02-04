@@ -72,7 +72,7 @@
     "react-icons": "^4.10.1",
     "react-kbs": "^2.1.1",
     "react-plot": "^1.4.2",
-    "react-roi": "^0.8.1",
+    "react-roi": "^0.14.0",
     "react-science": "^0.26.2",
     "react-use": "^17.4.0"
   },
