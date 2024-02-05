@@ -89,6 +89,7 @@ function ImageViewer({
           spaceAroundTarget: 0,
         },
         resizeStrategy: 'contain',
+        mode: 'select',
       }}
       onAfterZoomChange={setPanZoom}
     >
