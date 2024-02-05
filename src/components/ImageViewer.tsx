@@ -2,13 +2,13 @@ import styled from '@emotion/styled';
 import { Image, Mask, writeCanvas } from 'image-js';
 import {
   CSSProperties,
+  MutableRefObject,
   memo,
   useCallback,
   useEffect,
   useMemo,
-  useRef,
 } from 'react';
-import { MapInteractionCSS } from 'react-map-interaction';
+import { RoiContainer, RoiProvider, useTargetRef } from 'react-roi';
 
 import useImage from '../hooks/useImage';
 import useView from '../hooks/useView';
@@ -33,14 +33,23 @@ const canvasStyle: CSSProperties = {
   imageRendering: 'pixelated',
 };
 
+function TargetCanvas({ imageToShow }: { imageToShow: Image | Mask }) {
+  const canvasRef: MutableRefObject<HTMLCanvasElement> = useTargetRef() as any;
+
+  useEffect(() => {
+    if (canvasRef.current === null) return;
+    writeCanvas(imageToShow, canvasRef.current);
+  }, [canvasRef, imageToShow]);
+
+  return <canvas ref={canvasRef} style={canvasStyle} />;
+}
+
 function ImageViewer({
   identifier,
   showOriginal = false,
   image,
   annotable = false,
 }: ImageViewerProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
   const view = useView();
   const viewDispatch = useViewDispatch();
 
@@ -51,14 +60,14 @@ function ImageViewer({
     return showOriginal ? original : pipelined;
   }, [image, original, pipelined, showOriginal]);
 
-  const panZoom = useMemo(
-    () =>
+  const panZoom = useMemo(() => {
+    return (
       view.imageViewerProps[identifier] || {
-        translation: { x: 0, y: 0 },
         scale: 1,
-      },
-    [identifier, view.imageViewerProps],
-  );
+        translation: [0, 0],
+      }
+    );
+  }, [identifier, view.imageViewerProps]);
 
   const setPanZoom = useCallback(
     (panZoom) => {
@@ -70,24 +79,38 @@ function ImageViewer({
     [identifier, viewDispatch],
   );
 
-  useEffect(() => {
-    if (canvasRef.current === null) return;
-    writeCanvas(imageToShow, canvasRef.current);
-  }, [imageToShow]);
-
   return (
-    <MapInteractionCSS value={panZoom} onChange={setPanZoom} maxScale={20}>
-      <RelativeBox>
-        <canvas ref={canvasRef} style={canvasStyle} />
-        {annotable && (
-          <ROIAnnotations
-            width={imageToShow?.width}
-            height={imageToShow?.height}
-            identifier={identifier}
-          />
-        )}
-      </RelativeBox>
-    </MapInteractionCSS>
+    <RoiProvider
+      initialConfig={{
+        zoom: {
+          initial: panZoom,
+          min: 0.1,
+          max: 30,
+          spaceAroundTarget: 0,
+        },
+        resizeStrategy: 'contain',
+        mode: 'select',
+      }}
+      onAfterZoomChange={setPanZoom}
+    >
+      <RoiContainer
+        target={<TargetCanvas imageToShow={imageToShow} />}
+        style={{
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        <RelativeBox>
+          {annotable && (
+            <ROIAnnotations
+              width={imageToShow?.width}
+              height={imageToShow?.height}
+              identifier={identifier}
+            />
+          )}
+        </RelativeBox>
+      </RoiContainer>
+    </RoiProvider>
   );
 }
 
