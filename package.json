@@ -39,7 +39,7 @@
     "@commitlint/config-conventional": "^17.6.3",
     "@simbathesailor/use-what-changed": "^2.0.0",
     "@swc/plugin-emotion": "^2.5.67",
-    "@types/react": "^18.0.28",
+    "@types/react": "^18.2.48",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
@@ -54,7 +54,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.2",
-    "typescript": "^5.0.2",
+    "typescript": "~5.1.0",
     "vite": "^4.3.2"
   },
   "dependencies": {
@@ -76,6 +76,7 @@
     "react-map-interaction": "^2.1.0",
     "react-plot": "^1.4.2",
     "react-science": "^0.35.0",
+    "react-roi": "^0.14.0",
     "react-use": "^17.4.0"
   },
   "volta": {

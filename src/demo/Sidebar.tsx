@@ -11,6 +11,7 @@ const StyledSidebar = styled.div`
   color: white;
   background-color: cornflowerblue;
   padding: 0 20px;
+  overflow-y: auto;
 
   h1 {
     font-size: 1.5rem;

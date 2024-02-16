@@ -31,7 +31,9 @@ function CenterPanel() {
       Object.keys(images).map((identifier) => ({
         id: identifier,
         title: <TabTitle>{images[identifier].metadata.name}</TabTitle>,
-        content: <ImageViewer identifier={identifier} annotable />,
+        content: (
+          <ImageViewer key={identifier} identifier={identifier} annotable />
+        ),
       })),
     [images],
   );

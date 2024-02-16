@@ -71,10 +71,7 @@ export interface ViewState {
   imageViewerProps: Record<
     string,
     {
-      translation: {
-        x: number;
-        y: number;
-      };
+      translation: [number, number];
       scale: number;
     }
   >;
