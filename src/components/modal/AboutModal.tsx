@@ -1,14 +1,13 @@
+import { Dialog, DialogBody, DialogFooter } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { memo } from 'react';
 import { FaFileSignature, FaGithub } from 'react-icons/fa';
-import { Modal } from 'react-science/ui';
 
 import hearcLogo from '../../assets/hearc-logo.png';
 import zakodiumLogo from '../../assets/zakodium-logo.png';
 import useModal from '../../hooks/useModal';
 
 import StyledModalBody from './utils/StyledModalBody';
-import StyledModalHeader from './utils/StyledModalHeader';
 
 const AboutModalStyle = styled.div`
   display: flex;
@@ -80,13 +79,10 @@ function AboutModal() {
   const { isOpen, close } = useModal('about');
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
+    <Dialog title="About Pixelium" isOpen={isOpen} onClose={close}>
       <AboutModalStyle>
-        <StyledModalHeader>
-          <Modal.Header>About Pixelium</Modal.Header>
-        </StyledModalHeader>
         <StyledModalBody>
-          <Modal.Body>
+          <DialogBody>
             <AboutContent>
               <h2>Pixelium</h2>
               <p>
@@ -116,9 +112,9 @@ function AboutModal() {
               </p>
               <p>All rights reserved. Released under MIT license.</p>
             </AboutContent>
-          </Modal.Body>
+          </DialogBody>
         </StyledModalBody>
-        <Modal.Footer>
+        <DialogFooter>
           <LinksContainer>
             <a
               href="https://github.com/zakodium-oss/pixelium"
@@ -135,9 +131,9 @@ function AboutModal() {
               <FaFileSignature /> License
             </a>
           </LinksContainer>
-        </Modal.Footer>
+        </DialogFooter>
       </AboutModalStyle>
-    </Modal>
+    </Dialog>
   );
 }
 

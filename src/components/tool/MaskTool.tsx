@@ -17,11 +17,7 @@ function MaskTool() {
   if (pipelined === undefined) return null;
   if (!isGrey(pipelined)) return null;
 
-  return (
-    <Toolbar.Item title="Mask" onClick={open}>
-      <FaMask />
-    </Toolbar.Item>
-  );
+  return <Toolbar.Item title="Mask" icon={<FaMask />} onClick={open} />;
 }
 
 export default memo(MaskTool);

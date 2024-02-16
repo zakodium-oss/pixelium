@@ -1,6 +1,7 @@
+import { InputGroup, MenuItem } from '@blueprintjs/core';
+import { Select } from '@blueprintjs/select';
 import { Image, PixelateOptions } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -25,11 +26,9 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
   const [options, setOptions] = useState<PixelateOptions>(defaultOptions);
   const algorithmOptions = useMemo(
     () => [
-      [
-        { label: 'Center', value: 'center' },
-        { label: 'Mean', value: 'mean' },
-        { label: 'Median', value: 'median' },
-      ],
+      { label: 'Center', value: 'center' },
+      { label: 'Mean', value: 'mean' },
+      { label: 'Median', value: 'median' },
     ],
     [],
   );
@@ -76,31 +75,39 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="cellSize" label="Cell size">
-        <Input
-          type="number"
-          min={2}
-          value={options.cellSize}
-          onChange={(e) =>
-            setOptions({
-              ...options,
-              cellSize: e.target.valueAsNumber,
-            })
-          }
-        />
-      </Field>
-      <Field name="algorithm" label="Algorithm">
-        <Select
-          value={options.algorithm}
-          options={algorithmOptions}
-          onSelect={(value) =>
-            setOptions({
-              ...options,
-              algorithm: value as PixelateOptions['algorithm'],
-            })
-          }
-        />
-      </Field>
+      <InputGroup
+        type="number"
+        min={2}
+        value={options.cellSize?.toString()}
+        onChange={(e) =>
+          setOptions({
+            ...options,
+            cellSize: e.target.valueAsNumber,
+          })
+        }
+      />
+      <Select
+        activeItem={algorithmOptions.find(
+          (item) => item.value === options.algorithm,
+        )}
+        items={algorithmOptions}
+        itemRenderer={(item, { handleClick, modifiers }) => (
+          <MenuItem
+            key={item.value}
+            text={item.label}
+            onClick={handleClick}
+            active={modifiers.active}
+            disabled={modifiers.disabled}
+            selected={item.value === options.algorithm}
+          />
+        )}
+        onItemSelect={(item) =>
+          setOptions({
+            ...options,
+            algorithm: item.value as PixelateOptions['algorithm'],
+          })
+        }
+      />
     </PreviewModal>
   );
 }

@@ -1,24 +1,23 @@
+import {
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  InputGroup,
+  MenuItem,
+} from '@blueprintjs/core';
+import { Select } from '@blueprintjs/select';
 import styled from '@emotion/styled';
 import { fromMask, GetRoisOptions, Image, RoiKind } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import {
-  Button,
-  Field,
-  Input,
-  Modal,
-  Select,
-  useToggleAccordion,
-} from 'react-science/ui';
+import { Button, useToggleAccordion } from 'react-science/ui';
 
 import useDataDispatch from '../../hooks/useDataDispatch';
 import useImage from '../../hooks/useImage';
 import useModal from '../../hooks/useModal';
 import { SET_ROI } from '../../state/data/DataActionTypes';
-import { buttons } from '../../utils/colors';
 import isBinary from '../../utils/isBinary';
 
 import StyledModalBody from './utils/StyledModalBody';
-import StyledModalHeader from './utils/StyledModalHeader';
 
 const ExtractROIStyle = styled.div`
   display: flex;
@@ -76,11 +75,9 @@ function ExtractROIModal({ identifier }: ExtractROIProps) {
 
   const kindOptions = useMemo(
     () => [
-      [
-        { label: 'White', value: RoiKind.WHITE },
-        { label: 'Black', value: RoiKind.BLACK },
-        { label: 'Both', value: RoiKind.BW },
-      ],
+      { label: 'White', value: RoiKind.WHITE },
+      { label: 'Black', value: RoiKind.BLACK },
+      { label: 'Both', value: RoiKind.BW },
     ],
     [],
   );
@@ -89,61 +86,67 @@ function ExtractROIModal({ identifier }: ExtractROIProps) {
   if (!isBinary(pipelined)) return null;
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
+    <Dialog title="Extract ROIs" isOpen={isOpen} onClose={close}>
       <ExtractROIStyle>
-        <StyledModalHeader>
-          <Modal.Header>Extract ROIs</Modal.Header>
-        </StyledModalHeader>
-        <Modal.Body>
+        <DialogBody>
           <StyledModalBody>
             <FormContent>
-              <Field name="minSurface" label="Minimum surface">
-                <Input
-                  type="number"
-                  value={formContent.minSurface}
-                  onChange={(event) => {
-                    const newValue = event.target.valueAsNumber;
-                    setFormContent({
-                      ...formContent,
-                      minSurface: Number.isNaN(newValue) ? undefined : newValue,
-                    });
-                  }}
-                />
-              </Field>
-              <Field name="maxSurface" label="Maximum surface">
-                <Input
-                  type="number"
-                  value={formContent.maxSurface}
-                  onChange={(event) => {
-                    const newValue = event.target.valueAsNumber;
-                    setFormContent({
-                      ...formContent,
-                      maxSurface: Number.isNaN(newValue) ? undefined : newValue,
-                    });
-                  }}
-                />
-              </Field>
-              <Field name="kind" label="Kind">
-                <Select
-                  value={formContent.kind}
-                  options={kindOptions}
-                  onSelect={(value) =>
-                    setFormContent({ ...formContent, kind: value as RoiKind })
-                  }
-                />
-              </Field>
+              <InputGroup
+                type="number"
+                value={formContent.minSurface?.toString()}
+                onChange={(event) => {
+                  const newValue = event.target.valueAsNumber;
+                  setFormContent({
+                    ...formContent,
+                    minSurface: Number.isNaN(newValue) ? undefined : newValue,
+                  });
+                }}
+              />
+              <InputGroup
+                type="number"
+                value={formContent.maxSurface?.toString()}
+                onChange={(event) => {
+                  const newValue = event.target.valueAsNumber;
+                  setFormContent({
+                    ...formContent,
+                    maxSurface: Number.isNaN(newValue) ? undefined : newValue,
+                  });
+                }}
+              />
+              <Select
+                activeItem={kindOptions.find(
+                  (kind) => kind.value === formContent.kind,
+                )}
+                items={kindOptions}
+                itemRenderer={(item, { handleClick, modifiers }) => (
+                  <MenuItem
+                    key={item.value}
+                    text={item.label}
+                    onClick={handleClick}
+                    active={modifiers.active}
+                    disabled={modifiers.disabled}
+                    selected={item.value === formContent.kind}
+                  />
+                )}
+                onItemSelect={(item) =>
+                  setFormContent({
+                    ...formContent,
+                    kind: item.value,
+                  })
+                }
+              />
             </FormContent>
           </StyledModalBody>
-        </Modal.Body>
-        <Modal.Footer>
+        </DialogBody>
+        <DialogFooter>
           <FooterStyled>
-            <Button backgroundColor={buttons.info} onClick={extract}>
+            <Button intent="primary" onClick={extract}>
               Extract
             </Button>
           </FooterStyled>
-        </Modal.Footer>
+        </DialogFooter>
       </ExtractROIStyle>
-    </Modal>
+    </Dialog>
   );
 }
 

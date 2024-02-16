@@ -1,6 +1,7 @@
+import { InputGroup, MenuItem } from '@blueprintjs/core';
+import { Select } from '@blueprintjs/select';
 import { BorderType, Image, MedianFilterOptions } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -63,12 +64,11 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
   ]);
 
   const borderTypeOptions = useMemo(
-    () => [
+    () =>
       Object.keys(BorderType).map((borderType) => ({
         label: BorderType[borderType],
         value: BorderType[borderType],
       })),
-    ],
     [],
   );
 
@@ -84,48 +84,53 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="cellSize" label="Cell size">
-        <Input
+      <InputGroup
+        type="number"
+        step={2}
+        min={1}
+        value={medianFilterOptions.cellSize?.toString()}
+        onChange={(e) => {
+          setMedianFilterOptions({
+            ...medianFilterOptions,
+            cellSize: e.target.valueAsNumber,
+          });
+        }}
+      />
+      <Select
+        activeItem={borderTypeOptions.find(
+          (option) => option.value === medianFilterOptions.borderType,
+        )}
+        items={borderTypeOptions}
+        itemRenderer={(option, { handleClick, modifiers }) => (
+          <MenuItem
+            key={option.value}
+            text={option.label}
+            onClick={handleClick}
+            active={modifiers.active}
+            disabled={modifiers.disabled}
+            selected={option.value === medianFilterOptions.borderType}
+          />
+        )}
+        onItemSelect={(item) => {
+          setMedianFilterOptions({
+            ...medianFilterOptions,
+            borderType: item.value,
+          });
+        }}
+      />
+
+      {medianFilterOptions.borderType === BorderType.CONSTANT && (
+        <InputGroup
           type="number"
-          step={2}
-          min={1}
-          value={medianFilterOptions.cellSize}
+          name="borderValue"
+          value={medianFilterOptions.borderValue?.toString()}
           onChange={(e) => {
             setMedianFilterOptions({
               ...medianFilterOptions,
-              cellSize: e.target.valueAsNumber,
+              borderValue: e.target.valueAsNumber,
             });
           }}
         />
-      </Field>
-
-      <Field name="borderType" label="Border type">
-        <Select
-          value={medianFilterOptions.borderType}
-          options={borderTypeOptions}
-          onSelect={(value) => {
-            setMedianFilterOptions({
-              ...medianFilterOptions,
-              borderType: value as BorderType,
-            });
-          }}
-        />
-      </Field>
-
-      {medianFilterOptions.borderType === BorderType.CONSTANT && (
-        <Field name="borderValue" label="Border value">
-          <Input
-            type="number"
-            name="borderValue"
-            value={medianFilterOptions.borderValue}
-            onChange={(e) => {
-              setMedianFilterOptions({
-                ...medianFilterOptions,
-                borderValue: e.target.valueAsNumber,
-              });
-            }}
-          />
-        </Field>
       )}
     </PreviewModal>
   );

@@ -1,8 +1,8 @@
+import { Checkbox, InputGroup } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { ErodeOptions } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Checkbox, Field, Input } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -88,84 +88,75 @@ function ErodeModal({ previewImageIdentifier }: ErodeModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="iterations" label="Iterations">
-        <Input
-          type="number"
-          name="iterations"
-          min={1}
-          value={erodeOptions.iterations}
-          onChange={(e) => {
-            setErodeOptions({
-              ...erodeOptions,
-              iterations: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </Field>
-      <Field name="kernelWidth" label="Kernel width">
-        <Input
-          type="number"
-          name="kernelWidth"
-          step={2}
-          min={1}
-          value={erodeOptions.kernel[0].length}
-          onChange={(e) => {
-            setErodeOptions({
-              ...erodeOptions,
-              kernel: resizeKernel(
-                erodeOptions.kernel,
-                e.target.valueAsNumber,
-                'x',
-              ),
-            });
-          }}
-        />
-      </Field>
-      <Field name="kernelHeight" label="Kernel height">
-        <Input
-          type="number"
-          name="kernelHeight"
-          step={2}
-          min={1}
-          value={erodeOptions.kernel.length}
-          onChange={(e) => {
-            setErodeOptions({
-              ...erodeOptions,
-              kernel: resizeKernel(
-                erodeOptions.kernel,
-                e.target.valueAsNumber,
-                'y',
-              ),
-            });
-          }}
-        />
-      </Field>
-
-      <Field name="kernel" label="Kernel">
-        <KernelGrid>
-          {times(erodeOptions.kernel.length, (h) => (
-            <KernelRow key={h}>
-              {times(erodeOptions.kernel[0].length, (w) => (
-                <Checkbox
-                  key={w}
-                  checked={erodeOptions.kernel[h][w] === 1}
-                  onChange={(checked) =>
-                    setErodeOptions({
-                      ...erodeOptions,
-                      kernel: changeKernelCell(
-                        erodeOptions.kernel,
-                        w,
-                        h,
-                        checked as boolean,
-                      ),
-                    })
-                  }
-                />
-              ))}
-            </KernelRow>
-          ))}
-        </KernelGrid>
-      </Field>
+      <InputGroup
+        type="number"
+        name="iterations"
+        min={1}
+        value={erodeOptions.iterations?.toString()}
+        onChange={(e) => {
+          setErodeOptions({
+            ...erodeOptions,
+            iterations: e.target.valueAsNumber,
+          });
+        }}
+      />
+      <InputGroup
+        type="number"
+        name="kernelWidth"
+        step={2}
+        min={1}
+        value={erodeOptions.kernel[0].length?.toString()}
+        onChange={(e) => {
+          setErodeOptions({
+            ...erodeOptions,
+            kernel: resizeKernel(
+              erodeOptions.kernel,
+              e.target.valueAsNumber,
+              'x',
+            ),
+          });
+        }}
+      />
+      <InputGroup
+        type="number"
+        name="kernelHeight"
+        step={2}
+        min={1}
+        value={erodeOptions.kernel.length?.toString()}
+        onChange={(e) => {
+          setErodeOptions({
+            ...erodeOptions,
+            kernel: resizeKernel(
+              erodeOptions.kernel,
+              e.target.valueAsNumber,
+              'y',
+            ),
+          });
+        }}
+      />
+      <KernelGrid>
+        {times(erodeOptions.kernel.length, (h) => (
+          <KernelRow key={h}>
+            {times(erodeOptions.kernel[0].length, (w) => (
+              <Checkbox
+                key={w}
+                checked={erodeOptions.kernel[h][w] === 1}
+                onChange={(e) =>
+                  setErodeOptions({
+                    ...erodeOptions,
+                    kernel: changeKernelCell(
+                      erodeOptions.kernel,
+                      w,
+                      h,
+                      e.target.checked,
+                    ),
+                  })
+                }
+              />
+            ))}
+          </KernelRow>
+        ))}
+      </KernelGrid>
     </PreviewModal>
   );
 }

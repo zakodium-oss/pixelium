@@ -1,14 +1,13 @@
+import { Dialog, DialogBody, DialogFooter } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { Image, Mask } from 'image-js';
 import { memo, ReactNode, useCallback } from 'react';
-import { Button, Modal } from 'react-science/ui';
+import { Button } from 'react-science/ui';
 
 import useViewDispatch from '../../../hooks/useViewDispatch';
 import { SET_EDIT_MODE_IDENTIFIER } from '../../../state/view/ViewActionTypes';
-import { buttons } from '../../../utils/colors';
 import ImageViewer from '../../ImageViewer';
 import StyledModalBody from '../utils/StyledModalBody';
-import StyledModalHeader from '../utils/StyledModalHeader';
 
 const PreviewModalStyle = styled.div`
   display: flex;
@@ -83,12 +82,13 @@ function PreviewModal({
   }, [apply, viewDispatch]);
 
   return (
-    <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
+    <Dialog
+      title={editing ? `Editing : ${title}` : title}
+      isOpen={isOpenDialog}
+      onClose={closeDialog}
+    >
       <PreviewModalStyle>
-        <StyledModalHeader>
-          <Modal.Header>{editing ? `Editing : ${title}` : title}</Modal.Header>
-        </StyledModalHeader>
-        <Modal.Body>
+        <DialogBody>
           <StyledModalBody>
             <ImageViewerContainer>
               <ImageViewer identifier={viewIdentifier} image={original} />
@@ -105,16 +105,16 @@ function PreviewModal({
               )}
             </ImageViewerContainer>
           </StyledModalBody>
-        </Modal.Body>
-        <Modal.Footer>
+        </DialogBody>
+        <DialogFooter>
           <FooterStyled>
-            <Button backgroundColor={buttons.info} onClick={internalApply}>
+            <Button intent="primary" onClick={internalApply}>
               {editing ? 'Edit operation' : 'Add operation'}
             </Button>
           </FooterStyled>
-        </Modal.Footer>
+        </DialogFooter>
       </PreviewModalStyle>
-    </Modal>
+    </Dialog>
   );
 }
 

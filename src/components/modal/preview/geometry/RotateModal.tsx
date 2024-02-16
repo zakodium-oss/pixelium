@@ -1,6 +1,7 @@
+import { Checkbox, MenuItem } from '@blueprintjs/core';
+import { Select } from '@blueprintjs/select';
 import { Image, RotateAngle } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Checkbox, Field, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -66,12 +67,11 @@ function RotateModal({ previewImageIdentifier }: RotateModalProps) {
   ]);
 
   const rotateAngleOptions = useMemo(
-    () => [
+    () =>
       [0, 90, 180, 270].map((rotateAngle) => ({
         label: `${rotateAngle}`,
         value: `${rotateAngle}`,
       })),
-    ],
     [],
   );
 
@@ -87,30 +87,38 @@ function RotateModal({ previewImageIdentifier }: RotateModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="clockwise" label="Clockwise">
-        <Checkbox
-          checked={rotateOptions.clockwise}
-          onChange={(checked) =>
-            setRotateOptions({
-              ...rotateOptions,
-              clockwise: checked as boolean,
-            })
-          }
-        />
-      </Field>
-      <Field name="angle" label="Angle">
-        <Select
-          value={`${rotateOptions.angle}`}
-          options={rotateAngleOptions}
-          onSelect={(value) => {
-            if (value === undefined) return;
-            setRotateOptions({
-              ...rotateOptions,
-              angle: Number.parseInt(value, 10) as RotateAngle | 0,
-            });
-          }}
-        />
-      </Field>
+      <Checkbox
+        checked={rotateOptions.clockwise}
+        onChange={(e) =>
+          setRotateOptions({
+            ...rotateOptions,
+            clockwise: e.target.checked,
+          })
+        }
+      />
+      <Select
+        activeItem={rotateAngleOptions.find(
+          (item) => item.value === `${rotateOptions.angle}`,
+        )}
+        items={rotateAngleOptions}
+        itemRenderer={(item, { handleClick, modifiers }) => (
+          <MenuItem
+            key={item.value}
+            text={item.label}
+            onClick={handleClick}
+            active={modifiers.active}
+            disabled={modifiers.disabled}
+            selected={item.value === `${rotateOptions.angle}`}
+          />
+        )}
+        onItemSelect={(item) => {
+          if (item === undefined) return;
+          setRotateOptions({
+            ...rotateOptions,
+            angle: Number.parseInt(item.value, 10) as RotateAngle | 0,
+          });
+        }}
+      />
     </PreviewModal>
   );
 }

@@ -1,6 +1,7 @@
+import { InputGroup, MenuItem } from '@blueprintjs/core';
+import { Select } from '@blueprintjs/select';
 import { BlurOptions, BorderType, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -57,12 +58,11 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
   }, [blurOptions, close, dataDispatch, opIdentifier, previewImageIdentifier]);
 
   const borderTypeOptions = useMemo(
-    () => [
+    () =>
       Object.keys(BorderType).map((borderType) => ({
         label: BorderType[borderType],
         value: BorderType[borderType],
       })),
-    ],
     [],
   );
 
@@ -78,64 +78,66 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="kernelWidth" label="Kernel width">
-        <Input
-          type="number"
-          name="kernelWidth"
-          step={2}
-          min={1}
-          value={blurOptions.width}
-          onChange={(e) => {
-            setBlurOptions({
-              ...blurOptions,
-              width: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </Field>
-      <Field name="kernelHeight" label="Kenel height">
-        <Input
-          type="number"
-          name="kernelHeight"
-          step={2}
-          min={1}
-          value={blurOptions.height}
-          onChange={(e) => {
-            setBlurOptions({
-              ...blurOptions,
-              height: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </Field>
-
-      <Field name="borderType" label="Border type">
-        <Select
-          value={blurOptions.borderType}
-          options={borderTypeOptions}
-          onSelect={(value) => {
-            setBlurOptions({
-              ...blurOptions,
-              borderType: value as BorderType,
-            });
-          }}
-        />
-      </Field>
-
-      {blurOptions.borderType === BorderType.CONSTANT && (
-        <Field name="borderValue" label="Border value">
-          <Input
-            type="number"
-            name="borderValue"
-            value={blurOptions.borderValue}
-            onChange={(e) => {
-              setBlurOptions({
-                ...blurOptions,
-                borderValue: e.target.valueAsNumber,
-              });
-            }}
+      <InputGroup
+        type="number"
+        name="kernelWidth"
+        step={2}
+        min={1}
+        value={blurOptions.width?.toString()}
+        onChange={(e) => {
+          setBlurOptions({
+            ...blurOptions,
+            width: e.target.valueAsNumber,
+          });
+        }}
+      />
+      <InputGroup
+        type="number"
+        name="kernelHeight"
+        step={2}
+        min={1}
+        value={blurOptions.height?.toString()}
+        onChange={(e) => {
+          setBlurOptions({
+            ...blurOptions,
+            height: e.target.valueAsNumber,
+          });
+        }}
+      />
+      <Select
+        activeItem={borderTypeOptions.find(
+          (option) => option.value === blurOptions.borderType,
+        )}
+        items={borderTypeOptions}
+        itemRenderer={(item, { handleClick, modifiers }) => (
+          <MenuItem
+            key={item.value}
+            text={item.label}
+            onClick={handleClick}
+            active={modifiers.active}
+            disabled={modifiers.disabled}
+            selected={item.value === blurOptions.borderType}
           />
-        </Field>
+        )}
+        onItemSelect={(item) => {
+          setBlurOptions({
+            ...blurOptions,
+            borderType: item.value,
+          });
+        }}
+      />
+      {blurOptions.borderType === BorderType.CONSTANT && (
+        <InputGroup
+          type="number"
+          name="borderValue"
+          value={blurOptions.borderValue?.toString()}
+          onChange={(e) => {
+            setBlurOptions({
+              ...blurOptions,
+              borderValue: e.target.valueAsNumber,
+            });
+          }}
+        />
       )}
     </PreviewModal>
   );

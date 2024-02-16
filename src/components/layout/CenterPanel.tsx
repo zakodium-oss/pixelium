@@ -1,6 +1,7 @@
+import { Tabs, Tab } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import React, { memo, useCallback, useEffect, useMemo } from 'react';
-import { DropZoneContainer, Tabs } from 'react-science/ui';
+import { DropZoneContainer } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useData from '../../hooks/useData';
@@ -55,16 +56,20 @@ function CenterPanel() {
   return (
     <StyledCenterPanel>
       <DropZoneContainer
-        emptyText="Drag and drop here either an image or a Pixelium file."
+        emptyDescription="Drag and drop here either an image or a Pixelium file."
         onDrop={handleOnDrop}
       >
         {tabsItems.length > 0 ? (
-          <Tabs
-            orientation="horizontal"
-            items={tabsItems}
-            opened={currentTab}
-            onClick={openTab}
-          />
+          <Tabs selectedTabId={currentTab} onChange={openTab}>
+            {tabsItems.map((item) => (
+              <Tab
+                id={item.id}
+                key={item.id}
+                title={item.title}
+                panel={<div>{item.content}</div>}
+              />
+            ))}
+          </Tabs>
         ) : null}
       </DropZoneContainer>
     </StyledCenterPanel>

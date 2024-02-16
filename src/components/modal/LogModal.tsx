@@ -1,14 +1,14 @@
+import { Dialog, DialogBody, DialogFooter } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { CSSProperties, memo, useMemo } from 'react';
 import { FaTrash } from 'react-icons/fa';
-import { Button, Modal, Table, ValueRenderers } from 'react-science/ui';
+import { Button, Table, ValueRenderers } from 'react-science/ui';
 
 import useLog from '../../hooks/useLog';
 import useModal from '../../hooks/useModal';
-import { buttons, getRowColor } from '../../utils/colors';
+import { getRowColor } from '../../utils/colors';
 
 import StyledModalBody from './utils/StyledModalBody';
-import StyledModalHeader from './utils/StyledModalHeader';
 
 const LogModalStyle = styled.div`
   display: flex;
@@ -61,13 +61,9 @@ function LogModal() {
   const reversedLogs = useMemo(() => logs.slice().reverse(), [logs]);
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
+    <Dialog title="Log history" isOpen={isOpen} onClose={close}>
       <LogModalStyle>
-        <StyledModalHeader>
-          <Modal.Header>Log history</Modal.Header>
-        </StyledModalHeader>
-
-        <Modal.Body>
+        <DialogBody>
           <StyledModalBody>
             {logs.length > 0 ? (
               <div className="table-container">
@@ -108,17 +104,17 @@ function LogModal() {
               <div className="no-log">Nothing to see for now.</div>
             )}
           </StyledModalBody>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button backgroundColor={buttons.danger} onClick={clear}>
+        </DialogBody>
+        <DialogFooter>
+          <Button intent="danger" onClick={clear}>
             <TrashButtonInner>
               <FaTrash />
               <span>Clear logs</span>
             </TrashButtonInner>
           </Button>
-        </Modal.Footer>
+        </DialogFooter>
       </LogModalStyle>
-    </Modal>
+    </Dialog>
   );
 }
 

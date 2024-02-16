@@ -1,6 +1,7 @@
+import { InputGroup, MenuItem } from '@blueprintjs/core';
+import { Select } from '@blueprintjs/select';
 import { BorderType, GaussianBlurXYOptions, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -65,12 +66,11 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
   ]);
 
   const borderTypeOptions = useMemo(
-    () => [
+    () =>
       Object.keys(BorderType).map((borderType) => ({
         label: BorderType[borderType],
         value: BorderType[borderType],
       })),
-    ],
     [],
   );
 
@@ -86,74 +86,76 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="sigmaX" label="Sigma X">
-        <Input
-          type="number"
-          name="sigmaX"
-          value={gaussianBlurOptions.sigmaX}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sigmaX: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </Field>
-      <Field name="sigmaY" label="Sigma Y">
-        <Input
-          type="number"
-          name="sigmaY"
-          value={gaussianBlurOptions.sigmaY}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sigmaY: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </Field>
-      <Field name="sizeX" label="Size X">
-        <Input
-          type="number"
-          name="sizeX"
-          min={1}
-          step={2}
-          value={gaussianBlurOptions.sizeX}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sizeX: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </Field>
-      <Field name="sizeY" label="Size Y">
-        <Input
-          type="number"
-          name="sizeY"
-          min={1}
-          step={2}
-          value={gaussianBlurOptions.sizeY}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sizeY: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </Field>
-      <Field name="borderType" label="Border type">
-        <Select
-          value={gaussianBlurOptions.borderType}
-          options={borderTypeOptions}
-          onSelect={(value) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              borderType: value as BorderType,
-            });
-          }}
-        />
-      </Field>
+      <InputGroup
+        type="number"
+        name="sigmaX"
+        value={gaussianBlurOptions.sigmaX?.toString()}
+        onChange={(e) => {
+          setGaussianBlurOptions({
+            ...gaussianBlurOptions,
+            sigmaX: e.target.valueAsNumber,
+          });
+        }}
+      />
+      <InputGroup
+        type="number"
+        name="sigmaY"
+        value={gaussianBlurOptions.sigmaY?.toString()}
+        onChange={(e) => {
+          setGaussianBlurOptions({
+            ...gaussianBlurOptions,
+            sigmaY: e.target.valueAsNumber,
+          });
+        }}
+      />
+      <InputGroup
+        type="number"
+        name="sizeX"
+        min={1}
+        step={2}
+        value={gaussianBlurOptions.sizeX?.toString()}
+        onChange={(e) => {
+          setGaussianBlurOptions({
+            ...gaussianBlurOptions,
+            sizeX: e.target.valueAsNumber,
+          });
+        }}
+      />
+      <InputGroup
+        type="number"
+        name="sizeY"
+        min={1}
+        step={2}
+        value={gaussianBlurOptions.sizeY?.toString()}
+        onChange={(e) => {
+          setGaussianBlurOptions({
+            ...gaussianBlurOptions,
+            sizeY: e.target.valueAsNumber,
+          });
+        }}
+      />
+      <Select
+        activeItem={borderTypeOptions.find(
+          (item) => item.value === gaussianBlurOptions.borderType,
+        )}
+        items={borderTypeOptions}
+        itemRenderer={(item, { handleClick, modifiers }) => (
+          <MenuItem
+            key={item.value}
+            text={item.label}
+            onClick={handleClick}
+            active={modifiers.active}
+            disabled={modifiers.disabled}
+            selected={item.value === gaussianBlurOptions.borderType}
+          />
+        )}
+        onItemSelect={(item) => {
+          setGaussianBlurOptions({
+            ...gaussianBlurOptions,
+            borderType: item.value,
+          });
+        }}
+      />
     </PreviewModal>
   );
 }

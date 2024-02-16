@@ -40,43 +40,40 @@ function PixeliumHeader() {
 
   return (
     <InnerHeader>
-      <Toolbar orientation="horizontal">
+      <Toolbar>
         <Toolbar.Item
           title="About Pixelium"
-          titleOrientation="horizontal"
+          icon={<SvgLogoZakodium />}
           onClick={openAbout}
-        >
-          <SvgLogoZakodium />
-        </Toolbar.Item>
+        />
       </Toolbar>
 
-      <Toolbar orientation="horizontal">
+      <Toolbar>
         <Toolbar.Item
           title="User manual"
+          icon={<FaQuestionCircle />}
           onClick={() => window.open('https://zakodium.com', '_blank')}
-        >
-          <FaQuestionCircle />
-        </Toolbar.Item>
+        />
         <Toolbar.Item
           title="Logs"
-          titleOrientation="vertical"
+          icon={<FaBug />}
           onClick={() => {
             openLogs();
             markAsRead();
           }}
         >
-          <FaBug />
-          {unreadCount > 0 && (
+          {/*TODO: find a way to display the unread count chip on the toolbar*/}
+          {/*{unreadCount > 0 && (
             <UnreadChip unreadLevel={unreadLevel}>{unreadCount}</UnreadChip>
-          )}
+          )} */}
         </Toolbar.Item>
-        <Toolbar.Item title="Settings">
-          <FaWrench />
-        </Toolbar.Item>
+        <Toolbar.Item title="Settings" icon={<FaWrench />} />
         {!isFullScreen && (
-          <Toolbar.Item title="Full Screen" onClick={toggleFullscreen}>
-            <FaRegWindowMaximize />
-          </Toolbar.Item>
+          <Toolbar.Item
+            title="Full Screen"
+            icon={<FaRegWindowMaximize />}
+            onClick={toggleFullscreen}
+          />
         )}
       </Toolbar>
     </InnerHeader>

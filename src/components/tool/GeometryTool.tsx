@@ -1,11 +1,7 @@
+import { Menu, MenuItem } from '@blueprintjs/core';
 import { memo, useCallback, useMemo } from 'react';
 import { TbGeometry } from 'react-icons/tb';
-import {
-  DropdownMenu,
-  MenuOption,
-  MenuOptions,
-  Toolbar,
-} from 'react-science/ui';
+import { Toolbar, ToolbarItemProps } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
@@ -20,7 +16,13 @@ function GeometryTool() {
 
   const { pipelined } = useImage();
 
-  const geometryOptions = useMemo<MenuOptions<string>>(
+  const geometryItem: ToolbarItemProps = {
+    id: 'geometry',
+    icon: <TbGeometry />,
+    title: 'Geometry',
+  };
+
+  const geometryOptions = useMemo(
     () => [
       {
         label: 'Resize',
@@ -36,8 +38,20 @@ function GeometryTool() {
     [],
   );
 
+  const content = (
+    <Menu>
+      {geometryOptions.map((option) => (
+        <MenuItem
+          key={option.label}
+          text={option.label}
+          onClick={() => selectOption(option)}
+        />
+      ))}
+    </Menu>
+  );
+
   const selectOption = useCallback(
-    (selected: MenuOption<string>) => {
+    (selected) => {
       if (selected.data === undefined) return;
       viewDispatch({
         type: OPEN_MODAL,
@@ -51,17 +65,7 @@ function GeometryTool() {
   if (pipelined === undefined) return null;
   if (isBinary(pipelined)) return null;
 
-  return (
-    <DropdownMenu
-      trigger="click"
-      onSelect={selectOption}
-      options={geometryOptions}
-    >
-      <Toolbar.Item title="Geometry">
-        <TbGeometry />
-      </Toolbar.Item>
-    </DropdownMenu>
-  );
+  return <Toolbar.PopoverItem content={content} itemProps={geometryItem} />;
 }
 
 export default memo(GeometryTool);
