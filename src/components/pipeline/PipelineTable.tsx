@@ -141,6 +141,7 @@ function PipelineTable({ identifier }: PipelineTableProps) {
         <p>Pipeline is empty.</p>
         <p>Import from another image:</p>
         <Select
+          filterable={false}
           activeItem={otherImagesOptions.find(
             (option) => option.value === imageKeyToImport,
           )}
@@ -159,7 +160,9 @@ function PipelineTable({ identifier }: PipelineTableProps) {
           onItemSelect={(item) => {
             setImageKeyToImport(item.value);
           }}
-        />
+        >
+          <Button text="Select" rightIcon="double-caret-vertical" />
+        </Select>
       </Empty>
     );
   }

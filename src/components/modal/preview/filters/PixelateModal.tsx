@@ -1,4 +1,4 @@
-import { FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
+import { Button, FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { Image, PixelateOptions } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -63,6 +63,8 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
     close();
   }, [close, dataDispatch, opIdentifier, options, previewImageIdentifier]);
 
+  const [algorithmLabel, setAlgorithmLabel] = useState<string>();
+
   return (
     <PreviewModal
       closeDialog={close}
@@ -90,6 +92,7 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
       </FormGroup>
       <FormGroup label="Algorithm">
         <Select
+          filterable={false}
           activeItem={algorithmOptions.find(
             (item) => item.value === options.algorithm,
           )}
@@ -104,13 +107,23 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
               selected={item.value === options.algorithm}
             />
           )}
-          onItemSelect={(item) =>
+          onItemSelect={(item) => {
+            setAlgorithmLabel(item.label);
             setOptions({
               ...options,
               algorithm: item.value as PixelateOptions['algorithm'],
-            })
-          }
-        />
+            });
+          }}
+        >
+          <Button
+            text={
+              algorithmLabel ??
+              algorithmOptions.find((item) => item.value === options.algorithm)
+                ?.label
+            }
+            rightIcon="double-caret-vertical"
+          />
+        </Select>
       </FormGroup>
     </PreviewModal>
   );

@@ -1,4 +1,4 @@
-import { FormGroup, MenuItem } from '@blueprintjs/core';
+import { Button, FormGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { FlipOptions, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -62,6 +62,8 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
     close();
   }, [close, dataDispatch, opIdentifier, options, previewImageIdentifier]);
 
+  const [axisLabel, setAxisLabel] = useState<string>();
+
   return (
     <PreviewModal
       closeDialog={close}
@@ -76,6 +78,7 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
     >
       <FormGroup label="Axis">
         <Select
+          filterable={false}
           activeItem={axisOptions.find((item) => item.value === options.axis)}
           items={axisOptions}
           itemRenderer={(item, { handleClick, modifiers }) => (
@@ -88,12 +91,21 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
               selected={item.value === options.axis}
             />
           )}
-          onItemSelect={(item) =>
+          onItemSelect={(item) => {
+            setAxisLabel(item.label);
             setOptions({
               axis: item.value as FlipOptions['axis'],
-            })
-          }
-        />
+            });
+          }}
+        >
+          <Button
+            text={
+              axisLabel ??
+              axisOptions.find((item) => item.value === options.axis)?.label
+            }
+            rightIcon="double-caret-vertical"
+          />
+        </Select>
       </FormGroup>
     </PreviewModal>
   );

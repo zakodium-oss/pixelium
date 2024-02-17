@@ -1,4 +1,4 @@
-import { FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
+import { Button, FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { BorderType, Image, MedianFilterOptions } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -72,6 +72,8 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
     [],
   );
 
+  const [borderLabel, setBorderLabel] = useState<string>();
+
   return (
     <PreviewModal
       closeDialog={close}
@@ -100,6 +102,7 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
       </FormGroup>
       <FormGroup label="Border type">
         <Select
+          filterable={false}
           activeItem={borderTypeOptions.find(
             (option) => option.value === medianFilterOptions.borderType,
           )}
@@ -115,12 +118,23 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
             />
           )}
           onItemSelect={(item) => {
+            setBorderLabel(item.label);
             setMedianFilterOptions({
               ...medianFilterOptions,
               borderType: item.value,
             });
           }}
-        />
+        >
+          <Button
+            text={
+              borderLabel ??
+              borderTypeOptions.find(
+                (item) => item.value === medianFilterOptions.borderType,
+              )?.label
+            }
+            rightIcon="double-caret-vertical"
+          />
+        </Select>
       </FormGroup>
 
       {medianFilterOptions.borderType === BorderType.CONSTANT && (

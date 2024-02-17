@@ -1,4 +1,4 @@
-import { FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
+import { Button, FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { BlurOptions, BorderType, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -66,6 +66,8 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
     [],
   );
 
+  const [borderLabel, setBorderLabel] = useState<string>();
+
   return (
     <PreviewModal
       closeDialog={close}
@@ -110,6 +112,7 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
       </FormGroup>
       <FormGroup label="Border type">
         <Select
+          filterable={false}
           activeItem={borderTypeOptions.find(
             (option) => option.value === blurOptions.borderType,
           )}
@@ -125,12 +128,23 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
             />
           )}
           onItemSelect={(item) => {
+            setBorderLabel(item.label);
             setBlurOptions({
               ...blurOptions,
               borderType: item.value,
             });
           }}
-        />
+        >
+          <Button
+            text={
+              borderLabel ??
+              borderTypeOptions.find(
+                (item) => item.value === blurOptions.borderType,
+              )?.label
+            }
+            rightIcon="double-caret-vertical"
+          />
+        </Select>
       </FormGroup>
       {blurOptions.borderType === BorderType.CONSTANT && (
         <InputGroup

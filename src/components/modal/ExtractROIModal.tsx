@@ -45,7 +45,7 @@ const FormContent = styled.div`
 const defaultFormContent = {
   minSurface: undefined,
   maxSurface: undefined,
-  kind: undefined,
+  kind: RoiKind.WHITE,
 };
 
 interface ExtractROIProps {
@@ -82,6 +82,7 @@ function ExtractROIModal({ identifier }: ExtractROIProps) {
     ],
     [],
   );
+  const [kindLabel, setKindLabel] = useState<string>();
 
   if (pipelined === undefined) return null;
   if (!isBinary(pipelined)) return null;
@@ -120,6 +121,7 @@ function ExtractROIModal({ identifier }: ExtractROIProps) {
               </FormGroup>
               <FormGroup label="Kind">
                 <Select
+                  filterable={false}
                   activeItem={kindOptions.find(
                     (kind) => kind.value === formContent.kind,
                   )}
@@ -134,13 +136,24 @@ function ExtractROIModal({ identifier }: ExtractROIProps) {
                       selected={item.value === formContent.kind}
                     />
                   )}
-                  onItemSelect={(item) =>
+                  onItemSelect={(item) => {
+                    setKindLabel(item.label);
                     setFormContent({
                       ...formContent,
                       kind: item.value,
-                    })
-                  }
-                />
+                    });
+                  }}
+                >
+                  <Button
+                    text={
+                      kindLabel ??
+                      kindOptions.find(
+                        (item) => item.value === formContent.kind,
+                      )?.label
+                    }
+                    rightIcon="double-caret-vertical"
+                  />
+                </Select>
               </FormGroup>
             </FormContent>
           </StyledModalBody>

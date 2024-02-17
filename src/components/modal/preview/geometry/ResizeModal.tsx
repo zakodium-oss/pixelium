@@ -1,4 +1,10 @@
-import { Checkbox, FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
+import {
+  Button,
+  Checkbox,
+  FormGroup,
+  InputGroup,
+  MenuItem,
+} from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { BorderType, Image, InterpolationType, ResizeOptions } from 'image-js';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
@@ -93,6 +99,9 @@ function ResizeModal({ previewImageIdentifier }: ResizeModalProps) {
     [],
   );
 
+  const [interpolationLabel, setInterpolationLabel] = useState<string>();
+  const [BorderLabel, setBorderLabel] = useState<string>();
+
   return (
     <PreviewModal
       closeDialog={close}
@@ -154,6 +163,7 @@ function ResizeModal({ previewImageIdentifier }: ResizeModalProps) {
       </FormGroup>
       <FormGroup label="Interpolation type">
         <Select
+          filterable={false}
           activeItem={interpolationTypeOptions.find(
             (item) => item.value === resizeOptions.interpolationType,
           )}
@@ -169,15 +179,27 @@ function ResizeModal({ previewImageIdentifier }: ResizeModalProps) {
             />
           )}
           onItemSelect={(item) => {
+            setInterpolationLabel(item.label);
             setResizeOptions({
               ...resizeOptions,
               interpolationType: item.value,
             });
           }}
-        />
+        >
+          <Button
+            text={
+              interpolationLabel ??
+              interpolationTypeOptions.find(
+                (item) => item.value === resizeOptions.interpolationType,
+              )?.label
+            }
+            rightIcon="double-caret-vertical"
+          />
+        </Select>
       </FormGroup>
       <FormGroup label="Border type">
         <Select
+          filterable={false}
           activeItem={borderTypeOptions.find(
             (item) => item.value === resizeOptions.borderType,
           )}
@@ -193,12 +215,23 @@ function ResizeModal({ previewImageIdentifier }: ResizeModalProps) {
             />
           )}
           onItemSelect={(item) => {
+            setBorderLabel(item.value);
             setResizeOptions({
               ...resizeOptions,
               borderType: item.value,
             });
           }}
-        />
+        >
+          <Button
+            text={
+              BorderLabel ??
+              borderTypeOptions.find(
+                (item) => item.value === resizeOptions.borderType,
+              )?.label
+            }
+            rightIcon="double-caret-vertical"
+          />
+        </Select>
       </FormGroup>
 
       {resizeOptions.borderType === BorderType.CONSTANT && (

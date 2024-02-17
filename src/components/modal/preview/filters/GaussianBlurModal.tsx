@@ -1,4 +1,4 @@
-import { FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
+import { Button, FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { BorderType, GaussianBlurXYOptions, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -74,6 +74,8 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
     [],
   );
 
+  const [borderLabel, setBorderLabel] = useState<string>();
+
   return (
     <PreviewModal
       closeDialog={close}
@@ -144,6 +146,7 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
       </FormGroup>
       <FormGroup label="Border type">
         <Select
+          filterable={false}
           activeItem={borderTypeOptions.find(
             (item) => item.value === gaussianBlurOptions.borderType,
           )}
@@ -159,12 +162,23 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
             />
           )}
           onItemSelect={(item) => {
+            setBorderLabel(item.label);
             setGaussianBlurOptions({
               ...gaussianBlurOptions,
               borderType: item.value,
             });
           }}
-        />
+        >
+          <Button
+            text={
+              borderLabel ??
+              borderTypeOptions.find(
+                (item) => item.value === gaussianBlurOptions.borderType,
+              )?.label
+            }
+            rightIcon="double-caret-vertical"
+          />
+        </Select>
       </FormGroup>
     </PreviewModal>
   );

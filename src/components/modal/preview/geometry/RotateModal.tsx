@@ -1,4 +1,4 @@
-import { Checkbox, FormGroup, MenuItem } from '@blueprintjs/core';
+import { Button, Checkbox, FormGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { Image, RotateAngle } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -75,6 +75,8 @@ function RotateModal({ previewImageIdentifier }: RotateModalProps) {
     [],
   );
 
+  const [angleLabel, setAngleLabel] = useState<string>();
+
   return (
     <PreviewModal
       closeDialog={close}
@@ -100,6 +102,7 @@ function RotateModal({ previewImageIdentifier }: RotateModalProps) {
       />
       <FormGroup label="Angle">
         <Select
+          filterable={false}
           activeItem={rotateAngleOptions.find(
             (item) => item.value === `${rotateOptions.angle}`,
           )}
@@ -116,12 +119,23 @@ function RotateModal({ previewImageIdentifier }: RotateModalProps) {
           )}
           onItemSelect={(item) => {
             if (item === undefined) return;
+            setAngleLabel(item.label);
             setRotateOptions({
               ...rotateOptions,
               angle: Number.parseInt(item.value, 10) as RotateAngle | 0,
             });
           }}
-        />
+        >
+          <Button
+            text={
+              angleLabel ??
+              rotateAngleOptions.find(
+                (item) => item.value === `${rotateOptions.angle}`,
+              )?.label
+            }
+            rightIcon="double-caret-vertical"
+          />
+        </Select>
       </FormGroup>
     </PreviewModal>
   );
