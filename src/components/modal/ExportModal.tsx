@@ -89,7 +89,12 @@ function ExportModal() {
   ]);
 
   return (
-    <Dialog title="Export Pixelium file" isOpen={isOpen} onClose={close}>
+    <Dialog
+      title="Export Pixelium file"
+      isOpen={isOpen}
+      onClose={close}
+      style={{ width: 'fit-content' }}
+    >
       <ExportStyle>
         <DialogBody>
           <StyledModalBody>

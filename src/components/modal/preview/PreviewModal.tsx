@@ -37,12 +37,6 @@ const ImageViewerContainer = styled.div`
   border-radius: 4px;
 `;
 
-const FooterStyled = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-`;
-
 const AlgorithmError = styled.div`
   display: flex;
   justify-content: center;
@@ -86,6 +80,7 @@ function PreviewModal({
       title={editing ? `Editing : ${title}` : title}
       isOpen={isOpenDialog}
       onClose={closeDialog}
+      style={{ width: 'fit-content' }}
     >
       <PreviewModalStyle>
         <DialogBody>
@@ -106,13 +101,14 @@ function PreviewModal({
             </ImageViewerContainer>
           </StyledModalBody>
         </DialogBody>
-        <DialogFooter>
-          <FooterStyled>
+        <DialogFooter
+          minimal
+          actions={
             <Button intent="primary" onClick={internalApply}>
               {editing ? 'Edit operation' : 'Add operation'}
             </Button>
-          </FooterStyled>
-        </DialogFooter>
+          }
+        />
       </PreviewModalStyle>
     </Dialog>
   );

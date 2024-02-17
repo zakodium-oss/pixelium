@@ -36,15 +36,6 @@ const LogModalStyle = styled.div`
   }
 `;
 
-const TrashButtonInner = styled.span`
-  display: flex;
-  align-items: center;
-
-  span {
-    margin-left: 8px;
-  }
-`;
-
 const tableHeaderStyle: CSSProperties = {
   textAlign: 'left',
 };
@@ -61,7 +52,12 @@ function LogModal() {
   const reversedLogs = useMemo(() => logs.slice().reverse(), [logs]);
 
   return (
-    <Dialog title="Log history" isOpen={isOpen} onClose={close}>
+    <Dialog
+      title="Log history"
+      isOpen={isOpen}
+      onClose={close}
+      style={{ width: 'fit-content' }}
+    >
       <LogModalStyle>
         <DialogBody>
           <StyledModalBody>
@@ -105,14 +101,14 @@ function LogModal() {
             )}
           </StyledModalBody>
         </DialogBody>
-        <DialogFooter>
-          <Button intent="danger" onClick={clear}>
-            <TrashButtonInner>
-              <FaTrash />
-              <span>Clear logs</span>
-            </TrashButtonInner>
-          </Button>
-        </DialogFooter>
+        <DialogFooter
+          minimal
+          actions={
+            <Button icon={<FaTrash />} intent="danger" onClick={clear}>
+              Clear logs
+            </Button>
+          }
+        />
       </LogModalStyle>
     </Dialog>
   );

@@ -30,12 +30,6 @@ const ExtractROIStyle = styled.div`
   }
 `;
 
-const FooterStyled = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-`;
-
 const FormContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -88,7 +82,12 @@ function ExtractROIModal({ identifier }: ExtractROIProps) {
   if (!isBinary(pipelined)) return null;
 
   return (
-    <Dialog title="Extract ROIs" isOpen={isOpen} onClose={close}>
+    <Dialog
+      title="Extract ROIs"
+      isOpen={isOpen}
+      onClose={close}
+      style={{ width: 'fit-content' }}
+    >
       <ExtractROIStyle>
         <DialogBody>
           <StyledModalBody>
@@ -161,11 +160,9 @@ function ExtractROIModal({ identifier }: ExtractROIProps) {
         <DialogFooter
           minimal
           actions={
-            <FooterStyled>
-              <Button intent="primary" onClick={extract}>
-                Extract
-              </Button>
-            </FooterStyled>
+            <Button intent="primary" onClick={extract}>
+              Extract
+            </Button>
           }
         />
       </ExtractROIStyle>
