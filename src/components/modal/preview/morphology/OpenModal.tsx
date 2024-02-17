@@ -1,4 +1,4 @@
-import { Checkbox, InputGroup } from '@blueprintjs/core';
+import { Checkbox, FormGroup, InputGroup } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { OpenOptions } from 'image-js';
 import times from 'lodash/times';
@@ -88,75 +88,83 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <InputGroup
-        type="number"
-        name="iterations"
-        min={1}
-        value={openOptions.iterations?.toString()}
-        onChange={(e) => {
-          setOpenOptions({
-            ...openOptions,
-            iterations: e.target.valueAsNumber,
-          });
-        }}
-      />
-      <InputGroup
-        type="number"
-        name="kernelWidth"
-        step={2}
-        min={1}
-        value={openOptions.kernel[0].length?.toString()}
-        onChange={(e) => {
-          setOpenOptions({
-            ...openOptions,
-            kernel: resizeKernel(
-              openOptions.kernel,
-              e.target.valueAsNumber,
-              'x',
-            ),
-          });
-        }}
-      />
-      <InputGroup
-        type="number"
-        name="kernelHeight"
-        step={2}
-        min={1}
-        value={openOptions.kernel.length?.toString()}
-        onChange={(e) => {
-          setOpenOptions({
-            ...openOptions,
-            kernel: resizeKernel(
-              openOptions.kernel,
-              e.target.valueAsNumber,
-              'y',
-            ),
-          });
-        }}
-      />
-      <KernelGrid>
-        {times(openOptions.kernel.length, (h) => (
-          <KernelRow key={h}>
-            {times(openOptions.kernel[0].length, (w) => (
-              <Checkbox
-                key={w}
-                checked={openOptions.kernel[h][w] === 1}
-                onChange={(e) =>
-                  setOpenOptions({
-                    ...openOptions,
-                    kernel: changeKernelCell(
-                      openOptions.kernel,
-                      w,
-                      h,
-                      e.target.checked,
-                    ),
-                  })
-                }
-              />
-            ))}
-          </KernelRow>
-        ))}
-      </KernelGrid>
+      <FormGroup label="Iterations">
+        <InputGroup
+          type="number"
+          name="iterations"
+          min={1}
+          value={openOptions.iterations?.toString()}
+          onChange={(e) => {
+            setOpenOptions({
+              ...openOptions,
+              iterations: e.target.valueAsNumber,
+            });
+          }}
+        />
+      </FormGroup>
+      <FormGroup label="Kernel width">
+        <InputGroup
+          type="number"
+          name="kernelWidth"
+          step={2}
+          min={1}
+          value={openOptions.kernel[0].length?.toString()}
+          onChange={(e) => {
+            setOpenOptions({
+              ...openOptions,
+              kernel: resizeKernel(
+                openOptions.kernel,
+                e.target.valueAsNumber,
+                'x',
+              ),
+            });
+          }}
+        />
+      </FormGroup>
+      <FormGroup label="Kernel height">
+        <InputGroup
+          type="number"
+          name="kernelHeight"
+          step={2}
+          min={1}
+          value={openOptions.kernel.length?.toString()}
+          onChange={(e) => {
+            setOpenOptions({
+              ...openOptions,
+              kernel: resizeKernel(
+                openOptions.kernel,
+                e.target.valueAsNumber,
+                'y',
+              ),
+            });
+          }}
+        />
+      </FormGroup>
+      <FormGroup label="Kernel">
+        <KernelGrid>
+          {times(openOptions.kernel.length, (h) => (
+            <KernelRow key={h}>
+              {times(openOptions.kernel[0].length, (w) => (
+                <Checkbox
+                  key={w}
+                  checked={openOptions.kernel[h][w] === 1}
+                  onChange={(e) =>
+                    setOpenOptions({
+                      ...openOptions,
+                      kernel: changeKernelCell(
+                        openOptions.kernel,
+                        w,
+                        h,
+                        e.target.checked,
+                      ),
+                    })
+                  }
+                />
+              ))}
+            </KernelRow>
+          ))}
+        </KernelGrid>
+      </FormGroup>
     </PreviewModal>
   );
 }

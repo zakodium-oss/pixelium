@@ -1,4 +1,4 @@
-import { Checkbox } from '@blueprintjs/core';
+import { Checkbox, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import styled from '@emotion/styled';
 import {
@@ -10,7 +10,7 @@ import {
   useState,
 } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Button, CheckedState, Table, ValueRenderers } from 'react-science/ui';
+import { Button, Table, ValueRenderers } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useData from '../../hooks/useData';
@@ -92,7 +92,7 @@ function PipelineTable({ identifier }: PipelineTableProps) {
   );
 
   const handleToggle = useCallback(
-    (opIdentifier: string, checked: CheckedState) => {
+    (opIdentifier, checked) => {
       dataDispatch({
         type: TOGGLE_OPERATION,
         payload: {
@@ -142,10 +142,23 @@ function PipelineTable({ identifier }: PipelineTableProps) {
         <p>Import from another image:</p>
         <Select
           activeItem={otherImagesOptions.find(
-            (item) => item.value === imageKeyToImport,
+            (option) => option.value === imageKeyToImport,
           )}
           items={otherImagesOptions}
-          onItemSelect={setImageKeyToImport}
+          itemRenderer={(item, { handleClick, modifiers }) =>
+            item ? (
+              <MenuItem
+                key={item.value}
+                text={item.label}
+                onClick={handleClick}
+                active={modifiers.active}
+                disabled={modifiers.disabled}
+              />
+            ) : null
+          }
+          onItemSelect={(item) => {
+            setImageKeyToImport(item.value);
+          }}
         />
       </Empty>
     );

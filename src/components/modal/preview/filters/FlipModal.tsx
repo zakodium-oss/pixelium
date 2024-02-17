@@ -1,4 +1,4 @@
-import { MenuItem } from '@blueprintjs/core';
+import { FormGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { FlipOptions, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -74,25 +74,27 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Select
-        activeItem={axisOptions.find((item) => item.value === options.axis)}
-        items={axisOptions}
-        itemRenderer={(item, { handleClick, modifiers }) => (
-          <MenuItem
-            key={item.value}
-            text={item.label}
-            onClick={handleClick}
-            active={modifiers.active}
-            disabled={modifiers.disabled}
-            selected={item.value === options.axis}
-          />
-        )}
-        onItemSelect={(item) =>
-          setOptions({
-            axis: item.value as FlipOptions['axis'],
-          })
-        }
-      />
+      <FormGroup label="Axis">
+        <Select
+          activeItem={axisOptions.find((item) => item.value === options.axis)}
+          items={axisOptions}
+          itemRenderer={(item, { handleClick, modifiers }) => (
+            <MenuItem
+              key={item.value}
+              text={item.label}
+              onClick={handleClick}
+              active={modifiers.active}
+              disabled={modifiers.disabled}
+              selected={item.value === options.axis}
+            />
+          )}
+          onItemSelect={(item) =>
+            setOptions({
+              axis: item.value as FlipOptions['axis'],
+            })
+          }
+        />
+      </FormGroup>
     </PreviewModal>
   );
 }

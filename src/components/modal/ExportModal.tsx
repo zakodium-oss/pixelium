@@ -1,6 +1,7 @@
 import {
   Checkbox,
   InputGroup,
+  FormGroup,
   Dialog,
   DialogBody,
   DialogFooter,
@@ -93,24 +94,30 @@ function ExportModal() {
         <DialogBody>
           <StyledModalBody>
             <div>
-              <InputGroup
-                type="text"
-                placeholder="Untitled"
-                value={formState.name}
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    name: e.target.value,
-                  })
-                }
-              />
+              <FormGroup label="Name">
+                <InputGroup
+                  type="text"
+                  placeholder="Untitled"
+                  value={formState.name}
+                  onChange={(e) =>
+                    setFormState({
+                      ...formState,
+                      name: e.target.value,
+                    })
+                  }
+                />
+              </FormGroup>
               <Checkbox
+                label="Include view"
+                alignIndicator="right"
                 checked={formState.view}
                 onChange={(e) =>
                   setFormState({ ...formState, view: e.target.checked })
                 }
               />
               <Checkbox
+                label="Include preferences"
+                alignIndicator="right"
                 checked={formState.preferences}
                 onChange={(e) =>
                   setFormState({
@@ -120,6 +127,8 @@ function ExportModal() {
                 }
               />
               <Checkbox
+                label="Include data"
+                alignIndicator="right"
                 checked={formState.data}
                 onChange={(e) =>
                   setFormState({
@@ -131,11 +140,14 @@ function ExportModal() {
             </div>
           </StyledModalBody>
         </DialogBody>
-        <DialogFooter>
-          <Button intent="primary" onClick={save}>
-            <SaveButtonInner>Save</SaveButtonInner>
-          </Button>
-        </DialogFooter>
+        <DialogFooter
+          minimal
+          actions={
+            <Button intent="primary" onClick={save}>
+              <SaveButtonInner>Save</SaveButtonInner>
+            </Button>
+          }
+        />
       </ExportStyle>
     </Dialog>
   );

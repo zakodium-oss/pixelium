@@ -1,4 +1,4 @@
-import { InputGroup, MenuItem } from '@blueprintjs/core';
+import { FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { BlurOptions, BorderType, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -78,54 +78,60 @@ function BlurModal({ previewImageIdentifier }: BlurModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <InputGroup
-        type="number"
-        name="kernelWidth"
-        step={2}
-        min={1}
-        value={blurOptions.width?.toString()}
-        onChange={(e) => {
-          setBlurOptions({
-            ...blurOptions,
-            width: e.target.valueAsNumber,
-          });
-        }}
-      />
-      <InputGroup
-        type="number"
-        name="kernelHeight"
-        step={2}
-        min={1}
-        value={blurOptions.height?.toString()}
-        onChange={(e) => {
-          setBlurOptions({
-            ...blurOptions,
-            height: e.target.valueAsNumber,
-          });
-        }}
-      />
-      <Select
-        activeItem={borderTypeOptions.find(
-          (option) => option.value === blurOptions.borderType,
-        )}
-        items={borderTypeOptions}
-        itemRenderer={(item, { handleClick, modifiers }) => (
-          <MenuItem
-            key={item.value}
-            text={item.label}
-            onClick={handleClick}
-            active={modifiers.active}
-            disabled={modifiers.disabled}
-            selected={item.value === blurOptions.borderType}
-          />
-        )}
-        onItemSelect={(item) => {
-          setBlurOptions({
-            ...blurOptions,
-            borderType: item.value,
-          });
-        }}
-      />
+      <FormGroup label="Kernel width">
+        <InputGroup
+          type="number"
+          name="kernelWidth"
+          step={2}
+          min={1}
+          value={blurOptions.width?.toString()}
+          onChange={(e) => {
+            setBlurOptions({
+              ...blurOptions,
+              width: e.target.valueAsNumber,
+            });
+          }}
+        />
+      </FormGroup>
+      <FormGroup label="Kernel height">
+        <InputGroup
+          type="number"
+          name="kernelHeight"
+          step={2}
+          min={1}
+          value={blurOptions.height?.toString()}
+          onChange={(e) => {
+            setBlurOptions({
+              ...blurOptions,
+              height: e.target.valueAsNumber,
+            });
+          }}
+        />
+      </FormGroup>
+      <FormGroup label="Border type">
+        <Select
+          activeItem={borderTypeOptions.find(
+            (option) => option.value === blurOptions.borderType,
+          )}
+          items={borderTypeOptions}
+          itemRenderer={(item, { handleClick, modifiers }) => (
+            <MenuItem
+              key={item.value}
+              text={item.label}
+              onClick={handleClick}
+              active={modifiers.active}
+              disabled={modifiers.disabled}
+              selected={item.value === blurOptions.borderType}
+            />
+          )}
+          onItemSelect={(item) => {
+            setBlurOptions({
+              ...blurOptions,
+              borderType: item.value,
+            });
+          }}
+        />
+      </FormGroup>
       {blurOptions.borderType === BorderType.CONSTANT && (
         <InputGroup
           type="number"

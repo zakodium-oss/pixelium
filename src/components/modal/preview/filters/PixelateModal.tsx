@@ -1,4 +1,4 @@
-import { InputGroup, MenuItem } from '@blueprintjs/core';
+import { FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { Image, PixelateOptions } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -75,39 +75,43 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <InputGroup
-        type="number"
-        min={2}
-        value={options.cellSize?.toString()}
-        onChange={(e) =>
-          setOptions({
-            ...options,
-            cellSize: e.target.valueAsNumber,
-          })
-        }
-      />
-      <Select
-        activeItem={algorithmOptions.find(
-          (item) => item.value === options.algorithm,
-        )}
-        items={algorithmOptions}
-        itemRenderer={(item, { handleClick, modifiers }) => (
-          <MenuItem
-            key={item.value}
-            text={item.label}
-            onClick={handleClick}
-            active={modifiers.active}
-            disabled={modifiers.disabled}
-            selected={item.value === options.algorithm}
-          />
-        )}
-        onItemSelect={(item) =>
-          setOptions({
-            ...options,
-            algorithm: item.value as PixelateOptions['algorithm'],
-          })
-        }
-      />
+      <FormGroup label="Cell size">
+        <InputGroup
+          type="number"
+          min={2}
+          value={options.cellSize?.toString()}
+          onChange={(e) =>
+            setOptions({
+              ...options,
+              cellSize: e.target.valueAsNumber,
+            })
+          }
+        />
+      </FormGroup>
+      <FormGroup label="Algorithm">
+        <Select
+          activeItem={algorithmOptions.find(
+            (item) => item.value === options.algorithm,
+          )}
+          items={algorithmOptions}
+          itemRenderer={(item, { handleClick, modifiers }) => (
+            <MenuItem
+              key={item.value}
+              text={item.label}
+              onClick={handleClick}
+              active={modifiers.active}
+              disabled={modifiers.disabled}
+              selected={item.value === options.algorithm}
+            />
+          )}
+          onItemSelect={(item) =>
+            setOptions({
+              ...options,
+              algorithm: item.value as PixelateOptions['algorithm'],
+            })
+          }
+        />
+      </FormGroup>
     </PreviewModal>
   );
 }

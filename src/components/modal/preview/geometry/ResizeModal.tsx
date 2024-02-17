@@ -1,4 +1,4 @@
-import { Checkbox, InputGroup, MenuItem } from '@blueprintjs/core';
+import { Checkbox, FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { BorderType, Image, InterpolationType, ResizeOptions } from 'image-js';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
@@ -106,6 +106,8 @@ function ResizeModal({ previewImageIdentifier }: ResizeModalProps) {
       algoError={algoError}
     >
       <Checkbox
+        label="Preserve aspect ratio"
+        alignIndicator="right"
         checked={resizeOptions.preserveAspectRatio}
         onChange={(e) =>
           setResizeOptions({
@@ -114,95 +116,105 @@ function ResizeModal({ previewImageIdentifier }: ResizeModalProps) {
           })
         }
       />
-      <InputGroup
-        type="number"
-        name="outputWidth"
-        value={resizeOptions.width?.toString()}
-        onChange={(e) => {
-          const baseRatio =
-            (resizeOptions.width ?? 0) / (resizeOptions.height ?? 1);
-          setResizeOptions({
-            ...resizeOptions,
-            width: e.target.valueAsNumber,
-            height: resizeOptions.preserveAspectRatio
-              ? Math.round((e.target.valueAsNumber ?? 0) / baseRatio)
-              : resizeOptions.height,
-          });
-        }}
-      />
-      <InputGroup
-        type="number"
-        name="outputWidth"
-        value={resizeOptions.height?.toString()}
-        onChange={(e) => {
-          const baseRatio =
-            (resizeOptions.width ?? 0) / (resizeOptions.height ?? 1);
-          setResizeOptions({
-            ...resizeOptions,
-            height: e.target.valueAsNumber,
-            width: resizeOptions.preserveAspectRatio
-              ? Math.round((e.target.valueAsNumber ?? 0) * baseRatio)
-              : resizeOptions.width,
-          });
-        }}
-      />
-      <Select
-        activeItem={interpolationTypeOptions.find(
-          (item) => item.value === resizeOptions.interpolationType,
-        )}
-        items={interpolationTypeOptions}
-        itemRenderer={(item, { handleClick, modifiers }) => (
-          <MenuItem
-            key={item.value}
-            text={item.label}
-            onClick={handleClick}
-            active={modifiers.active}
-            disabled={modifiers.disabled}
-            selected={item.value === resizeOptions.interpolationType}
-          />
-        )}
-        onItemSelect={(item) => {
-          setResizeOptions({
-            ...resizeOptions,
-            interpolationType: item.value,
-          });
-        }}
-      />
-      <Select
-        activeItem={borderTypeOptions.find(
-          (item) => item.value === resizeOptions.borderType,
-        )}
-        items={borderTypeOptions}
-        itemRenderer={(item, { handleClick, modifiers }) => (
-          <MenuItem
-            key={item.value}
-            text={item.label}
-            onClick={handleClick}
-            active={modifiers.active}
-            disabled={modifiers.disabled}
-            selected={item.value === resizeOptions.borderType}
-          />
-        )}
-        onItemSelect={(item) => {
-          setResizeOptions({
-            ...resizeOptions,
-            borderType: item.value,
-          });
-        }}
-      />
-
-      {resizeOptions.borderType === BorderType.CONSTANT && (
+      <FormGroup label="Output width">
         <InputGroup
           type="number"
-          name="borderValue"
-          value={resizeOptions.borderValue?.toString()}
+          name="outputWidth"
+          value={resizeOptions.width?.toString()}
           onChange={(e) => {
+            const baseRatio =
+              (resizeOptions.width ?? 0) / (resizeOptions.height ?? 1);
             setResizeOptions({
               ...resizeOptions,
-              borderValue: e.target.valueAsNumber,
+              width: e.target.valueAsNumber,
+              height: resizeOptions.preserveAspectRatio
+                ? Math.round((e.target.valueAsNumber ?? 0) / baseRatio)
+                : resizeOptions.height,
             });
           }}
         />
+      </FormGroup>
+      <FormGroup label="Output height">
+        <InputGroup
+          type="number"
+          name="outputHeight"
+          value={resizeOptions.height?.toString()}
+          onChange={(e) => {
+            const baseRatio =
+              (resizeOptions.width ?? 0) / (resizeOptions.height ?? 1);
+            setResizeOptions({
+              ...resizeOptions,
+              height: e.target.valueAsNumber,
+              width: resizeOptions.preserveAspectRatio
+                ? Math.round((e.target.valueAsNumber ?? 0) * baseRatio)
+                : resizeOptions.width,
+            });
+          }}
+        />
+      </FormGroup>
+      <FormGroup label="Interpolation type">
+        <Select
+          activeItem={interpolationTypeOptions.find(
+            (item) => item.value === resizeOptions.interpolationType,
+          )}
+          items={interpolationTypeOptions}
+          itemRenderer={(item, { handleClick, modifiers }) => (
+            <MenuItem
+              key={item.value}
+              text={item.label}
+              onClick={handleClick}
+              active={modifiers.active}
+              disabled={modifiers.disabled}
+              selected={item.value === resizeOptions.interpolationType}
+            />
+          )}
+          onItemSelect={(item) => {
+            setResizeOptions({
+              ...resizeOptions,
+              interpolationType: item.value,
+            });
+          }}
+        />
+      </FormGroup>
+      <FormGroup label="Border type">
+        <Select
+          activeItem={borderTypeOptions.find(
+            (item) => item.value === resizeOptions.borderType,
+          )}
+          items={borderTypeOptions}
+          itemRenderer={(item, { handleClick, modifiers }) => (
+            <MenuItem
+              key={item.value}
+              text={item.label}
+              onClick={handleClick}
+              active={modifiers.active}
+              disabled={modifiers.disabled}
+              selected={item.value === resizeOptions.borderType}
+            />
+          )}
+          onItemSelect={(item) => {
+            setResizeOptions({
+              ...resizeOptions,
+              borderType: item.value,
+            });
+          }}
+        />
+      </FormGroup>
+
+      {resizeOptions.borderType === BorderType.CONSTANT && (
+        <FormGroup label="Border value">
+          <InputGroup
+            type="number"
+            name="borderValue"
+            value={resizeOptions.borderValue?.toString()}
+            onChange={(e) => {
+              setResizeOptions({
+                ...resizeOptions,
+                borderValue: e.target.valueAsNumber,
+              });
+            }}
+          />
+        </FormGroup>
       )}
     </PreviewModal>
   );

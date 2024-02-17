@@ -1,4 +1,4 @@
-import { InputGroup, MenuItem } from '@blueprintjs/core';
+import { FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { BorderType, Image, MedianFilterOptions } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -84,40 +84,44 @@ function MedianFilterModal({ previewImageIdentifier }: MedianFilterModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <InputGroup
-        type="number"
-        step={2}
-        min={1}
-        value={medianFilterOptions.cellSize?.toString()}
-        onChange={(e) => {
-          setMedianFilterOptions({
-            ...medianFilterOptions,
-            cellSize: e.target.valueAsNumber,
-          });
-        }}
-      />
-      <Select
-        activeItem={borderTypeOptions.find(
-          (option) => option.value === medianFilterOptions.borderType,
-        )}
-        items={borderTypeOptions}
-        itemRenderer={(option, { handleClick, modifiers }) => (
-          <MenuItem
-            key={option.value}
-            text={option.label}
-            onClick={handleClick}
-            active={modifiers.active}
-            disabled={modifiers.disabled}
-            selected={option.value === medianFilterOptions.borderType}
-          />
-        )}
-        onItemSelect={(item) => {
-          setMedianFilterOptions({
-            ...medianFilterOptions,
-            borderType: item.value,
-          });
-        }}
-      />
+      <FormGroup label="Cell size">
+        <InputGroup
+          type="number"
+          step={2}
+          min={1}
+          value={medianFilterOptions.cellSize?.toString()}
+          onChange={(e) => {
+            setMedianFilterOptions({
+              ...medianFilterOptions,
+              cellSize: e.target.valueAsNumber,
+            });
+          }}
+        />
+      </FormGroup>
+      <FormGroup label="Border type">
+        <Select
+          activeItem={borderTypeOptions.find(
+            (option) => option.value === medianFilterOptions.borderType,
+          )}
+          items={borderTypeOptions}
+          itemRenderer={(option, { handleClick, modifiers }) => (
+            <MenuItem
+              key={option.value}
+              text={option.label}
+              onClick={handleClick}
+              active={modifiers.active}
+              disabled={modifiers.disabled}
+              selected={option.value === medianFilterOptions.borderType}
+            />
+          )}
+          onItemSelect={(item) => {
+            setMedianFilterOptions({
+              ...medianFilterOptions,
+              borderType: item.value,
+            });
+          }}
+        />
+      </FormGroup>
 
       {medianFilterOptions.borderType === BorderType.CONSTANT && (
         <InputGroup

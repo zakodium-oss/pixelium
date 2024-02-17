@@ -2,6 +2,7 @@ import {
   Dialog,
   DialogBody,
   DialogFooter,
+  FormGroup,
   InputGroup,
   MenuItem,
 } from '@blueprintjs/core';
@@ -91,60 +92,69 @@ function ExtractROIModal({ identifier }: ExtractROIProps) {
         <DialogBody>
           <StyledModalBody>
             <FormContent>
-              <InputGroup
-                type="number"
-                value={formContent.minSurface?.toString()}
-                onChange={(event) => {
-                  const newValue = event.target.valueAsNumber;
-                  setFormContent({
-                    ...formContent,
-                    minSurface: Number.isNaN(newValue) ? undefined : newValue,
-                  });
-                }}
-              />
-              <InputGroup
-                type="number"
-                value={formContent.maxSurface?.toString()}
-                onChange={(event) => {
-                  const newValue = event.target.valueAsNumber;
-                  setFormContent({
-                    ...formContent,
-                    maxSurface: Number.isNaN(newValue) ? undefined : newValue,
-                  });
-                }}
-              />
-              <Select
-                activeItem={kindOptions.find(
-                  (kind) => kind.value === formContent.kind,
-                )}
-                items={kindOptions}
-                itemRenderer={(item, { handleClick, modifiers }) => (
-                  <MenuItem
-                    key={item.value}
-                    text={item.label}
-                    onClick={handleClick}
-                    active={modifiers.active}
-                    disabled={modifiers.disabled}
-                    selected={item.value === formContent.kind}
-                  />
-                )}
-                onItemSelect={(item) =>
-                  setFormContent({
-                    ...formContent,
-                    kind: item.value,
-                  })
-                }
-              />
+              <FormGroup label="Minimum surface">
+                <InputGroup
+                  type="number"
+                  value={formContent.minSurface?.toString()}
+                  onChange={(event) => {
+                    const newValue = event.target.valueAsNumber;
+                    setFormContent({
+                      ...formContent,
+                      minSurface: Number.isNaN(newValue) ? undefined : newValue,
+                    });
+                  }}
+                />
+              </FormGroup>
+              <FormGroup label="Maximum surface">
+                <InputGroup
+                  type="number"
+                  value={formContent.maxSurface?.toString()}
+                  onChange={(event) => {
+                    const newValue = event.target.valueAsNumber;
+                    setFormContent({
+                      ...formContent,
+                      maxSurface: Number.isNaN(newValue) ? undefined : newValue,
+                    });
+                  }}
+                />
+              </FormGroup>
+              <FormGroup label="Kind">
+                <Select
+                  activeItem={kindOptions.find(
+                    (kind) => kind.value === formContent.kind,
+                  )}
+                  items={kindOptions}
+                  itemRenderer={(item, { handleClick, modifiers }) => (
+                    <MenuItem
+                      key={item.value}
+                      text={item.label}
+                      onClick={handleClick}
+                      active={modifiers.active}
+                      disabled={modifiers.disabled}
+                      selected={item.value === formContent.kind}
+                    />
+                  )}
+                  onItemSelect={(item) =>
+                    setFormContent({
+                      ...formContent,
+                      kind: item.value,
+                    })
+                  }
+                />
+              </FormGroup>
             </FormContent>
           </StyledModalBody>
         </DialogBody>
-        <DialogFooter>
-          <FooterStyled>
-            <Button intent="primary" onClick={extract}>
-              Extract
-            </Button>
-          </FooterStyled>
-        </DialogFooter>
+        <DialogFooter
+          minimal
+          actions={
+            <FooterStyled>
+              <Button intent="primary" onClick={extract}>
+                Extract
+              </Button>
+            </FooterStyled>
+          }
+        />
       </ExtractROIStyle>
     </Dialog>
   );

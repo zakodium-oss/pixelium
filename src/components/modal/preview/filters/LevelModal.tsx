@@ -1,4 +1,4 @@
-import { Checkbox, InputGroup } from '@blueprintjs/core';
+import { Checkbox, FormGroup, InputGroup } from '@blueprintjs/core';
 import { channelLabels, Image } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -82,71 +82,83 @@ function LevelModal({ previewImageIdentifier }: LevelModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      {times(pipelined.components, (i) => (
-        <Checkbox
-          key={i}
-          label={`Channel ${channelLabels[pipelined.colorModel][i]}`}
-          checked={options.channels.includes(i)}
-          onChange={(e) =>
+      <FormGroup label="Level">
+        {times(pipelined.components, (i) => (
+          <Checkbox
+            key={i}
+            label={`Channel ${channelLabels[pipelined.colorModel][i]}`}
+            checked={options.channels.includes(i)}
+            onChange={(e) =>
+              setOptions({
+                ...options,
+                channels: e.target.checked
+                  ? [...options.channels, i]
+                  : options.channels.filter((c) => c !== i),
+              })
+            }
+          />
+        ))}
+      </FormGroup>
+      <FormGroup label="Input min">
+        <InputGroup
+          type="number"
+          value={options.inputMin?.toString()}
+          onChange={(event) =>
             setOptions({
               ...options,
-              channels: e.target.checked
-                ? [...options.channels, i]
-                : options.channels.filter((c) => c !== i),
+              inputMin: event.target.valueAsNumber,
             })
           }
         />
-      ))}
-      <InputGroup
-        type="number"
-        value={options.inputMin?.toString()}
-        onChange={(event) =>
-          setOptions({
-            ...options,
-            inputMin: event.target.valueAsNumber,
-          })
-        }
-      />
-      <InputGroup
-        type="number"
-        value={options.inputMax?.toString()}
-        onChange={(event) =>
-          setOptions({
-            ...options,
-            inputMax: event.target.valueAsNumber,
-          })
-        }
-      />
-      <InputGroup
-        type="number"
-        value={options.outputMin?.toString()}
-        onChange={(event) =>
-          setOptions({
-            ...options,
-            outputMin: event.target.valueAsNumber,
-          })
-        }
-      />
-      <InputGroup
-        type="number"
-        value={options.outputMax?.toString()}
-        onChange={(event) =>
-          setOptions({
-            ...options,
-            outputMax: event.target.valueAsNumber,
-          })
-        }
-      />
-      <InputGroup
-        type="number"
-        value={options.gamma?.toString()}
-        onChange={(event) =>
-          setOptions({
-            ...options,
-            gamma: event.target.valueAsNumber,
-          })
-        }
-      />
+      </FormGroup>
+      <FormGroup label="Input max">
+        <InputGroup
+          type="number"
+          value={options.inputMax?.toString()}
+          onChange={(event) =>
+            setOptions({
+              ...options,
+              inputMax: event.target.valueAsNumber,
+            })
+          }
+        />
+      </FormGroup>
+      <FormGroup label="Output min">
+        <InputGroup
+          type="number"
+          value={options.outputMin?.toString()}
+          onChange={(event) =>
+            setOptions({
+              ...options,
+              outputMin: event.target.valueAsNumber,
+            })
+          }
+        />
+      </FormGroup>
+      <FormGroup label="Output max">
+        <InputGroup
+          type="number"
+          value={options.outputMax?.toString()}
+          onChange={(event) =>
+            setOptions({
+              ...options,
+              outputMax: event.target.valueAsNumber,
+            })
+          }
+        />
+      </FormGroup>
+      <FormGroup label="Gamma">
+        <InputGroup
+          type="number"
+          value={options.gamma?.toString()}
+          onChange={(event) =>
+            setOptions({
+              ...options,
+              gamma: event.target.valueAsNumber,
+            })
+          }
+        />
+      </FormGroup>
     </PreviewModal>
   );
 }

@@ -1,4 +1,4 @@
-import { Checkbox, MenuItem } from '@blueprintjs/core';
+import { Checkbox, FormGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { Image, RotateAngle } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -88,6 +88,8 @@ function RotateModal({ previewImageIdentifier }: RotateModalProps) {
       algoError={algoError}
     >
       <Checkbox
+        label="Clockwise"
+        alignIndicator="right"
         checked={rotateOptions.clockwise}
         onChange={(e) =>
           setRotateOptions({
@@ -96,29 +98,31 @@ function RotateModal({ previewImageIdentifier }: RotateModalProps) {
           })
         }
       />
-      <Select
-        activeItem={rotateAngleOptions.find(
-          (item) => item.value === `${rotateOptions.angle}`,
-        )}
-        items={rotateAngleOptions}
-        itemRenderer={(item, { handleClick, modifiers }) => (
-          <MenuItem
-            key={item.value}
-            text={item.label}
-            onClick={handleClick}
-            active={modifiers.active}
-            disabled={modifiers.disabled}
-            selected={item.value === `${rotateOptions.angle}`}
-          />
-        )}
-        onItemSelect={(item) => {
-          if (item === undefined) return;
-          setRotateOptions({
-            ...rotateOptions,
-            angle: Number.parseInt(item.value, 10) as RotateAngle | 0,
-          });
-        }}
-      />
+      <FormGroup label="Angle">
+        <Select
+          activeItem={rotateAngleOptions.find(
+            (item) => item.value === `${rotateOptions.angle}`,
+          )}
+          items={rotateAngleOptions}
+          itemRenderer={(item, { handleClick, modifiers }) => (
+            <MenuItem
+              key={item.value}
+              text={item.label}
+              onClick={handleClick}
+              active={modifiers.active}
+              disabled={modifiers.disabled}
+              selected={item.value === `${rotateOptions.angle}`}
+            />
+          )}
+          onItemSelect={(item) => {
+            if (item === undefined) return;
+            setRotateOptions({
+              ...rotateOptions,
+              angle: Number.parseInt(item.value, 10) as RotateAngle | 0,
+            });
+          }}
+        />
+      </FormGroup>
     </PreviewModal>
   );
 }
