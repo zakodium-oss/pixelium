@@ -1,6 +1,8 @@
+/** @jsxImportSource @emotion/react */
 import { Tabs, Tab } from '@blueprintjs/core';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import React, { memo, useCallback, useEffect, useMemo } from 'react';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 import { DropZoneContainer } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
@@ -62,7 +64,16 @@ function CenterPanel() {
         onDrop={handleOnDrop}
       >
         {tabsItems.length > 0 ? (
-          <Tabs selectedTabId={currentTab} onChange={openTab}>
+          <Tabs
+            selectedTabId={currentTab}
+            onChange={openTab}
+            css={css`
+              div[role='tablist'] {
+                overflow-x: auto;
+                overflow-y: hidden;
+              }
+            `}
+          >
             {tabsItems.map((item) => (
               <Tab
                 id={item.id}
