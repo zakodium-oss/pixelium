@@ -1,4 +1,5 @@
 import { Checkbox, FormGroup, InputGroup } from '@blueprintjs/core';
+import styled from '@emotion/styled';
 import { channelLabels, Image } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -23,6 +24,11 @@ interface LocalLevelOptions {
   outputMax: number;
   gamma: number;
 }
+
+const RowInputs = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 function LevelModal({ previewImageIdentifier }: LevelModalProps) {
   const view = useView();
@@ -86,6 +92,7 @@ function LevelModal({ previewImageIdentifier }: LevelModalProps) {
         {times(pipelined.components, (i) => (
           <Checkbox
             key={i}
+            inline
             label={`Channel ${channelLabels[pipelined.colorModel][i]}`}
             checked={options.channels.includes(i)}
             onChange={(e) =>
@@ -99,54 +106,58 @@ function LevelModal({ previewImageIdentifier }: LevelModalProps) {
           />
         ))}
       </FormGroup>
-      <FormGroup label="Input min">
-        <InputGroup
-          type="number"
-          value={options.inputMin?.toString()}
-          onChange={(event) =>
-            setOptions({
-              ...options,
-              inputMin: event.target.valueAsNumber,
-            })
-          }
-        />
-      </FormGroup>
-      <FormGroup label="Input max">
-        <InputGroup
-          type="number"
-          value={options.inputMax?.toString()}
-          onChange={(event) =>
-            setOptions({
-              ...options,
-              inputMax: event.target.valueAsNumber,
-            })
-          }
-        />
-      </FormGroup>
-      <FormGroup label="Output min">
-        <InputGroup
-          type="number"
-          value={options.outputMin?.toString()}
-          onChange={(event) =>
-            setOptions({
-              ...options,
-              outputMin: event.target.valueAsNumber,
-            })
-          }
-        />
-      </FormGroup>
-      <FormGroup label="Output max">
-        <InputGroup
-          type="number"
-          value={options.outputMax?.toString()}
-          onChange={(event) =>
-            setOptions({
-              ...options,
-              outputMax: event.target.valueAsNumber,
-            })
-          }
-        />
-      </FormGroup>
+      <RowInputs>
+        <FormGroup label="Input min">
+          <InputGroup
+            type="number"
+            value={options.inputMin?.toString()}
+            onChange={(event) =>
+              setOptions({
+                ...options,
+                inputMin: event.target.valueAsNumber,
+              })
+            }
+          />
+        </FormGroup>
+        <FormGroup label="Input max">
+          <InputGroup
+            type="number"
+            value={options.inputMax?.toString()}
+            onChange={(event) =>
+              setOptions({
+                ...options,
+                inputMax: event.target.valueAsNumber,
+              })
+            }
+          />
+        </FormGroup>
+      </RowInputs>
+      <RowInputs>
+        <FormGroup label="Output min">
+          <InputGroup
+            type="number"
+            value={options.outputMin?.toString()}
+            onChange={(event) =>
+              setOptions({
+                ...options,
+                outputMin: event.target.valueAsNumber,
+              })
+            }
+          />
+        </FormGroup>
+        <FormGroup label="Output max">
+          <InputGroup
+            type="number"
+            value={options.outputMax?.toString()}
+            onChange={(event) =>
+              setOptions({
+                ...options,
+                outputMax: event.target.valueAsNumber,
+              })
+            }
+          />
+        </FormGroup>
+      </RowInputs>
       <FormGroup label="Gamma">
         <InputGroup
           type="number"

@@ -1,5 +1,6 @@
 import { Button, FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
+import styled from '@emotion/styled';
 import { BorderType, GaussianBlurXYOptions, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
 
@@ -13,6 +14,11 @@ import PreviewModal from '../PreviewModal';
 interface GaussianBlurModalProps {
   previewImageIdentifier: string;
 }
+
+const RowInputs = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
   const { defaultOptions, editing, opIdentifier } =
@@ -88,62 +94,66 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <FormGroup label="Sigma X">
-        <InputGroup
-          type="number"
-          name="sigmaX"
-          value={gaussianBlurOptions.sigmaX?.toString()}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sigmaX: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </FormGroup>
-      <FormGroup label="Sigma Y">
-        <InputGroup
-          type="number"
-          name="sigmaY"
-          value={gaussianBlurOptions.sigmaY?.toString()}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sigmaY: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </FormGroup>
-      <FormGroup label="Size X">
-        <InputGroup
-          type="number"
-          name="sizeX"
-          min={1}
-          step={2}
-          value={gaussianBlurOptions.sizeX?.toString()}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sizeX: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </FormGroup>
-      <FormGroup label="Size Y">
-        <InputGroup
-          type="number"
-          name="sizeY"
-          min={1}
-          step={2}
-          value={gaussianBlurOptions.sizeY?.toString()}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sizeY: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </FormGroup>
+      <RowInputs>
+        <FormGroup label="Sigma X">
+          <InputGroup
+            type="number"
+            name="sigmaX"
+            value={gaussianBlurOptions.sigmaX?.toString()}
+            onChange={(e) => {
+              setGaussianBlurOptions({
+                ...gaussianBlurOptions,
+                sigmaX: e.target.valueAsNumber,
+              });
+            }}
+          />
+        </FormGroup>
+        <FormGroup label="Sigma Y">
+          <InputGroup
+            type="number"
+            name="sigmaY"
+            value={gaussianBlurOptions.sigmaY?.toString()}
+            onChange={(e) => {
+              setGaussianBlurOptions({
+                ...gaussianBlurOptions,
+                sigmaY: e.target.valueAsNumber,
+              });
+            }}
+          />
+        </FormGroup>
+      </RowInputs>
+      <RowInputs>
+        <FormGroup label="Size X">
+          <InputGroup
+            type="number"
+            name="sizeX"
+            min={1}
+            step={2}
+            value={gaussianBlurOptions.sizeX?.toString()}
+            onChange={(e) => {
+              setGaussianBlurOptions({
+                ...gaussianBlurOptions,
+                sizeX: e.target.valueAsNumber,
+              });
+            }}
+          />
+        </FormGroup>
+        <FormGroup label="Size Y">
+          <InputGroup
+            type="number"
+            name="sizeY"
+            min={1}
+            step={2}
+            value={gaussianBlurOptions.sizeY?.toString()}
+            onChange={(e) => {
+              setGaussianBlurOptions({
+                ...gaussianBlurOptions,
+                sizeY: e.target.valueAsNumber,
+              });
+            }}
+          />
+        </FormGroup>
+      </RowInputs>
       <FormGroup label="Border type">
         <Select
           filterable={false}
