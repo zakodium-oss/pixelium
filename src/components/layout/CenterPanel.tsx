@@ -68,9 +68,14 @@ function CenterPanel() {
             selectedTabId={currentTab}
             onChange={openTab}
             css={css`
+              height: 100%;
               div[role='tablist'] {
                 overflow-x: auto;
                 overflow-y: hidden;
+              }
+              div[role='tabpanel'] {
+                height: calc(100% - 30px);
+                margin-top: 0;
               }
             `}
           >
@@ -79,7 +84,7 @@ function CenterPanel() {
                 id={item.id}
                 key={item.id}
                 title={item.title}
-                panel={<div>{item.content}</div>}
+                panel={item.content}
               />
             ))}
           </Tabs>
