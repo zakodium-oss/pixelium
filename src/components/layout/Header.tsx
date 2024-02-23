@@ -51,7 +51,7 @@ function PixeliumHeader() {
             openLogs();
             markAsRead();
           }}
-         />
+        />
         <Toolbar.Item title="Settings" icon={<FaWrench />} />
         {!isFullScreen && (
           <Toolbar.Item

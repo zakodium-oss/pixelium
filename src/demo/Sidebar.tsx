@@ -93,6 +93,7 @@ function Sidebar({ setWebSource }: SidebarProps) {
                   onClick={() => {
                     setSelectedSource(source.source);
                   }}
+                  fill
                 >
                   {source.name}
                 </Button>
