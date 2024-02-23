@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { SvgLogoZakodium } from 'cheminfo-font';
 import { memo } from 'react';
 import {
@@ -13,18 +12,7 @@ import { useFullscreen, useToggle } from 'react-use';
 import useGlobal from '../../hooks/useGlobal';
 import useLog from '../../hooks/useLog';
 import useModal from '../../hooks/useModal';
-import { getNotificationColor } from '../../utils/colors';
-
-const UnreadChip = styled.span<{ unreadLevel: number }>`
-  position: absolute;
-  top: 0.5em;
-  left: 0.5em;
-  background-color: ${({ unreadLevel }) => getNotificationColor(unreadLevel)};
-  border-radius: 50%;
-  min-width: 14px;
-  font-size: 0.75em;
-  color: white;
-`;
+import { getNotificationIntent } from '../../utils/colors';
 
 function PixeliumHeader() {
   const { rootRef } = useGlobal();
@@ -57,16 +45,13 @@ function PixeliumHeader() {
         <Toolbar.Item
           title="Logs"
           icon={<FaBug />}
+          tag={unreadCount > 0 && unreadCount}
+          tagProps={{ intent: getNotificationIntent(unreadLevel) }}
           onClick={() => {
             openLogs();
             markAsRead();
           }}
-        >
-          {/*TODO: find a way to display the unread count chip on the toolbar*/}
-          {/*{unreadCount > 0 && (
-            <UnreadChip unreadLevel={unreadLevel}>{unreadCount}</UnreadChip>
-          )} */}
-        </Toolbar.Item>
+         />
         <Toolbar.Item title="Settings" icon={<FaWrench />} />
         {!isFullScreen && (
           <Toolbar.Item

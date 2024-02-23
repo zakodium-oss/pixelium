@@ -76,7 +76,7 @@
     "react-map-interaction": "^2.1.0",
     "react-plot": "^1.4.2",
     "react-roi": "^0.14.0",
-    "react-science": "^0.35.0",
+    "react-science": "^0.36.0",
     "react-use": "^17.4.0"
   },
   "volta": {
