@@ -1,14 +1,13 @@
+import { Dialog, DialogBody, DialogFooter } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { Image, Mask } from 'image-js';
 import { memo, ReactNode, useCallback } from 'react';
-import { Button, Modal } from 'react-science/ui';
+import { Button } from 'react-science/ui';
 
 import useViewDispatch from '../../../hooks/useViewDispatch';
 import { SET_EDIT_MODE_IDENTIFIER } from '../../../state/view/ViewActionTypes';
-import { buttons } from '../../../utils/colors';
 import ImageViewer from '../../ImageViewer';
 import StyledModalBody from '../utils/StyledModalBody';
-import StyledModalHeader from '../utils/StyledModalHeader';
 
 const PreviewModalStyle = styled.div`
   display: flex;
@@ -36,12 +35,6 @@ const ImageViewerContainer = styled.div`
   flex-grow: 3;
   border: 1px solid #9e9e9e;
   border-radius: 4px;
-`;
-
-const FooterStyled = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
 `;
 
 const AlgorithmError = styled.div`
@@ -83,12 +76,14 @@ function PreviewModal({
   }, [apply, viewDispatch]);
 
   return (
-    <Modal isOpen={isOpenDialog} onRequestClose={closeDialog} hasCloseButton>
+    <Dialog
+      title={editing ? `Editing : ${title}` : title}
+      isOpen={isOpenDialog}
+      onClose={closeDialog}
+      style={{ width: 'fit-content' }}
+    >
       <PreviewModalStyle>
-        <StyledModalHeader>
-          <Modal.Header>{editing ? `Editing : ${title}` : title}</Modal.Header>
-        </StyledModalHeader>
-        <Modal.Body>
+        <DialogBody>
           <StyledModalBody>
             <ImageViewerContainer>
               <ImageViewer identifier={viewIdentifier} image={original} />
@@ -105,16 +100,17 @@ function PreviewModal({
               )}
             </ImageViewerContainer>
           </StyledModalBody>
-        </Modal.Body>
-        <Modal.Footer>
-          <FooterStyled>
-            <Button backgroundColor={buttons.info} onClick={internalApply}>
+        </DialogBody>
+        <DialogFooter
+          minimal
+          actions={
+            <Button intent="primary" onClick={internalApply}>
               {editing ? 'Edit operation' : 'Add operation'}
             </Button>
-          </FooterStyled>
-        </Modal.Footer>
+          }
+        />
       </PreviewModalStyle>
-    </Modal>
+    </Dialog>
   );
 }
 

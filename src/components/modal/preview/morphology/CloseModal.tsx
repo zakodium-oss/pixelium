@@ -1,8 +1,8 @@
+import { Checkbox, FormGroup, InputGroup } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { CloseOptions } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Checkbox, Field, Input } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -88,12 +88,12 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="iterations" label="Iterations">
-        <Input
+      <FormGroup label="Iterations">
+        <InputGroup
           type="number"
           name="iterations"
           min={1}
-          value={closeOptions.iterations}
+          value={closeOptions.iterations?.toString()}
           onChange={(e) => {
             setCloseOptions({
               ...closeOptions,
@@ -101,14 +101,14 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
             });
           }}
         />
-      </Field>
-      <Field name="kernelWidth" label="Kernel width">
-        <Input
+      </FormGroup>
+      <FormGroup label="Kernel width">
+        <InputGroup
           type="number"
           name="kernelWidth"
           step={2}
           min={1}
-          value={closeOptions.kernel[0].length}
+          value={closeOptions.kernel[0].length?.toString()}
           onChange={(e) => {
             setCloseOptions({
               ...closeOptions,
@@ -120,14 +120,14 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
             });
           }}
         />
-      </Field>
-      <Field name="kernelHeight" label="Kernel height">
-        <Input
+      </FormGroup>
+      <FormGroup label="Kernel height">
+        <InputGroup
           type="number"
           name="kernelHeight"
           step={2}
           min={1}
-          value={closeOptions.kernel.length}
+          value={closeOptions.kernel.length?.toString()}
           onChange={(e) => {
             setCloseOptions({
               ...closeOptions,
@@ -139,9 +139,8 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
             });
           }}
         />
-      </Field>
-
-      <Field name="kernel" label="Kernel">
+      </FormGroup>
+      <FormGroup label="Kernel">
         <KernelGrid>
           {times(closeOptions.kernel.length, (h) => (
             <KernelRow key={h}>
@@ -149,14 +148,14 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
                 <Checkbox
                   key={w}
                   checked={closeOptions.kernel[h][w] === 1}
-                  onChange={(checked) =>
+                  onChange={(e) =>
                     setCloseOptions({
                       ...closeOptions,
                       kernel: changeKernelCell(
                         closeOptions.kernel,
                         w,
                         h,
-                        checked as boolean,
+                        e.target.checked,
                       ),
                     })
                   }
@@ -165,7 +164,7 @@ function CloseModal({ previewImageIdentifier }: CloseModalProps) {
             </KernelRow>
           ))}
         </KernelGrid>
-      </Field>
+      </FormGroup>
     </PreviewModal>
   );
 }

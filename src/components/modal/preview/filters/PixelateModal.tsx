@@ -1,6 +1,7 @@
+import { Button, FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
+import { Select } from '@blueprintjs/select';
 import { Image, PixelateOptions } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -25,11 +26,9 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
   const [options, setOptions] = useState<PixelateOptions>(defaultOptions);
   const algorithmOptions = useMemo(
     () => [
-      [
-        { label: 'Center', value: 'center' },
-        { label: 'Mean', value: 'mean' },
-        { label: 'Median', value: 'median' },
-      ],
+      { label: 'Center', value: 'center' },
+      { label: 'Mean', value: 'mean' },
+      { label: 'Median', value: 'median' },
     ],
     [],
   );
@@ -64,6 +63,8 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
     close();
   }, [close, dataDispatch, opIdentifier, options, previewImageIdentifier]);
 
+  const [algorithmLabel, setAlgorithmLabel] = useState<string>();
+
   return (
     <PreviewModal
       closeDialog={close}
@@ -76,11 +77,11 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="cellSize" label="Cell size">
-        <Input
+      <FormGroup label="Cell size">
+        <InputGroup
           type="number"
           min={2}
-          value={options.cellSize}
+          value={options.cellSize?.toString()}
           onChange={(e) =>
             setOptions({
               ...options,
@@ -88,19 +89,42 @@ function PixelateModal({ previewImageIdentifier }: PixelateModalProps) {
             })
           }
         />
-      </Field>
-      <Field name="algorithm" label="Algorithm">
+      </FormGroup>
+      <FormGroup label="Algorithm">
         <Select
-          value={options.algorithm}
-          options={algorithmOptions}
-          onSelect={(value) =>
+          filterable={false}
+          activeItem={algorithmOptions.find(
+            (item) => item.value === options.algorithm,
+          )}
+          items={algorithmOptions}
+          itemRenderer={(item, { handleClick, modifiers }) => (
+            <MenuItem
+              key={item.value}
+              text={item.label}
+              onClick={handleClick}
+              active={modifiers.active}
+              disabled={modifiers.disabled}
+              selected={item.value === options.algorithm}
+            />
+          )}
+          onItemSelect={(item) => {
+            setAlgorithmLabel(item.label);
             setOptions({
               ...options,
-              algorithm: value as PixelateOptions['algorithm'],
-            })
-          }
-        />
-      </Field>
+              algorithm: item.value as PixelateOptions['algorithm'],
+            });
+          }}
+        >
+          <Button
+            text={
+              algorithmLabel ??
+              algorithmOptions.find((item) => item.value === options.algorithm)
+                ?.label
+            }
+            rightIcon="double-caret-vertical"
+          />
+        </Select>
+      </FormGroup>
     </PreviewModal>
   );
 }

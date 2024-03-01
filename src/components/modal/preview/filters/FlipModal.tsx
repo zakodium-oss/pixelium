@@ -1,6 +1,7 @@
+import { Button, FormGroup, MenuItem } from '@blueprintjs/core';
+import { Select } from '@blueprintjs/select';
 import { FlipOptions, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Field, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -22,13 +23,12 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
   const { pipelined } = useImage(opIdentifier);
 
   const [options, setOptions] = useState<FlipOptions>(defaultOptions);
+
   const axisOptions = useMemo(
     () => [
-      [
-        { label: 'Horizontal', value: 'horizontal' },
-        { label: 'Vertical', value: 'vertical' },
-        { label: 'Both', value: 'both' },
-      ],
+      { label: 'Horizontal', value: 'horizontal' },
+      { label: 'Vertical', value: 'vertical' },
+      { label: 'Both', value: 'both' },
     ],
     [],
   );
@@ -62,6 +62,8 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
     close();
   }, [close, dataDispatch, opIdentifier, options, previewImageIdentifier]);
 
+  const [axisLabel, setAxisLabel] = useState<string>();
+
   return (
     <PreviewModal
       closeDialog={close}
@@ -74,17 +76,37 @@ function FlipModal({ previewImageIdentifier }: FlipModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="axis" label="Axis">
+      <FormGroup label="Axis">
         <Select
-          value={options.axis}
-          options={axisOptions}
-          onSelect={(value) =>
+          filterable={false}
+          activeItem={axisOptions.find((item) => item.value === options.axis)}
+          items={axisOptions}
+          itemRenderer={(item, { handleClick, modifiers }) => (
+            <MenuItem
+              key={item.value}
+              text={item.label}
+              onClick={handleClick}
+              active={modifiers.active}
+              disabled={modifiers.disabled}
+              selected={item.value === options.axis}
+            />
+          )}
+          onItemSelect={(item) => {
+            setAxisLabel(item.label);
             setOptions({
-              axis: value as 'horizontal' | 'vertical' | 'both' | undefined,
-            })
-          }
-        />
-      </Field>
+              axis: item.value as FlipOptions['axis'],
+            });
+          }}
+        >
+          <Button
+            text={
+              axisLabel ??
+              axisOptions.find((item) => item.value === options.axis)?.label
+            }
+            rightIcon="double-caret-vertical"
+          />
+        </Select>
+      </FormGroup>
     </PreviewModal>
   );
 }

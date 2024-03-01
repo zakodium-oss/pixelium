@@ -58,6 +58,8 @@
     "vite": "^4.3.2"
   },
   "dependencies": {
+    "@blueprintjs/core": "^5.9.1",
+    "@blueprintjs/select": "^5.1.1",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@lukeed/uuid": "^2.0.1",
@@ -71,9 +73,10 @@
     "react-d3-utils": "^1.0.0",
     "react-icons": "^4.10.1",
     "react-kbs": "^2.1.1",
+    "react-map-interaction": "^2.1.0",
     "react-plot": "^1.4.2",
     "react-roi": "^0.14.0",
-    "react-science": "^0.26.2",
+    "react-science": "^0.36.0",
     "react-use": "^17.4.0"
   },
   "volta": {

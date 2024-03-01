@@ -1,17 +1,23 @@
+import {
+  Checkbox,
+  InputGroup,
+  FormGroup,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+} from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Button, Checkbox, Field, Input, Modal } from 'react-science/ui';
+import { Button } from 'react-science/ui';
 
 import useData from '../../hooks/useData';
 import useLog from '../../hooks/useLog';
 import useModal from '../../hooks/useModal';
 import usePreferences from '../../hooks/usePreferences';
 import useView from '../../hooks/useView';
-import { buttons } from '../../utils/colors';
 import { savePixeliumBundle } from '../../utils/export';
 
 import StyledModalBody from './utils/StyledModalBody';
-import StyledModalHeader from './utils/StyledModalHeader';
 
 const ExportStyle = styled.div`
   display: flex;
@@ -83,18 +89,18 @@ function ExportModal() {
   ]);
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={close} hasCloseButton>
+    <Dialog
+      title="Export Pixelium file"
+      isOpen={isOpen}
+      onClose={close}
+      style={{ width: 'fit-content' }}
+    >
       <ExportStyle>
-        <StyledModalHeader>
-          <Modal.Header>
-            <div className="header">Export Pixelium file</div>
-          </Modal.Header>
-        </StyledModalHeader>
-        <Modal.Body>
+        <DialogBody>
           <StyledModalBody>
             <div>
-              <Field name="name" label="Name">
-                <Input
+              <FormGroup label="Name">
+                <InputGroup
                   type="text"
                   placeholder="Untitled"
                   value={formState.name}
@@ -105,47 +111,50 @@ function ExportModal() {
                     })
                   }
                 />
-              </Field>
-              <Field name="view" label="Include view">
-                <Checkbox
-                  checked={formState.view}
-                  onChange={(checked) =>
-                    setFormState({ ...formState, view: checked as boolean })
-                  }
-                />
-              </Field>
-              <Field name="preferences" label="Include preferences">
-                <Checkbox
-                  checked={formState.preferences}
-                  onChange={(checked) =>
-                    setFormState({
-                      ...formState,
-                      preferences: checked as boolean,
-                    })
-                  }
-                />
-              </Field>
-              <Field name="data" label="Include data">
-                <Checkbox
-                  checked={formState.data}
-                  onChange={(checked) =>
-                    setFormState({
-                      ...formState,
-                      data: checked as boolean,
-                    })
-                  }
-                />
-              </Field>
+              </FormGroup>
+              <Checkbox
+                label="Include view"
+                alignIndicator="right"
+                checked={formState.view}
+                onChange={(e) =>
+                  setFormState({ ...formState, view: e.target.checked })
+                }
+              />
+              <Checkbox
+                label="Include preferences"
+                alignIndicator="right"
+                checked={formState.preferences}
+                onChange={(e) =>
+                  setFormState({
+                    ...formState,
+                    preferences: e.target.checked,
+                  })
+                }
+              />
+              <Checkbox
+                label="Include data"
+                alignIndicator="right"
+                checked={formState.data}
+                onChange={(e) =>
+                  setFormState({
+                    ...formState,
+                    data: e.target.checked,
+                  })
+                }
+              />
             </div>
           </StyledModalBody>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button backgroundColor={buttons.info} onClick={save}>
-            <SaveButtonInner>Save</SaveButtonInner>
-          </Button>
-        </Modal.Footer>
+        </DialogBody>
+        <DialogFooter
+          minimal
+          actions={
+            <Button intent="primary" onClick={save}>
+              <SaveButtonInner>Save</SaveButtonInner>
+            </Button>
+          }
+        />
       </ExportStyle>
-    </Modal>
+    </Dialog>
   );
 }
 

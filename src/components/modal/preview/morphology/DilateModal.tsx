@@ -1,8 +1,8 @@
+import { Checkbox, FormGroup, InputGroup } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { DilateOptions } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Checkbox, Field, Input } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -94,12 +94,12 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="iterations" label="Iterations">
-        <Input
+      <FormGroup label="Iterations">
+        <InputGroup
           type="number"
           name="iterations"
           min={1}
-          value={dilateOptions.iterations}
+          value={dilateOptions.iterations?.toString()}
           onChange={(e) => {
             setDilateOptions({
               ...dilateOptions,
@@ -107,14 +107,14 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
             });
           }}
         />
-      </Field>
-      <Field name="kernelWidth" label="Kernel width">
-        <Input
+      </FormGroup>
+      <FormGroup label="Kernel width">
+        <InputGroup
           type="number"
           name="kernelWidth"
           step={2}
           min={1}
-          value={dilateOptions.kernel[0].length}
+          value={dilateOptions.kernel[0].length?.toString()}
           onChange={(e) => {
             setDilateOptions({
               ...dilateOptions,
@@ -126,14 +126,14 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
             });
           }}
         />
-      </Field>
-      <Field name="kernelHeight" label="Kernel height">
-        <Input
+      </FormGroup>
+      <FormGroup label="Kernel height">
+        <InputGroup
           type="number"
           name="kernelHeight"
           step={2}
           min={1}
-          value={dilateOptions.kernel.length}
+          value={dilateOptions.kernel.length?.toString()}
           onChange={(e) => {
             setDilateOptions({
               ...dilateOptions,
@@ -145,9 +145,8 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
             });
           }}
         />
-      </Field>
-
-      <Field name="kernel" label="Kernel">
+      </FormGroup>
+      <FormGroup label="Kernel">
         <KernelGrid>
           {times(dilateOptions.kernel.length, (h) => (
             <KernelRow key={h}>
@@ -155,14 +154,14 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
                 <Checkbox
                   key={w}
                   checked={dilateOptions.kernel[h][w] === 1}
-                  onChange={(checked) =>
+                  onChange={(e) =>
                     setDilateOptions({
                       ...dilateOptions,
                       kernel: changeKernelCell(
                         dilateOptions.kernel,
                         w,
                         h,
-                        checked as boolean,
+                        e.target.checked,
                       ),
                     })
                   }
@@ -171,7 +170,7 @@ function DilateModal({ previewImageIdentifier }: DilateModalProps) {
             </KernelRow>
           ))}
         </KernelGrid>
-      </Field>
+      </FormGroup>
     </PreviewModal>
   );
 }

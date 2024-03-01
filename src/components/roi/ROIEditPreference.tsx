@@ -1,11 +1,10 @@
+import { Checkbox, InputGroup } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { colord } from 'colord';
 import startCase from 'lodash/startCase';
 import { CSSProperties, memo, useCallback, useMemo, useState } from 'react';
 import {
-  Checkbox,
   ColorPickerDropdown,
-  Input,
   PanelPreferencesToolbar,
   Table,
   ValueRenderers,
@@ -115,9 +114,9 @@ function ROIEditPreference() {
           <RoiEditTitle>Shown columns</RoiEditTitle>
           <Table style={tableStyle}>
             <Table.Header>
-              <ValueRenderers.Title value="Label" />
-              <ValueRenderers.Title value="Name" />
-              <ValueRenderers.Title value="Visible" />
+              <ValueRenderers.Header value="Label" />
+              <ValueRenderers.Header value="Name" />
+              <ValueRenderers.Header value="Visible" />
             </Table.Header>
             {availableRoiColumns.map((column) => (
               <Table.Row key={column}>
@@ -126,9 +125,7 @@ function ROIEditPreference() {
                 <ValueRenderers.Component>
                   <Checkbox
                     checked={isColumnShown(column)}
-                    onChange={(checked) =>
-                      changeChecked(column, checked as boolean)
-                    }
+                    onChange={(e) => changeChecked(column, e.target.checked)}
                   />
                 </ValueRenderers.Component>
               </Table.Row>
@@ -139,12 +136,12 @@ function ROIEditPreference() {
           <RoiEditTitle>Annotations</RoiEditTitle>
           <Table style={tableStyle}>
             <Table.Header>
-              <ValueRenderers.Title value="Kind" />
-              <ValueRenderers.Title value="Color" />
-              <ValueRenderers.Title value="Display" />
-              <ValueRenderers.Title value="Display value" />
-              <ValueRenderers.Title value="Font size" />
-              <ValueRenderers.Title value="Font color" />
+              <ValueRenderers.Header value="Kind" />
+              <ValueRenderers.Header value="Color" />
+              <ValueRenderers.Header value="Display" />
+              <ValueRenderers.Header value="Display value" />
+              <ValueRenderers.Header value="Font size" />
+              <ValueRenderers.Header value="Font color" />
             </Table.Header>
             {Object.keys(annotationsPreferences).map((key) => (
               <Table.Row key={key}>
@@ -170,12 +167,12 @@ function ROIEditPreference() {
                 <ValueRenderers.Component>
                   <Checkbox
                     checked={annotationsPreferences[key].enabled}
-                    onChange={(checked) =>
+                    onChange={(e) =>
                       setAnnotationsPreferences({
                         ...annotationsPreferences,
                         [key]: {
                           ...annotationsPreferences[key],
-                          enabled: checked as boolean,
+                          enabled: e.target.checked,
                         },
                       })
                     }
@@ -184,19 +181,19 @@ function ROIEditPreference() {
                 <ValueRenderers.Component>
                   <Checkbox
                     checked={annotationsPreferences[key].displayValue}
-                    onChange={(checked) =>
+                    onChange={(e) =>
                       setAnnotationsPreferences({
                         ...annotationsPreferences,
                         [key]: {
                           ...annotationsPreferences[key],
-                          displayValue: checked as boolean,
+                          displayValue: e.target.checked,
                         },
                       })
                     }
                   />
                 </ValueRenderers.Component>
                 <ValueRenderers.Component>
-                  <Input
+                  <InputGroup
                     type="number"
                     value={annotationsPreferences[key].fontSize}
                     onChange={(event) => {

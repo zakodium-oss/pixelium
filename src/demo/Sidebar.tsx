@@ -4,8 +4,6 @@ import ky from 'ky';
 import { Fragment, memo, useEffect, useState } from 'react';
 import { Button } from 'react-science/ui';
 
-import { buttons } from '../utils/colors';
-
 const StyledSidebar = styled.div`
   display: flex;
   flex-direction: column;
@@ -92,10 +90,10 @@ function Sidebar({ setWebSource }: SidebarProps) {
               .map((source) => (
                 <Button
                   key={source.name}
-                  backgroundColor={buttons.neutral}
                   onClick={() => {
                     setSelectedSource(source.source);
                   }}
+                  fill
                 >
                   {source.name}
                 </Button>

@@ -28,15 +28,19 @@ function ImportTool() {
   );
 
   return (
-    <Toolbar.Item title={'Import file'} onClick={openFileDialog}>
-      <FaFileImport />
+    <>
+      <Toolbar.Item
+        title={'Import file'}
+        icon={<FaFileImport />}
+        onClick={openFileDialog}
+      />
       <StyledImportInput
         ref={inputRef}
         type="file"
         multiple
         onChange={handleOnChange}
       />
-    </Toolbar.Item>
+    </>
   );
 }
 

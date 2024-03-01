@@ -65,14 +65,12 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
   return (
     <PanelHeader total={rois.length} onClickSettings={handleEditROIPreference}>
       {rois.length > 0 && (
-        <Toolbar orientation="horizontal">
+        <Toolbar>
           <Toolbar.Item
             title={copyToClipBoardText}
-            titleOrientation="horizontal"
+            icon={<FaCopy />}
             onClick={handleCopyToClipboard}
-          >
-            <FaCopy />
-          </Toolbar.Item>
+          />
         </Toolbar>
       )}
     </PanelHeader>

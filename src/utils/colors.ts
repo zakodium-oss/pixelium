@@ -4,13 +4,13 @@ export const buttons = {
   neutral: { basic: '#6b7280', hover: '#4b5563' },
 };
 
-export function getNotificationColor(level: number) {
+export function getNotificationIntent(level: number) {
   if (level > 40) {
-    return '#ff0000';
+    return 'danger';
   } else if (level === 40) {
-    return '#ffc409';
+    return 'primary';
   }
-  return '#2dd36f';
+  return 'success';
 }
 
 export function getRowColor(level: number) {

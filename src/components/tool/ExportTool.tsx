@@ -1,12 +1,8 @@
+import { Menu, MenuItem } from '@blueprintjs/core';
 import { Image, ImageColorModel } from 'image-js';
 import { memo, useCallback, useMemo } from 'react';
 import { FaFileExport } from 'react-icons/fa';
-import {
-  DropdownMenu,
-  MenuOption,
-  MenuOptions,
-  Toolbar,
-} from 'react-science/ui';
+import { Toolbar, ToolbarItemProps } from 'react-science/ui';
 
 import useAnnotationRef from '../../hooks/useAnnotationRef';
 import useCurrentTab from '../../hooks/useCurrentTab';
@@ -26,7 +22,13 @@ function ExportTool() {
   const { svgRef } = useAnnotationRef();
   const { open: openExportModal } = useModal('export');
 
-  const exportOptions = useMemo<MenuOptions<string>>(
+  const exportItem: ToolbarItemProps = {
+    id: 'export',
+    icon: <FaFileExport />,
+    title: 'Export',
+  };
+
+  const exportOptions = useMemo(
     () => [
       {
         label: 'Export as png',
@@ -45,6 +47,18 @@ function ExportTool() {
       },
     ],
     [],
+  );
+
+  const content = (
+    <Menu>
+      {exportOptions.map((option) => (
+        <MenuItem
+          key={option.data}
+          text={option.label}
+          onClick={() => handleSelect(option)}
+        />
+      ))}
+    </Menu>
   );
 
   const mergeToImage = useCallback(async () => {
@@ -73,7 +87,7 @@ function ExportTool() {
   }, [mergeToImage]);
 
   const handleSelect = useCallback(
-    (selected: MenuOption<string>) => {
+    (selected) => {
       if (selected.data === 'png') {
         exportPNG().catch((error) =>
           logger.error(`Failed to generate PNG: ${error}`),
@@ -89,17 +103,7 @@ function ExportTool() {
     [copyToClipboard, exportPNG, logger, openExportModal],
   );
 
-  return (
-    <DropdownMenu
-      trigger="click"
-      options={exportOptions}
-      onSelect={handleSelect}
-    >
-      <Toolbar.Item title="Export" titleOrientation="horizontal">
-        <FaFileExport />
-      </Toolbar.Item>
-    </DropdownMenu>
-  );
+  return <Toolbar.PopoverItem content={content} itemProps={exportItem} />;
 }
 
 export default memo(ExportTool);

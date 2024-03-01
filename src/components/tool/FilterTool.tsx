@@ -1,11 +1,7 @@
+import { Menu, MenuItem } from '@blueprintjs/core';
 import { memo, useCallback, useMemo } from 'react';
 import { FaFilter } from 'react-icons/fa';
-import {
-  DropdownMenu,
-  MenuOption,
-  MenuOptions,
-  Toolbar,
-} from 'react-science/ui';
+import { Toolbar, ToolbarItemProps } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
@@ -21,7 +17,13 @@ function FilterTool() {
 
   const { pipelined } = useImage();
 
-  const filterOptions = useMemo<MenuOptions<string>>(
+  const filterItem: ToolbarItemProps = {
+    id: 'filter',
+    icon: <FaFilter />,
+    title: 'Filters',
+  };
+
+  const filterOptions = useMemo(
     () => [
       {
         label: 'Grey filters',
@@ -74,8 +76,21 @@ function FilterTool() {
     [pipelined],
   );
 
+  const content = (
+    <Menu>
+      {filterOptions.map((option) => (
+        <MenuItem
+          key={option.label}
+          text={option.label}
+          disabled={option.disabled}
+          onClick={() => selectOption(option)}
+        />
+      ))}
+    </Menu>
+  );
+
   const selectOption = useCallback(
-    (selected: MenuOption<string>) => {
+    (selected) => {
       if (selected.data === undefined) return;
       viewDispatch({
         type: OPEN_MODAL,
@@ -88,17 +103,7 @@ function FilterTool() {
   if (currentTab === undefined) return null;
   if (pipelined === undefined) return null;
 
-  return (
-    <DropdownMenu
-      trigger="click"
-      onSelect={selectOption}
-      options={filterOptions}
-    >
-      <Toolbar.Item title="Filters">
-        <FaFilter />
-      </Toolbar.Item>
-    </DropdownMenu>
-  );
+  return <Toolbar.PopoverItem content={content} itemProps={filterItem} />;
 }
 
 export default memo(FilterTool);

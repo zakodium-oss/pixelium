@@ -110,7 +110,7 @@ function ROITable({ identifier }: ROITableProps) {
       <Table>
         <Table.Header>
           {columns.map((column) => (
-            <ValueRenderers.Title key={column} value={startCase(column)} />
+            <ValueRenderers.Header key={column} value={startCase(column)} />
           ))}
         </Table.Header>
         {rois.map((roi) => (

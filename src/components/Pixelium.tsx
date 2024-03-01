@@ -105,7 +105,7 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                           <PixeliumStyle ref={rootRef}>
                             <Header />
                             <PixeliumMainStyle>
-                              <Toolbar orientation="vertical">
+                              <Toolbar vertical>
                                 <ImportTool />
                                 <ExportTool />
                                 <GreyTool />

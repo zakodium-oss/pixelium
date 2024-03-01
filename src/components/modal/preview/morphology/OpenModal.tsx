@@ -1,8 +1,8 @@
+import { Checkbox, FormGroup, InputGroup } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { OpenOptions } from 'image-js';
 import times from 'lodash/times';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Checkbox, Field, Input } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -88,12 +88,12 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="iterations" label="Iterations">
-        <Input
+      <FormGroup label="Iterations">
+        <InputGroup
           type="number"
           name="iterations"
           min={1}
-          value={openOptions.iterations}
+          value={openOptions.iterations?.toString()}
           onChange={(e) => {
             setOpenOptions({
               ...openOptions,
@@ -101,14 +101,14 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
             });
           }}
         />
-      </Field>
-      <Field name="kernelWidth" label="Kernel width">
-        <Input
+      </FormGroup>
+      <FormGroup label="Kernel width">
+        <InputGroup
           type="number"
           name="kernelWidth"
           step={2}
           min={1}
-          value={openOptions.kernel[0].length}
+          value={openOptions.kernel[0].length?.toString()}
           onChange={(e) => {
             setOpenOptions({
               ...openOptions,
@@ -120,14 +120,14 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
             });
           }}
         />
-      </Field>
-      <Field name="kernelHeight" label="Kernel height">
-        <Input
+      </FormGroup>
+      <FormGroup label="Kernel height">
+        <InputGroup
           type="number"
           name="kernelHeight"
           step={2}
           min={1}
-          value={openOptions.kernel.length}
+          value={openOptions.kernel.length?.toString()}
           onChange={(e) => {
             setOpenOptions({
               ...openOptions,
@@ -139,9 +139,8 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
             });
           }}
         />
-      </Field>
-
-      <Field name="kernel" label="Kernel">
+      </FormGroup>
+      <FormGroup label="Kernel">
         <KernelGrid>
           {times(openOptions.kernel.length, (h) => (
             <KernelRow key={h}>
@@ -149,14 +148,14 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
                 <Checkbox
                   key={w}
                   checked={openOptions.kernel[h][w] === 1}
-                  onChange={(checked) =>
+                  onChange={(e) =>
                     setOpenOptions({
                       ...openOptions,
                       kernel: changeKernelCell(
                         openOptions.kernel,
                         w,
                         h,
-                        checked as boolean,
+                        e.target.checked,
                       ),
                     })
                   }
@@ -165,7 +164,7 @@ function OpenModal({ previewImageIdentifier }: OpenModalProps) {
             </KernelRow>
           ))}
         </KernelGrid>
-      </Field>
+      </FormGroup>
     </PreviewModal>
   );
 }

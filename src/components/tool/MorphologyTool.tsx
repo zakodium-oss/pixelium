@@ -1,11 +1,7 @@
+import { Menu, MenuItem } from '@blueprintjs/core';
 import { memo, useCallback, useMemo } from 'react';
 import { FaRecordVinyl } from 'react-icons/fa';
-import {
-  DropdownMenu,
-  MenuOption,
-  MenuOptions,
-  Toolbar,
-} from 'react-science/ui';
+import { Toolbar, ToolbarItemProps } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
@@ -20,34 +16,36 @@ function MorphologyTool() {
 
   const { pipelined } = useImage();
 
-  const morphOptions = useMemo<MenuOptions<string>>(
+  const morphologyItem: ToolbarItemProps = {
+    id: 'morphology',
+    icon: <FaRecordVinyl />,
+    title: 'Morphology',
+  };
+
+  const morphOptions = useMemo(
     () => [
-      {
-        label: 'Dilate',
-        data: 'dilate',
-        type: 'option',
-      },
-      {
-        label: 'Erode',
-        data: 'erode',
-        type: 'option',
-      },
-      {
-        label: 'Open',
-        data: 'open',
-        type: 'option',
-      },
-      {
-        label: 'Close',
-        data: 'close',
-        type: 'option',
-      },
+      { label: 'Dilate', data: 'dilate', type: 'option' },
+      { label: 'Erode', data: 'erode', type: 'option' },
+      { label: 'Open', data: 'open', type: 'option' },
+      { label: 'Close', data: 'close', type: 'option' },
     ],
     [],
   );
 
+  const content = (
+    <Menu>
+      {morphOptions.map((option) => (
+        <MenuItem
+          key={option.label}
+          text={option.label}
+          onClick={() => selectOption(option)}
+        />
+      ))}
+    </Menu>
+  );
+
   const selectOption = useCallback(
-    (selected: MenuOption<string>) => {
+    (selected) => {
       if (selected.data === undefined) return;
       viewDispatch({
         type: OPEN_MODAL,
@@ -61,17 +59,7 @@ function MorphologyTool() {
   if (pipelined === undefined) return null;
   if (isColor(pipelined)) return null;
 
-  return (
-    <DropdownMenu
-      trigger="click"
-      onSelect={selectOption}
-      options={morphOptions}
-    >
-      <Toolbar.Item title="Morphology">
-        <FaRecordVinyl />
-      </Toolbar.Item>
-    </DropdownMenu>
-  );
+  return <Toolbar.PopoverItem content={content} itemProps={morphologyItem} />;
 }
 
 export default memo(MorphologyTool);

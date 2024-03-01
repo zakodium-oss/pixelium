@@ -23,9 +23,11 @@ function CloseTool() {
   if (currentTab === undefined) return null;
 
   return (
-    <Toolbar.Item title="Close current image" onClick={closeImage}>
-      <FaTimes />
-    </Toolbar.Item>
+    <Toolbar.Item
+      title="Close current image"
+      icon={<FaTimes />}
+      onClick={closeImage}
+    />
   );
 }
 

@@ -1,6 +1,8 @@
+import { Button, FormGroup, InputGroup, MenuItem } from '@blueprintjs/core';
+import { Select } from '@blueprintjs/select';
+import styled from '@emotion/styled';
 import { BorderType, GaussianBlurXYOptions, Image } from 'image-js';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Field, Input, Select } from 'react-science/ui';
 
 import useDataDispatch from '../../../../hooks/useDataDispatch';
 import useDefaultOptions from '../../../../hooks/useDefaultOptions';
@@ -12,6 +14,11 @@ import PreviewModal from '../PreviewModal';
 interface GaussianBlurModalProps {
   previewImageIdentifier: string;
 }
+
+const RowInputs = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
   const { defaultOptions, editing, opIdentifier } =
@@ -65,14 +72,15 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
   ]);
 
   const borderTypeOptions = useMemo(
-    () => [
+    () =>
       Object.keys(BorderType).map((borderType) => ({
         label: BorderType[borderType],
         value: BorderType[borderType],
       })),
-    ],
     [],
   );
+
+  const [borderLabel, setBorderLabel] = useState<string>();
 
   return (
     <PreviewModal
@@ -86,74 +94,102 @@ function GaussianBlurModal({ previewImageIdentifier }: GaussianBlurModalProps) {
       editing={editing}
       algoError={algoError}
     >
-      <Field name="sigmaX" label="Sigma X">
-        <Input
-          type="number"
-          name="sigmaX"
-          value={gaussianBlurOptions.sigmaX}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sigmaX: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </Field>
-      <Field name="sigmaY" label="Sigma Y">
-        <Input
-          type="number"
-          name="sigmaY"
-          value={gaussianBlurOptions.sigmaY}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sigmaY: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </Field>
-      <Field name="sizeX" label="Size X">
-        <Input
-          type="number"
-          name="sizeX"
-          min={1}
-          step={2}
-          value={gaussianBlurOptions.sizeX}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sizeX: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </Field>
-      <Field name="sizeY" label="Size Y">
-        <Input
-          type="number"
-          name="sizeY"
-          min={1}
-          step={2}
-          value={gaussianBlurOptions.sizeY}
-          onChange={(e) => {
-            setGaussianBlurOptions({
-              ...gaussianBlurOptions,
-              sizeY: e.target.valueAsNumber,
-            });
-          }}
-        />
-      </Field>
-      <Field name="borderType" label="Border type">
+      <RowInputs>
+        <FormGroup label="Sigma X">
+          <InputGroup
+            type="number"
+            name="sigmaX"
+            value={gaussianBlurOptions.sigmaX?.toString()}
+            onChange={(e) => {
+              setGaussianBlurOptions({
+                ...gaussianBlurOptions,
+                sigmaX: e.target.valueAsNumber,
+              });
+            }}
+          />
+        </FormGroup>
+        <FormGroup label="Sigma Y">
+          <InputGroup
+            type="number"
+            name="sigmaY"
+            value={gaussianBlurOptions.sigmaY?.toString()}
+            onChange={(e) => {
+              setGaussianBlurOptions({
+                ...gaussianBlurOptions,
+                sigmaY: e.target.valueAsNumber,
+              });
+            }}
+          />
+        </FormGroup>
+      </RowInputs>
+      <RowInputs>
+        <FormGroup label="Size X">
+          <InputGroup
+            type="number"
+            name="sizeX"
+            min={1}
+            step={2}
+            value={gaussianBlurOptions.sizeX?.toString()}
+            onChange={(e) => {
+              setGaussianBlurOptions({
+                ...gaussianBlurOptions,
+                sizeX: e.target.valueAsNumber,
+              });
+            }}
+          />
+        </FormGroup>
+        <FormGroup label="Size Y">
+          <InputGroup
+            type="number"
+            name="sizeY"
+            min={1}
+            step={2}
+            value={gaussianBlurOptions.sizeY?.toString()}
+            onChange={(e) => {
+              setGaussianBlurOptions({
+                ...gaussianBlurOptions,
+                sizeY: e.target.valueAsNumber,
+              });
+            }}
+          />
+        </FormGroup>
+      </RowInputs>
+      <FormGroup label="Border type">
         <Select
-          value={gaussianBlurOptions.borderType}
-          options={borderTypeOptions}
-          onSelect={(value) => {
+          filterable={false}
+          activeItem={borderTypeOptions.find(
+            (item) => item.value === gaussianBlurOptions.borderType,
+          )}
+          items={borderTypeOptions}
+          itemRenderer={(item, { handleClick, modifiers }) => (
+            <MenuItem
+              key={item.value}
+              text={item.label}
+              onClick={handleClick}
+              active={modifiers.active}
+              disabled={modifiers.disabled}
+              selected={item.value === gaussianBlurOptions.borderType}
+            />
+          )}
+          onItemSelect={(item) => {
+            setBorderLabel(item.label);
             setGaussianBlurOptions({
               ...gaussianBlurOptions,
-              borderType: value as BorderType,
+              borderType: item.value,
             });
           }}
-        />
-      </Field>
+        >
+          <Button
+            text={
+              borderLabel ??
+              borderTypeOptions.find(
+                (item) => item.value === gaussianBlurOptions.borderType,
+              )?.label
+            }
+            rightIcon="double-caret-vertical"
+          />
+        </Select>
+      </FormGroup>
     </PreviewModal>
   );
 }
