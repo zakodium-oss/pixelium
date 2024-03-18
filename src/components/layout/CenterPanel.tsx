@@ -16,14 +16,6 @@ const StyledCenterPanel = styled.div`
   width: 100%;
 `;
 
-const TabTitle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-`;
-
 function CenterPanel() {
   const { images } = useData();
   const viewDispatch = useViewDispatch();
@@ -32,7 +24,6 @@ function CenterPanel() {
     () =>
       Object.keys(images).map((identifier) => ({
         id: identifier,
-        title: <TabTitle>{images[identifier].metadata.name}</TabTitle>,
         content: (
           <ImageViewer key={identifier} identifier={identifier} annotable />
         ),
@@ -70,23 +61,14 @@ function CenterPanel() {
             onChange={openTab}
             css={css`
               height: 100%;
-              div[role='tablist'] {
-                overflow-x: auto;
-                overflow-y: hidden;
-              }
               div[role='tabpanel'] {
-                height: calc(100% - 30px);
+                height: 100%;
                 margin-top: 0;
               }
             `}
           >
             {tabsItems.map((item) => (
-              <Tab
-                id={item.id}
-                key={item.id}
-                title={item.title}
-                panel={item.content}
-              />
+              <Tab id={item.id} key={item.id} panel={item.content} />
             ))}
           </Tabs>
         ) : null}
