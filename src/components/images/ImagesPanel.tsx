@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
 import { useCallback, useMemo } from 'react';
+import { Toolbar } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useData from '../../hooks/useData';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import { OPEN_TAB } from '../../state/view/ViewActionTypes';
+import CloseTool from '../tool/CloseTool';
 
 const TabTitle = styled.div`
   display: flex;
@@ -15,8 +17,9 @@ const TabTitle = styled.div`
 `;
 
 const TabItem = styled.div<{ current: boolean }>`
-  cursor: pointer;
-  padding: 2px 0;
+  cursor: default;
+  display: flex;
+  align-items: center;
   border-bottom: 1px solid #e0e0e0;
   &:hover {
     background-color: #f0f0f0;
@@ -57,6 +60,9 @@ export default function ImagesPanel() {
               onClick={() => openTab(item.id)}
             >
               {item.title}
+              <Toolbar>
+                <CloseTool closeId={item.id} />
+              </Toolbar>
             </TabItem>
           ))}
         </div>
