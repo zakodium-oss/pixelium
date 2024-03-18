@@ -50,10 +50,11 @@ function CenterPanel() {
   );
 
   useEffect(() => {
-    if (!currentTab && tabsItems.length > 0) {
-      openTab(tabsItems[0].id);
+    if (tabsItems.length > 0) {
+      const defaultTab = tabsItems.at(-1);
+      if (defaultTab) openTab(defaultTab.id);
     }
-  }, [openTab, currentTab, tabsItems]);
+  }, [openTab, tabsItems]);
 
   const { handleFileLoad: handleOnDrop } = useFileLoader();
 
