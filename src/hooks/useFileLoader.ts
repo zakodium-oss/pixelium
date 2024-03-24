@@ -1,3 +1,4 @@
+import { v4 as uuid } from '@lukeed/uuid';
 import {
   fileCollectionFromFiles,
   FileCollection,
@@ -14,7 +15,7 @@ import {
 } from '../state/data/DataActionTypes';
 import { DataFile } from '../state/data/DataReducer';
 import { INITIALIZE_PREFERENCES } from '../state/preferences/PreferenceActionTypes';
-import { LOAD_VIEW_STATE } from '../state/view/ViewActionTypes';
+import { LOAD_VIEW_STATE, OPEN_TAB } from '../state/view/ViewActionTypes';
 import { loadPixeliumBundle } from '../utils/export';
 
 import useDataDispatch from './useDataDispatch';
@@ -77,7 +78,20 @@ export default function useFileLoader() {
           }
         }
       }
-      dataDispatch({ type: LOAD_DROP, payload: dataFiles });
+
+      const ids = dataFiles.map(() => uuid());
+      if (dataFiles.length !== ids.length) {
+        logger.error('The number of files and ids must be the same');
+        return 0;
+      }
+      const files = Object.fromEntries(
+        ids.map((id, index) => [id, dataFiles[index]]),
+      );
+
+      dataDispatch({ type: LOAD_DROP, payload: files });
+
+      const newId = ids.at(-1);
+      if (newId) viewDispatch({ type: OPEN_TAB, payload: newId });
       return dataFiles.length;
     },
     [dataDispatch, logger, preferencesDispatch, viewDispatch],

@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
 import { useCallback, useMemo } from 'react';
-import { Toolbar } from 'react-science/ui';
+import { Button } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useData from '../../hooks/useData';
+import useDataDispatch from '../../hooks/useDataDispatch';
 import useViewDispatch from '../../hooks/useViewDispatch';
-import { OPEN_TAB } from '../../state/view/ViewActionTypes';
-import CloseTool from '../tool/CloseTool';
+import { CLOSE_IMAGE } from '../../state/data/DataActionTypes';
+import { CLOSE_TAB, OPEN_TAB } from '../../state/view/ViewActionTypes';
 
 const TabTitle = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ const TabItem = styled.div<{ current: boolean }>`
 export default function ImagesPanel() {
   const { images } = useData();
   const viewDispatch = useViewDispatch();
+  const dataDispatch = useDataDispatch();
 
   const tabsItems = useMemo(
     () =>
@@ -49,6 +51,20 @@ export default function ImagesPanel() {
     [viewDispatch],
   );
 
+  const closeImage = useCallback(
+    (closeId: string) => {
+      dataDispatch({ type: CLOSE_IMAGE, payload: closeId });
+      if (tabsItems.length === 1) {
+        viewDispatch({ type: CLOSE_TAB });
+      } else if (currentTab === closeId) {
+        const lastTab = tabsItems.at(-1)?.id;
+        const id = lastTab === currentTab ? tabsItems.at(-2)?.id : lastTab;
+        if (id) viewDispatch({ type: OPEN_TAB, payload: id });
+      }
+    },
+    [dataDispatch, tabsItems, currentTab, viewDispatch],
+  );
+
   return (
     <>
       {tabsItems.length > 0 ? (
@@ -60,9 +76,14 @@ export default function ImagesPanel() {
               onClick={() => openTab(item.id)}
             >
               {item.title}
-              <Toolbar>
-                <CloseTool closeId={item.id} />
-              </Toolbar>
+              <Button
+                minimal
+                icon="cross"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeImage(item.id);
+                }}
+              />
             </TabItem>
           ))}
         </div>
