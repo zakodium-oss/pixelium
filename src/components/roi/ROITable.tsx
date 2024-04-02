@@ -104,7 +104,7 @@ function ROITable({ identifier }: ROITableProps) {
   return (
     <div
       style={{
-        overflow: 'auto',
+        overflowY: 'auto',
       }}
     >
       <Table>
