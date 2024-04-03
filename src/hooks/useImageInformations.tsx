@@ -1,10 +1,7 @@
 import { Image } from 'image-js';
 import { useMemo } from 'react';
 
-import useLog from './useLog';
-
 export default function useImageInformations(image: Image | null) {
-  const { logger } = useLog();
   return useMemo(() => {
     if (image === null) return { info: {}, meta: {} };
     const info = {
@@ -20,8 +17,8 @@ export default function useImageInformations(image: Image | null) {
     let newFields: Record<string, unknown> = {};
 
     for (const [tagCode, tagValue] of Object.entries(fields)) {
-      try {
-        if (typeof tagValue === 'string' && tagValue.startsWith('<')) {
+      if (typeof tagValue === 'string' && tagValue.startsWith('<')) {
+        try {
           let newTagCode = tagCode;
           const parser = new DOMParser();
           const xmlDoc = parser.parseFromString(tagValue, 'text/xml');
@@ -34,11 +31,11 @@ export default function useImageInformations(image: Image | null) {
               newFields[newTagCode] = value;
             }
           }
-        } else {
+        } catch {
           newFields[tagCode] = tagValue;
         }
-      } catch (error) {
-        logger.error(`Error parsing XML tag: ${error as string}`);
+      } else {
+        newFields[tagCode] = tagValue;
       }
     }
 
@@ -47,5 +44,5 @@ export default function useImageInformations(image: Image | null) {
       ...newFields,
     };
     return { info, meta };
-  }, [image, logger]);
+  }, [image]);
 }
