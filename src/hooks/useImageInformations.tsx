@@ -14,27 +14,30 @@ export default function useImageInformations(image: Image | null) {
       colorModel: image.colorModel,
     };
     const fields = Object.fromEntries(image.meta?.tiff?.fields || []);
+    let newFields: Record<string, unknown> = {};
 
     for (const [tagCode, tagValue] of Object.entries(fields)) {
       if (typeof tagValue === 'string' && tagValue.startsWith('<')) {
+        let newTagCode = tagCode;
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(tagValue, 'text/xml');
         const dataNodes = xmlDoc.querySelectorAll('Data');
-        const fieldInfo: Record<string, unknown> = {};
         for (const dataNode of dataNodes) {
           const label = dataNode.querySelector('Label')?.textContent;
           const value = dataNode.querySelector('Value')?.textContent;
           if (label && value) {
-            fieldInfo[label] = value;
+            newTagCode = tagCode.concat('.').concat(label);
+            newFields[newTagCode] = value;
           }
         }
-        fields[tagCode] = fieldInfo;
+      } else {
+        newFields[tagCode] = tagValue;
       }
     }
 
     const meta = {
       ...image.meta?.tiff?.tags,
-      ...fields,
+      ...newFields,
     };
     return { info, meta };
   }, [image]);
