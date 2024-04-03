@@ -1,7 +1,10 @@
 import { Image } from 'image-js';
 import { useMemo } from 'react';
 
+import useLog from './useLog';
+
 export default function useImageInformations(image: Image | null) {
+  const { logger } = useLog();
   return useMemo(() => {
     if (image === null) return { info: {}, meta: {} };
     const info = {
@@ -17,21 +20,25 @@ export default function useImageInformations(image: Image | null) {
     let newFields: Record<string, unknown> = {};
 
     for (const [tagCode, tagValue] of Object.entries(fields)) {
-      if (typeof tagValue === 'string' && tagValue.startsWith('<')) {
-        let newTagCode = tagCode;
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(tagValue, 'text/xml');
-        const dataNodes = xmlDoc.querySelectorAll('Data');
-        for (const dataNode of dataNodes) {
-          const label = dataNode.querySelector('Label')?.textContent;
-          const value = dataNode.querySelector('Value')?.textContent;
-          if (label && value) {
-            newTagCode = tagCode.concat('.').concat(label);
-            newFields[newTagCode] = value;
+      try {
+        if (typeof tagValue === 'string' && tagValue.startsWith('<')) {
+          let newTagCode = tagCode;
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(tagValue, 'text/xml');
+          const dataNodes = xmlDoc.querySelectorAll('Data');
+          for (const dataNode of dataNodes) {
+            const label = dataNode.querySelector('Label')?.textContent;
+            const value = dataNode.querySelector('Value')?.textContent;
+            if (label && value) {
+              newTagCode = tagCode.concat('.').concat(label);
+              newFields[newTagCode] = value;
+            }
           }
+        } else {
+          newFields[tagCode] = tagValue;
         }
-      } else {
-        newFields[tagCode] = tagValue;
+      } catch (error) {
+        logger.error(`Error parsing XML tag: ${error as string}`);
       }
     }
 
@@ -40,5 +47,5 @@ export default function useImageInformations(image: Image | null) {
       ...newFields,
     };
     return { info, meta };
-  }, [image]);
+  }, [image, logger]);
 }
