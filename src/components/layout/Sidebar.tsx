@@ -11,8 +11,6 @@ import ROIAccordion from '../roi/ROIAccordion';
 const StyledSidebar = styled.div`
   width: 100%;
   white-space: nowrap;
-  min-width: 300px;
-  max-width: 50%;
 `;
 
 function Sidebar() {
