@@ -1,6 +1,5 @@
-import styled from '@emotion/styled';
 import { useCallback, useMemo } from 'react';
-import { Button } from 'react-science/ui';
+import { Button, Table, ValueRenderers } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useData from '../../hooks/useData';
@@ -8,25 +7,6 @@ import useDataDispatch from '../../hooks/useDataDispatch';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import { CLOSE_IMAGE } from '../../state/data/DataActionTypes';
 import { CLOSE_TAB, OPEN_TAB } from '../../state/view/ViewActionTypes';
-
-const TabTitle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-`;
-
-const TabItem = styled.div<{ current: boolean }>`
-  cursor: default;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #e0e0e0;
-  &:hover {
-    background-color: #f0f0f0;
-  }
-  background-color: ${(props) => (props.current ? '#f0f0f0' : 'white')};
-`;
 
 export default function ImagesPanel() {
   const { images } = useData();
@@ -37,7 +17,12 @@ export default function ImagesPanel() {
     () =>
       Object.keys(images).map((identifier) => ({
         id: identifier,
-        title: <TabTitle>{images[identifier].metadata.name}</TabTitle>,
+        title: images[identifier].metadata.name,
+        width: images[identifier].image.width,
+        height: images[identifier].image.height,
+        bitDepth: images[identifier].image.bitDepth,
+        channels: images[identifier].image.channels,
+        colorModel: images[identifier].image.colorModel,
       })),
     [images],
   );
@@ -68,25 +53,44 @@ export default function ImagesPanel() {
   return (
     <>
       {tabsItems.length > 0 ? (
-        <div>
+        <Table compact bordered>
+          <Table.Header>
+            <ValueRenderers.Header value="Title" />
+            <ValueRenderers.Header value="Width" />
+            <ValueRenderers.Header value="Height" />
+            <ValueRenderers.Header value="Bit Depth" />
+            <ValueRenderers.Header value="Channels" />
+            <ValueRenderers.Header value="Color Model" />
+            <ValueRenderers.Header value="Close" />
+          </Table.Header>
           {tabsItems.map((item) => (
-            <TabItem
+            <Table.Row
               key={item.id}
-              current={currentTab === item.id}
+              style={{
+                backgroundColor: currentTab === item.id ? '#f0f0f0' : 'white',
+              }}
               onClick={() => openTab(item.id)}
             >
-              {item.title}
-              <Button
-                minimal
-                icon="cross"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  closeImage(item.id);
-                }}
-              />
-            </TabItem>
+              <ValueRenderers.Text value={item.title} />
+              <ValueRenderers.Number value={item.width} />
+              <ValueRenderers.Number value={item.height} />
+              <ValueRenderers.Number value={item.bitDepth} />
+              <ValueRenderers.Number value={item.channels} />
+              <ValueRenderers.Text value={item.colorModel} />
+              <ValueRenderers.Component>
+                <Button
+                  minimal
+                  small
+                  icon="cross"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    closeImage(item.id);
+                  }}
+                />
+              </ValueRenderers.Component>
+            </Table.Row>
           ))}
-        </div>
+        </Table>
       ) : null}
     </>
   );
