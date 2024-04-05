@@ -1,4 +1,10 @@
+import { ImageColorModel } from 'image-js';
 import { useCallback, useMemo } from 'react';
+import {
+  TbDroplet,
+  TbDropletFilled,
+  TbDropletHalfFilled,
+} from 'react-icons/tb';
 import { Button, Table, ValueRenderers } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
@@ -26,6 +32,23 @@ export default function ImagesPanel() {
       })),
     [images],
   );
+
+  const ColorModelIcon = (colorModelObj: { colorModel: ImageColorModel }) => {
+    const { colorModel } = colorModelObj;
+    switch (colorModel) {
+      case 'RGB':
+        return <TbDropletFilled color="#6495ED" />;
+      case 'RGBA':
+        return <TbDropletHalfFilled color="#6495ED" />;
+      case 'GREY':
+        return <TbDropletFilled color="#5F6B7C" />;
+      case 'GREYA':
+        return <TbDropletHalfFilled color="#5F6B7C" />;
+      case 'BINARY':
+        return <TbDroplet />;
+      default:
+    }
+  };
 
   const currentTab = useCurrentTab();
 
@@ -76,8 +99,20 @@ export default function ImagesPanel() {
               <ValueRenderers.Number value={item.height} />
               <ValueRenderers.Number value={item.bitDepth} />
               <ValueRenderers.Number value={item.channels} />
-              <ValueRenderers.Text value={item.colorModel} />
-              <ValueRenderers.Component>
+              <ValueRenderers.Component
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <ColorModelIcon colorModel={item.colorModel} />
+              </ValueRenderers.Component>
+              <ValueRenderers.Component
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
                 <Button
                   minimal
                   small
