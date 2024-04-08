@@ -30,7 +30,7 @@ function PixeliumHeader() {
     <InnerHeader>
       <Toolbar>
         <Toolbar.Item
-          title="About Pixelium"
+          tooltip="About Pixelium"
           icon={<SvgLogoZakodium />}
           onClick={openAbout}
         />
@@ -38,12 +38,12 @@ function PixeliumHeader() {
 
       <Toolbar>
         <Toolbar.Item
-          title="User manual"
+          tooltip="User manual"
           icon={<FaQuestionCircle />}
           onClick={() => window.open('https://zakodium.com', '_blank')}
         />
         <Toolbar.Item
-          title="Logs"
+          tooltip="Logs"
           icon={<FaBug />}
           tag={unreadCount > 0 && unreadCount}
           tagProps={{ intent: getNotificationIntent(unreadLevel) }}
@@ -52,10 +52,10 @@ function PixeliumHeader() {
             markAsRead();
           }}
         />
-        <Toolbar.Item title="Settings" icon={<FaWrench />} />
+        <Toolbar.Item tooltip="Settings" icon={<FaWrench />} />
         {!isFullScreen && (
           <Toolbar.Item
-            title="Full Screen"
+            tooltip="Full Screen"
             icon={<FaRegWindowMaximize />}
             onClick={toggleFullscreen}
           />
