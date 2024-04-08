@@ -1,9 +1,11 @@
+import { Tooltip } from '@blueprintjs/core';
 import { ImageColorModel } from 'image-js';
 import { useCallback, useMemo } from 'react';
 import {
   TbDroplet,
   TbDropletFilled,
   TbDropletHalfFilled,
+  TbNumber16Small,
 } from 'react-icons/tb';
 import { Button, Table, ValueRenderers } from 'react-science/ui';
 
@@ -50,6 +52,38 @@ export default function ImagesPanel() {
     }
   };
 
+  const ColorModelTooltip = (item) => {
+    return (
+      <Tooltip
+        position="bottom"
+        content={
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px',
+            }}
+          >
+            <div>Channels : {item.channels}</div>
+            <div>Bit depth : {item.bitDepth}</div>
+          </div>
+        }
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <ColorModelIcon colorModel={item.colorModel} />
+          {item.bitDepth === 16 && (
+            <TbNumber16Small size={20} color="#5F6B7C" />
+          )}
+        </div>
+      </Tooltip>
+    );
+  };
+
   const currentTab = useCurrentTab();
 
   const openTab = useCallback(
@@ -81,10 +115,8 @@ export default function ImagesPanel() {
             <ValueRenderers.Header value="Title" />
             <ValueRenderers.Header value="Width" />
             <ValueRenderers.Header value="Height" />
-            <ValueRenderers.Header value="Bit Depth" />
-            <ValueRenderers.Header value="Channels" />
             <ValueRenderers.Header value="Color Model" />
-            <ValueRenderers.Header value="Close" />
+            <ValueRenderers.Header />
           </Table.Header>
           {tabsItems.map((item) => (
             <Table.Row
@@ -97,15 +129,14 @@ export default function ImagesPanel() {
               <ValueRenderers.Text value={item.title} />
               <ValueRenderers.Number value={item.width} />
               <ValueRenderers.Number value={item.height} />
-              <ValueRenderers.Number value={item.bitDepth} />
-              <ValueRenderers.Number value={item.channels} />
               <ValueRenderers.Component
                 style={{
                   display: 'flex',
                   justifyContent: 'center',
+                  padding: '4px',
                 }}
               >
-                <ColorModelIcon colorModel={item.colorModel} />
+                <ColorModelTooltip {...item} />
               </ValueRenderers.Component>
               <ValueRenderers.Component
                 style={{
