@@ -25,7 +25,7 @@ function ExportTool() {
   const exportItem: ToolbarItemProps = {
     id: 'export',
     icon: <FaFileExport />,
-    title: 'Export',
+    tooltip: 'Export',
   };
 
   const exportOptions = useMemo(
