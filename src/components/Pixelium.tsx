@@ -116,7 +116,7 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                               </Toolbar>
                               <SplitPane
                                 direction="horizontal"
-                                size="20%"
+                                size="300px"
                                 controlledSide="end"
                               >
                                 <CenterPanel />
