@@ -122,6 +122,7 @@ export default function ImagesPanel() {
             <Table.Row
               key={item.id}
               style={{
+                cursor: 'pointer',
                 backgroundColor: currentTab === item.id ? '#f0f0f0' : 'white',
               }}
               onClick={() => openTab(item.id)}
