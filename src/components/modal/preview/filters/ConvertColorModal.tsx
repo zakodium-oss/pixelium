@@ -14,10 +14,22 @@ interface ConvertColorModalProps {
 }
 
 function ConvertColorModal({ previewImageIdentifier }: ConvertColorModalProps) {
-  const { defaultOptions, editing, opIdentifier } =
-    useDefaultOptions<ImageColorModel>('BINARY');
+  const { editing, opIdentifier } = useDefaultOptions<undefined>(undefined);
 
   const { pipelined } = useImage(opIdentifier);
+
+  const newConvertOptions = useMemo(() => {
+    const canConvert = new Map<ImageColorModel, ImageColorModel[]>([
+      ['GREY', ['GREYA', 'RGB', 'RGBA']],
+      ['GREYA', ['GREY', 'RGB', 'RGBA']],
+      ['RGB', ['GREY', 'GREYA', 'RGBA']],
+      ['RGBA', ['GREY', 'GREYA', 'RGB']],
+      ['BINARY', ['GREY', 'RGB', 'RGBA']],
+    ]);
+    return canConvert.get(pipelined.colorModel);
+  }, [pipelined]);
+
+  const defaultOptions: ImageColorModel = newConvertOptions?.[0] || 'GREY';
 
   const [convertOptions, setConvertOptions] =
     useState<ImageColorModel>(defaultOptions);
@@ -71,7 +83,7 @@ function ConvertColorModal({ previewImageIdentifier }: ConvertColorModalProps) {
       algoError={convertError}
     >
       <FastSelector
-        options={Object.values(ImageColorModel)}
+        options={newConvertOptions || []}
         selected={convertOptions}
         setSelected={(convertOpt) => setConvertOptions(convertOpt)}
       />
