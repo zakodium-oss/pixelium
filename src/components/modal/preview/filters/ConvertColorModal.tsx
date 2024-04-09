@@ -6,6 +6,7 @@ import useDefaultOptions from '../../../../hooks/useDefaultOptions';
 import useImage from '../../../../hooks/useImage';
 import useModal from '../../../../hooks/useModal';
 import { SET_CONVERT_COLOR } from '../../../../state/data/DataActionTypes';
+import { ConvertColorOptions } from '../../../../state/data/actions/pipeline/filter/convertColor';
 import FastSelector from '../../../FastSelector';
 import PreviewModal from '../PreviewModal';
 
@@ -29,10 +30,12 @@ function ConvertColorModal({ previewImageIdentifier }: ConvertColorModalProps) {
     return canConvert.get(pipelined.colorModel);
   }, [pipelined]);
 
-  const defaultOptions: ImageColorModel = newConvertOptions?.[0] || 'GREY';
+  const defaultOptions: ConvertColorOptions = {
+    colorModel: newConvertOptions?.[0] || 'GREY',
+  };
 
   const [convertOptions, setConvertOptions] =
-    useState<ImageColorModel>(defaultOptions);
+    useState<ConvertColorOptions>(defaultOptions);
 
   const [convertError, setConvertError] = useState<string>();
 
@@ -40,7 +43,7 @@ function ConvertColorModal({ previewImageIdentifier }: ConvertColorModalProps) {
     setConvertError(undefined);
     if (pipelined instanceof Image) {
       try {
-        return pipelined.convertColor(convertOptions);
+        return pipelined.convertColor(convertOptions.colorModel);
       } catch (error: any) {
         setConvertError(error.message);
         return null;
@@ -84,8 +87,10 @@ function ConvertColorModal({ previewImageIdentifier }: ConvertColorModalProps) {
     >
       <FastSelector
         options={newConvertOptions || []}
-        selected={convertOptions}
-        setSelected={(convertOpt) => setConvertOptions(convertOpt)}
+        selected={convertOptions.colorModel}
+        setSelected={(convertOpt) =>
+          setConvertOptions({ colorModel: convertOpt })
+        }
       />
     </PreviewModal>
   );

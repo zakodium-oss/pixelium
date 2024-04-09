@@ -8,9 +8,11 @@ import { DataState } from '../../../DataReducer';
 
 export const SET_CONVERT_COLOR = 'SET_CONVERT_COLOR';
 
+export type ConvertColorOptions = { colorModel: ImageColorModel };
+
 export type PipelineSetConvertColorAction = DataActionType<
   typeof SET_CONVERT_COLOR,
-  { identifier: string; opIdentifier?: string; options: ImageColorModel }
+  { identifier: string; opIdentifier?: string; options: ConvertColorOptions }
 >;
 
 export type ConvertColorOperation =
