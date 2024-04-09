@@ -20,7 +20,7 @@ function FilterTool() {
   const filterItem: ToolbarItemProps = {
     id: 'filter',
     icon: <FaFilter />,
-    title: 'Filters',
+    tooltip: 'Filters',
   };
 
   const filterOptions = useMemo(

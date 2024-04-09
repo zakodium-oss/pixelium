@@ -13,7 +13,9 @@ function ROITool() {
   if (pipelined === undefined) return null;
   if (!isBinary(pipelined)) return null;
 
-  return <Toolbar.Item title="Extract ROI" icon={<LuFocus />} onClick={open} />;
+  return (
+    <Toolbar.Item tooltip="Extract ROI" icon={<LuFocus />} onClick={open} />
+  );
 }
 
 export default memo(ROITool);

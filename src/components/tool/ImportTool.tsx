@@ -30,7 +30,7 @@ function ImportTool() {
   return (
     <>
       <Toolbar.Item
-        title={'Import file'}
+        tooltip={'Import file'}
         icon={<FaFileImport />}
         onClick={openFileDialog}
       />

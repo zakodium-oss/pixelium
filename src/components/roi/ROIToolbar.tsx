@@ -67,7 +67,7 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
       {rois.length > 0 && (
         <Toolbar>
           <Toolbar.Item
-            title={copyToClipBoardText}
+            tooltip={copyToClipBoardText}
             icon={<FaCopy />}
             onClick={handleCopyToClipboard}
           />

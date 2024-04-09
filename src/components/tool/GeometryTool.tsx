@@ -19,7 +19,7 @@ function GeometryTool() {
   const geometryItem: ToolbarItemProps = {
     id: 'geometry',
     icon: <TbGeometry />,
-    title: 'Geometry',
+    tooltip: 'Geometry',
   };
 
   const geometryOptions = useMemo(
