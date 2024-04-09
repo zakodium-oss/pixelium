@@ -35,6 +35,16 @@ export default function runPipeline(
           }
           break;
         }
+        case 'CONVERT_COLOR': {
+          if (applyOn instanceof Image) {
+            const result = applyOn.convertColor(operation.options);
+            pipelineSteps.push({
+              identifier: operation.identifier,
+              result,
+            });
+          }
+          break;
+        }
         case 'BLUR': {
           if (applyOn instanceof Image) {
             const result = applyOn.blur({

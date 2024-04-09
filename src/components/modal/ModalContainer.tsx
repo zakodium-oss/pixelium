@@ -8,6 +8,7 @@ import ExportModal from './ExportModal';
 import ExtractROIModal from './ExtractROIModal';
 import LogModal from './LogModal';
 import BlurModal from './preview/filters/BlurModal';
+import ConvertColorModal from './preview/filters/ConvertColorModal';
 import ExploreGreyModal from './preview/filters/ExploreGreyModal';
 import FlipModal from './preview/filters/FlipModal';
 import GaussianBlurModal from './preview/filters/GaussianBlurModal';
@@ -36,6 +37,9 @@ function ModalContainer() {
           )}
           {view.modals.grey && (
             <ExploreGreyModal previewImageIdentifier={currentTab} />
+          )}
+          {view.modals.convertColor && (
+            <ConvertColorModal previewImageIdentifier={currentTab} />
           )}
           {view.modals.blur && (
             <BlurModal previewImageIdentifier={currentTab} />
