@@ -16,4 +16,5 @@ export function initializePreferences(
   payload: InitializePreferenceAction['payload'],
 ) {
   draft.rois.columns = payload.rois.columns;
+  draft.rois.annotations = payload.rois.annotations;
 }
