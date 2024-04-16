@@ -1,4 +1,4 @@
-import { Roi } from 'image-js';
+import { Roi, getMask } from 'image-js';
 import { CSSProperties, memo, useMemo } from 'react';
 
 import usePreferences from '../../../hooks/usePreferences';
@@ -14,7 +14,7 @@ function SurfaceAnnotation({ roi }: SurfaceAnnotationProps) {
   const svgPath = useMemo(() => {
     if (!enabled) return '';
     const pathCommands: string[] = [];
-    const mask = roi.getMask();
+    const mask = getMask(roi);
     const width = mask.width;
     const height = mask.height;
     for (let column = 0; column < width; column++) {
