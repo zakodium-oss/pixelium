@@ -54,6 +54,7 @@ export default function runPipeline(
           if (applyOn instanceof Image) {
             const result = applyOn.threshold({
               algorithm: operation.options.algorithm,
+              slots: operation.options.slots,
             });
             pipelineSteps.push({
               identifier: operation.identifier,
