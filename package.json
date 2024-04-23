@@ -63,6 +63,7 @@
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@lukeed/uuid": "^2.0.1",
+    "@tanstack/react-table": "^8.16.0",
     "cheminfo-font": "^1.9.0",
     "fifo-logger": "^0.6.1",
     "file-collection": "^0.2.0",

@@ -1,12 +1,20 @@
 import styled from '@emotion/styled';
-import { Roi } from 'image-js';
+import {
+  Column,
+  ColumnFiltersState,
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getFacetedMinMaxValues,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import startCase from 'lodash/startCase';
-import { memo, useCallback, useMemo } from 'react';
-import { Table, ValueRenderers } from 'react-science/ui';
+import { memo, useState, useEffect, useMemo } from 'react';
 
 import usePreferences from '../../hooks/usePreferences';
 import useROIs from '../../hooks/useROIs';
-import { RoiColumn } from '../../state/preferences/PreferencesReducer';
 
 const Empty = styled.div`
   display: flex;
@@ -19,85 +27,77 @@ interface ROITableProps {
   identifier: string;
 }
 
+type RoiDataType = {
+  id: number;
+  column: number;
+  row: number;
+  width: number;
+  height: number;
+  surface: number;
+  feretMinDiameter: number;
+  feretMaxDiameter: number;
+  feretAspectRatio: number;
+  roundness: number;
+  solidity: number;
+  sphericity: number;
+  fillRatio: number;
+};
+
 function ROITable({ identifier }: ROITableProps) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
   const rois = useROIs(identifier);
+
   const preferences = usePreferences();
 
-  const columns = useMemo(
+  const roiData: RoiDataType[] = rois.map((roi) => ({
+    id: roi.id,
+    column: roi.origin.column,
+    row: roi.origin.row,
+    width: roi.width,
+    height: roi.height,
+    surface: roi.surface,
+    feretMinDiameter: Number(roi.feret.minDiameter.length.toFixed(2)),
+    feretMaxDiameter: Number(roi.feret.maxDiameter.length.toFixed(2)),
+    feretAspectRatio: Number(roi.feret.aspectRatio.toFixed(2)),
+    roundness: Number(roi.roundness.toFixed(2)),
+    solidity: Number(roi.solidity.toFixed(2)),
+    sphericity: Number(roi.sphericity.toFixed(2)),
+    fillRatio: Number(roi.fillRatio.toFixed(2)),
+  }));
+
+  const columnHelper = createColumnHelper<RoiDataType>();
+
+  const keys = useMemo(
     () => preferences.rois.columns,
     [preferences.rois.columns],
   );
 
-  const columnRenderer = useCallback((column: RoiColumn, roi: Roi) => {
-    const {
-      id,
-      width,
-      height,
-      surface,
-      feret,
-      roundness,
-      solidity,
-      sphericity,
-      fillRatio,
-      origin: { column: x, row: y },
-    } = roi;
-    switch (column) {
-      case 'id':
-        return <ValueRenderers.Number key={column} value={id} />;
-      case 'column':
-        return <ValueRenderers.Number key={column} value={x} />;
-      case 'row':
-        return <ValueRenderers.Number key={column} value={y} />;
-      case 'width':
-        return <ValueRenderers.Number key={column} value={width} />;
-      case 'height':
-        return <ValueRenderers.Number key={column} value={height} />;
-      case 'surface':
-        return <ValueRenderers.Number key={column} value={surface} />;
-      case 'feretAspectRatio':
-        return (
-          <ValueRenderers.Number
-            key={column}
-            value={feret.aspectRatio}
-            fixed={2}
-          />
-        );
-      case 'feretMinDiameter':
-        return (
-          <ValueRenderers.Number
-            key={column}
-            value={feret.minDiameter.length}
-            fixed={2}
-          />
-        );
-      case 'feretMaxDiameter':
-        return (
-          <ValueRenderers.Number
-            key={column}
-            value={feret.maxDiameter.length}
-            fixed={2}
-          />
-        );
-      case 'roundness':
-        return (
-          <ValueRenderers.Number key={column} value={roundness} fixed={2} />
-        );
-      case 'solidity':
-        return (
-          <ValueRenderers.Number key={column} value={solidity} fixed={2} />
-        );
-      case 'sphericity':
-        return (
-          <ValueRenderers.Number key={column} value={sphericity} fixed={2} />
-        );
-      case 'fillRatio':
-        return (
-          <ValueRenderers.Number key={column} value={fillRatio} fixed={2} />
-        );
-      default:
-        throw new Error(`Unknown column`);
-    }
-  }, []);
+  const columns = useMemo(
+    () =>
+      keys.map((key) => {
+        return columnHelper.accessor(key, {
+          header: startCase(key),
+          footer: (props) => props.column.id,
+        });
+      }),
+    [columnHelper, keys],
+  );
+
+  const [data] = useState<RoiDataType[]>(roiData);
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: {
+      columnFilters,
+    },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
+  });
 
   if (rois.length === 0) return <Empty>No ROIs generated</Empty>;
 
@@ -107,19 +107,130 @@ function ROITable({ identifier }: ROITableProps) {
         overflowY: 'auto',
       }}
     >
-      <Table>
-        <Table.Header>
-          {columns.map((column) => (
-            <ValueRenderers.Header key={column} value={startCase(column)} />
+      <table>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <th
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    style={{ borderRight: 'solid 1px lightGray' }}
+                  >
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div>
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                        </div>
+                        {header.column.getCanFilter() ? (
+                          <div>
+                            <Filter column={header.column} />
+                          </div>
+                        ) : null}
+                      </>
+                    )}
+                  </th>
+                );
+              })}
+            </tr>
           ))}
-        </Table.Header>
-        {rois.map((roi) => (
-          <Table.Row key={roi.id}>
-            {columns.map((column) => columnRenderer(column, roi))}
-          </Table.Row>
-        ))}
-      </Table>
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => {
+            return (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => {
+                  return (
+                    <td
+                      key={cell.id}
+                      style={{ borderRight: 'solid 1px lightGray' }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
+  );
+}
+
+function Filter({ column }: { column: Column<any, unknown> }) {
+  const columnFilterValue = column.getFilterValue();
+
+  const [min, max] = column.getFacetedMinMaxValues() as [number, number];
+
+  return (
+    <div>
+      <DebouncedInput
+        type="number"
+        min={min ?? ''}
+        max={max ?? ''}
+        value={Number((columnFilterValue as [number, number])?.[0]) || ''}
+        onChange={(value) =>
+          column.setFilterValue((old: [number, number]) => [value, old?.[1]])
+        }
+        placeholder={`Min (${min ?? ''})`}
+      />
+      <DebouncedInput
+        type="number"
+        min={min ?? ''}
+        max={max ?? ''}
+        value={Number((columnFilterValue as [number, number])?.[1]) || ''}
+        onChange={(value) =>
+          column.setFilterValue((old: [number, number]) => [old?.[0], value])
+        }
+        placeholder={`Max (${max ?? ''})`}
+      />
+    </div>
+  );
+}
+
+function DebouncedInput({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}: {
+  value: string | number;
+  onChange: (value: string | number) => void;
+  debounce?: number;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value);
+    }, debounce);
+
+    return () => clearTimeout(timeout);
+  }, [debounce, onChange, value]);
+
+  return (
+    <input
+      {...props}
+      value={value as number}
+      onChange={(e) => setValue(e.target.value)}
+      style={{
+        fontSize: 12,
+        border: 'solid 1px lightGray',
+        padding: 2,
+      }}
+    />
   );
 }
 
