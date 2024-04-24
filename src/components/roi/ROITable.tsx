@@ -6,15 +6,18 @@ import {
   flexRender,
   getCoreRowModel,
   getFacetedMinMaxValues,
-  getFacetedUniqueValues,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import startCase from 'lodash/startCase';
-import { memo, useState, useEffect, useMemo } from 'react';
+import { memo, useState, useEffect, useMemo, useCallback } from 'react';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
+import useDataDispatch from '../../hooks/useDataDispatch';
 import usePreferences from '../../hooks/usePreferences';
 import useROIs from '../../hooks/useROIs';
+import { SET_ROI } from '../../state/data/DataActionTypes';
 
 const Empty = styled.div`
   display: flex;
@@ -44,27 +47,29 @@ type RoiDataType = {
 };
 
 function ROITable({ identifier }: ROITableProps) {
+  const rois = useROIs(identifier);
+  const preferences = usePreferences();
+  const dataDispatch = useDataDispatch();
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  const rois = useROIs(identifier);
-
-  const preferences = usePreferences();
-
-  const roiData: RoiDataType[] = rois.map((roi) => ({
-    id: roi.id,
-    column: roi.origin.column,
-    row: roi.origin.row,
-    width: roi.width,
-    height: roi.height,
-    surface: roi.surface,
-    feretMinDiameter: Number(roi.feret.minDiameter.length.toFixed(2)),
-    feretMaxDiameter: Number(roi.feret.maxDiameter.length.toFixed(2)),
-    feretAspectRatio: Number(roi.feret.aspectRatio.toFixed(2)),
-    roundness: Number(roi.roundness.toFixed(2)),
-    solidity: Number(roi.solidity.toFixed(2)),
-    sphericity: Number(roi.sphericity.toFixed(2)),
-    fillRatio: Number(roi.fillRatio.toFixed(2)),
-  }));
+  const [orgRoi] = useState<RoiDataType[]>(
+    rois.map((roi) => ({
+      id: roi.id,
+      column: roi.origin.column,
+      row: roi.origin.row,
+      width: roi.width,
+      height: roi.height,
+      surface: roi.surface,
+      feretMinDiameter: Number(roi.feret.minDiameter.length.toFixed(2)),
+      feretMaxDiameter: Number(roi.feret.maxDiameter.length.toFixed(2)),
+      feretAspectRatio: Number(roi.feret.aspectRatio.toFixed(2)),
+      roundness: Number(roi.roundness.toFixed(2)),
+      solidity: Number(roi.solidity.toFixed(2)),
+      sphericity: Number(roi.sphericity.toFixed(2)),
+      fillRatio: Number(roi.fillRatio.toFixed(2)),
+    })),
+  );
 
   const columnHelper = createColumnHelper<RoiDataType>();
 
@@ -84,10 +89,8 @@ function ROITable({ identifier }: ROITableProps) {
     [columnHelper, keys],
   );
 
-  const [data] = useState<RoiDataType[]>(roiData);
-
   const table = useReactTable({
-    data,
+    data: orgRoi,
     columns,
     state: {
       columnFilters,
@@ -95,11 +98,40 @@ function ROITable({ identifier }: ROITableProps) {
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getSortedRowModel: getSortedRowModel(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
   });
 
-  if (rois.length === 0) return <Empty>No ROIs generated</Empty>;
+  const updateData = useCallback(() => {
+    for (const headerGroup of table.getHeaderGroups()) {
+      for (const header of headerGroup.headers) {
+        if (header.column.getFilterValue !== undefined) {
+          const filteredRois = table.getFilteredRowModel().rows.map((row) => {
+            return row.original;
+          });
+          const newRois = rois.filter((roi) =>
+            filteredRois.some((filteredRoi) => filteredRoi.id === roi.id),
+          );
+          dataDispatch({
+            type: SET_ROI,
+            payload: {
+              identifier,
+              rois: newRois,
+            },
+          });
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataDispatch, identifier, table]);
+
+  useEffect(() => {
+    updateData();
+  }, [columnFilters, table, updateData]);
+
+  if (orgRoi.length === 0) {
+    return <Empty>No ROIs generated</Empty>;
+  }
 
   return (
     <div
@@ -120,11 +152,23 @@ function ROITable({ identifier }: ROITableProps) {
                   >
                     {header.isPlaceholder ? null : (
                       <>
-                        <div>
+                        <div
+                          onClick={header.column.getToggleSortingHandler()}
+                          style={{
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 10,
+                          }}
+                        >
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext(),
                           )}
+                          {{
+                            asc: <FaChevronUp />,
+                            desc: <FaChevronDown />,
+                          }[header.column.getIsSorted() as string] ?? null}
                         </div>
                         {header.column.getCanFilter() ? (
                           <div>
@@ -214,11 +258,11 @@ function DebouncedInput({
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      onChange(value);
+      if (value !== initialValue) onChange(value);
     }, debounce);
 
     return () => clearTimeout(timeout);
-  }, [debounce, onChange, value]);
+  }, [debounce, initialValue, onChange, value]);
 
   return (
     <input
