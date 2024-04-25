@@ -21,21 +21,20 @@ function ROIAccordion() {
 
   return (
     <Accordion.Item title="ROIs">
-      {isEditing ? (
+      <div style={{ display: isEditing ? 'block' : 'none' }}>
         <ROIEditColumnPreference />
-      ) : (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-            width: '100%',
-          }}
-        >
-          <ROIToolbar identifier={currentTab} />
-          <ROITable identifier={currentTab} />
-        </div>
-      )}
+      </div>
+      <div
+        style={{
+          display: isEditing ? 'none' : 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          width: '100%',
+        }}
+      >
+        <ROIToolbar identifier={currentTab} />
+        <ROITable identifier={currentTab} />
+      </div>
     </Accordion.Item>
   );
 }

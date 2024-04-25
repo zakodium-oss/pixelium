@@ -77,10 +77,7 @@ function ROITable({ identifier }: ROITableProps) {
 
   const columnHelper = createColumnHelper<RoiDataType>();
 
-  const keys = useMemo(
-    () => preferences.rois.columns,
-    [preferences.rois.columns],
-  );
+  const [keys, setKeys] = useState(preferences.rois.columns);
 
   const columns = useMemo(
     () =>
@@ -107,6 +104,21 @@ function ROITable({ identifier }: ROITableProps) {
     getSortedRowModel: getSortedRowModel(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
   });
+
+  useEffect(() => {
+    for (const headerGroup of table.getHeaderGroups()) {
+      for (const header of headerGroup.headers) {
+        if (
+          !preferences.rois.columns.includes(
+            header.column.id as keyof RoiDataType,
+          )
+        ) {
+          header.column.setFilterValue([]);
+        }
+      }
+    }
+    setKeys(preferences.rois.columns);
+  }, [preferences.rois.columns, table]);
 
   const updateData = useCallback(() => {
     for (const headerGroup of table.getHeaderGroups()) {
@@ -238,7 +250,7 @@ function ROITable({ identifier }: ROITableProps) {
   );
 }
 
-function Filter({ column }: { column: Column<any, unknown> }) {
+function Filter({ column }: { column: Column<RoiDataType, unknown> }) {
   const columnFilterValue = column.getFilterValue();
 
   const [min, max] = column.getFacetedMinMaxValues() as [number, number];

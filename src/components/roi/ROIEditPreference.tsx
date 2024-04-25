@@ -115,13 +115,11 @@ function ROIEditPreference() {
           <Table style={tableStyle}>
             <Table.Header>
               <ValueRenderers.Header value="Label" />
-              <ValueRenderers.Header value="Name" />
               <ValueRenderers.Header value="Visible" />
             </Table.Header>
             {availableRoiColumns.map((column) => (
               <Table.Row key={column}>
                 <ValueRenderers.Text value={startCase(column)} />
-                <ValueRenderers.Text value={column} />
                 <ValueRenderers.Component>
                   <Checkbox
                     checked={isColumnShown(column)}
