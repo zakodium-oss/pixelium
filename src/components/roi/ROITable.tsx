@@ -1,7 +1,9 @@
+import { FormGroup, Popover } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import {
   Column,
   ColumnFiltersState,
+  SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -12,7 +14,8 @@ import {
 } from '@tanstack/react-table';
 import startCase from 'lodash/startCase';
 import { memo, useState, useEffect, useMemo, useCallback } from 'react';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp, FaFilter } from 'react-icons/fa';
+import { Button } from 'react-science/ui';
 
 import useDataDispatch from '../../hooks/useDataDispatch';
 import usePreferences from '../../hooks/usePreferences';
@@ -52,6 +55,7 @@ function ROITable({ identifier }: ROITableProps) {
   const dataDispatch = useDataDispatch();
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const [orgRoi] = useState<RoiDataType[]>(
     rois.map((roi) => ({
@@ -94,8 +98,10 @@ function ROITable({ identifier }: ROITableProps) {
     columns,
     state: {
       columnFilters,
+      sorting,
     },
     onColumnFiltersChange: setColumnFilters,
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -148,10 +154,22 @@ function ROITable({ identifier }: ROITableProps) {
                   <th
                     key={header.id}
                     colSpan={header.colSpan}
-                    style={{ borderRight: 'solid 1px lightGray' }}
+                    style={{
+                      borderRight: 'solid 1px lightGray',
+                      position: 'sticky',
+                      top: 0,
+                      backgroundColor: 'white',
+                    }}
                   >
                     {header.isPlaceholder ? null : (
-                      <>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: 10,
+                        }}
+                      >
                         <div
                           onClick={header.column.getToggleSortingHandler()}
                           style={{
@@ -168,14 +186,25 @@ function ROITable({ identifier }: ROITableProps) {
                           {{
                             asc: <FaChevronUp />,
                             desc: <FaChevronDown />,
-                          }[header.column.getIsSorted() as string] ?? null}
+                          }[header.column.getIsSorted() as string] ?? (
+                            <FaChevronDown style={{ visibility: 'hidden' }} />
+                          )}
                         </div>
-                        {header.column.getCanFilter() ? (
-                          <div>
-                            <Filter column={header.column} />
-                          </div>
-                        ) : null}
-                      </>
+                        <div>
+                          {header.column.getCanFilter() ? (
+                            <Popover
+                              content={<Filter column={header.column} />}
+                              placement="bottom"
+                            >
+                              <Button
+                                minimal
+                                icon={<FaFilter />}
+                                active={header.column.getIsFiltered()}
+                              />
+                            </Popover>
+                          ) : null}
+                        </div>
+                      </div>
                     )}
                   </th>
                 );
@@ -215,27 +244,54 @@ function Filter({ column }: { column: Column<any, unknown> }) {
   const [min, max] = column.getFacetedMinMaxValues() as [number, number];
 
   return (
-    <div>
-      <DebouncedInput
-        type="number"
-        min={min ?? ''}
-        max={max ?? ''}
-        value={Number((columnFilterValue as [number, number])?.[0]) || ''}
-        onChange={(value) =>
-          column.setFilterValue((old: [number, number]) => [value, old?.[1]])
-        }
-        placeholder={`Min (${min ?? ''})`}
-      />
-      <DebouncedInput
-        type="number"
-        min={min ?? ''}
-        max={max ?? ''}
-        value={Number((columnFilterValue as [number, number])?.[1]) || ''}
-        onChange={(value) =>
-          column.setFilterValue((old: [number, number]) => [old?.[0], value])
-        }
-        placeholder={`Max (${max ?? ''})`}
-      />
+    <div
+      style={{
+        width: '200px',
+        padding: 10,
+      }}
+    >
+      <div style={{ height: 50 }}>histogram & slider</div>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 8,
+        }}
+      >
+        <FormGroup label="Min">
+          <DebouncedInput
+            type="number"
+            min={min ?? ''}
+            max={max ?? ''}
+            value={Number((columnFilterValue as [number, number])?.[0]) || ''}
+            onChange={(value) =>
+              column.setFilterValue((old: [number, number]) => [
+                value,
+                old?.[1],
+              ])
+            }
+            placeholder={`${min ?? ''}`}
+          />
+        </FormGroup>
+        <FormGroup label="Max">
+          <DebouncedInput
+            type="number"
+            min={min ?? ''}
+            max={max ?? ''}
+            value={Number((columnFilterValue as [number, number])?.[1]) || ''}
+            onChange={(value) =>
+              column.setFilterValue((old: [number, number]) => [
+                old?.[0],
+                value,
+              ])
+            }
+            placeholder={`${max ?? ''}`}
+          />
+        </FormGroup>
+      </div>
+      <Button minimal intent="danger" onClick={() => column.setFilterValue([])}>
+        Reset filters
+      </Button>
     </div>
   );
 }
@@ -272,6 +328,7 @@ function DebouncedInput({
       style={{
         fontSize: 12,
         border: 'solid 1px lightGray',
+        width: '100%',
         padding: 2,
       }}
     />
