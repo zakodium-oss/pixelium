@@ -1,4 +1,5 @@
-import { memo, useMemo } from 'react';
+import { ColumnFiltersState } from '@tanstack/react-table';
+import { memo, useMemo, useState } from 'react';
 import { Accordion } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
@@ -16,6 +17,7 @@ function ROIAccordion() {
     () => view.editROIPreference,
     [view.editROIPreference],
   );
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   if (currentTab === undefined) return null;
 
@@ -32,8 +34,16 @@ function ROIAccordion() {
           width: '100%',
         }}
       >
-        <ROIToolbar identifier={currentTab} />
-        <ROITable identifier={currentTab} />
+        <ROIToolbar
+          identifier={currentTab}
+          columnFilters={columnFilters}
+          setColumnFilters={setColumnFilters}
+        />
+        <ROITable
+          identifier={currentTab}
+          columnFilters={columnFilters}
+          setColumnFilters={setColumnFilters}
+        />
       </div>
     </Accordion.Item>
   );

@@ -14,7 +14,8 @@ import {
 } from '@tanstack/react-table';
 import startCase from 'lodash/startCase';
 import { memo, useState, useEffect, useMemo, useCallback } from 'react';
-import { FaChevronDown, FaChevronUp, FaFilter } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { MdFilterAlt } from 'react-icons/md';
 import { Button } from 'react-science/ui';
 
 import useDataDispatch from '../../hooks/useDataDispatch';
@@ -31,6 +32,8 @@ const Empty = styled.div`
 
 interface ROITableProps {
   identifier: string;
+  columnFilters: ColumnFiltersState;
+  setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
 }
 
 type RoiDataType = {
@@ -49,12 +52,15 @@ type RoiDataType = {
   fillRatio: number;
 };
 
-function ROITable({ identifier }: ROITableProps) {
+function ROITable({
+  identifier,
+  columnFilters,
+  setColumnFilters,
+}: ROITableProps) {
   const rois = useROIs(identifier);
   const preferences = usePreferences();
   const dataDispatch = useDataDispatch();
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const [orgRoi] = useState<RoiDataType[]>(
@@ -210,7 +216,7 @@ function ROITable({ identifier }: ROITableProps) {
                             >
                               <Button
                                 minimal
-                                icon={<FaFilter />}
+                                icon={<MdFilterAlt size={20} />}
                                 active={header.column.getIsFiltered()}
                               />
                             </Popover>
@@ -302,7 +308,7 @@ function Filter({ column }: { column: Column<RoiDataType, unknown> }) {
         </FormGroup>
       </div>
       <Button minimal intent="danger" onClick={() => column.setFilterValue([])}>
-        Reset filters
+        Reset filter
       </Button>
     </div>
   );

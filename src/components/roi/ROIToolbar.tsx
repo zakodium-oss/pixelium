@@ -1,7 +1,9 @@
+import { ColumnFiltersState } from '@tanstack/react-table';
 import { Roi } from 'image-js';
 import startCase from 'lodash/startCase';
 import { memo, useCallback, useState } from 'react';
 import { FaCopy } from 'react-icons/fa';
+import { MdFilterAltOff } from 'react-icons/md';
 import { Toolbar, PanelHeader } from 'react-science/ui';
 import { useCopyToClipboard } from 'react-use';
 
@@ -12,6 +14,8 @@ import { SET_EDIT_ROI_PREFERENCE } from '../../state/view/ViewActionTypes';
 
 interface ROIToolbarProps {
   identifier: string;
+  columnFilters: ColumnFiltersState;
+  setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
 }
 
 function roisToTSV(rois: Roi[]) {
@@ -40,7 +44,11 @@ function roisToTSV(rois: Roi[]) {
 
 const copyToClipBoardDefaultText = 'Copy to clipboard';
 
-function ROIToolbar({ identifier }: ROIToolbarProps) {
+function ROIToolbar({
+  identifier,
+  columnFilters,
+  setColumnFilters,
+}: ROIToolbarProps) {
   const rois = useROIs(identifier);
   const viewDispatch = useViewDispatch();
 
@@ -70,6 +78,12 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
             tooltip={copyToClipBoardText}
             icon={<FaCopy />}
             onClick={handleCopyToClipboard}
+          />
+          <Toolbar.Item
+            tooltip="Reset filters"
+            disabled={columnFilters.length === 0}
+            icon={<MdFilterAltOff size={20} />}
+            onClick={() => setColumnFilters([])}
           />
         </Toolbar>
       )}
