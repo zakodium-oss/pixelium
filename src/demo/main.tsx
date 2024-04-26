@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 
+import './style.css';
 import 'react-science/styles/preflight.css';
 
 import '@blueprintjs/core/lib/css/blueprint.css';
