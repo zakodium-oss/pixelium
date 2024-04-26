@@ -18,6 +18,7 @@ function ROIAccordion() {
     [view.editROIPreference],
   );
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [orgRoisLength, setOrgRoisLength] = useState(0);
 
   if (currentTab === undefined) return null;
 
@@ -38,11 +39,13 @@ function ROIAccordion() {
           identifier={currentTab}
           columnFilters={columnFilters}
           setColumnFilters={setColumnFilters}
+          orgRoisLength={orgRoisLength}
         />
         <ROITable
           identifier={currentTab}
           columnFilters={columnFilters}
           setColumnFilters={setColumnFilters}
+          setOrgRoisLength={setOrgRoisLength}
         />
       </div>
     </Accordion.Item>

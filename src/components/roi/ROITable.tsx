@@ -38,6 +38,7 @@ interface ROITableProps {
   identifier: string;
   columnFilters: ColumnFiltersState;
   setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
+  setOrgRoisLength: React.Dispatch<React.SetStateAction<number>>;
 }
 
 type RoiDataType = {
@@ -60,6 +61,7 @@ function ROITable({
   identifier,
   columnFilters,
   setColumnFilters,
+  setOrgRoisLength,
 }: ROITableProps) {
   const rois = useROIs(identifier);
   const preferences = usePreferences();
@@ -84,6 +86,8 @@ function ROITable({
       fillRatio: Number(roi.fillRatio.toFixed(2)),
     })),
   );
+
+  setOrgRoisLength(orgRoi.length);
 
   const columnHelper = createColumnHelper<RoiDataType>();
 

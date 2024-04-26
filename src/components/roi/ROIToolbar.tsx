@@ -16,6 +16,7 @@ interface ROIToolbarProps {
   identifier: string;
   columnFilters: ColumnFiltersState;
   setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
+  orgRoisLength: number;
 }
 
 function roisToTSV(rois: Roi[]) {
@@ -48,6 +49,7 @@ function ROIToolbar({
   identifier,
   columnFilters,
   setColumnFilters,
+  orgRoisLength,
 }: ROIToolbarProps) {
   const rois = useROIs(identifier);
   const viewDispatch = useViewDispatch();
@@ -71,7 +73,11 @@ function ROIToolbar({
   }, [viewDispatch]);
 
   return (
-    <PanelHeader total={rois.length} onClickSettings={handleEditROIPreference}>
+    <PanelHeader
+      total={orgRoisLength}
+      current={rois.length}
+      onClickSettings={handleEditROIPreference}
+    >
       {rois.length > 0 && (
         <Toolbar>
           <Toolbar.Item
