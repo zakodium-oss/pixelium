@@ -4,18 +4,22 @@ import {
   Column,
   ColumnFiltersState,
   SortingState,
+  Table,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getFacetedMinMaxValues,
+  getFacetedRowModel,
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import startCase from 'lodash/startCase';
+import { xHistogram, xyToXYObject } from 'ml-spectra-processing';
 import { memo, useState, useEffect, useMemo, useCallback } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { MdFilterAlt } from 'react-icons/md';
+import { Plot, BarSeries, Axis } from 'react-plot';
 import { Button } from 'react-science/ui';
 
 import useDataDispatch from '../../hooks/useDataDispatch';
@@ -111,6 +115,7 @@ function ROITable({
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
   });
 
+  // Clear column filters before removing it
   useEffect(() => {
     for (const headerGroup of table.getHeaderGroups()) {
       for (const header of headerGroup.headers) {
@@ -126,7 +131,7 @@ function ROITable({
     setKeys(preferences.rois.columns);
   }, [preferences.rois.columns, table]);
 
-  const updateData = useCallback(() => {
+  const updateRois = useCallback(() => {
     for (const headerGroup of table.getHeaderGroups()) {
       for (const header of headerGroup.headers) {
         if (header.column.getFilterValue !== undefined) {
@@ -150,8 +155,8 @@ function ROITable({
   }, [dataDispatch, identifier, table]);
 
   useEffect(() => {
-    updateData();
-  }, [columnFilters, table, updateData]);
+    updateRois();
+  }, [columnFilters, table, updateRois]);
 
   if (orgRoi.length === 0) {
     return <Empty>No ROIs generated</Empty>;
@@ -211,7 +216,9 @@ function ROITable({
                         <div>
                           {header.column.getCanFilter() ? (
                             <Popover
-                              content={<Filter column={header.column} />}
+                              content={
+                                <Filter column={header.column} table={table} />
+                              }
                               placement="bottom"
                             >
                               <Button
@@ -256,19 +263,58 @@ function ROITable({
   );
 }
 
-function Filter({ column }: { column: Column<RoiDataType, unknown> }) {
+function Filter({
+  column,
+  table,
+}: {
+  column: Column<RoiDataType, unknown>;
+  table: Table<RoiDataType>;
+}) {
   const columnFilterValue = column.getFilterValue();
 
-  const [min, max] = column.getFacetedMinMaxValues() as [number, number];
+  // Create a new table without the current column filter for the histogram
+  const histTable = useReactTable({
+    data: table.options.data,
+    columns: table.options.columns,
+    state: {
+      columnFilters: table.options.state.columnFilters?.filter(
+        (filter) => filter.id !== column.id,
+      ),
+    },
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
+  });
+
+  const [min, max] = useMemo(() => {
+    for (const headerGroup of histTable.getHeaderGroups()) {
+      for (const header of headerGroup.headers) {
+        if (header.column.id === column.id) {
+          return header.column.getFacetedMinMaxValues() as [number, number];
+        }
+      }
+    }
+    return column.getFacetedMinMaxValues() as [number, number];
+  }, [column, histTable]);
+
+  const histValues = useMemo(
+    () =>
+      histTable
+        .getFilteredRowModel()
+        .rows.map((row) => row.original[column.id]),
+    [column.id, histTable],
+  );
 
   return (
     <div
       style={{
-        width: '200px',
         padding: 10,
       }}
     >
-      <div style={{ height: 50 }}>histogram & slider</div>
+      <div style={{ display: 'flex', justifyContent: 'center', padding: 10 }}>
+        <Histogram values={histValues} />
+      </div>
       <div
         style={{
           display: 'flex',
@@ -311,6 +357,26 @@ function Filter({ column }: { column: Column<RoiDataType, unknown> }) {
         Reset filter
       </Button>
     </div>
+  );
+}
+
+function Histogram({ values }: { values: number[] }) {
+  const histogram = xHistogram(values, {
+    nbSlots: values.length,
+    centerX: false,
+  });
+
+  const histData = xyToXYObject(histogram).map((point) => ({
+    x: point.x,
+    y: point.y,
+  }));
+
+  return (
+    <Plot width={200} height={100}>
+      <BarSeries data={histData} lineStyle={{ stroke: 'cornflowerblue' }} />
+      <Axis min={0} position="left" hidden />
+      <Axis position="bottom" paddingEnd="10" paddingStart="10" hiddenTicks />
+    </Plot>
   );
 }
 
