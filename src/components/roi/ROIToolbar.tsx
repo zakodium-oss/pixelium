@@ -78,7 +78,7 @@ function ROIToolbar({
       current={rois.length}
       onClickSettings={handleEditROIPreference}
     >
-      {rois.length > 0 && (
+      {orgRoisLength > 0 && (
         <Toolbar>
           <Toolbar.Item
             tooltip={copyToClipBoardText}
