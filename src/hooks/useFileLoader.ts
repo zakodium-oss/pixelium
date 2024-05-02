@@ -32,7 +32,7 @@ export default function useFileLoader() {
   const loadFileCollection = useCallback(
     async (fileCollection: FileCollection) => {
       const dataFiles: DataFile[] = [];
-
+      let pixeliumId;
       // for each image, decode it
       for (const file of fileCollection) {
         if (file.name.includes('.pixelium')) {
@@ -47,6 +47,9 @@ export default function useFileLoader() {
               type: LOAD_PIXELIUM,
               payload: data,
             });
+            if (view === null) {
+              pixeliumId = Object.keys(data.images).at(-1);
+            }
           }
           if (preferences !== null) {
             preferencesDispatch({
@@ -91,7 +94,11 @@ export default function useFileLoader() {
       dataDispatch({ type: LOAD_DROP, payload: files });
 
       const newId = ids.at(-1);
-      if (newId) viewDispatch({ type: OPEN_TAB, payload: newId });
+
+      if (newId || pixeliumId) {
+        viewDispatch({ type: OPEN_TAB, payload: newId || pixeliumId });
+      }
+
       return dataFiles.length;
     },
     [dataDispatch, logger, preferencesDispatch, viewDispatch],
