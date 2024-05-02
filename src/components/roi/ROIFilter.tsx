@@ -50,7 +50,10 @@ function ROIFilter({
     return column.getFacetedMinMaxValues() as [number, number];
   }, [column, histTable]);
 
-  const [min, max] = minMaxValues ?? [];
+  const [min, max] =
+    (['id', 'column'].includes(column.id)
+      ? [minMaxValues[0][0], minMaxValues[1]]
+      : minMaxValues) ?? [];
 
   const histValues = useMemo(
     () =>
