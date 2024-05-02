@@ -1,4 +1,4 @@
-import { FormGroup } from '@blueprintjs/core';
+import { FormGroup, RangeSlider } from '@blueprintjs/core';
 import {
   Column,
   Table,
@@ -66,8 +66,35 @@ function ROIFilter({
         padding: 10,
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'center', padding: 10 }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'end',
+          gap: 10,
+          padding: 10,
+        }}
+      >
         <Histogram values={histValues} />
+        <div style={{ width: '100%', paddingLeft: 30 }}>
+          <RangeSlider
+            min={min}
+            max={max}
+            value={(columnFilterValue as [number, number]) ?? [min, max]}
+            stepSize={
+              ['id', 'column', 'row', 'width', 'height', 'surface'].includes(
+                column.id,
+              )
+                ? 1
+                : 0.01
+            }
+            labelRenderer={false}
+            onChange={(value) => {
+              column.setFilterValue(value);
+            }}
+          />
+        </div>
       </div>
       <div
         style={{
@@ -131,8 +158,8 @@ function Histogram({ values }: { values: number[] }) {
   return (
     <Plot width={200} height={100}>
       <BarSeries data={histData} lineStyle={{ stroke: 'cornflowerblue' }} />
-      <Axis min={0} position="left" hidden />
-      <Axis position="bottom" paddingEnd="10" paddingStart="10" hiddenTicks />
+      <Axis min={0} position="left" hiddenLine />
+      <Axis position="bottom" hiddenTicks />
     </Plot>
   );
 }
