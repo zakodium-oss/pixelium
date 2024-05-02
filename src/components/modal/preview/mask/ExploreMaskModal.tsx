@@ -9,14 +9,15 @@ import { SET_MASK } from '../../../../state/data/DataActionTypes';
 import FastSelector from '../../../FastSelector';
 import PreviewModal from '../PreviewModal';
 
-interface ExportGreyModalProps {
+interface ExportMaskModalProps {
   previewImageIdentifier: string;
 }
 
-function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
+function ExploreMaskModal({ previewImageIdentifier }: ExportMaskModalProps) {
   const { defaultOptions, editing, opIdentifier } =
     useDefaultOptions<ThresholdOptionsAlgorithm>({
       algorithm: ThresholdAlgorithm.HUANG,
+      slots: 2 ** 8,
     });
 
   const { pipelined } = useImage(opIdentifier);
@@ -69,10 +70,12 @@ function ExploreGreyModal({ previewImageIdentifier }: ExportGreyModalProps) {
       <FastSelector
         options={Object.values(ThresholdAlgorithm)}
         selected={maskOptions.algorithm}
-        setSelected={(algorithm) => setMaskOptions({ algorithm })}
+        setSelected={(algorithm) =>
+          setMaskOptions({ ...maskOptions, algorithm })
+        }
       />
     </PreviewModal>
   );
 }
 
-export default memo(ExploreGreyModal);
+export default memo(ExploreMaskModal);
