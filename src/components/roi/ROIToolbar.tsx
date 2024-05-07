@@ -2,13 +2,19 @@ import { Roi } from 'image-js';
 import startCase from 'lodash/startCase';
 import { memo, useCallback, useState } from 'react';
 import { FaCopy } from 'react-icons/fa';
+import { MdFilterAltOff } from 'react-icons/md';
 import { Toolbar, PanelHeader } from 'react-science/ui';
 import { useCopyToClipboard } from 'react-use';
 
+import useROIFilters from '../../hooks/useROIFilters';
 import useROIs from '../../hooks/useROIs';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import { availableRoiColumns } from '../../state/preferences/PreferencesReducer';
 import { SET_EDIT_ROI_PREFERENCE } from '../../state/view/ViewActionTypes';
+import useROIContext, {
+  UPDATE_FILTER,
+  useROIDispatch,
+} from '../context/ROIContext';
 
 interface ROIToolbarProps {
   identifier: string;
@@ -62,14 +68,53 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
     viewDispatch({ type: SET_EDIT_ROI_PREFERENCE, payload: true });
   }, [viewDispatch]);
 
+  const roiDispatch = useROIDispatch();
+  const { filters } = useROIContext();
+  const { filteredROIs } = useROIFilters({ identifier });
+
+  function resetFilters() {
+    for (const filter of filters) {
+      roiDispatch({
+        type: UPDATE_FILTER,
+        payload: {
+          identifier,
+          roiFilter: { column: filter.column, min: '', max: '' },
+        },
+      });
+    }
+  }
+
+  const hasFilters = useCallback(() => {
+    if (filters.length === 0) return false;
+    for (const columnFilter of filters) {
+      if (
+        typeof columnFilter.min === 'number' ||
+        typeof columnFilter.max === 'number'
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }, [filters]);
+
   return (
-    <PanelHeader total={rois.length} onClickSettings={handleEditROIPreference}>
+    <PanelHeader
+      current={filteredROIs.length}
+      total={rois.length}
+      onClickSettings={handleEditROIPreference}
+    >
       {rois.length > 0 && (
         <Toolbar>
           <Toolbar.Item
             tooltip={copyToClipBoardText}
             icon={<FaCopy />}
             onClick={handleCopyToClipboard}
+          />
+          <Toolbar.Item
+            tooltip="Reset filters"
+            disabled={!hasFilters()}
+            icon={<MdFilterAltOff size={20} />}
+            onClick={resetFilters}
           />
         </Toolbar>
       )}
