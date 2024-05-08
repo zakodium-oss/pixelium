@@ -1,8 +1,7 @@
 import { CSSProperties, memo, useEffect, useMemo, useRef } from 'react';
 
 import useAnnotationRef from '../../hooks/useAnnotationRef';
-import useROIFilters, { getRealFilteredROIs } from '../../hooks/useROIFilters';
-import useROIs from '../../hooks/useROIs';
+import useOriginalFilteredROIs from '../../hooks/useOriginalFilteredROIs';
 
 import ROIAnnotation from './annotation/ROIAnnotation';
 
@@ -17,17 +16,14 @@ function ROIAnnotations({
   width = 0,
   height = 0,
 }: ROIAnnotationsProps) {
-  const rois = useROIs(identifier);
-  const { filteredROIs } = useROIFilters({ identifier });
+  const originalFilteredROIs = useOriginalFilteredROIs(identifier);
 
-  const realFilteredROIs = useMemo(
-    () => getRealFilteredROIs(rois, filteredROIs),
-    [rois, filteredROIs],
-  );
   const annotations = useMemo(
     () =>
-      realFilteredROIs.map((roi) => <ROIAnnotation key={roi.id} roi={roi} />),
-    [realFilteredROIs],
+      originalFilteredROIs.map((roi) => (
+        <ROIAnnotation key={roi.id} roi={roi} />
+      )),
+    [originalFilteredROIs],
   );
 
   const annotationsRef = useRef<SVGSVGElement>(null);

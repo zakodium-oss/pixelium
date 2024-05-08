@@ -70,7 +70,7 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
 
   const roiDispatch = useROIDispatch();
   const { filters } = useROIContext();
-  const { filteredROIs } = useROIFilters({ identifier });
+  const filteredROIs = useROIFilters({ identifier });
 
   function resetFilters() {
     for (const filter of filters) {

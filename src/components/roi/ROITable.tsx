@@ -26,7 +26,7 @@ interface ROITableProps {
 function ROITable({ identifier }: ROITableProps) {
   const rois = useROIs(identifier);
   const { filters } = useROIContext();
-  const { filteredROIs } = useROIFilters({ identifier });
+  const filteredROIs = useROIFilters({ identifier });
 
   const hasFilter = useCallback(
     (column: string) => {

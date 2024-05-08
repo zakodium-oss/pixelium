@@ -23,7 +23,7 @@ function ROIFilter({
   const roiDispatch = useROIDispatch();
 
   const { filters } = useROIContext();
-  const { filteredROIs } = useROIFilters({
+  const filteredROIs = useROIFilters({
     identifier,
     exclude: column,
   });

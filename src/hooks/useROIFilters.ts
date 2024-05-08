@@ -1,5 +1,3 @@
-import { Roi } from 'image-js';
-
 import useROIContext from '../components/context/ROIContext';
 
 import useROIs from './useROIs';
@@ -19,16 +17,6 @@ export type FilterableROI = {
   sphericity?: number;
   fillRatio?: number;
 };
-
-export function getRealFilteredROIs(
-  rois: Roi[],
-  filteredROIs: FilterableROI[],
-) {
-  const result = rois.filter((roi) =>
-    filteredROIs.some((filteredROI) => filteredROI.id === roi.id),
-  );
-  return result;
-}
 
 export default function useROIFilters({
   identifier,
@@ -75,5 +63,5 @@ export default function useROIFilters({
     });
   });
 
-  return { filteredROIs };
+  return filteredROIs;
 }
