@@ -4,7 +4,7 @@ import useROIContext from '../components/context/ROIContext';
 
 import useROIs from './useROIs';
 
-export type RoiDataType = {
+export type FilterableROI = {
   id?: number;
   column?: number;
   row?: number;
@@ -20,7 +20,10 @@ export type RoiDataType = {
   fillRatio?: number;
 };
 
-export function getRealFilteredROIs(rois: Roi[], filteredROIs: RoiDataType[]) {
+export function getRealFilteredROIs(
+  rois: Roi[],
+  filteredROIs: FilterableROI[],
+) {
   const result = rois.filter((roi) =>
     filteredROIs.some((filteredROI) => filteredROI.id === roi.id),
   );
@@ -37,7 +40,7 @@ export default function useROIFilters({
   const rois = useROIs(identifier);
   const { filters } = useROIContext();
 
-  let filteredROIs: RoiDataType[] = rois.map((roi) => ({
+  let filteredROIs: FilterableROI[] = rois.map((roi) => ({
     id: roi.id,
     column: roi.origin.column,
     row: roi.origin.row,

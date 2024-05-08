@@ -3,14 +3,14 @@ import { Reducer, createContext, useContext } from 'react';
 
 import { DispatchContext } from './DispatchContext';
 
-export type RoiFilterType = {
+export type RoiFilter = {
   column: string;
   min?: number | string;
   max?: number | string;
 };
 
 export interface ROIState {
-  filters: RoiFilterType[];
+  filters: RoiFilter[];
 }
 
 export const initialROIState: ROIState = { filters: [] };
@@ -33,7 +33,7 @@ export type ROIActionType<Action, Payload = void> = Payload extends void
 
 export type UpdateFilterAction = ROIActionType<
   typeof UPDATE_FILTER,
-  { identifier: string; roiFilter: RoiFilterType }
+  { roiFilter: RoiFilter }
 >;
 
 export function updateFilter(

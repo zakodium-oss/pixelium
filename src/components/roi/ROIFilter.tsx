@@ -5,7 +5,7 @@ import { Plot, BarSeries, Axis } from 'react-plot';
 
 import useROIFilters from '../../hooks/useROIFilters';
 import useROIContext, {
-  RoiFilterType,
+  RoiFilter,
   UPDATE_FILTER,
   useROIDispatch,
 } from '../context/ROIContext';
@@ -33,16 +33,15 @@ function ROIFilter({
   }, [filteredROIs, column]);
 
   const updateFilter = useCallback(
-    (newFilter: RoiFilterType) => {
+    (newFilter: RoiFilter) => {
       roiDispatch({
         type: UPDATE_FILTER,
         payload: {
-          identifier,
           roiFilter: newFilter,
         },
       });
     },
-    [identifier, roiDispatch],
+    [roiDispatch],
   );
 
   const minMax = useMemo(() => {
@@ -153,7 +152,7 @@ function Histogram({
   columnFilterValue,
 }: {
   values: number[];
-  columnFilterValue: RoiFilterType;
+  columnFilterValue: RoiFilter;
 }) {
   const histogram =
     values.length > 0

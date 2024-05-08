@@ -77,7 +77,6 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
       roiDispatch({
         type: UPDATE_FILTER,
         payload: {
-          identifier,
           roiFilter: { column: filter.column, min: '', max: '' },
         },
       });
