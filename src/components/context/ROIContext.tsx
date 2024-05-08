@@ -23,7 +23,7 @@ export default function useROIContext() {
   return useContext(ROIContext);
 }
 
-export const UPDATE_FILTER = 'UPDATE_FILTER';
+const UPDATE_FILTER = 'UPDATE_FILTER';
 
 export type ROIActions = UpdateFilterAction;
 

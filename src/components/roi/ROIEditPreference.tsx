@@ -22,7 +22,7 @@ import {
   RoiColumn,
 } from '../../state/preferences/PreferencesReducer';
 import { SET_EDIT_ROI_PREFERENCE } from '../../state/view/ViewActionTypes';
-import { UPDATE_FILTER, useROIDispatch } from '../context/ROIContext';
+import { useROIDispatch } from '../context/ROIContext';
 
 const PaddedContent = styled.div`
   overflow: auto;
@@ -65,7 +65,7 @@ function ROIEditPreference() {
   const changeChecked = useCallback(
     (column: RoiColumn, checked: boolean) => {
       roiDispatch({
-        type: UPDATE_FILTER,
+        type: 'UPDATE_FILTER',
         payload: {
           roiFilter: { column, min: '', max: '' },
         },

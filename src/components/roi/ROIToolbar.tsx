@@ -11,10 +11,7 @@ import useROIs from '../../hooks/useROIs';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import { availableRoiColumns } from '../../state/preferences/PreferencesReducer';
 import { SET_EDIT_ROI_PREFERENCE } from '../../state/view/ViewActionTypes';
-import useROIContext, {
-  UPDATE_FILTER,
-  useROIDispatch,
-} from '../context/ROIContext';
+import useROIContext, { useROIDispatch } from '../context/ROIContext';
 
 interface ROIToolbarProps {
   identifier: string;
@@ -75,7 +72,7 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
   function resetFilters() {
     for (const filter of filters) {
       roiDispatch({
-        type: UPDATE_FILTER,
+        type: 'UPDATE_FILTER',
         payload: {
           roiFilter: { column: filter.column, min: '', max: '' },
         },

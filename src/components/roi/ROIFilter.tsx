@@ -6,7 +6,6 @@ import { Plot, BarSeries, Axis } from 'react-plot';
 import useROIFilters from '../../hooks/useROIFilters';
 import useROIContext, {
   RoiFilter,
-  UPDATE_FILTER,
   useROIDispatch,
 } from '../context/ROIContext';
 
@@ -35,7 +34,7 @@ function ROIFilter({
   const updateFilter = useCallback(
     (newFilter: RoiFilter) => {
       roiDispatch({
-        type: UPDATE_FILTER,
+        type: 'UPDATE_FILTER',
         payload: {
           roiFilter: newFilter,
         },
