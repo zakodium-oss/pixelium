@@ -35,13 +35,13 @@ export default function useROIFilters({
     width: roi.width,
     height: roi.height,
     surface: roi.surface,
-    feretMinDiameter: Number(roi.feret.minDiameter.length.toFixed(2)),
-    feretMaxDiameter: Number(roi.feret.maxDiameter.length.toFixed(2)),
-    feretAspectRatio: Number(roi.feret.aspectRatio.toFixed(2)),
-    roundness: Number(roi.roundness.toFixed(2)),
-    solidity: Number(roi.solidity.toFixed(2)),
-    sphericity: Number(roi.sphericity.toFixed(2)),
-    fillRatio: Number(roi.fillRatio.toFixed(2)),
+    feretMinDiameter: roi.feret.minDiameter.length,
+    feretMaxDiameter: roi.feret.maxDiameter.length,
+    feretAspectRatio: roi.feret.aspectRatio,
+    roundness: roi.roundness,
+    solidity: roi.solidity,
+    sphericity: roi.sphericity,
+    fillRatio: roi.fillRatio,
   }));
 
   filteredROIs = filteredROIs.filter((filteredROI) => {

@@ -88,7 +88,10 @@ function ROITable({ identifier }: ROITableProps) {
         {filteredROIs.map((roi) => (
           <Table.Row key={roi.id}>
             {columns.map((column) => (
-              <ValueRenderers.Number key={column} value={roi[column]} />
+              <ValueRenderers.Number
+                key={column}
+                value={Number(roi[column]?.toFixed(2))}
+              />
             ))}
           </Table.Row>
         ))}
