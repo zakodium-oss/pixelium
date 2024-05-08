@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import useROIContext from '../components/context/ROIContext';
 
 import useROIs from './useROIs';
@@ -28,40 +30,44 @@ export default function useROIFilters({
   const rois = useROIs(identifier);
   const { filters } = useROIContext();
 
-  let filteredROIs: FilterableROI[] = rois.map((roi) => ({
-    id: roi.id,
-    column: roi.origin.column,
-    row: roi.origin.row,
-    width: roi.width,
-    height: roi.height,
-    surface: roi.surface,
-    feretMinDiameter: roi.feret.minDiameter.length,
-    feretMaxDiameter: roi.feret.maxDiameter.length,
-    feretAspectRatio: roi.feret.aspectRatio,
-    roundness: roi.roundness,
-    solidity: roi.solidity,
-    sphericity: roi.sphericity,
-    fillRatio: roi.fillRatio,
-  }));
+  const filteredROIs: FilterableROI[] = useMemo(() => {
+    const formattedROIs = rois.map((roi) => ({
+      id: roi.id,
+      column: roi.origin.column,
+      row: roi.origin.row,
+      width: roi.width,
+      height: roi.height,
+      surface: roi.surface,
+      feretMinDiameter: roi.feret.minDiameter.length,
+      feretMaxDiameter: roi.feret.maxDiameter.length,
+      feretAspectRatio: roi.feret.aspectRatio,
+      roundness: roi.roundness,
+      solidity: roi.solidity,
+      sphericity: roi.sphericity,
+      fillRatio: roi.fillRatio,
+    }));
 
-  filteredROIs = filteredROIs.filter((filteredROI) => {
-    return filters.every((filter) => {
-      if (filter.column === exclude) {
+    const results = formattedROIs.filter((filteredROI) => {
+      return filters.every((filter) => {
+        if (filter.column === exclude) {
+          return true;
+        }
+        if (filter.min && filter.max) {
+          return (
+            filteredROI[filter.column] >= filter.min &&
+            filteredROI[filter.column] <= filter.max
+          );
+        } else if (filter.min) {
+          return filteredROI[filter.column] >= filter.min;
+        } else if (filter.max) {
+          return filteredROI[filter.column] <= filter.max;
+        }
         return true;
-      }
-      if (filter.min && filter.max) {
-        return (
-          filteredROI[filter.column] >= filter.min &&
-          filteredROI[filter.column] <= filter.max
-        );
-      } else if (filter.min) {
-        return filteredROI[filter.column] >= filter.min;
-      } else if (filter.max) {
-        return filteredROI[filter.column] <= filter.max;
-      }
-      return true;
+      });
     });
-  });
+
+    return results;
+  }, [exclude, filters, rois]);
 
   return filteredROIs;
 }
