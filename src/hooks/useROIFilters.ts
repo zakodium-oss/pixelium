@@ -5,19 +5,19 @@ import useROIContext from '../components/context/ROIContext';
 import useROIs from './useROIs';
 
 export type FilterableROI = {
-  id?: number;
-  column?: number;
-  row?: number;
-  width?: number;
-  height?: number;
-  surface?: number;
-  feretMinDiameter?: number;
-  feretMaxDiameter?: number;
-  feretAspectRatio?: number;
-  roundness?: number;
-  solidity?: number;
-  sphericity?: number;
-  fillRatio?: number;
+  id: number;
+  column: number;
+  row: number;
+  width: number;
+  height: number;
+  surface: number;
+  feretMinDiameter: number;
+  feretMaxDiameter: number;
+  feretAspectRatio: number;
+  roundness: number;
+  solidity: number;
+  sphericity: number;
+  fillRatio: number;
 };
 
 export default function useROIFilters({
