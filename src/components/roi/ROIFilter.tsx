@@ -61,12 +61,11 @@ function ROIFilter({
   }, [filters, column]);
 
   const stepSize = useMemo(() => {
-    return ['id', 'column', 'row', 'width', 'height', 'surface'].includes(
-      column,
-    )
-      ? 1
-      : 0.01;
-  }, [column]);
+    for (const roi of filteredROIs) {
+      if (!Number.isInteger(roi[column])) return 0.01;
+    }
+    return 1;
+  }, [column, filteredROIs]);
 
   return (
     <div
