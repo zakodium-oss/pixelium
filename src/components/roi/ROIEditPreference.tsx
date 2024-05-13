@@ -65,9 +65,9 @@ function ROIEditPreference() {
   const changeChecked = useCallback(
     (column: RoiColumn, checked: boolean) => {
       roiDispatch({
-        type: 'UPDATE_FILTER',
+        type: 'REMOVE_FILTER',
         payload: {
-          roiFilter: { column, min: '', max: '' },
+          column,
         },
       });
       setShownColumns(

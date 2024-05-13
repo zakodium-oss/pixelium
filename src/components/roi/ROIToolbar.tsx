@@ -72,10 +72,8 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
   function resetFilters() {
     for (const filter of filters) {
       roiDispatch({
-        type: 'UPDATE_FILTER',
-        payload: {
-          roiFilter: { column: filter.column, min: '', max: '' },
-        },
+        type: 'REMOVE_FILTER',
+        payload: { column: filter.column },
       });
     }
   }

@@ -30,11 +30,7 @@ function ROITable({ identifier }: ROITableProps) {
 
   const hasFilter = useCallback(
     (column: string) => {
-      const columnFilter = filters.find((f) => f.column === column) ?? {
-        column,
-        min: '',
-        max: '',
-      };
+      const columnFilter = filters.find((f) => f.column === column);
       if (!columnFilter) return false;
       return (
         typeof columnFilter.min === 'number' ||

@@ -5,8 +5,8 @@ import { DispatchContext } from './DispatchContext';
 
 export type RoiFilter = {
   column: string;
-  min?: number | string;
-  max?: number | string;
+  min?: number;
+  max?: number;
 };
 
 export interface ROIState {
@@ -24,8 +24,9 @@ export default function useROIContext() {
 }
 
 const UPDATE_FILTER = 'UPDATE_FILTER';
+const REMOVE_FILTER = 'REMOVE_FILTER';
 
-export type ROIActions = UpdateFilterAction;
+export type ROIActions = UpdateFilterAction | RemoveFilterAction;
 
 export type ROIActionType<Action, Payload = void> = Payload extends void
   ? { type: Action }
@@ -34,6 +35,11 @@ export type ROIActionType<Action, Payload = void> = Payload extends void
 export type UpdateFilterAction = ROIActionType<
   typeof UPDATE_FILTER,
   { roiFilter: RoiFilter }
+>;
+
+export type RemoveFilterAction = ROIActionType<
+  typeof REMOVE_FILTER,
+  { column: string }
 >;
 
 export function updateFilter(
@@ -54,10 +60,19 @@ export function updateFilter(
   draft.filters = [...otherFilters, newFilter];
 }
 
+export function removeFilter(
+  draft: Draft<ROIState>,
+  payload: RemoveFilterAction['payload'],
+) {
+  draft.filters = draft.filters.filter((f) => f.column !== payload.column);
+}
+
 function innerROIReducer(draft: Draft<ROIState>, action: ROIActions) {
   switch (action.type) {
     case UPDATE_FILTER:
       return updateFilter(draft, action.payload);
+    case REMOVE_FILTER:
+      return removeFilter(draft, action.payload);
     default:
       throw new Error('Unknown action type in roi reducer.');
   }
