@@ -20,6 +20,12 @@ export type FilterableROI = {
   fillRatio: number;
 };
 
+type MinMaxValue = {
+  column: string;
+  min: number;
+  max: number;
+};
+
 export default function useROIFilters({
   identifier,
   exclude,
@@ -69,5 +75,16 @@ export default function useROIFilters({
     return results;
   }, [exclude, filters, rois]);
 
-  return filteredROIs;
+  const minMaxValues = useMemo(() => {
+    let values: MinMaxValue[] = [];
+    for (const column of Object.keys(filteredROIs[0])) {
+      const colValues = filteredROIs.map((roi) => roi[column]);
+      const min = Math.min(...colValues);
+      const max = Math.max(...colValues);
+      values.push({ column, min, max });
+    }
+    return values;
+  }, [filteredROIs]);
+
+  return { filteredROIs, minMaxValues };
 }

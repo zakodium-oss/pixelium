@@ -22,7 +22,7 @@ function ROIFilter({
   const roiDispatch = useROIDispatch();
 
   const { filters } = useROIContext();
-  const filteredROIs = useROIFilters({
+  const { filteredROIs, minMaxValues } = useROIFilters({
     identifier,
     exclude: column,
   });
@@ -53,11 +53,14 @@ function ROIFilter({
   }, [roiDispatch, column]);
 
   const minMax = useMemo(() => {
-    const values = filteredROIs.map((roi) => roi[column]);
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-    return { column, min, max };
-  }, [filteredROIs, column]);
+    return (
+      minMaxValues.find((minMaxValue) => minMaxValue.column === column) ?? {
+        column,
+        min: 0,
+        max: 0,
+      }
+    );
+  }, [minMaxValues, column]);
 
   const columnFilter = useMemo(() => {
     return filters.find((f) => f.column === column);
@@ -86,7 +89,7 @@ function ROIFilter({
   }, [columnFilter, minMax]);
 
   useEffect(() => {
-    if (columnFilter?.min === minMax.min && columnFilter.max === minMax.max) {
+    if (columnFilter?.min === minMax.min && columnFilter?.max === minMax.max) {
       removeFilter();
     }
   }, [columnFilter, minMax, removeFilter]);
