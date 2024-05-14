@@ -78,18 +78,7 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
     }
   }
 
-  const hasFilters = useCallback(() => {
-    if (filters.length === 0) return false;
-    for (const columnFilter of filters) {
-      if (
-        typeof columnFilter.min === 'number' ||
-        typeof columnFilter.max === 'number'
-      ) {
-        return true;
-      }
-    }
-    return false;
-  }, [filters]);
+  const hasFilters = filters.length > 0;
 
   return (
     <PanelHeader
@@ -106,7 +95,7 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
           />
           <Toolbar.Item
             tooltip="Reset filters"
-            disabled={!hasFilters()}
+            disabled={!hasFilters}
             icon={<MdFilterAltOff size={20} />}
             onClick={resetFilters}
           />

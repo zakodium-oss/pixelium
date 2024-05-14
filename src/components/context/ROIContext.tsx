@@ -60,6 +60,11 @@ export function updateMin(
   }
 
   if (
+    updateValue === payload.min &&
+    (oldFilter?.max === payload.max || oldFilter?.max === undefined)
+  ) {
+    draft.filters = otherFilters;
+  } else if (
     updateValue !== undefined &&
     updateValue < (oldFilter?.max ?? payload.max)
   ) {
@@ -90,6 +95,11 @@ export function updateMax(
   }
 
   if (
+    updateValue === payload.max &&
+    (oldFilter?.min === payload.min || oldFilter?.min === undefined)
+  ) {
+    draft.filters = otherFilters;
+  } else if (
     updateValue !== undefined &&
     updateValue > (oldFilter?.min ?? payload.min)
   ) {

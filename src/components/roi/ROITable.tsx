@@ -1,7 +1,7 @@
 import { Button, Popover } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import startCase from 'lodash/startCase';
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { MdFilterAlt } from 'react-icons/md';
 import { Table, ValueRenderers } from 'react-science/ui';
 
@@ -28,17 +28,9 @@ function ROITable({ identifier }: ROITableProps) {
   const { filters } = useROIContext();
   const { filteredROIs } = useROIFilters({ identifier });
 
-  const hasFilter = useCallback(
-    (column: string) => {
-      const columnFilter = filters.find((f) => f.column === column);
-      if (!columnFilter) return false;
-      return (
-        typeof columnFilter.min === 'number' ||
-        typeof columnFilter.max === 'number'
-      );
-    },
-    [filters],
-  );
+  function hasFilter(column: string) {
+    return filters.some((f) => f.column === column);
+  }
 
   const preferences = usePreferences();
 

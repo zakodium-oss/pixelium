@@ -1,6 +1,6 @@
 import { FormGroup, RangeSlider } from '@blueprintjs/core';
 import { xHistogram, xyToXYObject } from 'ml-spectra-processing';
-import { memo, useState, useEffect, useMemo, useCallback } from 'react';
+import { memo, useState, useMemo, useCallback } from 'react';
 import { Plot, BarSeries, Axis } from 'react-plot';
 
 import useROIFilters from '../../hooks/useROIFilters';
@@ -105,12 +105,6 @@ function ROIFilter({
     setInputMin(minMax.min);
     setInputMax(minMax.max);
   }, [roiDispatch, column, minMax]);
-
-  useEffect(() => {
-    if (columnFilter?.min === minMax.min && columnFilter?.max === minMax.max) {
-      removeFilter();
-    }
-  }, [columnFilter, minMax, removeFilter]);
 
   return (
     <div
