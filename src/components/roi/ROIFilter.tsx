@@ -2,7 +2,6 @@ import { FormGroup, RangeSlider } from '@blueprintjs/core';
 import { xHistogram, xyToXYObject } from 'ml-spectra-processing';
 import { memo, useState, useEffect, useMemo, useCallback } from 'react';
 import { Plot, BarSeries, Axis } from 'react-plot';
-import { useDebounce } from 'react-use';
 
 import useROIFilters from '../../hooks/useROIFilters';
 import useROIContext, {
@@ -42,41 +41,6 @@ function ROIFilter({
     );
   }, [minMaxValues, column]);
 
-  const updateMin = useCallback(
-    (newFilter: RoiFilter) => {
-      roiDispatch({
-        type: 'UPDATE_MIN',
-        payload: {
-          roiFilter: newFilter,
-          max: minMax.max,
-        },
-      });
-    },
-    [minMax.max, roiDispatch],
-  );
-
-  const updateMax = useCallback(
-    (newFilter: RoiFilter) => {
-      roiDispatch({
-        type: 'UPDATE_MAX',
-        payload: {
-          roiFilter: newFilter,
-          min: minMax.min,
-        },
-      });
-    },
-    [minMax.min, roiDispatch],
-  );
-
-  const removeFilter = useCallback(() => {
-    roiDispatch({
-      type: 'REMOVE_FILTER',
-      payload: {
-        column,
-      },
-    });
-  }, [roiDispatch, column]);
-
   const columnFilter = useMemo(() => {
     return filters.find((f) => f.column === column);
   }, [filters, column]);
@@ -95,13 +59,52 @@ function ROIFilter({
     ];
   }, [columnFilter, minMax]);
 
-  const inputMin = useMemo(() => {
-    return Math.max(Number(columnFilter?.min) || minMax.min, minMax.min);
-  }, [columnFilter, minMax]);
+  const [inputMin, setInputMin] = useState(
+    Math.max(Number(columnFilter?.min) || minMax.min, minMax.min),
+  );
 
-  const inputMax = useMemo(() => {
-    return Math.min(Number(columnFilter?.max) || minMax.max, minMax.max);
-  }, [columnFilter, minMax]);
+  const [inputMax, setInputMax] = useState(
+    Math.min(Number(columnFilter?.max) || minMax.max, minMax.max),
+  );
+
+  const updateMin = useCallback(
+    (newFilter: RoiFilter) => {
+      roiDispatch({
+        type: 'UPDATE_MIN',
+        payload: {
+          roiFilter: newFilter,
+          min: minMax.min,
+          max: minMax.max,
+        },
+      });
+    },
+    [minMax, roiDispatch],
+  );
+
+  const updateMax = useCallback(
+    (newFilter: RoiFilter) => {
+      roiDispatch({
+        type: 'UPDATE_MAX',
+        payload: {
+          roiFilter: newFilter,
+          min: minMax.min,
+          max: minMax.max,
+        },
+      });
+    },
+    [minMax, roiDispatch],
+  );
+
+  const removeFilter = useCallback(() => {
+    roiDispatch({
+      type: 'REMOVE_FILTER',
+      payload: {
+        column,
+      },
+    });
+    setInputMin(minMax.min);
+    setInputMax(minMax.max);
+  }, [roiDispatch, column, minMax]);
 
   useEffect(() => {
     if (columnFilter?.min === minMax.min && columnFilter?.max === minMax.max) {
@@ -137,6 +140,8 @@ function ROIFilter({
               onChange={(value) => {
                 updateMin({ column, min: value[0] });
                 updateMax({ column, max: value[1] });
+                setInputMin(value[0]);
+                setInputMax(value[1]);
               }}
             />
           </div>
@@ -151,25 +156,25 @@ function ROIFilter({
         }}
       >
         <FormGroup label="Min">
-          <DebouncedInput
-            type="number"
+          <Input
             value={inputMin}
             onChange={(value) => {
               updateMin({ column, min: value });
+              setInputMin(value);
             }}
+            onBlur={() => setInputMin(columnFilter?.min || minMax.min)}
             stepSize={stepSize}
-            placeholder="min"
           />
         </FormGroup>
         <FormGroup label="Max">
-          <DebouncedInput
-            type="number"
+          <Input
             value={inputMax}
             onChange={(value) => {
               updateMax({ column, max: value });
+              setInputMax(value);
             }}
+            onBlur={() => setInputMax(columnFilter?.max || minMax.max)}
             stepSize={stepSize}
-            placeholder="max"
           />
         </FormGroup>
       </div>
@@ -223,38 +228,22 @@ function Histogram({
   );
 }
 
-function DebouncedInput({
-  value: initialValue,
-  onChange,
+function Input({
   stepSize,
-  debounce = 800,
+  onChange,
   ...props
 }: {
-  value: number;
-  onChange: (value: number) => void;
   stepSize: number;
-  debounce?: number;
+  onChange: (value: number) => void;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
-  const [value, setValue] = useState(initialValue);
-
-  useDebounce(
-    () => {
-      onChange(value);
-    },
-    debounce,
-    [value],
-  );
-
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
-
   return (
     <input
       {...props}
-      value={value}
+      type="number"
       step={stepSize}
-      onChange={(e) => setValue(Number(e.target.value))}
+      onChange={(e) => {
+        onChange(Number(e.target.value));
+      }}
       style={{
         fontSize: 12,
         border: 'solid 1px lightGray',

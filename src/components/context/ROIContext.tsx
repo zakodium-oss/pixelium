@@ -31,12 +31,12 @@ export type ROIActionType<Action, Payload = void> = Payload extends void
 
 export type UpdateMinAction = ROIActionType<
   'UPDATE_MIN',
-  { roiFilter: RoiFilter; max: number }
+  { roiFilter: RoiFilter; min: number; max: number }
 >;
 
 export type UpdateMaxAction = ROIActionType<
   'UPDATE_MAX',
-  { roiFilter: RoiFilter; min: number }
+  { roiFilter: RoiFilter; min: number; max: number }
 >;
 
 export type RemoveFilterAction = ROIActionType<
@@ -54,7 +54,10 @@ export function updateMin(
   const oldFilter = oldFilters.find((f) => f.column === column);
   const otherFilters = oldFilters.filter((f) => f.column !== column) ?? [];
 
-  const updateValue = payload.roiFilter.min;
+  let updateValue = payload.roiFilter.min;
+  if (updateValue !== undefined && updateValue < payload.min) {
+    updateValue = payload.min;
+  }
 
   if (
     updateValue !== undefined &&
@@ -66,6 +69,8 @@ export function updateMin(
       max: oldFilter?.max,
     };
     draft.filters = [...otherFilters, newFilter];
+  } else {
+    draft.filters = oldFilters;
   }
 }
 
@@ -79,7 +84,10 @@ export function updateMax(
   const oldFilter = oldFilters.find((f) => f.column === column);
   const otherFilters = oldFilters.filter((f) => f.column !== column) ?? [];
 
-  const updateValue = payload.roiFilter.max;
+  let updateValue = payload.roiFilter.max;
+  if (updateValue !== undefined && updateValue > payload.max) {
+    updateValue = payload.max;
+  }
 
   if (
     updateValue !== undefined &&
@@ -91,6 +99,8 @@ export function updateMax(
       max: updateValue,
     };
     draft.filters = [...otherFilters, newFilter];
+  } else {
+    draft.filters = oldFilters;
   }
 }
 
