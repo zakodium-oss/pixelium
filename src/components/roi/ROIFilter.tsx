@@ -89,6 +89,41 @@ function ROIFilter({
     return Math.min(Number(columnFilter?.max) || minMax.max, minMax.max);
   }, [columnFilter, minMax]);
 
+  const updateInputFilter = useCallback(
+    (value: number, inputType: 'min' | 'max') => {
+      let min = 0;
+      let max = 0;
+      switch (inputType) {
+        case 'min':
+          if (value > (columnFilter?.max ?? minMax.max)) {
+            min = columnFilter?.max ?? minMax.max;
+            max = value;
+          } else {
+            min = value;
+            max = columnFilter?.max ?? minMax.max;
+          }
+          break;
+        case 'max':
+          if (value < (columnFilter?.min ?? minMax.min)) {
+            min = value;
+            max = columnFilter?.min ?? minMax.min;
+          } else {
+            min = columnFilter?.min ?? minMax.min;
+            max = value;
+          }
+          break;
+        default:
+          break;
+      }
+      updateFilter({
+        column,
+        min,
+        max,
+      });
+    },
+    [column, columnFilter, minMax, updateFilter],
+  );
+
   useEffect(() => {
     if (columnFilter?.min === minMax.min && columnFilter?.max === minMax.max) {
       removeFilter();
@@ -140,11 +175,7 @@ function ROIFilter({
             type="number"
             value={inputMin}
             onChange={(value) => {
-              updateFilter({
-                column,
-                min: value,
-                max: columnFilter?.max ?? minMax.max,
-              });
+              updateInputFilter(value, 'min');
             }}
             stepSize={stepSize}
             placeholder="min"
@@ -155,11 +186,7 @@ function ROIFilter({
             type="number"
             value={inputMax}
             onChange={(value) => {
-              updateFilter({
-                column,
-                min: columnFilter?.min ?? minMax.min,
-                max: value,
-              });
+              updateInputFilter(value, 'max');
             }}
             stepSize={stepSize}
             placeholder="max"
