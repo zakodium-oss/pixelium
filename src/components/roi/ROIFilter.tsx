@@ -2,6 +2,7 @@ import { FormGroup, RangeSlider } from '@blueprintjs/core';
 import { xHistogram, xyToXYObject } from 'ml-spectra-processing';
 import { memo, useState, useEffect, useMemo, useCallback } from 'react';
 import { Plot, BarSeries, Axis } from 'react-plot';
+import { useDebounce } from 'react-use';
 
 import useROIFilters from '../../hooks/useROIFilters';
 import useROIContext, {
@@ -229,17 +230,17 @@ function DebouncedInput({
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
   const [value, setValue] = useState(initialValue);
 
+  useDebounce(
+    () => {
+      onChange(value);
+    },
+    debounce,
+    [value],
+  );
+
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (value !== initialValue) onChange(value);
-    }, debounce);
-
-    return () => clearTimeout(timeout);
-  }, [debounce, initialValue, onChange, value]);
 
   return (
     <input
