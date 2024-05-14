@@ -211,10 +211,10 @@ function Histogram({
   const activeHistData = useMemo(() => {
     return histData.filter(
       (point) =>
-        (point.x > Number(columnFilterValue?.min) &&
-          point.x < Number(columnFilterValue?.max)) ||
-        columnFilterValue?.min === undefined ||
-        columnFilterValue?.max === undefined,
+        (point.x > Number(columnFilterValue?.min) ||
+          columnFilterValue?.min === undefined) &&
+        (point.x < Number(columnFilterValue?.max) ||
+          columnFilterValue?.max === undefined),
     );
   }, [histData, columnFilterValue]);
 
