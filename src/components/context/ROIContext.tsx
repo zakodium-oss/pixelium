@@ -23,15 +23,20 @@ export default function useROIContext() {
   return useContext(ROIContext);
 }
 
-export type ROIActions = UpdateFilterAction | RemoveFilterAction;
+export type ROIActions = UpdateMinAction | UpdateMaxAction | RemoveFilterAction;
 
 export type ROIActionType<Action, Payload = void> = Payload extends void
   ? { type: Action }
   : { type: Action; payload: Payload };
 
-export type UpdateFilterAction = ROIActionType<
-  'UPDATE_FILTER',
-  { roiFilter: RoiFilter }
+export type UpdateMinAction = ROIActionType<
+  'UPDATE_MIN',
+  { roiFilter: RoiFilter; max: number }
+>;
+
+export type UpdateMaxAction = ROIActionType<
+  'UPDATE_MAX',
+  { roiFilter: RoiFilter; min: number }
 >;
 
 export type RemoveFilterAction = ROIActionType<
@@ -39,9 +44,9 @@ export type RemoveFilterAction = ROIActionType<
   { column: string }
 >;
 
-export function updateFilter(
+export function updateMin(
   draft: Draft<ROIState>,
-  payload: UpdateFilterAction['payload'],
+  payload: UpdateMinAction['payload'],
 ) {
   const oldFilters = draft.filters;
   const column = payload.roiFilter.column;
@@ -49,12 +54,44 @@ export function updateFilter(
   const oldFilter = oldFilters.find((f) => f.column === column);
   const otherFilters = oldFilters.filter((f) => f.column !== column) ?? [];
 
-  const newFilter = {
-    column,
-    min: payload.roiFilter.min ?? oldFilter?.min,
-    max: payload.roiFilter.max ?? oldFilter?.max,
-  };
-  draft.filters = [...otherFilters, newFilter];
+  const updateValue = payload.roiFilter.min;
+
+  if (
+    updateValue !== undefined &&
+    updateValue < (oldFilter?.max ?? payload.max)
+  ) {
+    const newFilter = {
+      column,
+      min: updateValue,
+      max: oldFilter?.max,
+    };
+    draft.filters = [...otherFilters, newFilter];
+  }
+}
+
+export function updateMax(
+  draft: Draft<ROIState>,
+  payload: UpdateMaxAction['payload'],
+) {
+  const oldFilters = draft.filters;
+  const column = payload.roiFilter.column;
+
+  const oldFilter = oldFilters.find((f) => f.column === column);
+  const otherFilters = oldFilters.filter((f) => f.column !== column) ?? [];
+
+  const updateValue = payload.roiFilter.max;
+
+  if (
+    updateValue !== undefined &&
+    updateValue > (oldFilter?.min ?? payload.min)
+  ) {
+    const newFilter = {
+      column,
+      min: oldFilter?.min,
+      max: updateValue,
+    };
+    draft.filters = [...otherFilters, newFilter];
+  }
 }
 
 export function removeFilter(
@@ -66,8 +103,10 @@ export function removeFilter(
 
 function innerROIReducer(draft: Draft<ROIState>, action: ROIActions) {
   switch (action.type) {
-    case 'UPDATE_FILTER':
-      return updateFilter(draft, action.payload);
+    case 'UPDATE_MIN':
+      return updateMin(draft, action.payload);
+    case 'UPDATE_MAX':
+      return updateMax(draft, action.payload);
     case 'REMOVE_FILTER':
       return removeFilter(draft, action.payload);
     default:
