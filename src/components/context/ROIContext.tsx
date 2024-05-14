@@ -23,9 +23,6 @@ export default function useROIContext() {
   return useContext(ROIContext);
 }
 
-const UPDATE_FILTER = 'UPDATE_FILTER';
-const REMOVE_FILTER = 'REMOVE_FILTER';
-
 export type ROIActions = UpdateFilterAction | RemoveFilterAction;
 
 export type ROIActionType<Action, Payload = void> = Payload extends void
@@ -33,12 +30,12 @@ export type ROIActionType<Action, Payload = void> = Payload extends void
   : { type: Action; payload: Payload };
 
 export type UpdateFilterAction = ROIActionType<
-  typeof UPDATE_FILTER,
+  'UPDATE_FILTER',
   { roiFilter: RoiFilter }
 >;
 
 export type RemoveFilterAction = ROIActionType<
-  typeof REMOVE_FILTER,
+  'REMOVE_FILTER',
   { column: string }
 >;
 
@@ -69,9 +66,9 @@ export function removeFilter(
 
 function innerROIReducer(draft: Draft<ROIState>, action: ROIActions) {
   switch (action.type) {
-    case UPDATE_FILTER:
+    case 'UPDATE_FILTER':
       return updateFilter(draft, action.payload);
-    case REMOVE_FILTER:
+    case 'REMOVE_FILTER':
       return removeFilter(draft, action.payload);
     default:
       throw new Error('Unknown action type in roi reducer.');
