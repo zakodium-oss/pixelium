@@ -6,6 +6,7 @@ interface FastSelectorProps<T> {
   options: T[];
   selected: T | undefined;
   setSelected: (value: T) => void;
+  defaultItem?: T | undefined;
 }
 
 const Container = styled.div`
@@ -19,7 +20,7 @@ const List = styled.ul`
   border-radius: 6px;
 `;
 
-const ListElement = styled.li<{ selected: boolean }>`
+const ListElement = styled.li<{ selected: boolean; defaultItem: boolean }>`
   padding: 10px;
   border: 1px solid #9e9e9e;
   border-top-width: 0px;
@@ -41,7 +42,8 @@ const ListElement = styled.li<{ selected: boolean }>`
     border-bottom-right-radius: 6px;
   }
 
-  background-color: ${({ selected }) => (selected ? 'royalblue' : 'white')};
+  background-color: ${({ selected, defaultItem }) =>
+    selected ? 'royalblue' : defaultItem ? 'lightgray' : 'white'};
   color: ${({ selected }) => (selected ? 'white' : 'black')};
 `;
 
@@ -49,6 +51,7 @@ export default function FastSelector<T extends string>({
   options,
   selected,
   setSelected,
+  defaultItem,
 }: FastSelectorProps<T>) {
   // eslint-disable-next-line unicorn/no-array-reduce
   const refs: { [key: string]: RefObject<HTMLLIElement> } = options.reduce(
@@ -106,6 +109,7 @@ export default function FastSelector<T extends string>({
             selected={option === selected}
             onClick={() => setSelected(option)}
             ref={refs[option]}
+            defaultItem={option === defaultItem}
           >
             {option}
           </ListElement>

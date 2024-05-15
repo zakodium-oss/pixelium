@@ -19,19 +19,15 @@ function ConvertColorModal({ previewImageIdentifier }: ConvertColorModalProps) {
 
   const { pipelined } = useImage(opIdentifier);
 
-  const newConvertOptions = useMemo(() => {
-    const canConvert = new Map<ImageColorModel, ImageColorModel[]>([
-      ['GREY', ['GREYA', 'RGB', 'RGBA']],
-      ['GREYA', ['GREY', 'RGB', 'RGBA']],
-      ['RGB', ['GREY', 'GREYA', 'RGBA']],
-      ['RGBA', ['GREY', 'GREYA', 'RGB']],
-      ['BINARY', ['GREY', 'RGB', 'RGBA']],
-    ]);
-    return canConvert.get(pipelined.colorModel);
-  }, [pipelined]);
+  const convertOptionsList: ImageColorModel[] = [
+    'GREY',
+    'GREYA',
+    'RGB',
+    'RGBA',
+  ];
 
   const defaultOptions: ConvertColorOptions = {
-    colorModel: newConvertOptions?.[0] || 'GREY',
+    colorModel: pipelined.colorModel,
   };
 
   const [convertOptions, setConvertOptions] =
@@ -43,7 +39,11 @@ function ConvertColorModal({ previewImageIdentifier }: ConvertColorModalProps) {
     setConvertError(undefined);
     if (pipelined instanceof Image) {
       try {
-        return pipelined.convertColor(convertOptions.colorModel);
+        if (convertOptions.colorModel === pipelined.colorModel) {
+          return pipelined;
+        } else {
+          return pipelined.convertColor(convertOptions.colorModel);
+        }
       } catch (error: any) {
         setConvertError(error.message);
         return null;
@@ -56,20 +56,23 @@ function ConvertColorModal({ previewImageIdentifier }: ConvertColorModalProps) {
   const { isOpen, close } = useModal('convertColor');
 
   const applyConversion = useCallback(() => {
-    dataDispatch({
-      type: SET_CONVERT_COLOR,
-      payload: {
-        identifier: previewImageIdentifier,
-        opIdentifier,
-        options: convertOptions,
-      },
-    });
+    if (convertOptions.colorModel !== pipelined.colorModel) {
+      dataDispatch({
+        type: SET_CONVERT_COLOR,
+        payload: {
+          identifier: previewImageIdentifier,
+          opIdentifier,
+          options: convertOptions,
+        },
+      });
+    }
     close();
   }, [
     close,
     convertOptions,
     dataDispatch,
     opIdentifier,
+    pipelined.colorModel,
     previewImageIdentifier,
   ]);
 
@@ -86,11 +89,12 @@ function ConvertColorModal({ previewImageIdentifier }: ConvertColorModalProps) {
       algoError={convertError}
     >
       <FastSelector
-        options={newConvertOptions || []}
+        options={convertOptionsList}
         selected={convertOptions.colorModel}
         setSelected={(convertOpt) =>
           setConvertOptions({ colorModel: convertOpt })
         }
+        defaultItem={pipelined.colorModel}
       />
     </PreviewModal>
   );

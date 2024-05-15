@@ -35,6 +35,7 @@ function FilterTool() {
         label: 'Convert color',
         data: 'convertColor',
         type: 'option',
+        disabled: isBinary(pipelined),
       },
       {
         label: 'Blur',
