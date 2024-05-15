@@ -77,6 +77,9 @@ export default function useROIFilters({
 
   const minMaxValues = useMemo(() => {
     let values: MinMaxValue[] = [];
+    if (filteredROIs.length === 0) {
+      return values;
+    }
     for (const column of Object.keys(filteredROIs[0])) {
       const colValues = filteredROIs.map((roi) => roi[column]);
       const min = Math.min(...colValues);
