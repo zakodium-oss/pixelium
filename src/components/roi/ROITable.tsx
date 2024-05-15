@@ -1,7 +1,7 @@
 import { Button, Popover } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import startCase from 'lodash/startCase';
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { MdFilterAlt } from 'react-icons/md';
 import { Table, ValueRenderers } from 'react-science/ui';
 
@@ -21,9 +21,10 @@ const Empty = styled.div`
 
 interface ROITableProps {
   identifier: string;
+  setDefaultOpened: (value: boolean) => void;
 }
 
-function ROITable({ identifier }: ROITableProps) {
+function ROITable({ identifier, setDefaultOpened }: ROITableProps) {
   const rois = useROIs(identifier);
   const { filters } = useROIContext();
   const { filteredROIs } = useROIFilters({ identifier });
@@ -38,6 +39,12 @@ function ROITable({ identifier }: ROITableProps) {
     () => preferences.rois.columns,
     [preferences.rois.columns],
   );
+
+  useEffect(() => {
+    if (rois.length > 0) {
+      setDefaultOpened(true);
+    }
+  });
 
   if (rois.length === 0) return <Empty>No ROIs generated</Empty>;
 

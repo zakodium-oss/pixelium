@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { Accordion } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
@@ -17,10 +17,12 @@ function ROIAccordion() {
     [view.editROIPreference],
   );
 
+  const [defaultOpened, setDefaultOpened] = useState(false);
+
   if (currentTab === undefined) return null;
 
   return (
-    <Accordion.Item title="ROIs">
+    <Accordion.Item title="ROIs" defaultOpened={defaultOpened}>
       {isEditing ? (
         <ROIEditColumnPreference />
       ) : (
@@ -33,7 +35,10 @@ function ROIAccordion() {
           }}
         >
           <ROIToolbar identifier={currentTab} />
-          <ROITable identifier={currentTab} />
+          <ROITable
+            identifier={currentTab}
+            setDefaultOpened={setDefaultOpened}
+          />
         </div>
       )}
     </Accordion.Item>
