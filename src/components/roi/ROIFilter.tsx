@@ -53,17 +53,13 @@ function ROIFilter({
   };
 
   const sliderValue: [number, number] = [
-    Math.max(Number(columnFilter?.min) || minMax.min, minMax.min),
-    Math.min(Number(columnFilter?.max) || minMax.max, minMax.max),
+    columnFilter?.min || minMax.min,
+    columnFilter?.max || minMax.max,
   ];
 
-  const [inputMin, setInputMin] = useState(
-    Math.max(Number(columnFilter?.min) || minMax.min, minMax.min),
-  );
+  const [inputMin, setInputMin] = useState(columnFilter?.min);
 
-  const [inputMax, setInputMax] = useState(
-    Math.min(Number(columnFilter?.max) || minMax.max, minMax.max),
-  );
+  const [inputMax, setInputMax] = useState(columnFilter?.max);
 
   const updateMin = useCallback(
     (newFilter: RoiFilter) => {
@@ -156,6 +152,7 @@ function ROIFilter({
             }}
             onBlur={() => setInputMin(columnFilter?.min || minMax.min)}
             stepSize={stepSize()}
+            placeholder={minMax.min.toString()}
           />
         </FormGroup>
         <FormGroup label="Max">
@@ -167,6 +164,7 @@ function ROIFilter({
             }}
             onBlur={() => setInputMax(columnFilter?.max || minMax.max)}
             stepSize={stepSize()}
+            placeholder={minMax.max.toString()}
           />
         </FormGroup>
       </div>
