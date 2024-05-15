@@ -6,7 +6,7 @@ import { MdFilterAltOff } from 'react-icons/md';
 import { Toolbar, PanelHeader } from 'react-science/ui';
 import { useCopyToClipboard } from 'react-use';
 
-import useROIFilters from '../../hooks/useROIFilters';
+import useOriginalFilteredROIs from '../../hooks/useOriginalFilteredROIs';
 import useROIs from '../../hooks/useROIs';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import { availableRoiColumns } from '../../state/preferences/PreferencesReducer';
@@ -45,6 +45,7 @@ const copyToClipBoardDefaultText = 'Copy to clipboard';
 
 function ROIToolbar({ identifier }: ROIToolbarProps) {
   const rois = useROIs(identifier);
+  const originalFilteredROIs = useOriginalFilteredROIs(identifier);
   const viewDispatch = useViewDispatch();
 
   const [copyToClipBoardText, setCopyToClipBoardText] = useState(
@@ -54,12 +55,12 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
   const [, copyToClipboard] = useCopyToClipboard();
 
   const handleCopyToClipboard = useCallback(() => {
-    copyToClipboard(roisToTSV(rois));
+    copyToClipboard(roisToTSV(originalFilteredROIs));
     setCopyToClipBoardText('Copied!');
     setTimeout(() => {
       setCopyToClipBoardText(copyToClipBoardDefaultText);
     }, 1000);
-  }, [copyToClipboard, rois]);
+  }, [copyToClipboard, originalFilteredROIs]);
 
   const handleEditROIPreference = useCallback(() => {
     viewDispatch({ type: SET_EDIT_ROI_PREFERENCE, payload: true });
@@ -67,7 +68,6 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
 
   const roiDispatch = useROIDispatch();
   const { filters } = useROIContext();
-  const { filteredROIs } = useROIFilters({ identifier });
 
   function resetFilters() {
     for (const filter of filters) {
@@ -82,7 +82,7 @@ function ROIToolbar({ identifier }: ROIToolbarProps) {
 
   return (
     <PanelHeader
-      current={filteredROIs.length}
+      current={originalFilteredROIs.length}
       total={rois.length}
       onClickSettings={handleEditROIPreference}
     >
