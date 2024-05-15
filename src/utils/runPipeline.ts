@@ -36,7 +36,10 @@ export default function runPipeline(
           break;
         }
         case 'CONVERT_COLOR': {
-          if (applyOn instanceof Image) {
+          if (
+            applyOn instanceof Image &&
+            operation.options.colorModel !== applyOn.colorModel
+          ) {
             const result = applyOn.convertColor(operation.options.colorModel);
             pipelineSteps.push({
               identifier: operation.identifier,
