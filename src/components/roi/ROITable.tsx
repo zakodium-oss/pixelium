@@ -56,7 +56,7 @@ function ROITable({ identifier }: ROITableProps) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: 10,
+                gap: 5,
               }}
             >
               <ValueRenderers.Header key={column} value={startCase(column)} />
@@ -68,6 +68,7 @@ function ROITable({ identifier }: ROITableProps) {
                   minimal
                   icon={<MdFilterAlt size={20} />}
                   active={hasFilter(column)}
+                  style={{ padding: 0 }}
                 />
               </Popover>
             </ValueRenderers.Component>
