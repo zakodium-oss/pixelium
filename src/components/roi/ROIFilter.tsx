@@ -27,9 +27,7 @@ function ROIFilter({
     exclude: column,
   });
 
-  const histValues = useMemo(() => {
-    return filteredROIs.map((roi) => roi[column]);
-  }, [filteredROIs, column]);
+  const histValues = filteredROIs.map((roi) => roi[column]);
 
   const minMax = useMemo(() => {
     return (
@@ -41,23 +39,23 @@ function ROIFilter({
     );
   }, [minMaxValues, column]);
 
-  const columnFilter = useMemo(() => {
-    return filters.find((f) => f.column === column);
-  }, [filters, column]);
+  const columnFilter = filters.find((f) => f.column === column);
 
-  const stepSize = useMemo(() => {
+  const stepSize = () => {
+    let step = 1;
     for (const roi of filteredROIs) {
-      if (!Number.isInteger(roi[column])) return 0.01;
+      if (!Number.isInteger(roi[column])) {
+        step = 0.01;
+        break;
+      }
     }
-    return 1;
-  }, [column, filteredROIs]);
+    return step;
+  };
 
-  const sliderValue: [number, number] = useMemo(() => {
-    return [
-      Math.max(Number(columnFilter?.min) || minMax.min, minMax.min),
-      Math.min(Number(columnFilter?.max) || minMax.max, minMax.max),
-    ];
-  }, [columnFilter, minMax]);
+  const sliderValue: [number, number] = [
+    Math.max(Number(columnFilter?.min) || minMax.min, minMax.min),
+    Math.min(Number(columnFilter?.max) || minMax.max, minMax.max),
+  ];
 
   const [inputMin, setInputMin] = useState(
     Math.max(Number(columnFilter?.min) || minMax.min, minMax.min),
@@ -129,7 +127,7 @@ function ROIFilter({
               min={minMax.min}
               max={minMax.max}
               value={sliderValue}
-              stepSize={stepSize}
+              stepSize={stepSize()}
               labelRenderer={false}
               onChange={(value) => {
                 updateMin({ column, min: value[0] });
@@ -157,7 +155,7 @@ function ROIFilter({
               setInputMin(value);
             }}
             onBlur={() => setInputMin(columnFilter?.min || minMax.min)}
-            stepSize={stepSize}
+            stepSize={stepSize()}
           />
         </FormGroup>
         <FormGroup label="Max">
@@ -168,7 +166,7 @@ function ROIFilter({
               setInputMax(value);
             }}
             onBlur={() => setInputMax(columnFilter?.max || minMax.max)}
-            stepSize={stepSize}
+            stepSize={stepSize()}
           />
         </FormGroup>
       </div>
