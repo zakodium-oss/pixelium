@@ -33,16 +33,13 @@ export default function useROIFilter({
 
   const columnFilter = filters.find((f) => f.column === column) ?? minMax;
 
-  const stepSize = () => {
-    let step = 1;
-    for (const roi of filteredColumn) {
-      if (!Number.isInteger(roi)) {
-        step = 0.01;
-        break;
-      }
+  let stepSize = 1;
+  for (const roi of filteredColumn) {
+    if (!Number.isInteger(roi)) {
+      stepSize = 0.01;
+      break;
     }
-    return step;
-  };
+  }
 
   const updateMin = useCallback(
     (newFilter: RoiFilter) => {

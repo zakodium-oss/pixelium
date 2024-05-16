@@ -58,7 +58,7 @@ function ROIFilter({
               min={minMax.min}
               max={minMax.max}
               value={sliderValue}
-              stepSize={stepSize()}
+              stepSize={stepSize}
               labelRenderer={false}
               onChange={(value) => {
                 updateMin({ column, min: value[0] });
@@ -90,7 +90,7 @@ function ROIFilter({
               }
             }}
             onBlur={() => setInputMin(columnFilter?.min)}
-            stepSize={stepSize()}
+            stepSize={stepSize}
             placeholder={minMax.min.toString()}
           />
         </FormGroup>
@@ -106,7 +106,7 @@ function ROIFilter({
               }
             }}
             onBlur={() => setInputMax(columnFilter?.max)}
-            stepSize={stepSize()}
+            stepSize={stepSize}
             placeholder={minMax.max.toString()}
           />
         </FormGroup>
