@@ -1,13 +1,10 @@
 import { FormGroup, RangeSlider } from '@blueprintjs/core';
 import { xHistogram, xyToXYObject } from 'ml-spectra-processing';
-import { memo, useState, useMemo, useCallback } from 'react';
+import { memo, useState, useMemo } from 'react';
 import { Plot, BarSeries, Axis } from 'react-plot';
 
-import useROIFilters from '../../hooks/useROIFilters';
-import useROIContext, {
-  RoiFilter,
-  useROIDispatch,
-} from '../context/ROIContext';
+import useROIFilter from '../../hooks/useROIFilter';
+import { RoiFilter } from '../context/ROIContext';
 
 const histogramWidth = 250;
 const histogramHeight = 120;
@@ -19,86 +16,30 @@ function ROIFilter({
   identifier: string;
   column: string;
 }) {
-  const roiDispatch = useROIDispatch();
-
-  const { filters } = useROIContext();
-  const { filteredROIs, minMaxValues } = useROIFilters({
+  const {
+    filteredColumn,
+    columnFilter,
+    minMax,
+    stepSize,
+    updateMin,
+    updateMax,
+    removeFilter,
+  } = useROIFilter({
     identifier,
-    exclude: column,
+    column,
   });
-
-  const histValues = filteredROIs.map((roi) => roi[column]);
-
-  const minMax = useMemo(() => {
-    return (
-      minMaxValues.find((minMaxValue) => minMaxValue.column === column) ?? {
-        column,
-        min: 0,
-        max: 0,
-      }
-    );
-  }, [minMaxValues, column]);
-
-  const columnFilter = filters.find((f) => f.column === column);
-
-  const stepSize = () => {
-    let step = 1;
-    for (const roi of filteredROIs) {
-      if (!Number.isInteger(roi[column])) {
-        step = 0.01;
-        break;
-      }
-    }
-    return step;
-  };
 
   const sliderValue: [number, number] = [
     columnFilter?.min || minMax.min,
     columnFilter?.max || minMax.max,
   ];
 
-  const [inputMin, setInputMin] = useState(columnFilter?.min);
-
-  const [inputMax, setInputMax] = useState(columnFilter?.max);
-
-  const updateMin = useCallback(
-    (newFilter: RoiFilter) => {
-      roiDispatch({
-        type: 'UPDATE_MIN',
-        payload: {
-          roiFilter: newFilter,
-          min: minMax.min,
-          max: minMax.max,
-        },
-      });
-    },
-    [minMax, roiDispatch],
+  const [inputMin, setInputMin] = useState<number | ''>(
+    columnFilter?.min || minMax.min,
   );
-
-  const updateMax = useCallback(
-    (newFilter: RoiFilter) => {
-      roiDispatch({
-        type: 'UPDATE_MAX',
-        payload: {
-          roiFilter: newFilter,
-          min: minMax.min,
-          max: minMax.max,
-        },
-      });
-    },
-    [minMax, roiDispatch],
+  const [inputMax, setInputMax] = useState<number | ''>(
+    columnFilter?.max || minMax.max,
   );
-
-  const removeFilter = useCallback(() => {
-    roiDispatch({
-      type: 'REMOVE_FILTER',
-      payload: {
-        column,
-      },
-    });
-    setInputMin(minMax.min);
-    setInputMax(minMax.max);
-  }, [roiDispatch, column, minMax]);
 
   return (
     <div
@@ -106,7 +47,7 @@ function ROIFilter({
         padding: 20,
       }}
     >
-      {Math.abs(minMax.max - minMax.min) > 0 && (
+      {minMax.max - minMax.min > 0 && (
         <div
           style={{
             display: 'flex',
@@ -116,7 +57,7 @@ function ROIFilter({
             gap: 10,
           }}
         >
-          <Histogram values={histValues} columnFilterValue={columnFilter} />
+          <Histogram values={filteredColumn} columnFilterValue={columnFilter} />
 
           <div style={{ width: histogramWidth, paddingLeft: 26 }}>
             <RangeSlider
@@ -147,8 +88,12 @@ function ROIFilter({
           <Input
             value={inputMin}
             onChange={(value) => {
-              updateMin({ column, min: value });
-              setInputMin(value);
+              if (value === '') {
+                setInputMin('');
+              } else {
+                updateMin({ column, min: Number(value) });
+                setInputMin(Number(value));
+              }
             }}
             onBlur={() => setInputMin(columnFilter?.min || minMax.min)}
             stepSize={stepSize()}
@@ -159,8 +104,12 @@ function ROIFilter({
           <Input
             value={inputMax}
             onChange={(value) => {
-              updateMax({ column, max: value });
-              setInputMax(value);
+              if (value === '') {
+                setInputMax('');
+              } else {
+                updateMax({ column, max: Number(value) });
+                setInputMax(Number(value));
+              }
             }}
             onBlur={() => setInputMax(columnFilter?.max || minMax.max)}
             stepSize={stepSize()}
@@ -170,7 +119,11 @@ function ROIFilter({
       </div>
       <span
         style={{ color: 'firebrick', cursor: 'pointer' }}
-        onClick={removeFilter}
+        onClick={() => {
+          removeFilter();
+          setInputMin(minMax.min);
+          setInputMax(minMax.max);
+        }}
       >
         Reset filter
       </span>
@@ -224,7 +177,7 @@ function Input({
   ...props
 }: {
   stepSize: number;
-  onChange: (value: number) => void;
+  onChange: (value: string) => void;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
   return (
     <input
@@ -232,7 +185,7 @@ function Input({
       type="number"
       step={stepSize}
       onChange={(e) => {
-        onChange(Number(e.target.value));
+        onChange(e.target.value);
       }}
       style={{
         fontSize: 12,

@@ -1,12 +1,12 @@
 import { Button, Popover } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import startCase from 'lodash/startCase';
-import { memo, useEffect, useMemo } from 'react';
+import { memo, useEffect } from 'react';
 import { MdFilterAlt } from 'react-icons/md';
 import { Table, ValueRenderers } from 'react-science/ui';
 
+import useFilteredROIs from '../../hooks/useFilteredROIs';
 import usePreferences from '../../hooks/usePreferences';
-import useROIFilters from '../../hooks/useROIFilters';
 import useROIs from '../../hooks/useROIs';
 import useROIContext from '../context/ROIContext';
 
@@ -27,7 +27,7 @@ interface ROITableProps {
 function ROITable({ identifier, setDefaultOpened }: ROITableProps) {
   const rois = useROIs(identifier);
   const { filters } = useROIContext();
-  const { filteredROIs } = useROIFilters({ identifier });
+  const filteredROIs = useFilteredROIs(identifier);
 
   function hasFilter(column: string) {
     return filters.some((f) => f.column === column);
@@ -35,10 +35,7 @@ function ROITable({ identifier, setDefaultOpened }: ROITableProps) {
 
   const preferences = usePreferences();
 
-  const columns = useMemo(
-    () => preferences.rois.columns,
-    [preferences.rois.columns],
-  );
+  const columns = preferences.rois.columns;
 
   useEffect(() => {
     if (rois.length > 0) {
