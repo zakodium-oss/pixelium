@@ -8,9 +8,12 @@ export type RoiFilter = {
   min?: number;
   max?: number;
 };
-
 export interface ROIState {
-  filters: RoiFilter[];
+  filters: {
+    column: string;
+    min: number;
+    max: number;
+  }[];
 }
 
 export const initialROIState: ROIState = { filters: [] };
@@ -71,7 +74,7 @@ export function updateMin(
     const newFilter = {
       column,
       min: updateValue,
-      max: oldFilter?.max,
+      max: oldFilter?.max ?? payload.max,
     };
     draft.filters = [...otherFilters, newFilter];
   } else {
@@ -105,7 +108,7 @@ export function updateMax(
   ) {
     const newFilter = {
       column,
-      min: oldFilter?.min,
+      min: oldFilter?.min ?? payload.min,
       max: updateValue,
     };
     draft.filters = [...otherFilters, newFilter];

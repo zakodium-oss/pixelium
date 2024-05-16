@@ -4,7 +4,6 @@ import { memo, useState, useMemo } from 'react';
 import { Plot, BarSeries, Axis } from 'react-plot';
 
 import useROIFilter from '../../hooks/useROIFilter';
-import { RoiFilter } from '../context/ROIContext';
 
 const histogramWidth = 250;
 const histogramHeight = 120;
@@ -29,17 +28,10 @@ function ROIFilter({
     column,
   });
 
-  const sliderValue: [number, number] = [
-    columnFilter?.min || minMax.min,
-    columnFilter?.max || minMax.max,
-  ];
+  const sliderValue: [number, number] = [columnFilter?.min, columnFilter?.max];
 
-  const [inputMin, setInputMin] = useState<number | ''>(
-    columnFilter?.min || minMax.min,
-  );
-  const [inputMax, setInputMax] = useState<number | ''>(
-    columnFilter?.max || minMax.max,
-  );
+  const [inputMin, setInputMin] = useState<number | ''>(columnFilter?.min);
+  const [inputMax, setInputMax] = useState<number | ''>(columnFilter?.max);
 
   return (
     <div
@@ -57,7 +49,7 @@ function ROIFilter({
             gap: 10,
           }}
         >
-          <Histogram values={filteredColumn} columnFilterValue={columnFilter} />
+          <Histogram values={filteredColumn} sliderValue={sliderValue} />
 
           <div style={{ width: histogramWidth, paddingLeft: 26 }}>
             <RangeSlider
@@ -95,7 +87,7 @@ function ROIFilter({
                 setInputMin(Number(value));
               }
             }}
-            onBlur={() => setInputMin(columnFilter?.min || minMax.min)}
+            onBlur={() => setInputMin(columnFilter?.min)}
             stepSize={stepSize()}
             placeholder={minMax.min.toString()}
           />
@@ -111,7 +103,7 @@ function ROIFilter({
                 setInputMax(Number(value));
               }
             }}
-            onBlur={() => setInputMax(columnFilter?.max || minMax.max)}
+            onBlur={() => setInputMax(columnFilter?.max)}
             stepSize={stepSize()}
             placeholder={minMax.max.toString()}
           />
@@ -133,10 +125,10 @@ function ROIFilter({
 
 function Histogram({
   values,
-  columnFilterValue,
+  sliderValue,
 }: {
   values: number[];
-  columnFilterValue: RoiFilter | undefined;
+  sliderValue: [number, number];
 }) {
   const histogram =
     values.length > 0
@@ -153,13 +145,9 @@ function Histogram({
 
   const activeHistData = useMemo(() => {
     return histData.filter(
-      (point) =>
-        (point.x > Number(columnFilterValue?.min) ||
-          columnFilterValue?.min === undefined) &&
-        (point.x < Number(columnFilterValue?.max) ||
-          columnFilterValue?.max === undefined),
+      (point) => point.x >= sliderValue[0] && point.x <= sliderValue[1],
     );
-  }, [histData, columnFilterValue]);
+  }, [histData, sliderValue]);
 
   return (
     <Plot width={histogramWidth} height={histogramHeight}>
