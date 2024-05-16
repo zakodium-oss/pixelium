@@ -23,7 +23,7 @@ export const OP_TYPE_MODAL_MAP: {
   [key in PipelineOperations['type']]: ModalName;
 } = {
   GREY_FILTER: 'grey',
-  CONVERT_COLOR: 'convertColor',
+  CONVERT: 'convert',
   BLUR: 'blur',
   GAUSSIAN_BLUR: 'gaussianBlur',
   INVERT: 'invert',
@@ -48,7 +48,7 @@ export function getModalNameFromOperationType(
 
 export type ModalName =
   | 'grey'
-  | 'convertColor'
+  | 'convert'
   | 'blur'
   | 'gaussianBlur'
   | 'invert'
@@ -87,7 +87,7 @@ export const initialViewState: ViewState = {
   imageViewerProps: {},
   modals: {
     grey: false,
-    convertColor: false,
+    convert: false,
     blur: false,
     gaussianBlur: false,
     invert: false,

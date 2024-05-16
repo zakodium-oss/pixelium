@@ -35,12 +35,15 @@ export default function runPipeline(
           }
           break;
         }
-        case 'CONVERT_COLOR': {
-          if (
-            applyOn instanceof Image &&
-            operation.options.colorModel !== applyOn.colorModel
-          ) {
-            const result = applyOn.convertColor(operation.options.colorModel);
+        case 'CONVERT': {
+          if (applyOn instanceof Image) {
+            let result = applyOn;
+            if (operation.options.colorModel !== applyOn.colorModel) {
+              result = result.convertColor(operation.options.colorModel);
+            }
+            if (operation.options.bitDepth !== applyOn.bitDepth) {
+              result = result.convertBitDepth(operation.options.bitDepth);
+            }
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
