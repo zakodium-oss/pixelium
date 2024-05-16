@@ -2,6 +2,7 @@ import { FormGroup, RangeSlider } from '@blueprintjs/core';
 import { xHistogram, xyToXYObject } from 'ml-spectra-processing';
 import { memo, useState, useMemo } from 'react';
 import { Plot, BarSeries, Axis } from 'react-plot';
+import { Button } from 'react-science/ui';
 
 import useROIFilter from '../../hooks/useROIFilter';
 
@@ -36,7 +37,7 @@ function ROIFilter({
   return (
     <div
       style={{
-        padding: 20,
+        padding: 10,
       }}
     >
       {minMax.max - minMax.min > 0 && (
@@ -46,6 +47,7 @@ function ROIFilter({
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            padding: 10,
             gap: 10,
           }}
         >
@@ -109,8 +111,9 @@ function ROIFilter({
           />
         </FormGroup>
       </div>
-      <span
-        style={{ color: 'firebrick', cursor: 'pointer' }}
+      <Button
+        intent="danger"
+        minimal
         onClick={() => {
           removeFilter();
           setInputMin(minMax.min);
@@ -118,7 +121,7 @@ function ROIFilter({
         }}
       >
         Reset filter
-      </span>
+      </Button>
     </div>
   );
 }
