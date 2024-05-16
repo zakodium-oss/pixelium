@@ -35,7 +35,10 @@
     "react-dom": ">=18.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.3",
+    "@commitlint/config-conventional": "^17.6.3",
     "@simbathesailor/use-what-changed": "^2.0.0",
+    "@swc/plugin-emotion": "^2.5.67",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
@@ -44,6 +47,7 @@
     "eslint": "^8.38.0",
     "eslint-config-cheminfo-react": "^9.1.1",
     "eslint-config-cheminfo-typescript": "^11.3.1",
+    "husky": "^8.0.3",
     "ky": "^0.25.1",
     "modern-normalize": "^2.0.0",
     "prettier": "^2.8.8",
