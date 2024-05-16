@@ -32,8 +32,8 @@ function FilterTool() {
         disabled: !isColor(pipelined),
       },
       {
-        label: 'Convert color',
-        data: 'convertColor',
+        label: 'Convert',
+        data: 'convert',
         type: 'option',
         disabled: isBinary(pipelined),
       },

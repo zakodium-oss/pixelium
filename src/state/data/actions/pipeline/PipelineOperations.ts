@@ -1,5 +1,5 @@
 import type { BlurOperation } from './filter/blur';
-import { ConvertColorOperation } from './filter/convertColor';
+import { ConvertOperation } from './filter/convert';
 import type { FlipOperation } from './filter/flip';
 import type { GaussianBlurOperation } from './filter/gaussianBlur';
 import type { GreyFilterOperation } from './filter/greyFilter';
@@ -28,7 +28,7 @@ export type PipelineOperation<T extends string, O> = O extends undefined
 
 export type PipelineOperations =
   | GreyFilterOperation
-  | ConvertColorOperation
+  | ConvertOperation
   | BlurOperation
   | FlipOperation
   | GaussianBlurOperation
