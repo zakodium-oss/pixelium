@@ -1,10 +1,10 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
+import { usePanZoomTransform } from 'react-roi/lib-esm/hooks/usePanZoom';
 
 import useAnnotationRef from '../../hooks/useAnnotationRef';
 import useOriginalFilteredROIs from '../../hooks/useOriginalFilteredROIs';
 
 import ROIAnnotation from './annotation/ROIAnnotation';
-import { usePanZoomTransform } from 'react-roi/lib-esm/hooks/usePanZoom';
 
 interface ROIAnnotationsProps {
   identifier: string;
