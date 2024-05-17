@@ -1,9 +1,11 @@
 import styled from '@emotion/styled';
 import { WebSource } from 'filelist-utils';
-import { memo, useMemo, useReducer, useRef } from 'react';
+import { memo, useCallback, useMemo, useReducer, useRef } from 'react';
 import { KbsProvider } from 'react-kbs';
+import { RoiProvider } from 'react-roi';
 import { RootLayout, SplitPane, Toolbar } from 'react-science/ui';
 
+import useViewDispatch from '../hooks/useViewDispatch';
 import {
   dataReducer,
   DataState,
@@ -14,6 +16,7 @@ import {
   preferencesReducer,
   PreferencesState,
 } from '../state/preferences/PreferencesReducer';
+import { SET_PAN_ZOOM } from '../state/view/ViewActionTypes';
 import {
   initialViewState,
   viewReducer,
@@ -65,6 +68,7 @@ const PixeliumMainStyle = styled.div`
 `;
 
 function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
+  const viewDispatch = useViewDispatch();
   // Refs
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -82,6 +86,35 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
     view ?? initialViewState,
   );
   const [roiState, dispatchROI] = useReducer(ROIReducer, initialROIState);
+
+  const identifier = viewState.currentTab;
+
+  const panZoom = useMemo(() => {
+    if (
+      view !== undefined &&
+      identifier !== undefined &&
+      view.imageViewerProps[identifier]
+    ) {
+      return view.imageViewerProps[identifier];
+    } else {
+      return {
+        scale: 1,
+        translation: [0, 0] as [number, number],
+      };
+    }
+  }, [identifier, view]);
+
+  const setPanZoom = useCallback(
+    (panZoom) => {
+      if (view !== undefined && identifier !== undefined) {
+        viewDispatch({
+          type: SET_PAN_ZOOM,
+          payload: { identifier, panZoom },
+        });
+      }
+    },
+    [identifier, view, viewDispatch],
+  );
 
   const dispatchers = useMemo(() => {
     return {
@@ -103,33 +136,47 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                   <DispatchProvider value={dispatchers}>
                     <PipelineProvider identifier={viewState.currentTab}>
                       <ROIProvider value={roiState}>
-                        <AnnotationsProvider>
-                          <AutoLoader webSource={webSource}>
-                            <PixeliumStyle ref={rootRef}>
-                              <Header />
-                              <PixeliumMainStyle>
-                                <Toolbar vertical>
-                                  <ImportTool />
-                                  <ExportTool />
-                                  <GreyTool />
-                                  <MaskTool />
-                                  <MorphologyTool />
-                                  <GeometryTool />
-                                  <ROITool />
-                                  <ModalContainer />
-                                </Toolbar>
-                                <SplitPane
-                                  direction="horizontal"
-                                  size="300px"
-                                  controlledSide="end"
-                                >
-                                  <CenterPanel />
-                                  <Sidebar />
-                                </SplitPane>
-                              </PixeliumMainStyle>
-                            </PixeliumStyle>
-                          </AutoLoader>
-                        </AnnotationsProvider>
+                        <RoiProvider
+                          initialConfig={{
+                            zoom: {
+                              initial: panZoom,
+                              min: 0.1,
+                              max: 30,
+                              spaceAroundTarget: 0,
+                            },
+                            resizeStrategy: 'contain',
+                            mode: 'select',
+                          }}
+                          onAfterZoomChange={setPanZoom}
+                        >
+                          <AnnotationsProvider>
+                            <AutoLoader webSource={webSource}>
+                              <PixeliumStyle ref={rootRef}>
+                                <Header />
+                                <PixeliumMainStyle>
+                                  <Toolbar vertical>
+                                    <ImportTool />
+                                    <ExportTool />
+                                    <GreyTool />
+                                    <MaskTool />
+                                    <MorphologyTool />
+                                    <GeometryTool />
+                                    <ROITool />
+                                    <ModalContainer />
+                                  </Toolbar>
+                                  <SplitPane
+                                    direction="horizontal"
+                                    size="400px"
+                                    controlledSide="end"
+                                  >
+                                    <CenterPanel />
+                                    <Sidebar />
+                                  </SplitPane>
+                                </PixeliumMainStyle>
+                              </PixeliumStyle>
+                            </AutoLoader>
+                          </AnnotationsProvider>
+                        </RoiProvider>
                       </ROIProvider>
                     </PipelineProvider>
                   </DispatchProvider>
