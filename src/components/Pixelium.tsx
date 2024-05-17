@@ -27,6 +27,7 @@ import { DispatchProvider } from './context/DispatchContext';
 import { LogProvider } from './context/LogContext';
 import { PipelineProvider } from './context/PipelineContext';
 import { PreferencesProvider } from './context/PreferencesContext';
+import { initialROIState, ROIProvider, ROIReducer } from './context/ROIContext';
 import { RootProvider } from './context/RootContext';
 import { ViewProvider } from './context/ViewContext';
 import CenterPanel from './layout/CenterPanel';
@@ -80,14 +81,16 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
     viewReducer,
     view ?? initialViewState,
   );
+  const [roiState, dispatchROI] = useReducer(ROIReducer, initialROIState);
 
   const dispatchers = useMemo(() => {
     return {
       data: dispatchData,
       preferences: dispatchPreferences,
       view: dispatchView,
+      roi: dispatchROI,
     };
-  }, [dispatchData, dispatchPreferences, dispatchView]);
+  }, [dispatchData, dispatchPreferences, dispatchView, dispatchROI]);
 
   return (
     <RootLayout>
@@ -99,33 +102,35 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                 <ViewProvider value={viewState}>
                   <DispatchProvider value={dispatchers}>
                     <PipelineProvider identifier={viewState.currentTab}>
-                      <AnnotationsProvider>
-                        <AutoLoader webSource={webSource}>
-                          <PixeliumStyle ref={rootRef}>
-                            <Header />
-                            <PixeliumMainStyle>
-                              <Toolbar vertical>
-                                <ImportTool />
-                                <ExportTool />
-                                <GreyTool />
-                                <MaskTool />
-                                <MorphologyTool />
-                                <GeometryTool />
-                                <ROITool />
-                                <ModalContainer />
-                              </Toolbar>
-                              <SplitPane
-                                direction="horizontal"
-                                size="300px"
-                                controlledSide="end"
-                              >
-                                <CenterPanel />
-                                <Sidebar />
-                              </SplitPane>
-                            </PixeliumMainStyle>
-                          </PixeliumStyle>
-                        </AutoLoader>
-                      </AnnotationsProvider>
+                      <ROIProvider value={roiState}>
+                        <AnnotationsProvider>
+                          <AutoLoader webSource={webSource}>
+                            <PixeliumStyle ref={rootRef}>
+                              <Header />
+                              <PixeliumMainStyle>
+                                <Toolbar vertical>
+                                  <ImportTool />
+                                  <ExportTool />
+                                  <GreyTool />
+                                  <MaskTool />
+                                  <MorphologyTool />
+                                  <GeometryTool />
+                                  <ROITool />
+                                  <ModalContainer />
+                                </Toolbar>
+                                <SplitPane
+                                  direction="horizontal"
+                                  size="300px"
+                                  controlledSide="end"
+                                >
+                                  <CenterPanel />
+                                  <Sidebar />
+                                </SplitPane>
+                              </PixeliumMainStyle>
+                            </PixeliumStyle>
+                          </AutoLoader>
+                        </AnnotationsProvider>
+                      </ROIProvider>
                     </PipelineProvider>
                   </DispatchProvider>
                 </ViewProvider>

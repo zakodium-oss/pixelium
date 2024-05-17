@@ -1,7 +1,7 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 
 import useAnnotationRef from '../../hooks/useAnnotationRef';
-import useROIs from '../../hooks/useROIs';
+import useOriginalFilteredROIs from '../../hooks/useOriginalFilteredROIs';
 
 import ROIAnnotation from './annotation/ROIAnnotation';
 import { usePanZoomTransform } from 'react-roi/lib-esm/hooks/usePanZoom';
@@ -17,10 +17,14 @@ function ROIAnnotations({
   width = 0,
   height = 0,
 }: ROIAnnotationsProps) {
-  const rois = useROIs(identifier);
+  const originalFilteredROIs = useOriginalFilteredROIs(identifier);
+
   const annotations = useMemo(
-    () => rois.map((roi) => <ROIAnnotation key={roi.id} roi={roi} />),
-    [rois],
+    () =>
+      originalFilteredROIs.map((roi) => (
+        <ROIAnnotation key={roi.id} roi={roi} />
+      )),
+    [originalFilteredROIs],
   );
 
   const annotationsRef = useRef<SVGSVGElement>(null);

@@ -22,6 +22,7 @@ import {
   RoiColumn,
 } from '../../state/preferences/PreferencesReducer';
 import { SET_EDIT_ROI_PREFERENCE } from '../../state/view/ViewActionTypes';
+import { useROIDispatch } from '../context/ROIContext';
 
 const PaddedContent = styled.div`
   overflow: auto;
@@ -47,6 +48,7 @@ function ROIEditPreference() {
   const preferences = usePreferences();
   const viewDispatch = useViewDispatch();
   const preferencesDispatch = usePreferencesDispatch();
+  const roiDispatch = useROIDispatch();
 
   const [shownColumns, setShownColumns] = useState(preferences.rois.columns);
   const [annotationsPreferences, setAnnotationsPreferences] = useState(
@@ -62,6 +64,12 @@ function ROIEditPreference() {
 
   const changeChecked = useCallback(
     (column: RoiColumn, checked: boolean) => {
+      roiDispatch({
+        type: 'REMOVE_FILTER',
+        payload: {
+          column,
+        },
+      });
       setShownColumns(
         checked
           ? [...shownColumns, column].sort(
@@ -71,7 +79,7 @@ function ROIEditPreference() {
           : shownColumns.filter((c) => c !== column),
       );
     },
-    [shownColumns],
+    [roiDispatch, shownColumns],
   );
 
   const close = useCallback(
