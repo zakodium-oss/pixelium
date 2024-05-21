@@ -44,7 +44,7 @@ function ROITable({ identifier }: ROITableProps) {
         overflowY: 'auto',
       }}
     >
-      <Table>
+      <Table compact striped>
         <Table.Header>
           {columns.map((column) => (
             <ValueRenderers.Component
