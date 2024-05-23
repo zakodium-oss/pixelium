@@ -4,13 +4,14 @@ import { Accordion } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import Histograms from '../histogram/Histograms';
+import ImagesPanel from '../images/ImagesPanel';
 import InformationPanel from '../information/InformationPanel';
 import PipelineTable from '../pipeline/PipelineTable';
 import ROIAccordion from '../roi/ROIAccordion';
 
 const StyledSidebar = styled.div`
   width: 100%;
-  min-width: 300px;
+  white-space: nowrap;
 `;
 
 function Sidebar() {
@@ -20,6 +21,9 @@ function Sidebar() {
   return (
     <StyledSidebar>
       <Accordion>
+        <Accordion.Item title="Images" defaultOpened>
+          <ImagesPanel />
+        </Accordion.Item>
         <Accordion.Item title="Informations">
           <InformationPanel />
         </Accordion.Item>

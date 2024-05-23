@@ -1,7 +1,8 @@
-import { CSSProperties, memo, useEffect, useMemo, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
+import { usePanZoomTransform } from 'react-roi/lib-esm/hooks/usePanZoom';
 
 import useAnnotationRef from '../../hooks/useAnnotationRef';
-import useROIs from '../../hooks/useROIs';
+import useOriginalFilteredROIs from '../../hooks/useOriginalFilteredROIs';
 
 import ROIAnnotation from './annotation/ROIAnnotation';
 
@@ -16,10 +17,14 @@ function ROIAnnotations({
   width = 0,
   height = 0,
 }: ROIAnnotationsProps) {
-  const rois = useROIs(identifier);
+  const originalFilteredROIs = useOriginalFilteredROIs(identifier);
+
   const annotations = useMemo(
-    () => rois.map((roi) => <ROIAnnotation key={roi.id} roi={roi} />),
-    [rois],
+    () =>
+      originalFilteredROIs.map((roi) => (
+        <ROIAnnotation key={roi.id} roi={roi} />
+      )),
+    [originalFilteredROIs],
   );
 
   const annotationsRef = useRef<SVGSVGElement>(null);
@@ -30,25 +35,14 @@ function ROIAnnotations({
     setSvgRef(annotationsRef);
   }, [setSvgRef, svgRef]);
 
-  const viewBox = useMemo(() => `0 0 ${width} ${height}`, [width, height]);
-  const style: CSSProperties = useMemo(
-    () => ({
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      width: `${width}px`,
-      height: `${height}px`,
-    }),
-    [width, height],
-  );
+  const transform = usePanZoomTransform();
 
   return (
-    <div style={style}>
+    <div style={{ width, height }}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="100%"
-        height="100%"
-        viewBox={viewBox}
+        style={{ transform, transformOrigin: '0px 0px' }}
+        viewBox={`0 0 ${width} ${height}`}
         ref={annotationsRef}
       >
         {annotations}

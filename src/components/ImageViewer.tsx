@@ -1,9 +1,8 @@
-import styled from '@emotion/styled';
 import { Image, Mask, writeCanvas } from 'image-js';
 import {
   CSSProperties,
-  MutableRefObject,
   memo,
+  MutableRefObject,
   useCallback,
   useEffect,
   useMemo,
@@ -23,10 +22,6 @@ interface ImageViewerProps {
   showOriginal?: boolean;
   annotable?: boolean;
 }
-
-const RelativeBox = styled.div`
-  position: relative;
-`;
 
 const canvasStyle: CSSProperties = {
   objectFit: 'contain',
@@ -94,21 +89,20 @@ function ImageViewer({
       onAfterZoomChange={setPanZoom}
     >
       <RoiContainer
+        zoomWithoutModifierKey
         target={<TargetCanvas imageToShow={imageToShow} />}
         style={{
           width: '100%',
           height: '100%',
         }}
       >
-        <RelativeBox>
-          {annotable && (
-            <ROIAnnotations
-              width={imageToShow?.width}
-              height={imageToShow?.height}
-              identifier={identifier}
-            />
-          )}
-        </RelativeBox>
+        {annotable && (
+          <ROIAnnotations
+            width={imageToShow?.width}
+            height={imageToShow?.height}
+            identifier={identifier}
+          />
+        )}
       </RoiContainer>
     </RoiProvider>
   );

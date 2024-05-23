@@ -1,12 +1,16 @@
+import { Button, Popover } from '@blueprintjs/core';
 import styled from '@emotion/styled';
-import { Roi } from 'image-js';
 import startCase from 'lodash/startCase';
-import { memo, useCallback, useMemo } from 'react';
+import { memo } from 'react';
+import { MdFilterAlt } from 'react-icons/md';
 import { Table, ValueRenderers } from 'react-science/ui';
 
+import useFilteredROIs from '../../hooks/useFilteredROIs';
 import usePreferences from '../../hooks/usePreferences';
 import useROIs from '../../hooks/useROIs';
-import { RoiColumn } from '../../state/preferences/PreferencesReducer';
+import useROIContext from '../context/ROIContext';
+
+import ROIFilter from './ROIFilter';
 
 const Empty = styled.div`
   display: flex;
@@ -21,101 +25,60 @@ interface ROITableProps {
 
 function ROITable({ identifier }: ROITableProps) {
   const rois = useROIs(identifier);
+  const { filters } = useROIContext();
+  const filteredROIs = useFilteredROIs(identifier);
+
+  function hasFilter(column: string) {
+    return filters.some((f) => f.column === column);
+  }
+
   const preferences = usePreferences();
 
-  const columns = useMemo(
-    () => preferences.rois.columns,
-    [preferences.rois.columns],
-  );
-
-  const columnRenderer = useCallback((column: RoiColumn, roi: Roi) => {
-    const {
-      id,
-      width,
-      height,
-      surface,
-      feret,
-      roundness,
-      solidity,
-      sphericity,
-      fillRatio,
-      origin: { column: x, row: y },
-    } = roi;
-    switch (column) {
-      case 'id':
-        return <ValueRenderers.Number key={column} value={id} />;
-      case 'column':
-        return <ValueRenderers.Number key={column} value={x} />;
-      case 'row':
-        return <ValueRenderers.Number key={column} value={y} />;
-      case 'width':
-        return <ValueRenderers.Number key={column} value={width} />;
-      case 'height':
-        return <ValueRenderers.Number key={column} value={height} />;
-      case 'surface':
-        return <ValueRenderers.Number key={column} value={surface} />;
-      case 'feretAspectRatio':
-        return (
-          <ValueRenderers.Number
-            key={column}
-            value={feret.aspectRatio}
-            fixed={2}
-          />
-        );
-      case 'feretMinDiameter':
-        return (
-          <ValueRenderers.Number
-            key={column}
-            value={feret.minDiameter.length}
-            fixed={2}
-          />
-        );
-      case 'feretMaxDiameter':
-        return (
-          <ValueRenderers.Number
-            key={column}
-            value={feret.maxDiameter.length}
-            fixed={2}
-          />
-        );
-      case 'roundness':
-        return (
-          <ValueRenderers.Number key={column} value={roundness} fixed={2} />
-        );
-      case 'solidity':
-        return (
-          <ValueRenderers.Number key={column} value={solidity} fixed={2} />
-        );
-      case 'sphericity':
-        return (
-          <ValueRenderers.Number key={column} value={sphericity} fixed={2} />
-        );
-      case 'fillRatio':
-        return (
-          <ValueRenderers.Number key={column} value={fillRatio} fixed={2} />
-        );
-      default:
-        throw new Error(`Unknown column`);
-    }
-  }, []);
+  const columns = preferences.rois.columns;
 
   if (rois.length === 0) return <Empty>No ROIs generated</Empty>;
 
   return (
     <div
       style={{
-        overflow: 'auto',
+        overflowY: 'auto',
       }}
     >
-      <Table>
+      <Table compact striped>
         <Table.Header>
           {columns.map((column) => (
-            <ValueRenderers.Header key={column} value={startCase(column)} />
+            <ValueRenderers.Component
+              key={column}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 5,
+              }}
+            >
+              <ValueRenderers.Header key={column} value={startCase(column)} />
+              <Popover
+                content={<ROIFilter identifier={identifier} column={column} />}
+                placement="bottom"
+              >
+                <Button
+                  minimal
+                  icon={<MdFilterAlt size={20} />}
+                  active={hasFilter(column)}
+                  style={{ padding: 0 }}
+                />
+              </Popover>
+            </ValueRenderers.Component>
           ))}
         </Table.Header>
-        {rois.map((roi) => (
+        {filteredROIs.map((roi) => (
           <Table.Row key={roi.id}>
-            {columns.map((column) => columnRenderer(column, roi))}
+            {columns.map((column) => (
+              <ValueRenderers.Number
+                key={column}
+                value={Number(roi[column]?.toFixed(2))}
+              />
+            ))}
           </Table.Row>
         ))}
       </Table>

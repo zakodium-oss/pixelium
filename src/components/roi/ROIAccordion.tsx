@@ -2,6 +2,7 @@ import { memo, useMemo } from 'react';
 import { Accordion } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
+import useROIs from '../../hooks/useROIs';
 import useView from '../../hooks/useView';
 
 import ROIEditColumnPreference from './ROIEditPreference';
@@ -10,7 +11,7 @@ import ROIToolbar from './ROIToolbar';
 
 function ROIAccordion() {
   const currentTab = useCurrentTab();
-
+  const rois = useROIs(currentTab);
   const view = useView();
   const isEditing = useMemo(
     () => view.editROIPreference,
@@ -20,7 +21,7 @@ function ROIAccordion() {
   if (currentTab === undefined) return null;
 
   return (
-    <Accordion.Item title="ROIs">
+    <Accordion.Item title="ROIs" defaultOpened={rois.length > 0}>
       {isEditing ? (
         <ROIEditColumnPreference />
       ) : (

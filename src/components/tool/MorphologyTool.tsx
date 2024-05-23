@@ -19,7 +19,7 @@ function MorphologyTool() {
   const morphologyItem: ToolbarItemProps = {
     id: 'morphology',
     icon: <FaRecordVinyl />,
-    title: 'Morphology',
+    tooltip: 'Morphology',
   };
 
   const morphOptions = useMemo(

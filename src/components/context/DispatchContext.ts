@@ -4,10 +4,13 @@ import { DataActions } from '../../state/data/DataReducer';
 import { PreferencesActions } from '../../state/preferences/PreferencesReducer';
 import { ViewActions } from '../../state/view/ViewReducer';
 
+import { ROIActions } from './ROIContext';
+
 interface DispatchState {
   data: Dispatch<DataActions>;
   preferences: Dispatch<PreferencesActions>;
   view: Dispatch<ViewActions>;
+  roi: Dispatch<ROIActions>;
 }
 export const DispatchContext = createContext<DispatchState>({
   data: () => {
@@ -18,6 +21,9 @@ export const DispatchContext = createContext<DispatchState>({
   },
   view: () => {
     throw new Error('ViewContext not initialized');
+  },
+  roi: () => {
+    throw new Error('ROIContext not initialized');
   },
 });
 
