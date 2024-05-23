@@ -142,7 +142,7 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                               initial: panZoom,
                               min: 0.1,
                               max: 30,
-                              spaceAroundTarget: 0,
+                              spaceAroundTarget: 0.1,
                             },
                             resizeStrategy: 'contain',
                             mode: 'select',
