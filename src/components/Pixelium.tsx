@@ -55,6 +55,7 @@ interface PixeliumProps {
   preferences?: PreferencesState;
   view?: ViewState;
   webSource?: WebSource;
+  setWebSource?: (webSource: WebSource) => void;
 }
 
 const PixeliumMainStyle = styled.div`
@@ -64,7 +65,13 @@ const PixeliumMainStyle = styled.div`
   overflow: hidden;
 `;
 
-function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
+function Pixelium({
+  data,
+  preferences,
+  view,
+  webSource,
+  setWebSource,
+}: PixeliumProps) {
   // Refs
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -104,7 +111,10 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                     <PipelineProvider identifier={viewState.currentTab}>
                       <ROIProvider value={roiState}>
                         <AnnotationsProvider>
-                          <AutoLoader webSource={webSource}>
+                          <AutoLoader
+                            webSource={webSource}
+                            setWebSource={setWebSource}
+                          >
                             <PixeliumStyle ref={rootRef}>
                               <Header />
                               <PixeliumMainStyle>

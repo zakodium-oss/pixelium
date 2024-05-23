@@ -60,8 +60,6 @@ function Sidebar({ setWebSource }: SidebarProps) {
     sections: [],
   });
 
-  const [selectedSource, setSelectedSource] = useState<WebSource>();
-
   useEffect(() => {
     ky.get('https://image-js.github.io/image-dataset-demo/toc.json')
       .json<TocResponse>()
@@ -71,12 +69,6 @@ function Sidebar({ setWebSource }: SidebarProps) {
         console.error(error);
       });
   }, []);
-
-  useEffect(() => {
-    if (selectedSource) {
-      setWebSource(selectedSource);
-    }
-  }, [selectedSource, setWebSource]);
 
   return (
     <StyledSidebar>
@@ -91,7 +83,7 @@ function Sidebar({ setWebSource }: SidebarProps) {
                 <Button
                   key={source.name}
                   onClick={() => {
-                    setSelectedSource(source.source);
+                    setWebSource(source.source);
                   }}
                   fill
                 >

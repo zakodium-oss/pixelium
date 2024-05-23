@@ -6,10 +6,11 @@ import useLog from '../hooks/useLog';
 
 interface AutoLoaderProps {
   webSource?: WebSource;
+  setWebSource?: (webSource: WebSource) => void;
   children: ReactNode;
 }
 
-function AutoLoader({ children, webSource }: AutoLoaderProps) {
+function AutoLoader({ children, webSource, setWebSource }: AutoLoaderProps) {
   const { handleWebSource } = useFileLoader();
   const { logger } = useLog();
 
@@ -19,7 +20,9 @@ function AutoLoader({ children, webSource }: AutoLoaderProps) {
     handleWebSource(webSource).catch((error) => {
       logger.error(`Error while loading websource: ${error.message}`);
     });
-  }, [handleWebSource, logger, webSource]);
+
+    setWebSource?.({ entries: [] });
+  }, [handleWebSource, logger, webSource, setWebSource]);
 
   return children;
 }

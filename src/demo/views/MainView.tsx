@@ -27,7 +27,7 @@ function MainView() {
     <MainViewWrapper>
       <Sidebar setWebSource={setWebSource} />
       <PixeliumWrapper>
-        <Pixelium webSource={webSource} />
+        <Pixelium webSource={webSource} setWebSource={setWebSource} />
       </PixeliumWrapper>
     </MainViewWrapper>
   );
