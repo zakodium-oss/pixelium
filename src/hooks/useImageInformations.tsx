@@ -1,5 +1,15 @@
 import { Image } from 'image-js';
 import { useMemo } from 'react';
+import { tagNames } from 'tiff';
+
+function getTagName(tagCode: string): string {
+  return (
+    tagNames.standard[tagCode] ||
+    tagNames.exif[tagCode] ||
+    tagNames.gps[tagCode] ||
+    tagCode
+  );
+}
 
 export default function useImageInformations(image: Image | null) {
   return useMemo(() => {
@@ -13,13 +23,14 @@ export default function useImageInformations(image: Image | null) {
       components: image.components,
       colorModel: image.colorModel,
     };
+
     const fields = Object.fromEntries(image.meta?.tiff?.fields || []);
-    let newFields: Record<string, unknown> = {};
+    let meta: Record<string, unknown> = {};
 
     for (const [tagCode, tagValue] of Object.entries(fields)) {
+      const tagName = getTagName(tagCode);
       if (typeof tagValue === 'string' && tagValue.startsWith('<')) {
         try {
-          let newTagCode = tagCode;
           const parser = new DOMParser();
           const xmlDoc = parser.parseFromString(tagValue, 'text/xml');
           const dataNodes = xmlDoc.querySelectorAll('Data');
@@ -27,22 +38,18 @@ export default function useImageInformations(image: Image | null) {
             const label = dataNode.querySelector('Label')?.textContent;
             const value = dataNode.querySelector('Value')?.textContent;
             if (label && value) {
-              newTagCode = tagCode.concat('.').concat(label);
-              newFields[newTagCode] = value;
+              const newTagName = tagName.concat('.').concat(label);
+              meta[newTagName] = value;
             }
           }
         } catch {
-          newFields[tagCode] = tagValue;
+          meta[tagName] = tagValue;
         }
       } else {
-        newFields[tagCode] = tagValue;
+        meta[tagName] = tagValue;
       }
     }
 
-    const meta = {
-      ...image.meta?.tiff?.tags,
-      ...newFields,
-    };
     return { info, meta };
   }, [image]);
 }
