@@ -80,10 +80,14 @@ function ROITable({ identifier }: ROITableProps) {
               <Button
                 minimal
                 onClick={() => {
-                  zoomIntoROI([
-                    { x: roi.column, y: roi.row },
-                    { x: roi.column + roi.width, y: roi.row + roi.height },
-                  ]);
+                  const points = rois.find((r) => r.id === roi.id)?.mbr.points;
+                  if (points) {
+                    const zone = points.map((point) => ({
+                      x: roi.column + point.column,
+                      y: roi.row + point.row,
+                    }));
+                    zoomIntoROI(zone);
+                  }
                 }}
                 style={{ padding: 0 }}
               >
