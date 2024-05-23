@@ -12,6 +12,7 @@ export const CLOSE_IMAGE = 'CLOSE_IMAGE';
 
 export {
   SET_GREY_FILTER,
+  SET_CONVERT,
   SET_BLUR,
   SET_FLIP,
   SET_GAUSSIAN_BLUR,

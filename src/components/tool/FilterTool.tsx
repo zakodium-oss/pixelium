@@ -32,6 +32,12 @@ function FilterTool() {
         disabled: !isColor(pipelined),
       },
       {
+        label: 'Convert',
+        data: 'convert',
+        type: 'option',
+        disabled: isBinary(pipelined),
+      },
+      {
         label: 'Blur',
         data: 'blur',
         type: 'option',

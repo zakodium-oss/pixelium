@@ -35,6 +35,22 @@ export default function runPipeline(
           }
           break;
         }
+        case 'CONVERT': {
+          if (applyOn instanceof Image) {
+            let result = applyOn;
+            if (operation.options.colorModel !== applyOn.colorModel) {
+              result = result.convertColor(operation.options.colorModel);
+            }
+            if (operation.options.bitDepth !== applyOn.bitDepth) {
+              result = result.convertBitDepth(operation.options.bitDepth);
+            }
+            pipelineSteps.push({
+              identifier: operation.identifier,
+              result,
+            });
+          }
+          break;
+        }
         case 'BLUR': {
           if (applyOn instanceof Image) {
             const result = applyOn.blur({
