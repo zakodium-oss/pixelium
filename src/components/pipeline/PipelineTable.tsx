@@ -201,6 +201,7 @@ function PipelineTable({ identifier }: PipelineTableProps) {
                 ({ identifier }) => identifier === operation.identifier,
               )?.time ?? 0
             }
+            fixed={2}
           />
           <ValueRenderers.Component>
             <ActionsContainer>

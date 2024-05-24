@@ -26,11 +26,11 @@ export default function runPipeline(
       switch (operation.type) {
         case 'GREY_FILTER': {
           if (applyOn instanceof Image) {
-            const time0 = Date.now();
+            const time0 = performance.now();
             const result = applyOn.grey({
               algorithm: operation.options.algorithm,
             });
-            const time = Date.now() - time0;
+            const time = performance.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
@@ -42,14 +42,14 @@ export default function runPipeline(
         case 'CONVERT': {
           if (applyOn instanceof Image) {
             let result = applyOn;
-            const time0 = Date.now();
+            const time0 = performance.now();
             if (operation.options.colorModel !== applyOn.colorModel) {
               result = result.convertColor(operation.options.colorModel);
             }
             if (operation.options.bitDepth !== applyOn.bitDepth) {
               result = result.convertBitDepth(operation.options.bitDepth);
             }
-            const time = Date.now() - time0;
+            const time = performance.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
@@ -60,14 +60,14 @@ export default function runPipeline(
         }
         case 'BLUR': {
           if (applyOn instanceof Image) {
-            const time0 = Date.now();
+            const time0 = performance.now();
             const result = applyOn.blur({
               width: operation.options.width,
               height: operation.options.height,
               borderType: operation.options.borderType,
               borderValue: operation.options.borderValue,
             });
-            const time = Date.now() - time0;
+            const time = performance.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
@@ -78,12 +78,12 @@ export default function runPipeline(
         }
         case 'MASK': {
           if (applyOn instanceof Image) {
-            const time0 = Date.now();
+            const time0 = performance.now();
             const result = applyOn.threshold({
               algorithm: operation.options.algorithm,
               slots: operation.options.slots,
             });
-            const time = Date.now() - time0;
+            const time = performance.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
@@ -94,14 +94,14 @@ export default function runPipeline(
         }
         case 'GAUSSIAN_BLUR': {
           if (applyOn instanceof Image) {
-            const time0 = Date.now();
+            const time0 = performance.now();
             const result = applyOn.gaussianBlur({
               sigmaX: operation.options.sigmaX,
               sigmaY: operation.options.sigmaY,
               sizeX: operation.options.sizeX,
               sizeY: operation.options.sizeY,
             });
-            const time = Date.now() - time0;
+            const time = performance.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
@@ -111,9 +111,9 @@ export default function runPipeline(
           break;
         }
         case 'INVERT': {
-          const time0 = Date.now();
+          const time0 = performance.now();
           const result = applyOn.invert();
-          const time = Date.now() - time0;
+          const time = performance.now() - time0;
           pipelineSteps.push({
             identifier: operation.identifier,
             result,
@@ -123,11 +123,11 @@ export default function runPipeline(
         }
         case 'FLIP': {
           if (applyOn instanceof Image) {
-            const time0 = Date.now();
+            const time0 = performance.now();
             const result = applyOn.flip({
               axis: operation.options.axis,
             });
-            const time = Date.now() - time0;
+            const time = performance.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
@@ -138,7 +138,7 @@ export default function runPipeline(
         }
         case 'LEVEL': {
           if (applyOn instanceof Image) {
-            const time0 = Date.now();
+            const time0 = performance.now();
             const result = applyOn.level({
               channels: operation.options.channels,
               inputMin: operation.options.inputMin,
@@ -147,7 +147,7 @@ export default function runPipeline(
               outputMax: operation.options.outputMax,
               gamma: operation.options.gamma,
             });
-            const time = Date.now() - time0;
+            const time = performance.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
@@ -158,12 +158,12 @@ export default function runPipeline(
         }
         case 'PIXELATE': {
           if (applyOn instanceof Image) {
-            const time0 = Date.now();
+            const time0 = performance.now();
             const result = applyOn.pixelate({
               cellSize: operation.options.cellSize,
               algorithm: operation.options.algorithm,
             });
-            const time = Date.now() - time0;
+            const time = performance.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
@@ -174,13 +174,13 @@ export default function runPipeline(
         }
         case 'MEDIAN_FILTER': {
           if (applyOn instanceof Image) {
-            const time0 = Date.now();
+            const time0 = performance.now();
             const result = applyOn.medianFilter({
               cellSize: operation.options.cellSize,
               borderType: operation.options.borderType,
               borderValue: operation.options.borderValue,
             });
-            const time = Date.now() - time0;
+            const time = performance.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
@@ -190,12 +190,12 @@ export default function runPipeline(
           break;
         }
         case 'DILATE': {
-          const time0 = Date.now();
+          const time0 = performance.now();
           const result = applyOn.dilate({
             kernel: operation.options.kernel,
             iterations: operation.options.iterations,
           });
-          const time = Date.now() - time0;
+          const time = performance.now() - time0;
           pipelineSteps.push({
             identifier: operation.identifier,
             result,
@@ -204,12 +204,12 @@ export default function runPipeline(
           break;
         }
         case 'ERODE': {
-          const time0 = Date.now();
+          const time0 = performance.now();
           const result = applyOn.erode({
             kernel: operation.options.kernel,
             iterations: operation.options.iterations,
           });
-          const time = Date.now() - time0;
+          const time = performance.now() - time0;
           pipelineSteps.push({
             identifier: operation.identifier,
             result,
@@ -218,12 +218,12 @@ export default function runPipeline(
           break;
         }
         case 'OPEN': {
-          const time0 = Date.now();
+          const time0 = performance.now();
           const result = applyOn.open({
             kernel: operation.options.kernel,
             iterations: operation.options.iterations,
           });
-          const time = Date.now() - time0;
+          const time = performance.now() - time0;
           pipelineSteps.push({
             identifier: operation.identifier,
             result,
@@ -232,12 +232,12 @@ export default function runPipeline(
           break;
         }
         case 'CLOSE': {
-          const time0 = Date.now();
+          const time0 = performance.now();
           const result = applyOn.close({
             kernel: operation.options.kernel,
             iterations: operation.options.iterations,
           });
-          const time = Date.now() - time0;
+          const time = performance.now() - time0;
           pipelineSteps.push({
             identifier: operation.identifier,
             result,
@@ -247,7 +247,7 @@ export default function runPipeline(
         }
         case 'RESIZE': {
           if (applyOn instanceof Image) {
-            const time0 = Date.now();
+            const time0 = performance.now();
             const result = applyOn.resize({
               width: operation.options.width,
               height: operation.options.height,
@@ -256,7 +256,7 @@ export default function runPipeline(
               preserveAspectRatio: operation.options.preserveAspectRatio,
               borderType: operation.options.borderType,
             });
-            const time = Date.now() - time0;
+            const time = performance.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
@@ -267,12 +267,12 @@ export default function runPipeline(
         }
         case 'ROTATE': {
           if (applyOn instanceof Image) {
-            const time0 = Date.now();
+            const time0 = performance.now();
             const result = applyOn.rotate(
               (operation.options.angle *
                 (operation.options.clockwise ? 1 : -1)) as RotateAngle,
             );
-            const time = Date.now() - time0;
+            const time = performance.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
