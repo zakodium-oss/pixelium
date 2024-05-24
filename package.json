@@ -77,7 +77,8 @@
     "react-plot": "^1.4.2",
     "react-roi": "^1.4.0",
     "react-science": "^3.1.0",
-    "react-use": "^17.4.0"
+    "react-use": "^17.4.0",
+    "tiff": "^6.1.0"
   },
   "volta": {
     "node": "18.16.0",

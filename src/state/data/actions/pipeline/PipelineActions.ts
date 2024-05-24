@@ -1,4 +1,5 @@
 import type { PipelineSetBlurAction } from './filter/blur';
+import { PipelineSetConvertAction } from './filter/convert';
 import type { PipelineSetFlipAction } from './filter/flip';
 import type { PipelineSetGaussianBlurAction } from './filter/gaussianBlur';
 import type { PipelineSetGreyFilterAction } from './filter/greyFilter';
@@ -20,6 +21,7 @@ import type { PipelineSetErodeAction } from './morphology/erode';
 import type { PipelineSetOpenAction } from './morphology/open';
 
 export { setGreyFilter, SET_GREY_FILTER } from './filter/greyFilter';
+export { setConvert, SET_CONVERT } from './filter/convert';
 export { setBlur, SET_BLUR } from './filter/blur';
 export { setGaussianBlur, SET_GAUSSIAN_BLUR } from './filter/gaussianBlur';
 export { setInvert, SET_INVERT } from './filter/invert';
@@ -40,6 +42,7 @@ export { setRotate, SET_ROTATE } from './geometry/rotate';
 
 export type PipelineActionsTypes =
   | PipelineSetGreyFilterAction
+  | PipelineSetConvertAction
   | PipelineSetBlurAction
   | PipelineSetGaussianBlurAction
   | PipelineSetInvertAction
