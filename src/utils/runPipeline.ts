@@ -42,15 +42,18 @@ export default function runPipeline(
         case 'CONVERT': {
           if (applyOn instanceof Image) {
             let result = applyOn;
+            const time0 = Date.now();
             if (operation.options.colorModel !== applyOn.colorModel) {
               result = result.convertColor(operation.options.colorModel);
             }
             if (operation.options.bitDepth !== applyOn.bitDepth) {
               result = result.convertBitDepth(operation.options.bitDepth);
             }
+            const time = Date.now() - time0;
             pipelineSteps.push({
               identifier: operation.identifier,
               result,
+              time,
             });
           }
           break;
