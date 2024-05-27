@@ -3,13 +3,15 @@ import { Draft, produce } from 'immer';
 import { Reducer } from 'react';
 
 import * as Type from './DataActionTypes';
-import * as LoadActions from './actions/LoadActions';
 import type {
   SetLoadingAction,
   LoadDropAction,
   LoadPixeliumAction,
   CloseImageAction,
 } from './actions/LoadActions';
+import * as LoadActions from './actions/LoadActions';
+import type { EditMetaDataAction } from './actions/MetaDataActions';
+import * as MetaDataActions from './actions/MetaDataActions';
 import * as RoiActions from './actions/RoiActions';
 import { SetROIAction } from './actions/RoiActions';
 import * as PipelineActions from './actions/pipeline/PipelineActions';
@@ -41,7 +43,8 @@ export type DataActions =
   | PipelineActionsTypes
   | LoadPixeliumAction
   | CloseImageAction
-  | CopyPipelineOperationsAction;
+  | CopyPipelineOperationsAction
+  | EditMetaDataAction;
 
 function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
   switch (action.type) {
@@ -93,6 +96,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return LoadActions.closeImage(draft, action.payload);
     case Type.COPY_OPERATIONS:
       return PipelineActions.copyOperations(draft, action.payload);
+    case Type.EDIT_METADATA:
+      return MetaDataActions.editMetaData(draft, action.payload);
     default:
       throw new Error('Unknown action type in data reducer.');
   }

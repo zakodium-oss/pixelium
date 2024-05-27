@@ -1,6 +1,6 @@
-import { Tooltip } from '@blueprintjs/core';
+import { InputGroup, Tooltip } from '@blueprintjs/core';
 import { ImageColorModel } from 'image-js';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   TbDroplet,
   TbDropletFilled,
@@ -107,6 +107,19 @@ export default function ImagesPanel() {
     [dataDispatch, tabsItems, currentTab, viewDispatch],
   );
 
+  function editMetaData(label: string, value: string) {
+    if (currentTab) {
+      dataDispatch({
+        type: 'EDIT_METADATA',
+        payload: {
+          identifier: currentTab,
+          label,
+          value,
+        },
+      });
+    }
+  }
+
   return (
     <>
       {tabsItems.length > 0 ? (
@@ -127,7 +140,13 @@ export default function ImagesPanel() {
               }}
               onClick={() => openTab(item.id)}
             >
-              <ValueRenderers.Text value={item.title} />
+              <ValueRenderers.Component>
+                <EditableInput
+                  label="title"
+                  value={item.title}
+                  editMetaData={editMetaData}
+                />
+              </ValueRenderers.Component>
               <ValueRenderers.Number value={item.width} />
               <ValueRenderers.Number value={item.height} />
               <ValueRenderers.Component
@@ -160,5 +179,36 @@ export default function ImagesPanel() {
         </Table>
       ) : null}
     </>
+  );
+}
+
+function EditableInput({
+  label,
+  value,
+  editMetaData,
+}: {
+  label: string;
+  value: string;
+  editMetaData: (label: string, value: string) => void;
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputValue, setInputValue] = useState(value);
+
+  return (
+    <InputGroup
+      value={inputValue}
+      onChange={(e) => {
+        setInputValue(e.target.value);
+        editMetaData(label, e.target.value);
+      }}
+      style={{
+        boxShadow: 'none',
+        backgroundColor: isEditing ? 'white' : 'transparent',
+      }}
+      onClick={() => setIsEditing(true)}
+      onBlur={() => {
+        setIsEditing(false);
+      }}
+    />
   );
 }
