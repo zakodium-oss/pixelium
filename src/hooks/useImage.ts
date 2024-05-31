@@ -9,6 +9,7 @@ export default function useImage(toOperation?: string) {
     () => ({
       original: pipelineContent.original,
       pipelined: pipelineContent.pipelined(toOperation),
+      times: pipelineContent.times,
     }),
     [pipelineContent, toOperation],
   );
