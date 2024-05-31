@@ -129,7 +129,7 @@ export default function ImagesPanel() {
         <Table compact bordered>
           <Table.Header>
             <ValueRenderers.Header value="Title" />
-            <ValueRenderers.Header value="Pixel Size" />
+            <ValueRenderers.Header value="Resolution" />
             <ValueRenderers.Header value="Width" />
             <ValueRenderers.Header value="Height" />
             <ValueRenderers.Header value="Color Model" />
