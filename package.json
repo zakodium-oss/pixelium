@@ -75,7 +75,7 @@
     "react-kbs": "^2.1.1",
     "react-map-interaction": "^2.1.0",
     "react-plot": "^1.4.2",
-    "react-roi": "^1.4.0",
+    "react-roi": "^1.4.2",
     "react-science": "^3.1.0",
     "react-use": "^17.4.0",
     "tiff": "^6.1.0"

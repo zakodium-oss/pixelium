@@ -2,7 +2,8 @@ import { Button, Popover } from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import startCase from 'lodash/startCase';
 import { memo } from 'react';
-import { MdFilterAlt } from 'react-icons/md';
+import { MdFilterAlt, MdSearch } from 'react-icons/md';
+import { useActions } from 'react-roi';
 import { Table, ValueRenderers } from 'react-science/ui';
 
 import useFilteredROIs from '../../hooks/useFilteredROIs';
@@ -24,6 +25,7 @@ interface ROITableProps {
 }
 
 function ROITable({ identifier }: ROITableProps) {
+  const { zoomIntoROI } = useActions();
   const rois = useROIs(identifier);
   const { filters } = useROIContext();
   const filteredROIs = useFilteredROIs(identifier);
@@ -46,6 +48,7 @@ function ROITable({ identifier }: ROITableProps) {
     >
       <Table compact striped>
         <Table.Header>
+          <ValueRenderers.Header />
           {columns.map((column) => (
             <ValueRenderers.Component
               key={column}
@@ -73,6 +76,23 @@ function ROITable({ identifier }: ROITableProps) {
         </Table.Header>
         {filteredROIs.map((roi) => (
           <Table.Row key={roi.id}>
+            <ValueRenderers.Component style={{ marginTop: -2 }}>
+              <Button
+                minimal
+                onClick={() => {
+                  zoomIntoROI(
+                    [
+                      { x: roi.column, y: roi.row },
+                      { x: roi.column + roi.width, y: roi.row + roi.height },
+                    ],
+                    { margin: 0.5 },
+                  );
+                }}
+                style={{ padding: 0 }}
+              >
+                <MdSearch size={20} />
+              </Button>
+            </ValueRenderers.Component>
             {columns.map((column) => (
               <ValueRenderers.Number
                 key={column}

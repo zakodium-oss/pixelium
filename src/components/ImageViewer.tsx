@@ -3,16 +3,12 @@ import {
   CSSProperties,
   memo,
   MutableRefObject,
-  useCallback,
   useEffect,
   useMemo,
 } from 'react';
-import { RoiContainer, RoiProvider, useTargetRef } from 'react-roi';
+import { RoiContainer, useTargetRef } from 'react-roi';
 
 import useImage from '../hooks/useImage';
-import useView from '../hooks/useView';
-import useViewDispatch from '../hooks/useViewDispatch';
-import { SET_PAN_ZOOM } from '../state/view/ViewActionTypes';
 
 import ROIAnnotations from './roi/ROIAnnotations';
 
@@ -45,9 +41,6 @@ function ImageViewer({
   image,
   annotable = false,
 }: ImageViewerProps) {
-  const view = useView();
-  const viewDispatch = useViewDispatch();
-
   const { original, pipelined } = useImage();
 
   const imageToShow = useMemo(() => {
@@ -55,56 +48,23 @@ function ImageViewer({
     return showOriginal ? original : pipelined;
   }, [image, original, pipelined, showOriginal]);
 
-  const panZoom = useMemo(() => {
-    return (
-      view.imageViewerProps[identifier] || {
-        scale: 1,
-        translation: [0, 0],
-      }
-    );
-  }, [identifier, view.imageViewerProps]);
-
-  const setPanZoom = useCallback(
-    (panZoom) => {
-      viewDispatch({
-        type: SET_PAN_ZOOM,
-        payload: { identifier, panZoom },
-      });
-    },
-    [identifier, viewDispatch],
-  );
-
   return (
-    <RoiProvider
-      initialConfig={{
-        zoom: {
-          initial: panZoom,
-          min: 0.1,
-          max: 30,
-          spaceAroundTarget: 0,
-        },
-        resizeStrategy: 'contain',
-        mode: 'select',
+    <RoiContainer
+      zoomWithoutModifierKey
+      target={<TargetCanvas imageToShow={imageToShow} />}
+      style={{
+        width: '100%',
+        height: '100%',
       }}
-      onAfterZoomChange={setPanZoom}
     >
-      <RoiContainer
-        zoomWithoutModifierKey
-        target={<TargetCanvas imageToShow={imageToShow} />}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        {annotable && (
-          <ROIAnnotations
-            width={imageToShow?.width}
-            height={imageToShow?.height}
-            identifier={identifier}
-          />
-        )}
-      </RoiContainer>
-    </RoiProvider>
+      {annotable && (
+        <ROIAnnotations
+          width={imageToShow?.width}
+          height={imageToShow?.height}
+          identifier={identifier}
+        />
+      )}
+    </RoiContainer>
   );
 }
 

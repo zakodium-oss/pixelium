@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
-import { usePanZoomTransform } from 'react-roi/lib-esm/hooks/usePanZoom';
+import { usePanZoomTransform } from 'react-roi';
 
 import useAnnotationRef from '../../hooks/useAnnotationRef';
 import useOriginalFilteredROIs from '../../hooks/useOriginalFilteredROIs';
