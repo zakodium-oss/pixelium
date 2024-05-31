@@ -38,10 +38,9 @@ function ROIAnnotations({
   const transform = usePanZoomTransform();
 
   return (
-    <div style={{ width, height }}>
+    <div style={{ width, height, transform, transformOrigin: '0px 0px' }}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        style={{ transform, transformOrigin: '0px 0px' }}
         viewBox={`0 0 ${width} ${height}`}
         ref={annotationsRef}
       >
