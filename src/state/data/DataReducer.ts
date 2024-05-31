@@ -22,7 +22,12 @@ import { CopyPipelineOperationsAction } from './actions/pipeline/meta';
 export interface DataFile {
   image: Image;
   pipeline: PipelineOperations[];
-  metadata: { name: string; relativePath: string };
+  metadata: {
+    name: string;
+    relativePath: string;
+    pixelSize: string;
+    pixelUnits: string;
+  };
   rois: Roi[];
 }
 

@@ -26,6 +26,8 @@ export default function ImagesPanel() {
       Object.keys(images).map((identifier) => ({
         id: identifier,
         title: images[identifier].metadata.name,
+        pixelSize: images[identifier].metadata.pixelSize,
+        pixelUnits: images[identifier].metadata.pixelUnits,
         width: images[identifier].image.width,
         height: images[identifier].image.height,
         bitDepth: images[identifier].image.bitDepth,
@@ -126,6 +128,7 @@ export default function ImagesPanel() {
         <Table compact bordered>
           <Table.Header>
             <ValueRenderers.Header value="Title" />
+            <ValueRenderers.Header value="Pixel Size" />
             <ValueRenderers.Header value="Width" />
             <ValueRenderers.Header value="Height" />
             <ValueRenderers.Header value="Color Model" />
@@ -144,6 +147,19 @@ export default function ImagesPanel() {
                 <EditableInput
                   label="title"
                   value={item.title}
+                  editMetaData={editMetaData}
+                />
+              </ValueRenderers.Component>
+              <ValueRenderers.Component style={{ display: 'flex' }}>
+                <EditableInput
+                  label="pixelSize"
+                  value={item.pixelSize}
+                  editMetaData={editMetaData}
+                  fixed={2}
+                />
+                <EditableInput
+                  label="pixelUnits"
+                  value={item.pixelUnits}
                   editMetaData={editMetaData}
                 />
               </ValueRenderers.Component>
@@ -186,17 +202,25 @@ function EditableInput({
   label,
   value,
   editMetaData,
+  fixed,
 }: {
   label: string;
   value: string;
   editMetaData: (label: string, value: string) => void;
+  fixed?: number;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(value);
 
   return (
     <InputGroup
-      value={inputValue}
+      value={
+        inputValue !== undefined
+          ? fixed
+            ? Number(inputValue).toFixed(fixed)
+            : inputValue
+          : ''
+      }
       onChange={(e) => {
         setInputValue(e.target.value);
         editMetaData(label, e.target.value);
