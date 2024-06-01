@@ -1,8 +1,7 @@
-import styled from '@emotion/styled';
 import { WebSource } from 'filelist-utils';
-import { memo, useMemo, useReducer, useRef } from 'react';
+import { memo, ReactNode, useMemo, useReducer, useRef } from 'react';
 import { KbsProvider } from 'react-kbs';
-import { RootLayout, SplitPane, Toolbar } from 'react-science/ui';
+import { RootLayout } from 'react-science/ui';
 
 import {
   dataReducer,
@@ -30,25 +29,6 @@ import { PreferencesProvider } from './context/PreferencesContext';
 import { initialROIState, ROIProvider, ROIReducer } from './context/ROIContext';
 import { RootProvider } from './context/RootContext';
 import { ViewProvider } from './context/ViewContext';
-import CenterPanel from './layout/CenterPanel';
-import Header from './layout/Header';
-import Sidebar from './layout/Sidebar';
-import ModalContainer from './modal/ModalContainer';
-import ExportTool from './tool/ExportTool';
-import GreyTool from './tool/FilterTool';
-import GeometryTool from './tool/GeometryTool';
-import ImportTool from './tool/ImportTool';
-import MaskTool from './tool/MaskTool';
-import MorphologyTool from './tool/MorphologyTool';
-import ROITool from './tool/ROITool';
-
-const PixeliumStyle = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-`;
 
 interface PixeliumProps {
   data?: DataState;
@@ -56,21 +36,16 @@ interface PixeliumProps {
   view?: ViewState;
   webSource?: WebSource;
   setWebSource?: (webSource: WebSource) => void;
+  children: ReactNode;
 }
 
-const PixeliumMainStyle = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  overflow: hidden;
-`;
-
-function Pixelium({
+function PixeliumProvider({
   data,
   preferences,
   view,
   webSource,
   setWebSource,
+  children,
 }: PixeliumProps) {
   // Refs
   const rootRef = useRef<HTMLDivElement>(null);
@@ -115,29 +90,7 @@ function Pixelium({
                             webSource={webSource}
                             setWebSource={setWebSource}
                           >
-                            <PixeliumStyle ref={rootRef}>
-                              <Header />
-                              <PixeliumMainStyle>
-                                <Toolbar vertical>
-                                  <ImportTool />
-                                  <ExportTool />
-                                  <GreyTool />
-                                  <MaskTool />
-                                  <MorphologyTool />
-                                  <GeometryTool />
-                                  <ROITool />
-                                  <ModalContainer />
-                                </Toolbar>
-                                <SplitPane
-                                  direction="horizontal"
-                                  size="300px"
-                                  controlledSide="end"
-                                >
-                                  <CenterPanel />
-                                  <Sidebar />
-                                </SplitPane>
-                              </PixeliumMainStyle>
-                            </PixeliumStyle>
+                            {children}
                           </AutoLoader>
                         </AnnotationsProvider>
                       </ROIProvider>
@@ -153,4 +106,4 @@ function Pixelium({
   );
 }
 
-export default memo(Pixelium);
+export default memo(PixeliumProvider);
