@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-import { WebSource } from 'filelist-utils';
-import { memo, useState } from 'react';
+import { memo } from 'react';
 
 import PixeliumApp from '../../components/PixeliumApp';
 import PixeliumProvider from '../../components/PixeliumProvider';
@@ -22,12 +21,10 @@ const PixeliumWrapper = styled.div`
 `;
 
 function MainView() {
-  const [webSource, setWebSource] = useState<WebSource>();
-
   return (
-    <PixeliumProvider webSource={webSource} setWebSource={setWebSource}>
+    <PixeliumProvider>
       <MainViewWrapper>
-        <Sidebar setWebSource={setWebSource} />
+        <Sidebar />
         <PixeliumWrapper>
           <PixeliumApp />
         </PixeliumWrapper>

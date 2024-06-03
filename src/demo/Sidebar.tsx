@@ -4,6 +4,8 @@ import ky from 'ky';
 import { Fragment, memo, useEffect, useState } from 'react';
 import { Button } from 'react-science/ui';
 
+import { useWebSource } from '../components/context/WebSourceContext';
+
 const StyledSidebar = styled.div`
   display: flex;
   flex-direction: column;
@@ -50,11 +52,8 @@ interface TocResponse {
   }[];
 }
 
-interface SidebarProps {
-  setWebSource: (webSource: WebSource) => void;
-}
-
-function Sidebar({ setWebSource }: SidebarProps) {
+function Sidebar() {
+  const { setWebSource } = useWebSource();
   const [toc, setToC] = useState<TocResponse>({
     title: '',
     sections: [],

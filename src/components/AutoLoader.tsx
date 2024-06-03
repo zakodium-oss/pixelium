@@ -1,16 +1,17 @@
-import { WebSource } from 'filelist-utils';
 import { memo, ReactNode, useEffect } from 'react';
 
 import useFileLoader from '../hooks/useFileLoader';
 import useLog from '../hooks/useLog';
 
+import { useWebSource } from './context/WebSourceContext';
+
 interface AutoLoaderProps {
-  webSource?: WebSource;
-  setWebSource?: (webSource: WebSource) => void;
   children: ReactNode;
 }
 
-function AutoLoader({ children, webSource, setWebSource }: AutoLoaderProps) {
+function AutoLoader({ children }: AutoLoaderProps) {
+  const { webSource, setWebSource } = useWebSource();
+
   const { handleWebSource } = useFileLoader();
   const { logger } = useLog();
 
@@ -21,7 +22,7 @@ function AutoLoader({ children, webSource, setWebSource }: AutoLoaderProps) {
       logger.error(`Error while loading websource: ${error.message}`);
     });
 
-    setWebSource?.({ entries: [] });
+    setWebSource?.(undefined);
   }, [handleWebSource, logger, webSource, setWebSource]);
 
   return children;

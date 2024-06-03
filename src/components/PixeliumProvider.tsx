@@ -1,4 +1,3 @@
-import { WebSource } from 'filelist-utils';
 import { memo, ReactNode, useMemo, useReducer, useRef } from 'react';
 import { KbsProvider } from 'react-kbs';
 import { RootLayout } from 'react-science/ui';
@@ -29,13 +28,12 @@ import { PreferencesProvider } from './context/PreferencesContext';
 import { initialROIState, ROIProvider, ROIReducer } from './context/ROIContext';
 import { RootProvider } from './context/RootContext';
 import { ViewProvider } from './context/ViewContext';
+import { WebSourceProvider } from './context/WebSourceContext';
 
 interface PixeliumProps {
   data?: DataState;
   preferences?: PreferencesState;
   view?: ViewState;
-  webSource?: WebSource;
-  setWebSource?: (webSource: WebSource) => void;
   children: ReactNode;
 }
 
@@ -43,8 +41,6 @@ function PixeliumProvider({
   data,
   preferences,
   view,
-  webSource,
-  setWebSource,
   children,
 }: PixeliumProps) {
   // Refs
@@ -75,34 +71,31 @@ function PixeliumProvider({
   }, [dispatchData, dispatchPreferences, dispatchView, dispatchROI]);
 
   return (
-    <RootLayout>
-      <RootProvider value={{ rootRef }}>
-        <KbsProvider>
-          <LogProvider>
-            <DataProvider value={dataState}>
-              <PreferencesProvider value={preferencesState}>
-                <ViewProvider value={viewState}>
-                  <DispatchProvider value={dispatchers}>
-                    <PipelineProvider identifier={viewState.currentTab}>
-                      <ROIProvider value={roiState}>
-                        <AnnotationsProvider>
-                          <AutoLoader
-                            webSource={webSource}
-                            setWebSource={setWebSource}
-                          >
-                            {children}
-                          </AutoLoader>
-                        </AnnotationsProvider>
-                      </ROIProvider>
-                    </PipelineProvider>
-                  </DispatchProvider>
-                </ViewProvider>
-              </PreferencesProvider>
-            </DataProvider>
-          </LogProvider>
-        </KbsProvider>
-      </RootProvider>
-    </RootLayout>
+    <WebSourceProvider>
+      <RootLayout>
+        <RootProvider value={{ rootRef }}>
+          <KbsProvider>
+            <LogProvider>
+              <DataProvider value={dataState}>
+                <PreferencesProvider value={preferencesState}>
+                  <ViewProvider value={viewState}>
+                    <DispatchProvider value={dispatchers}>
+                      <PipelineProvider identifier={viewState.currentTab}>
+                        <ROIProvider value={roiState}>
+                          <AnnotationsProvider>
+                            <AutoLoader>{children}</AutoLoader>
+                          </AnnotationsProvider>
+                        </ROIProvider>
+                      </PipelineProvider>
+                    </DispatchProvider>
+                  </ViewProvider>
+                </PreferencesProvider>
+              </DataProvider>
+            </LogProvider>
+          </KbsProvider>
+        </RootProvider>
+      </RootLayout>
+    </WebSourceProvider>
   );
 }
 
