@@ -6,6 +6,7 @@ import { Toolbar, ToolbarItemProps } from 'react-science/ui';
 
 import useAnnotationRef from '../../hooks/useAnnotationRef';
 import useCurrentTab from '../../hooks/useCurrentTab';
+import useData from '../../hooks/useData';
 import useImage from '../../hooks/useImage';
 import useLog from '../../hooks/useLog';
 import useModal from '../../hooks/useModal';
@@ -17,10 +18,21 @@ import {
 
 function ExportTool() {
   const currentTab = useCurrentTab();
+  const data = useData();
   const { pipelined } = useImage();
   const { logger } = useLog();
   const { svgRef } = useAnnotationRef();
   const { open: openExportModal } = useModal('export');
+
+  const title = useMemo(() => {
+    let fullTitle;
+    if (currentTab) {
+      fullTitle = data.images[currentTab]?.metadata.name || currentTab;
+    } else {
+      fullTitle = 'unnamed';
+    }
+    return fullTitle.split('.')[0];
+  }, [currentTab, data]);
 
   const exportItem: ToolbarItemProps = {
     id: 'export',
@@ -79,10 +91,8 @@ function ExportTool() {
   }, [pipelined, svgRef]);
 
   const exportPNG = useCallback(async () => {
-    return mergeToImage().then((toSave) =>
-      saveAsPng(toSave, `${currentTab || 'unnamed'}.png`),
-    );
-  }, [currentTab, mergeToImage]);
+    return mergeToImage().then((toSave) => saveAsPng(toSave, title));
+  }, [mergeToImage, title]);
 
   const copyToClipboard = useCallback(() => {
     return mergeToImage().then((toSave) => saveToClipboard(toSave));
