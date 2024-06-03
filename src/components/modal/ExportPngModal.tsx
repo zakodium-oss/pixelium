@@ -11,6 +11,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
+import useData from '../../hooks/useData';
 import useLog from '../../hooks/useLog';
 import useModal from '../../hooks/useModal';
 import { saveAsPng } from '../../utils/export';
@@ -40,9 +41,20 @@ const SaveButtonInner = styled.span`
 function ExportPngModal() {
   const { isOpen, close } = useModal('exportPng');
   const currentTab = useCurrentTab();
+  const data = useData();
   const [hasAnnotations, setHasAnnotations] = useState<boolean | null>(null);
 
   const { logger } = useLog();
+
+  const title = useMemo(() => {
+    let fullTitle;
+    if (currentTab) {
+      fullTitle = data.images[currentTab]?.metadata.name || currentTab;
+    } else {
+      fullTitle = 'unnamed';
+    }
+    return fullTitle.split('.')[0];
+  }, [currentTab, data]);
 
   const defaultFormState = useMemo(
     () => ({
@@ -62,9 +74,9 @@ function ExportPngModal() {
 
   const exportPNG = useCallback(async () => {
     return mergeToImage().then(({ toSave }) =>
-      saveAsPng(toSave, `${formState.name || currentTab || 'unnamed'}.png`),
+      saveAsPng(toSave, formState.name || title),
     );
-  }, [currentTab, formState.name, mergeToImage]);
+  }, [formState.name, mergeToImage, title]);
 
   const save = useCallback(() => {
     exportPNG()
@@ -107,7 +119,7 @@ function ExportPngModal() {
               <FormGroup label="Name">
                 <InputGroup
                   type="text"
-                  placeholder="Untitled"
+                  placeholder={title}
                   value={formState.name}
                   onChange={(e) =>
                     setFormState({
