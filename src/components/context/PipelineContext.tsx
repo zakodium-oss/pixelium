@@ -4,15 +4,17 @@ import { createContext, ReactNode, useCallback, useMemo } from 'react';
 import useData from '../../hooks/useData';
 import useLog from '../../hooks/useLog';
 import { EMPTY_IMAGE } from '../../utils/defaults';
-import runPipeline from '../../utils/runPipeline';
+import runPipeline, { PipelineStep } from '../../utils/runPipeline';
 
 interface PipelineContextContent {
   pipelined: (toOperation?: string) => Image | Mask;
+  times: Omit<PipelineStep, 'result'>[];
   original: Image;
 }
 
 export const PipelineContext = createContext<PipelineContextContent>({
   pipelined: () => EMPTY_IMAGE,
+  times: [],
   original: EMPTY_IMAGE,
 });
 
@@ -69,9 +71,13 @@ export function PipelineProvider({
   const content = useMemo(
     () => ({
       pipelined,
+      times: pipelineSteps.map(({ identifier, time }) => ({
+        identifier,
+        time,
+      })),
       original: dataFile.image,
     }),
-    [dataFile.image, pipelined],
+    [dataFile.image, pipelineSteps, pipelined],
   );
 
   return (

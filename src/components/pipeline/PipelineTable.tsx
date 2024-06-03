@@ -15,6 +15,7 @@ import { Button, Table, ValueRenderers } from 'react-science/ui';
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useData from '../../hooks/useData';
 import useDataDispatch from '../../hooks/useDataDispatch';
+import useImage from '../../hooks/useImage';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import {
   COPY_OPERATIONS,
@@ -51,6 +52,7 @@ interface PipelineTableProps {
 
 function PipelineTable({ identifier }: PipelineTableProps) {
   const data = useData();
+  const { times } = useImage();
   const dataDispatch = useDataDispatch();
   const viewDispatch = useViewDispatch();
   const currentTab = useCurrentTab();
@@ -166,7 +168,6 @@ function PipelineTable({ identifier }: PipelineTableProps) {
       </Empty>
     );
   }
-
   return (
     <Table>
       <Table.Header>
@@ -174,6 +175,7 @@ function PipelineTable({ identifier }: PipelineTableProps) {
         <ValueRenderers.Header value="Type" />
         <ValueRenderers.Header value="Options" />
         <ValueRenderers.Header value="Enabled" />
+        <ValueRenderers.Header value="Time (ms)" />
         <ValueRenderers.Header value="Actions" />
       </Table.Header>
       {pipeline.map((operation, index) => (
@@ -193,6 +195,14 @@ function PipelineTable({ identifier }: PipelineTableProps) {
               }
             />
           </ValueRenderers.Component>
+          <ValueRenderers.Number
+            value={
+              times.find(
+                ({ identifier }) => identifier === operation.identifier,
+              )?.time ?? 0
+            }
+            fixed={2}
+          />
           <ValueRenderers.Component>
             <ActionsContainer>
               <Button

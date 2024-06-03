@@ -53,6 +53,8 @@ function innerDataReducer(draft: Draft<DataState>, action: DataActions) {
       return LoadActions.loadPixelium(draft, action.payload);
     case Type.SET_GREY_FILTER:
       return PipelineActions.setGreyFilter(draft, action.payload);
+    case Type.SET_CONVERT:
+      return PipelineActions.setConvert(draft, action.payload);
     case Type.SET_BLUR:
       return PipelineActions.setBlur(draft, action.payload);
     case Type.SET_GAUSSIAN_BLUR:
