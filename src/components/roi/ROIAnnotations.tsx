@@ -33,19 +33,21 @@ function ROIAnnotations({
   useEffect(() => {
     if (annotationsRef.current === null) return;
     setSvgRef(annotationsRef);
-  }, [setSvgRef, svgRef]);
+  }, [setSvgRef, svgRef, annotations]);
 
   const transform = usePanZoomTransform();
 
   return (
     <div style={{ width, height, transform, transformOrigin: '0px 0px' }}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox={`0 0 ${width} ${height}`}
-        ref={annotationsRef}
-      >
-        {annotations}
-      </svg>
+      {annotations.length > 0 && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox={`0 0 ${width} ${height}`}
+          ref={annotationsRef}
+        >
+          {annotations}
+        </svg>
+      )}
     </div>
   );
 }

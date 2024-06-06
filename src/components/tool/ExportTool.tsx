@@ -72,7 +72,9 @@ function ExportTool() {
         ? (pipelined as Image)
         : pipelined.convertColor(ImageColorModel.RGBA);
     const toSave =
-      annotations === null ? recolored : annotations.copyTo(recolored);
+      annotations === null
+        ? (pipelined as Image)
+        : annotations.copyTo(recolored);
     return toSave;
   }, [pipelined, svgRef]);
 
