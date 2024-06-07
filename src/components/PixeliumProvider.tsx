@@ -1,9 +1,14 @@
-import styled from '@emotion/styled';
-import { WebSource } from 'filelist-utils';
-import { memo, useCallback, useMemo, useReducer, useRef } from 'react';
+import {
+  memo,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useReducer,
+  useRef,
+} from 'react';
 import { KbsProvider } from 'react-kbs';
 import { RoiProvider } from 'react-roi';
-import { RootLayout, SplitPane, Toolbar } from 'react-science/ui';
+import { RootLayout } from 'react-science/ui';
 
 import useViewDispatch from '../hooks/useViewDispatch';
 import {
@@ -23,7 +28,6 @@ import {
   ViewState,
 } from '../state/view/ViewReducer';
 
-import AutoLoader from './AutoLoader';
 import { AnnotationsProvider } from './context/AnnotationsContext';
 import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
@@ -33,42 +37,22 @@ import { PreferencesProvider } from './context/PreferencesContext';
 import { initialROIState, ROIProvider, ROIReducer } from './context/ROIContext';
 import { RootProvider } from './context/RootContext';
 import { ViewProvider } from './context/ViewContext';
-import CenterPanel from './layout/CenterPanel';
-import Header from './layout/Header';
-import Sidebar from './layout/Sidebar';
-import ModalContainer from './modal/ModalContainer';
-import ExportTool from './tool/ExportTool';
-import GreyTool from './tool/FilterTool';
-import GeometryTool from './tool/GeometryTool';
-import ImportTool from './tool/ImportTool';
-import MaskTool from './tool/MaskTool';
-import MorphologyTool from './tool/MorphologyTool';
-import ROITool from './tool/ROITool';
-
-const PixeliumStyle = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-`;
 
 interface PixeliumProps {
   data?: DataState;
   preferences?: PreferencesState;
   view?: ViewState;
-  webSource?: WebSource;
+  children: ReactNode;
 }
 
-const PixeliumMainStyle = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  overflow: hidden;
-`;
-
-function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
+function PixeliumProvider({
+  data,
+  preferences,
+  view,
+  children,
+}: PixeliumProps) {
   const viewDispatch = useViewDispatch();
+
   // Refs
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -149,33 +133,7 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
                           }}
                           onAfterZoomChange={setPanZoom}
                         >
-                          <AnnotationsProvider>
-                            <AutoLoader webSource={webSource}>
-                              <PixeliumStyle ref={rootRef}>
-                                <Header />
-                                <PixeliumMainStyle>
-                                  <Toolbar vertical>
-                                    <ImportTool />
-                                    <ExportTool />
-                                    <GreyTool />
-                                    <MaskTool />
-                                    <MorphologyTool />
-                                    <GeometryTool />
-                                    <ROITool />
-                                    <ModalContainer />
-                                  </Toolbar>
-                                  <SplitPane
-                                    direction="horizontal"
-                                    size="400px"
-                                    controlledSide="end"
-                                  >
-                                    <CenterPanel />
-                                    <Sidebar />
-                                  </SplitPane>
-                                </PixeliumMainStyle>
-                              </PixeliumStyle>
-                            </AutoLoader>
-                          </AnnotationsProvider>
+                          <AnnotationsProvider>{children}</AnnotationsProvider>
                         </RoiProvider>
                       </ROIProvider>
                     </PipelineProvider>
@@ -190,4 +148,4 @@ function Pixelium({ data, preferences, view, webSource }: PixeliumProps) {
   );
 }
 
-export default memo(Pixelium);
+export default memo(PixeliumProvider);

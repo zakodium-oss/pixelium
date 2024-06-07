@@ -4,6 +4,9 @@ import ky from 'ky';
 import { Fragment, memo, useEffect, useState } from 'react';
 import { Button } from 'react-science/ui';
 
+import useFileLoader from '../hooks/useFileLoader';
+import useLog from '../hooks/useLog';
+
 const StyledSidebar = styled.div`
   display: flex;
   flex-direction: column;
@@ -50,17 +53,14 @@ interface TocResponse {
   }[];
 }
 
-interface SidebarProps {
-  setWebSource: (webSource: WebSource) => void;
-}
+function Sidebar() {
+  const { handleWebSource } = useFileLoader();
+  const { logger } = useLog();
 
-function Sidebar({ setWebSource }: SidebarProps) {
   const [toc, setToC] = useState<TocResponse>({
     title: '',
     sections: [],
   });
-
-  const [selectedSource, setSelectedSource] = useState<WebSource>();
 
   useEffect(() => {
     ky.get('https://image-js.github.io/image-dataset-demo/toc.json')
@@ -71,12 +71,6 @@ function Sidebar({ setWebSource }: SidebarProps) {
         console.error(error);
       });
   }, []);
-
-  useEffect(() => {
-    if (selectedSource) {
-      setWebSource(selectedSource);
-    }
-  }, [selectedSource, setWebSource]);
 
   return (
     <StyledSidebar>
@@ -91,7 +85,11 @@ function Sidebar({ setWebSource }: SidebarProps) {
                 <Button
                   key={source.name}
                   onClick={() => {
-                    setSelectedSource(source.source);
+                    handleWebSource(source.source).catch((error) => {
+                      logger.error(
+                        `Error while loading websource: ${error.message}`,
+                      );
+                    });
                   }}
                   fill
                 >
