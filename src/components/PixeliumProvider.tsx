@@ -28,7 +28,6 @@ import {
   ViewState,
 } from '../state/view/ViewReducer';
 
-import AutoLoader from './AutoLoader';
 import { AnnotationsProvider } from './context/AnnotationsContext';
 import { DataProvider } from './context/DataContext';
 import { DispatchProvider } from './context/DispatchContext';
@@ -38,7 +37,6 @@ import { PreferencesProvider } from './context/PreferencesContext';
 import { initialROIState, ROIProvider, ROIReducer } from './context/ROIContext';
 import { RootProvider } from './context/RootContext';
 import { ViewProvider } from './context/ViewContext';
-import { WebSourceProvider } from './context/WebSourceContext';
 
 interface PixeliumProps {
   data?: DataState;
@@ -112,45 +110,41 @@ function PixeliumProvider({
   }, [dispatchData, dispatchPreferences, dispatchView, dispatchROI]);
 
   return (
-    <WebSourceProvider>
-      <RootLayout>
-        <RootProvider value={{ rootRef }}>
-          <KbsProvider>
-            <LogProvider>
-              <DataProvider value={dataState}>
-                <PreferencesProvider value={preferencesState}>
-                  <ViewProvider value={viewState}>
-                    <DispatchProvider value={dispatchers}>
-                      <PipelineProvider identifier={viewState.currentTab}>
-                        <ROIProvider value={roiState}>
-                          <RoiProvider
-                            initialConfig={{
-                              zoom: {
-                                initial: panZoom,
-                                min: 0.1,
-                                max: 30,
-                                spaceAroundTarget: 0.1,
-                              },
-                              resizeStrategy: 'contain',
-                              mode: 'select',
-                            }}
-                            onAfterZoomChange={setPanZoom}
-                          >
-                            <AnnotationsProvider>
-                              <AutoLoader>{children}</AutoLoader>
-                            </AnnotationsProvider>
-                          </RoiProvider>
-                        </ROIProvider>
-                      </PipelineProvider>
-                    </DispatchProvider>
-                  </ViewProvider>
-                </PreferencesProvider>
-              </DataProvider>
-            </LogProvider>
-          </KbsProvider>
-        </RootProvider>
-      </RootLayout>
-    </WebSourceProvider>
+    <RootLayout>
+      <RootProvider value={{ rootRef }}>
+        <KbsProvider>
+          <LogProvider>
+            <DataProvider value={dataState}>
+              <PreferencesProvider value={preferencesState}>
+                <ViewProvider value={viewState}>
+                  <DispatchProvider value={dispatchers}>
+                    <PipelineProvider identifier={viewState.currentTab}>
+                      <ROIProvider value={roiState}>
+                        <RoiProvider
+                          initialConfig={{
+                            zoom: {
+                              initial: panZoom,
+                              min: 0.1,
+                              max: 30,
+                              spaceAroundTarget: 0.1,
+                            },
+                            resizeStrategy: 'contain',
+                            mode: 'select',
+                          }}
+                          onAfterZoomChange={setPanZoom}
+                        >
+                          <AnnotationsProvider>{children}</AnnotationsProvider>
+                        </RoiProvider>
+                      </ROIProvider>
+                    </PipelineProvider>
+                  </DispatchProvider>
+                </ViewProvider>
+              </PreferencesProvider>
+            </DataProvider>
+          </LogProvider>
+        </KbsProvider>
+      </RootProvider>
+    </RootLayout>
   );
 }
 

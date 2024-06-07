@@ -4,7 +4,8 @@ import ky from 'ky';
 import { Fragment, memo, useEffect, useState } from 'react';
 import { Button } from 'react-science/ui';
 
-import { useWebSource } from '../components/context/WebSourceContext';
+import useFileLoader from '../hooks/useFileLoader';
+import useLog from '../hooks/useLog';
 
 const StyledSidebar = styled.div`
   display: flex;
@@ -53,7 +54,9 @@ interface TocResponse {
 }
 
 function Sidebar() {
-  const { setWebSource } = useWebSource();
+  const { handleWebSource } = useFileLoader();
+  const { logger } = useLog();
+
   const [toc, setToC] = useState<TocResponse>({
     title: '',
     sections: [],
@@ -82,7 +85,11 @@ function Sidebar() {
                 <Button
                   key={source.name}
                   onClick={() => {
-                    setWebSource(source.source);
+                    handleWebSource(source.source).catch((error) => {
+                      logger.error(
+                        `Error while loading websource: ${error.message}`,
+                      );
+                    });
                   }}
                   fill
                 >
