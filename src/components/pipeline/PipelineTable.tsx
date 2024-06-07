@@ -183,7 +183,14 @@ function PipelineTable({ identifier }: PipelineTableProps) {
           <ValueRenderers.Number value={index + 1} />
           <ValueRenderers.Text value={operation.type} style={pointerStyle} />
           {'options' in operation ? (
-            <ValueRenderers.Object value={operation.options} />
+            <ValueRenderers.Component
+              style={{
+                maxWidth: '100px',
+                overflowX: 'auto',
+              }}
+            >
+              <ValueRenderers.Object value={operation.options} />
+            </ValueRenderers.Component>
           ) : (
             <ValueRenderers.Text value="N/A" />
           )}
