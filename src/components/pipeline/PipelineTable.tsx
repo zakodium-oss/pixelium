@@ -1,4 +1,4 @@
-import { Checkbox, MenuItem } from '@blueprintjs/core';
+import { Checkbox, MenuItem, Tooltip } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import styled from '@emotion/styled';
 import {
@@ -173,7 +173,6 @@ function PipelineTable({ identifier }: PipelineTableProps) {
       <Table.Header>
         <ValueRenderers.Header value="#" />
         <ValueRenderers.Header value="Type" />
-        <ValueRenderers.Header value="Options" />
         <ValueRenderers.Header value="Enabled" />
         <ValueRenderers.Header value="Time (ms)" />
         <ValueRenderers.Header value="Actions" />
@@ -181,19 +180,25 @@ function PipelineTable({ identifier }: PipelineTableProps) {
       {pipeline.map((operation, index) => (
         <Table.Row key={operation.identifier}>
           <ValueRenderers.Number value={index + 1} />
-          <ValueRenderers.Text value={operation.type} style={pointerStyle} />
-          {'options' in operation ? (
-            <ValueRenderers.Component
-              style={{
-                maxWidth: '100px',
-                overflowX: 'auto',
-              }}
+          <ValueRenderers.Component style={pointerStyle}>
+            <Tooltip
+              position="bottom"
+              interactionKind="hover"
+              content={
+                <ValueRenderers.Component>
+                  <ValueRenderers.Text
+                    value={
+                      'options' in operation
+                        ? JSON.stringify(operation.options, null, 2)
+                        : 'N/A'
+                    }
+                  />
+                </ValueRenderers.Component>
+              }
             >
-              <ValueRenderers.Object value={operation.options} />
-            </ValueRenderers.Component>
-          ) : (
-            <ValueRenderers.Text value="N/A" />
-          )}
+              {operation.type}
+            </Tooltip>
+          </ValueRenderers.Component>
           <ValueRenderers.Component>
             <Checkbox
               checked={operation.isActive}
