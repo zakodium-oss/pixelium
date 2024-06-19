@@ -182,17 +182,15 @@ function PipelineTable({ identifier }: PipelineTableProps) {
           <ValueRenderers.Number value={index + 1} />
           <ValueRenderers.Component style={pointerStyle}>
             <Tooltip
-              position="bottom"
+              position="right"
               interactionKind="hover"
               content={
                 <ValueRenderers.Component>
-                  <ValueRenderers.Text
-                    value={
-                      'options' in operation
-                        ? JSON.stringify(operation.options, null, 2)
-                        : 'N/A'
-                    }
-                  />
+                  <div style={{ whiteSpace: 'pre-wrap' }}>
+                    {'options' in operation
+                      ? JSON.stringify(operation.options, null, 2)
+                      : 'N/A'}
+                  </div>
                 </ValueRenderers.Component>
               }
             >
