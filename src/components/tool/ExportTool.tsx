@@ -5,22 +5,34 @@ import { FaFileExport } from 'react-icons/fa';
 import { Toolbar, ToolbarItemProps } from 'react-science/ui';
 
 import useAnnotationRef from '../../hooks/useAnnotationRef';
-import useCurrentTab from '../../hooks/useCurrentTab';
 import useImage from '../../hooks/useImage';
-import useLog from '../../hooks/useLog';
 import useModal from '../../hooks/useModal';
-import {
-  saveAsPng,
-  saveToClipboard,
-  svgElementToImage,
-} from '../../utils/export';
+import { svgElementToImage } from '../../utils/export';
+
+export function useMergeToImage() {
+  const { pipelined } = useImage();
+  const { svgRef } = useAnnotationRef();
+
+  return async () => {
+    const svgElement = svgRef.current;
+    const annotations = await svgElementToImage(svgElement, {
+      width: pipelined.width,
+      height: pipelined.height,
+    });
+    const recolored =
+      pipelined.colorModel === ImageColorModel.RGBA
+        ? (pipelined as Image)
+        : pipelined.convertColor(ImageColorModel.RGBA);
+    const toSave =
+      annotations === null ? recolored : annotations.copyTo(recolored);
+    return toSave;
+  };
+}
 
 function ExportTool() {
-  const currentTab = useCurrentTab();
-  const { pipelined } = useImage();
-  const { logger } = useLog();
-  const { svgRef } = useAnnotationRef();
-  const { open: openExportModal } = useModal('export');
+  const { open: openExportPngModal } = useModal('exportPng');
+  const { open: openExportClipboardModal } = useModal('exportClipboard');
+  const { open: openExportPixeliumModal } = useModal('exportPixelium');
 
   const exportItem: ToolbarItemProps = {
     id: 'export',
@@ -61,46 +73,17 @@ function ExportTool() {
     </Menu>
   );
 
-  const mergeToImage = useCallback(async () => {
-    const svgElement = svgRef.current;
-    const annotations = await svgElementToImage(svgElement, {
-      width: pipelined.width,
-      height: pipelined.height,
-    });
-    const recolored =
-      pipelined.colorModel === ImageColorModel.RGBA
-        ? (pipelined as Image)
-        : pipelined.convertColor(ImageColorModel.RGBA);
-    const toSave =
-      annotations === null ? recolored : annotations.copyTo(recolored);
-    return toSave;
-  }, [pipelined, svgRef]);
-
-  const exportPNG = useCallback(async () => {
-    return mergeToImage().then((toSave) =>
-      saveAsPng(toSave, `${currentTab || 'unnamed'}.png`),
-    );
-  }, [currentTab, mergeToImage]);
-
-  const copyToClipboard = useCallback(() => {
-    return mergeToImage().then((toSave) => saveToClipboard(toSave));
-  }, [mergeToImage]);
-
   const handleSelect = useCallback(
     (selected) => {
       if (selected.data === 'png') {
-        exportPNG().catch((error) =>
-          logger.error(`Failed to generate PNG: ${error}`),
-        );
+        openExportPngModal();
       } else if (selected.data === 'clipboard') {
-        copyToClipboard().catch((error) =>
-          logger.error(`Failed to copy to clipboard: ${error}`),
-        );
+        openExportClipboardModal();
       } else if (selected.data === 'pixelium') {
-        openExportModal();
+        openExportPixeliumModal();
       }
     },
-    [copyToClipboard, exportPNG, logger, openExportModal],
+    [openExportPngModal, openExportClipboardModal, openExportPixeliumModal],
   );
 
   return <Toolbar.PopoverItem content={content} itemProps={exportItem} />;

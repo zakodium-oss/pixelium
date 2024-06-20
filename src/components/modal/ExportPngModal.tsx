@@ -10,12 +10,11 @@ import styled from '@emotion/styled';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Button } from 'react-science/ui';
 
-import useData from '../../hooks/useData';
+import useCurrentTab from '../../hooks/useCurrentTab';
 import useLog from '../../hooks/useLog';
 import useModal from '../../hooks/useModal';
-import usePreferences from '../../hooks/usePreferences';
-import useView from '../../hooks/useView';
-import { savePixeliumBundle } from '../../utils/export';
+import { saveAsPng } from '../../utils/export';
+import { useMergeToImage } from '../tool/ExportTool';
 
 import StyledModalBody from './utils/StyledModalBody';
 
@@ -38,19 +37,16 @@ const SaveButtonInner = styled.span`
   align-items: center;
 `;
 
-function ExportModal() {
-  const { isOpen, close } = useModal('export');
-  const data = useData();
-  const preferences = usePreferences();
-  const view = useView();
+function ExportPngModal() {
+  const { isOpen, close } = useModal('exportPng');
+  const currentTab = useCurrentTab();
+
   const { logger } = useLog();
 
   const defaultFormState = useMemo(
     () => ({
       name: '',
-      view: false,
-      preferences: false,
-      data: false,
+      annotations: true,
     }),
     [],
   );
@@ -61,36 +57,26 @@ function ExportModal() {
     [setFormState, defaultFormState],
   );
 
+  const mergeToImage = useMergeToImage();
+
+  const exportPNG = useCallback(async () => {
+    return mergeToImage().then((toSave) =>
+      saveAsPng(toSave, `${currentTab || 'unnamed'}.png`),
+    );
+  }, [currentTab, mergeToImage]);
+
   const save = useCallback(() => {
-    savePixeliumBundle({
-      name: formState.name.length > 0 ? formState.name : 'Untitled',
-      view: formState.view ? view : null,
-      preferences: formState.preferences ? preferences : null,
-      data: formState.data ? data : null,
-    })
-      .catch((error) => {
-        logger.error(`Error while exporting Pixelium file: ${error}`);
-      })
+    exportPNG()
+      .catch((error) => logger.error(`Failed to generate PNG: ${error}`))
       .finally(() => {
         resetForm();
         close();
       });
-  }, [
-    close,
-    data,
-    formState.data,
-    formState.name,
-    formState.preferences,
-    formState.view,
-    logger,
-    preferences,
-    resetForm,
-    view,
-  ]);
+  }, [close, exportPNG, logger, resetForm]);
 
   return (
     <Dialog
-      title="Export Pixelium file"
+      title="Export PNG file"
       isOpen={isOpen}
       onClose={close}
       style={{ width: 'fit-content' }}
@@ -113,33 +99,11 @@ function ExportModal() {
                 />
               </FormGroup>
               <Checkbox
-                label="Include view"
+                label="Include annotations"
                 alignIndicator="right"
-                checked={formState.view}
+                checked={formState.annotations}
                 onChange={(e) =>
-                  setFormState({ ...formState, view: e.target.checked })
-                }
-              />
-              <Checkbox
-                label="Include preferences"
-                alignIndicator="right"
-                checked={formState.preferences}
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    preferences: e.target.checked,
-                  })
-                }
-              />
-              <Checkbox
-                label="Include data"
-                alignIndicator="right"
-                checked={formState.data}
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    data: e.target.checked,
-                  })
+                  setFormState({ ...formState, annotations: e.target.checked })
                 }
               />
             </div>
@@ -158,4 +122,4 @@ function ExportModal() {
   );
 }
 
-export default memo(ExportModal);
+export default memo(ExportPngModal);

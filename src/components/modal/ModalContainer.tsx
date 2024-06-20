@@ -4,7 +4,6 @@ import useCurrentTab from '../../hooks/useCurrentTab';
 import useView from '../../hooks/useView';
 
 import AboutModal from './AboutModal';
-import ExportModal from './ExportModal';
 import ExtractROIModal from './ExtractROIModal';
 import LogModal from './LogModal';
 import BlurModal from './preview/filters/BlurModal';
@@ -23,6 +22,9 @@ import CloseModal from './preview/morphology/CloseModal';
 import DilateModal from './preview/morphology/DilateModal';
 import ErodeModal from './preview/morphology/ErodeModal';
 import OpenModal from './preview/morphology/OpenModal';
+import ExportPngModal from './ExportPngModal';
+import ExportClipboardModal from './ExportClipboardModal';
+import ExportPixeliumModal from './ExportPixeliumModal';
 
 function ModalContainer() {
   const view = useView();
@@ -74,7 +76,9 @@ function ModalContainer() {
           {view.modals.close && (
             <CloseModal previewImageIdentifier={currentTab} />
           )}
-          {view.modals.export && <ExportModal />}
+          {view.modals.exportPng && <ExportPngModal />}
+          {view.modals.exportClipboard && <ExportClipboardModal />}
+          {view.modals.exportPixelium && <ExportPixeliumModal />}
           {view.modals.resize && (
             <ResizeModal previewImageIdentifier={currentTab} />
           )}
