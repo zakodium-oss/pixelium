@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { WebSource } from 'filelist-utils';
-import { memo, useState } from 'react';
+import { memo } from 'react';
 
-import Pixelium from '../../components/Pixelium';
+import PixeliumApp from '../../components/PixeliumApp';
+import PixeliumProvider from '../../components/PixeliumProvider';
 import Sidebar from '../Sidebar';
 
 const MainViewWrapper = styled.div`
@@ -21,15 +21,15 @@ const PixeliumWrapper = styled.div`
 `;
 
 function MainView() {
-  const [webSource, setWebSource] = useState<WebSource>();
-
   return (
-    <MainViewWrapper>
-      <Sidebar setWebSource={setWebSource} />
-      <PixeliumWrapper>
-        <Pixelium webSource={webSource} />
-      </PixeliumWrapper>
-    </MainViewWrapper>
+    <PixeliumProvider>
+      <MainViewWrapper>
+        <Sidebar />
+        <PixeliumWrapper>
+          <PixeliumApp />
+        </PixeliumWrapper>
+      </MainViewWrapper>
+    </PixeliumProvider>
   );
 }
 

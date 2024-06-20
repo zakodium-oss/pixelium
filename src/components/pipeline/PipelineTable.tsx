@@ -1,4 +1,4 @@
-import { Checkbox, MenuItem } from '@blueprintjs/core';
+import { Checkbox, MenuItem, Tooltip } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import styled from '@emotion/styled';
 import {
@@ -15,6 +15,7 @@ import { Button, Table, ValueRenderers } from 'react-science/ui';
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useData from '../../hooks/useData';
 import useDataDispatch from '../../hooks/useDataDispatch';
+import useImage from '../../hooks/useImage';
 import useViewDispatch from '../../hooks/useViewDispatch';
 import {
   COPY_OPERATIONS,
@@ -51,6 +52,7 @@ interface PipelineTableProps {
 
 function PipelineTable({ identifier }: PipelineTableProps) {
   const data = useData();
+  const { times } = useImage();
   const dataDispatch = useDataDispatch();
   const viewDispatch = useViewDispatch();
   const currentTab = useCurrentTab();
@@ -166,25 +168,35 @@ function PipelineTable({ identifier }: PipelineTableProps) {
       </Empty>
     );
   }
-
   return (
     <Table>
       <Table.Header>
         <ValueRenderers.Header value="#" />
         <ValueRenderers.Header value="Type" />
-        <ValueRenderers.Header value="Options" />
         <ValueRenderers.Header value="Enabled" />
+        <ValueRenderers.Header value="Time (ms)" />
         <ValueRenderers.Header value="Actions" />
       </Table.Header>
       {pipeline.map((operation, index) => (
         <Table.Row key={operation.identifier}>
           <ValueRenderers.Number value={index + 1} />
-          <ValueRenderers.Text value={operation.type} style={pointerStyle} />
-          {'options' in operation ? (
-            <ValueRenderers.Object value={operation.options} />
-          ) : (
-            <ValueRenderers.Text value="N/A" />
-          )}
+          <ValueRenderers.Component style={pointerStyle}>
+            <Tooltip
+              position="right"
+              interactionKind="hover"
+              content={
+                <ValueRenderers.Component>
+                  <div style={{ whiteSpace: 'pre-wrap' }}>
+                    {'options' in operation
+                      ? JSON.stringify(operation.options, null, 2)
+                      : 'N/A'}
+                  </div>
+                </ValueRenderers.Component>
+              }
+            >
+              {operation.type}
+            </Tooltip>
+          </ValueRenderers.Component>
           <ValueRenderers.Component>
             <Checkbox
               checked={operation.isActive}
@@ -193,6 +205,14 @@ function PipelineTable({ identifier }: PipelineTableProps) {
               }
             />
           </ValueRenderers.Component>
+          <ValueRenderers.Number
+            value={
+              times.find(
+                ({ identifier }) => identifier === operation.identifier,
+              )?.time ?? 0
+            }
+            fixed={2}
+          />
           <ValueRenderers.Component>
             <ActionsContainer>
               <Button
