@@ -9,7 +9,7 @@ import useImage from '../../hooks/useImage';
 import useModal from '../../hooks/useModal';
 import { svgElementToImage } from '../../utils/export';
 
-export function useMergeToImage() {
+export function useMergeToImage(hasAnnotations: boolean) {
   const { pipelined } = useImage();
   const { svgRef } = useAnnotationRef();
 
@@ -24,10 +24,10 @@ export function useMergeToImage() {
         ? (pipelined as Image)
         : pipelined.convertColor(ImageColorModel.RGBA);
     const toSave =
-      annotations === null
+      annotations === null || !hasAnnotations
         ? (pipelined as Image)
         : annotations.copyTo(recolored);
-    return toSave;
+    return { toSave, annotations };
   };
 }
 

@@ -1,6 +1,6 @@
 import { Checkbox, Dialog, DialogBody, DialogFooter } from '@blueprintjs/core';
 import styled from '@emotion/styled';
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-science/ui';
 
 import useLog from '../../hooks/useLog';
@@ -32,6 +32,7 @@ const SaveButtonInner = styled.span`
 function ExportClipboardModal() {
   const { isOpen, close } = useModal('exportClipboard');
   const { logger } = useLog();
+  const [hasAnnotations, setHasAnnotations] = useState<boolean | null>(null);
 
   const defaultFormState = useMemo(
     () => ({
@@ -46,10 +47,10 @@ function ExportClipboardModal() {
     [setFormState, defaultFormState],
   );
 
-  const mergeToImage = useMergeToImage();
+  const mergeToImage = useMergeToImage(formState.annotations);
 
   const copyToClipboard = useCallback(() => {
-    return mergeToImage().then((toSave) => saveToClipboard(toSave));
+    return mergeToImage().then(({ toSave }) => saveToClipboard(toSave));
   }, [mergeToImage]);
 
   const save = useCallback(() => {
@@ -60,6 +61,25 @@ function ExportClipboardModal() {
         close();
       });
   }, [close, copyToClipboard, logger, resetForm]);
+
+  useEffect(() => {
+    mergeToImage()
+      .then(({ annotations }) => {
+        if (annotations === null) {
+          setHasAnnotations(false);
+          save();
+        } else {
+          setHasAnnotations(true);
+        }
+      })
+      .catch((error) => {
+        logger.error(`Failed to merge to image: ${error}`);
+      });
+  }, [logger, mergeToImage, save]);
+
+  if (hasAnnotations === null || !hasAnnotations) {
+    return null;
+  }
 
   return (
     <Dialog
@@ -77,7 +97,10 @@ function ExportClipboardModal() {
                 alignIndicator="right"
                 checked={formState.annotations}
                 onChange={(e) =>
-                  setFormState({ ...formState, annotations: e.target.checked })
+                  setFormState({
+                    ...formState,
+                    annotations: e.target.checked,
+                  })
                 }
               />
             </div>

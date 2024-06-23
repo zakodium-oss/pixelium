@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from '@blueprintjs/core';
 import styled from '@emotion/styled';
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
@@ -40,6 +40,7 @@ const SaveButtonInner = styled.span`
 function ExportPngModal() {
   const { isOpen, close } = useModal('exportPng');
   const currentTab = useCurrentTab();
+  const [hasAnnotations, setHasAnnotations] = useState<boolean | null>(null);
 
   const { logger } = useLog();
 
@@ -57,10 +58,10 @@ function ExportPngModal() {
     [setFormState, defaultFormState],
   );
 
-  const mergeToImage = useMergeToImage();
+  const mergeToImage = useMergeToImage(formState.annotations);
 
   const exportPNG = useCallback(async () => {
-    return mergeToImage().then((toSave) =>
+    return mergeToImage().then(({ toSave }) =>
       saveAsPng(toSave, `${currentTab || 'unnamed'}.png`),
     );
   }, [currentTab, mergeToImage]);
@@ -73,6 +74,24 @@ function ExportPngModal() {
         close();
       });
   }, [close, exportPNG, logger, resetForm]);
+
+  useEffect(() => {
+    mergeToImage()
+      .then(({ annotations }) => {
+        if (annotations !== null) {
+          setHasAnnotations(true);
+        } else {
+          setHasAnnotations(false);
+        }
+      })
+      .catch((error) => {
+        logger.error(`Failed to merge to image: ${error}`);
+      });
+  }, [logger, mergeToImage]);
+
+  if (hasAnnotations === null) {
+    return null;
+  }
 
   return (
     <Dialog
@@ -98,14 +117,19 @@ function ExportPngModal() {
                   }
                 />
               </FormGroup>
-              <Checkbox
-                label="Include annotations"
-                alignIndicator="right"
-                checked={formState.annotations}
-                onChange={(e) =>
-                  setFormState({ ...formState, annotations: e.target.checked })
-                }
-              />
+              {hasAnnotations ? (
+                <Checkbox
+                  label="Include annotations"
+                  alignIndicator="right"
+                  checked={formState.annotations}
+                  onChange={(e) =>
+                    setFormState({
+                      ...formState,
+                      annotations: e.target.checked,
+                    })
+                  }
+                />
+              ) : null}
             </div>
           </StyledModalBody>
         </DialogBody>
