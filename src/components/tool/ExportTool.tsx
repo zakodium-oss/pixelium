@@ -24,9 +24,11 @@ export function useMergeToImage(hasAnnotations: boolean) {
         ? (pipelined as Image)
         : pipelined.convertColor(ImageColorModel.RGBA);
     const toSave =
-      annotations === null || !hasAnnotations
+      annotations !== null && hasAnnotations
+        ? annotations.copyTo(recolored)
+        : pipelined.colorModel !== ImageColorModel.BINARY
         ? (pipelined as Image)
-        : annotations.copyTo(recolored);
+        : recolored;
     return { toSave, annotations };
   };
 }

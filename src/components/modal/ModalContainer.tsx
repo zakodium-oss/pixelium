@@ -4,6 +4,9 @@ import useCurrentTab from '../../hooks/useCurrentTab';
 import useView from '../../hooks/useView';
 
 import AboutModal from './AboutModal';
+import ExportClipboardModal from './ExportClipboardModal';
+import ExportPixeliumModal from './ExportPixeliumModal';
+import ExportPngModal from './ExportPngModal';
 import ExtractROIModal from './ExtractROIModal';
 import LogModal from './LogModal';
 import BlurModal from './preview/filters/BlurModal';
@@ -22,9 +25,6 @@ import CloseModal from './preview/morphology/CloseModal';
 import DilateModal from './preview/morphology/DilateModal';
 import ErodeModal from './preview/morphology/ErodeModal';
 import OpenModal from './preview/morphology/OpenModal';
-import ExportPngModal from './ExportPngModal';
-import ExportClipboardModal from './ExportClipboardModal';
-import ExportPixeliumModal from './ExportPixeliumModal';
 
 function ModalContainer() {
   const view = useView();
