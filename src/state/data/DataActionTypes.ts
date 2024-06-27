@@ -10,6 +10,8 @@ export const LOAD_PIXELIUM = 'LOAD_PIXELIUM';
 
 export const CLOSE_IMAGE = 'CLOSE_IMAGE';
 
+export const EDIT_METADATA = 'EDIT_METADATA';
+
 export {
   SET_GREY_FILTER,
   SET_CONVERT,

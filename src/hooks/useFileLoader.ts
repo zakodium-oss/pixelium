@@ -23,12 +23,37 @@ import useLog from './useLog';
 import usePreferencesDispatch from './usePreferencesDispatch';
 import useViewDispatch from './useViewDispatch';
 
+function getPixelInfo(fields) {
+  let pixelSize;
+  let pixelUnits;
+  for (const [, tagValue] of Object.entries(fields)) {
+    if (typeof tagValue === 'string' && tagValue.startsWith('<')) {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(tagValue, 'text/xml');
+      const dataNodes = xmlDoc.querySelectorAll('Data');
+      for (const dataNode of dataNodes) {
+        const label = dataNode.querySelector('Label')?.textContent;
+        if (label === 'Magnification') {
+          const value = dataNode.querySelector('Value')?.textContent;
+          if (value) {
+            const pixelValue = 30000 / Number(value);
+            pixelUnits = 'nm';
+            pixelSize = pixelValue.toString();
+          }
+        }
+      }
+    }
+  }
+  return { pixelSize, pixelUnits };
+}
+
 export default function useFileLoader() {
   const dataDispatch = useDataDispatch();
   const preferencesDispatch = usePreferencesDispatch();
   const viewDispatch = useViewDispatch();
 
   const { logger } = useLog();
+
   const loadFileCollection = useCallback(
     async (fileCollection: FileCollection) => {
       const dataFiles: DataFile[] = [];
@@ -66,9 +91,14 @@ export default function useFileLoader() {
         } else {
           try {
             const image = decode(new Uint8Array(await file.arrayBuffer()));
+
+            const fields = Object.fromEntries(image.meta?.tiff?.fields || []);
+            const { pixelSize, pixelUnits } = getPixelInfo(fields);
             const metadata = {
               name: file.name,
               relativePath: file.relativePath,
+              pixelSize,
+              pixelUnits,
             };
             dataFiles.push({
               image,
