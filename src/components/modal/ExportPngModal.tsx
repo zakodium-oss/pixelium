@@ -62,9 +62,9 @@ function ExportPngModal() {
 
   const exportPNG = useCallback(async () => {
     return mergeToImage().then(({ toSave }) =>
-      saveAsPng(toSave, `${currentTab || 'unnamed'}.png`),
+      saveAsPng(toSave, `${formState.name || currentTab || 'unnamed'}.png`),
     );
-  }, [currentTab, mergeToImage]);
+  }, [currentTab, formState.name, mergeToImage]);
 
   const save = useCallback(() => {
     exportPNG()
