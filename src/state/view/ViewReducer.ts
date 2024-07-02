@@ -58,7 +58,9 @@ export type ModalName =
   | 'mask'
   | 'log'
   | 'about'
-  | 'export'
+  | 'exportPng'
+  | 'exportClipboard'
+  | 'exportPixelium'
   | 'median'
   | 'dilate'
   | 'erode'
@@ -97,7 +99,9 @@ export const initialViewState: ViewState = {
     mask: false,
     log: false,
     about: false,
-    export: false,
+    exportPng: false,
+    exportClipboard: false,
+    exportPixelium: false,
     median: false,
     dilate: false,
     erode: false,

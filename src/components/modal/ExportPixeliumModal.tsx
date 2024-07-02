@@ -38,8 +38,8 @@ const SaveButtonInner = styled.span`
   align-items: center;
 `;
 
-function ExportModal() {
-  const { isOpen, close } = useModal('export');
+function ExportPixeliumModal() {
+  const { isOpen, close } = useModal('exportPixelium');
   const data = useData();
   const preferences = usePreferences();
   const view = useView();
@@ -48,9 +48,9 @@ function ExportModal() {
   const defaultFormState = useMemo(
     () => ({
       name: '',
-      view: false,
-      preferences: false,
-      data: false,
+      view: true,
+      preferences: true,
+      data: true,
     }),
     [],
   );
@@ -158,4 +158,4 @@ function ExportModal() {
   );
 }
 
-export default memo(ExportModal);
+export default memo(ExportPixeliumModal);
