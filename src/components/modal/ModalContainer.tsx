@@ -76,8 +76,12 @@ function ModalContainer() {
           {view.modals.close && (
             <CloseModal previewImageIdentifier={currentTab} />
           )}
-          {view.modals.exportPng && <ExportPngModal />}
-          {view.modals.exportClipboard && <ExportClipboardModal />}
+          {view.modals.exportPng && (
+            <ExportPngModal previewImageIdentifier={currentTab} />
+          )}
+          {view.modals.exportClipboard && (
+            <ExportClipboardModal previewImageIdentifier={currentTab} />
+          )}
           {view.modals.exportPixelium && <ExportPixeliumModal />}
           {view.modals.resize && (
             <ResizeModal previewImageIdentifier={currentTab} />

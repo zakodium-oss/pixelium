@@ -7,13 +7,14 @@ import {
   DialogFooter,
 } from '@blueprintjs/core';
 import styled from '@emotion/styled';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { Button } from 'react-science/ui';
 
 import useCurrentTab from '../../hooks/useCurrentTab';
 import useData from '../../hooks/useData';
 import useLog from '../../hooks/useLog';
 import useModal from '../../hooks/useModal';
+import useOriginalFilteredROIs from '../../hooks/useOriginalFilteredROIs';
 import { saveAsPng } from '../../utils/export';
 import { useMergeToImage } from '../tool/ExportTool';
 
@@ -38,11 +39,17 @@ const SaveButtonInner = styled.span`
   align-items: center;
 `;
 
-function ExportPngModal() {
+type ExportPngModalProps = {
+  previewImageIdentifier: string;
+};
+
+function ExportPngModal({ previewImageIdentifier }: ExportPngModalProps) {
   const { isOpen, close } = useModal('exportPng');
   const currentTab = useCurrentTab();
   const data = useData();
-  const [hasAnnotations, setHasAnnotations] = useState<boolean | null>(null);
+
+  const ROIs = useOriginalFilteredROIs(previewImageIdentifier);
+  const hasAnnotations = ROIs.length > 0;
 
   const { logger } = useLog();
 
@@ -86,24 +93,6 @@ function ExportPngModal() {
         close();
       });
   }, [close, exportPNG, logger, resetForm]);
-
-  useEffect(() => {
-    mergeToImage()
-      .then(({ annotations }) => {
-        if (annotations !== null) {
-          setHasAnnotations(true);
-        } else {
-          setHasAnnotations(false);
-        }
-      })
-      .catch((error) => {
-        logger.error(`Failed to merge to image: ${error}`);
-      });
-  }, [logger, mergeToImage]);
-
-  if (hasAnnotations === null) {
-    return null;
-  }
 
   return (
     <Dialog

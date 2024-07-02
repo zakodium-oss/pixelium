@@ -1,10 +1,11 @@
 import { Checkbox, Dialog, DialogBody, DialogFooter } from '@blueprintjs/core';
 import styled from '@emotion/styled';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { Button } from 'react-science/ui';
 
 import useLog from '../../hooks/useLog';
 import useModal from '../../hooks/useModal';
+import useOriginalFilteredROIs from '../../hooks/useOriginalFilteredROIs';
 import { saveToClipboard } from '../../utils/export';
 import { useMergeToImage } from '../tool/ExportTool';
 
@@ -28,11 +29,18 @@ const SaveButtonInner = styled.span`
   display: flex;
   align-items: center;
 `;
+type ExportClipboardModalProps = {
+  previewImageIdentifier: string;
+};
 
-function ExportClipboardModal() {
+function ExportClipboardModal({
+  previewImageIdentifier,
+}: ExportClipboardModalProps) {
   const { isOpen, close } = useModal('exportClipboard');
   const { logger } = useLog();
-  const [hasAnnotations, setHasAnnotations] = useState<boolean | null>(null);
+
+  const ROIs = useOriginalFilteredROIs(previewImageIdentifier);
+  const hasAnnotations = ROIs.length > 0;
 
   const defaultFormState = useMemo(
     () => ({
@@ -62,22 +70,8 @@ function ExportClipboardModal() {
       });
   }, [close, copyToClipboard, logger, resetForm]);
 
-  useEffect(() => {
-    mergeToImage()
-      .then(({ annotations }) => {
-        if (annotations === null) {
-          setHasAnnotations(false);
-          save();
-        } else {
-          setHasAnnotations(true);
-        }
-      })
-      .catch((error) => {
-        logger.error(`Failed to merge to image: ${error}`);
-      });
-  }, [logger, mergeToImage, save]);
-
-  if (hasAnnotations === null || !hasAnnotations) {
+  if (!hasAnnotations) {
+    save();
     return null;
   }
 
