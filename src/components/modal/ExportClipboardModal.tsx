@@ -1,4 +1,11 @@
-import { Checkbox, Dialog, DialogBody, DialogFooter } from '@blueprintjs/core';
+import {
+  Checkbox,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  Position,
+  OverlayToaster,
+} from '@blueprintjs/core';
 import styled from '@emotion/styled';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Button } from 'react-science/ui';
@@ -29,6 +36,11 @@ const SaveButtonInner = styled.span`
   display: flex;
   align-items: center;
 `;
+
+const AppToaster = OverlayToaster.create({
+  position: Position.TOP,
+});
+
 type ExportClipboardModalProps = {
   previewImageIdentifier: string;
 };
@@ -63,11 +75,23 @@ function ExportClipboardModal({
 
   const save = useCallback(() => {
     copyToClipboard()
-      .catch((error) => logger.error(`Failed to copy to clipboard: ${error}`))
+      .catch((error) => {
+        logger.error(`Failed to copy to clipboard: ${error}`);
+        AppToaster.show({
+          message: 'Failed to copy to clipboard',
+          intent: 'danger',
+          timeout: 1500,
+        });
+      })
       .finally(() => {
         resetForm();
         close();
       });
+    AppToaster.show({
+      message: 'Copied successfully !',
+      intent: 'success',
+      timeout: 1500,
+    });
   }, [close, copyToClipboard, logger, resetForm]);
 
   if (!hasAnnotations) {
