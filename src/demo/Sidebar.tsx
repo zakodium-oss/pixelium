@@ -61,9 +61,8 @@ function Sidebar() {
     title: '',
     sections: [],
   });
-
   useEffect(() => {
-    ky.get('https://image-js.github.io/image-dataset-demo/toc.json')
+    ky.get('https://demo-dataset.image-js.org/toc.json')
       .json<TocResponse>()
       .then(setToC)
       .catch((error) => {
