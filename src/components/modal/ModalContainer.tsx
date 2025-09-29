@@ -4,7 +4,9 @@ import useCurrentTab from '../../hooks/useCurrentTab';
 import useView from '../../hooks/useView';
 
 import AboutModal from './AboutModal';
-import ExportModal from './ExportModal';
+import ExportClipboardModal from './ExportClipboardModal';
+import ExportPixeliumModal from './ExportPixeliumModal';
+import ExportPngModal from './ExportPngModal';
 import ExtractROIModal from './ExtractROIModal';
 import LogModal from './LogModal';
 import BlurModal from './preview/filters/BlurModal';
@@ -74,7 +76,13 @@ function ModalContainer() {
           {view.modals.close && (
             <CloseModal previewImageIdentifier={currentTab} />
           )}
-          {view.modals.export && <ExportModal />}
+          {view.modals.exportPng && (
+            <ExportPngModal previewImageIdentifier={currentTab} />
+          )}
+          {view.modals.exportClipboard && (
+            <ExportClipboardModal previewImageIdentifier={currentTab} />
+          )}
+          {view.modals.exportPixelium && <ExportPixeliumModal />}
           {view.modals.resize && (
             <ResizeModal previewImageIdentifier={currentTab} />
           )}
